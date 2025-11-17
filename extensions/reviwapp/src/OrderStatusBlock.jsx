@@ -1,0 +1,17 @@
+import "@shopify/ui-extensions/preact";
+import { render } from "preact";
+
+export default async () => {
+  render(<Extension />, document.body);
+};
+
+function Extension() {
+  return (
+    <s-banner>
+      <s-text>
+        uyt7u68i6i68768ossd fasdfasdfsdfasdfasdf
+        {shopify.i18n.translate("earnPoints")}
+      </s-text>
+    </s-banner>
+  );
+}
