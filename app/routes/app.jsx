@@ -20,7 +20,7 @@ export default function App() {
         <s-link href="/app">Home</s-link>
         <s-link href="/app/additional">Additional page</s-link>
         <s-link href="/app/judge">Judge me </s-link>
-        <s-link href="/app/test">test me </s-link>
+        <s-link href="/app/review">Review</s-link>
       </s-app-nav>
       <Outlet />
       {/* <LayoutExample></LayoutExample> */}
