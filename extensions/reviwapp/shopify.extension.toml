@@ -1,0 +1,29 @@
+# Learn more about configuring your Customer account UI extension:
+# https://shopify.dev/api/customer-account-ui-extensions/unstable/configuration
+
+# The version of APIs your extension will receive. Learn more:
+# https://shopify.dev/docs/api/usage/versioning
+api_version = "2025-10"
+
+[[extensions]]
+name = "reviwapp"
+handle = "reviwapp"
+type = "ui_extension"
+uid = "992bc326-4020-da41-60b9-0d579a6bad36aac4500f"
+
+# Controls where in Shopify your extension will be injected
+# and the file that contains your extension's source code.
+
+[[extensions.targeting]]
+module = "./src/OrderStatusBlock.jsx"
+target = "customer-account.order-status.block.render"
+
+[[extensions.targeting]]
+module = "./src/NewTab.jsx"
+# ❌ 'customer-account.profile-status.block.render' does NOT exist
+# ✅ Correct, existing Shopify target:
+target = "customer-account.profile.block.render"
+
+[extensions.capabilities]
+api_access = true
+# network_access = true
