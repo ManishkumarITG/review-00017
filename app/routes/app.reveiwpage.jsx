@@ -4,8 +4,8 @@ import {
     Card,
     Page,
     Box,
-    LegacyTabs,
     BlockStack,
+    LegacyTabs
 } from "@shopify/polaris";
 import "@shopify/polaris/build/esm/styles.css";
 import {

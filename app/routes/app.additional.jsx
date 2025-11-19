@@ -2,7 +2,7 @@
 
 
 export default function AdditionalPage() {
-  return (
+  return (  
     <>
       <s-page heading="Additional page">
         <s-section heading="Multiple pages">

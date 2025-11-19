@@ -2,9 +2,7 @@ import { Outlet, useLoaderData, useRouteError } from "react-router";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { AppProvider } from "@shopify/shopify-app-react-router/react";
 import { authenticate } from "../shopify.server";
-
-// import LayoutExample from "./app.judge";
-
+// import LayoutExample from "./app.setting";
 import en from "@shopify/polaris/locales/en.json";
 
 
@@ -23,10 +21,11 @@ export default function App() {
       <s-app-nav>
         <s-link href="/app">Home</s-link>
         <s-link href="/app/additional">Additional page</s-link>
-        <s-link href="/app/reveiwpage">Review Page</s-link>
-        <s-link href="/app/review">Dummy Review Page</s-link>
+        <s-link href="/app/setting">Judge me </s-link>
         <s-link href="/app/review">Review</s-link>
+        <s-link href="/app/deshboard">Deshboard</s-link>
         <s-link href="/app/mySettingPage">Settings</s-link>
+        <s-link href="/app/reveiwpage">Review Page</s-link>
         {/* <s-link href="/app/table">Table </s-link> */}
       </s-app-nav>
       <Outlet />

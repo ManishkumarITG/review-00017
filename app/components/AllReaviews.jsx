@@ -61,7 +61,7 @@ export default function AllReaviews() {
             <IndexTable.Row
                 id={id.toString()}
                 key={id.toString()}
-                selected={false}
+                selected={true}
                 position={index}
                 verticalAlign="top"
             >
