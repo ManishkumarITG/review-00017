@@ -16,14 +16,9 @@ import {
   StarFilledIcon,
   StarIcon,
 } from "@shopify/polaris-icons";
-
+import ReviewRequest from "../components/ReviewRequest";
 export default function AppReview() {
   const [selected, setSelected] = useState(0);
-
-  const handleTabChange = useCallback(
-    (selectedTabIndex) => setSelected(selectedTabIndex),
-    [],
-  );
 
   const tabs = [
     {
@@ -56,6 +51,12 @@ export default function AppReview() {
     },
   ];
 
+  const handleTabChange = (selectedTabIndex) => {
+    setSelected(selectedTabIndex);
+    console.log(selectedTabIndex);
+
+  };
+
   return (
     <AppProvider>
       <Page fullWidth={true}>
@@ -66,7 +67,32 @@ export default function AppReview() {
             onSelect={handleTabChange}
           ></LegacyTabs>
         </Card>
-    
+
+        <Page fullWidth={true} >
+          {
+            tabs[selected].id === "all-customers-1" && (
+              <Card padding="500">
+
+                <Text as="p">Review Content</Text>
+              </Card>
+            )
+          }
+          {
+            tabs[selected].id === "accepts-marketing-1" && (
+              <ReviewRequest />
+            )
+          }
+          {
+            tabs[selected].id === "repeat-customers-1" && (
+              <Card padding="500">
+                <Text as="p" >Customer Question </Text>
+              </Card>
+            )
+          }
+        </Page>
+
+
+
 
       </Page>
     </AppProvider>
