@@ -1,0 +1,34 @@
+import { Box, Card, Image, InlineGrid, MediaCard } from '@shopify/polaris';
+import React from 'react';
+
+function DeshboardImageWithText({ title, imageurl, buttontext, textcontent }) {
+    return (
+        <>
+            <MediaCard
+                title={title}
+                primaryAction={{
+                    content: buttontext,
+                    onAction: () => { },
+                }}
+                description={textcontent}
+                // popoverActions={[{ content: 'Dismiss', onAction: () => { } }]}
+                size="small"
+            >
+                <img
+                    alt=""
+                    width="100%"
+                    height="100%"
+                    style={{
+                        objectFit: 'cover',
+                        objectPosition: 'center',
+                    }}
+                    src={imageurl}
+                />
+            </MediaCard>
+
+        </>
+    );
+}
+
+
+export default DeshboardImageWithText;
