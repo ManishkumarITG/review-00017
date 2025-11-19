@@ -16,11 +16,7 @@ import "@shopify/polaris/build/esm/styles.css";
 import { PaintBrushRoundIcon, StarIcon } from "@shopify/polaris-icons";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import en from "@shopify/polaris/locales/en.json";
-import Branding from "./app.mySettingPage.branding";
 import { useEffect } from "react";
-
-// import Widget from "../components/Widget.jsx";
-// import Branding from "../components/Branding.jsx";
 
 function MySettingPage() {
   const location = useLocation();
