@@ -66,6 +66,8 @@ export default function AppReview() {
             onSelect={handleTabChange}
           ></LegacyTabs>
         </Card>
+    
+
       </Page>
     </AppProvider>
   );
