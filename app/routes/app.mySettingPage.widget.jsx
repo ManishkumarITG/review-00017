@@ -14,7 +14,7 @@ import {
 } from "@shopify/polaris";
 
 import { CaretDownIcon } from "@shopify/polaris-icons";
-import "./style.css";
+import "../components/style.css";
 
 export default function Widget() {
   const [selected, setSelected] = useState("today");
@@ -98,7 +98,7 @@ export default function Widget() {
           />
         }
       >
-        <InlineGrid gap="400" columns={{ xs: 1, sm: 1, md: 1, lg: 3, xl: 3 }}>
+        <InlineGrid gap="400" columns={{ xs: 1, sm: 2, md: 2, lg: 3, xl: 3 }}>
           {simplifiedMediaCardData.map((card) => (
             <MediaCard
               key={card.key}
