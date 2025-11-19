@@ -9,15 +9,17 @@ import {
   Button,
   Divider,
   Box,
-
 } from "@shopify/polaris";
-import { MenuHorizontalIcon, ChevronDownIcon, CheckCircleIcon } from "@shopify/polaris-icons";
+import {
+  MenuHorizontalIcon,
+  ChevronDownIcon,
+  CheckCircleIcon,
+} from "@shopify/polaris-icons";
 
 import InstallWidgetsCard from "./InstallWidgetsCard";
 function DashboardGuidance() {
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
-
 
   const toggle = () => setOpen(!open);
   const [panelState, setPanelState] = useState({
@@ -34,7 +36,6 @@ function DashboardGuidance() {
       [pannelId]: !prev[pannelId],
     }));
   };
-
 
   return (
     <Card roundedAbove="sm">
@@ -57,11 +58,7 @@ function DashboardGuidance() {
               }
               onClose={toggle}
             >
-              <ActionList
-                items={[
-                  { content: "Dismiss setup Guide" },
-                ]}
-              />
+              <ActionList items={[{ content: "Dismiss setup Guide" }]} />
             </Popover>
 
             <Popover
@@ -69,13 +66,12 @@ function DashboardGuidance() {
                 <Button
                   fullWidth
                   variant="base"
-                  disclosure={expanded ? 'up' : 'down'}
+                  disclosure={expanded ? "up" : "down"}
                   onClick={() => setExpanded(!expanded)}
                   incon={expanded}
                 />
               }
-            >
-            </Popover>
+            ></Popover>
           </InlineGrid>
         </InlineGrid>
 
@@ -93,99 +89,101 @@ function DashboardGuidance() {
       <Box paddingBlockStart="300">
         <Divider borderColor="border" />
       </Box>
-      {
-        expanded && (
-          <Box paddingBlock="200">
+      {expanded && (
+        <Box paddingBlock="200">
+          <InstallWidgetsCard
+            title=" Install Review Widget and Star Rating Badge"
+            description=" Display reviews and star ratings on the product page by enabling the Judge.me widgets in your Shopify theme."
+            buttons={[
+              {
+                label: "Install Review Widget",
+                variant: "primary",
+                tone: "base",
+                onClick: () => console.log("Upload clicked"),
+              },
+              {
+                label: "Install Star Rating Badge",
+                // variant: "primary",
+                // tone: "base",
+                onClick: () => console.log("Upload clicked"),
+              },
+            ]}
+            isOpen={panelState["customize_widget"]}
+          />
+          <InstallWidgetsCard
+            pannelId="customize_widget"
+            onToggle={togglePanel}
+            isOpen={panelState["customize_widget"]}
+            title="Customize the review widget"
+            description="Change the look and feel of your review display to match your brand."
+            buttons={[
+              {
+                label: "Go to widget settings",
+                variant: "primary",
+                tone: "base",
+                onClick: () => console.log("Widget settings clicked"),
+              },
+            ]}
+          />
+          <InstallWidgetsCard
+            title=" Add store logo and check email styling"
+            description="Add store logo and check email styling"
+            buttons={[
+              {
+                label: "Edit email template styling",
+                variant: "primary",
+                tone: "base",
+                onClick: () => console.log("Upload clicked"),
+              },
+            ]}
+          />
 
-          
-
-            <InstallWidgetsCard
-              title=" Install Review Widget and Star Rating Badge"
-              description=" Display reviews and star ratings on the product page by enabling the Judge.me widgets in your Shopify theme."
-              buttons={[
-                {
-                  label: "Install Review Widget",
-                  variant: "primary",
-                  tone: "base",
-                  onClick: () => console.log("Upload clicked"),
-                },
-                {
-                  label: "Install Star Rating Badge",
-                  // variant: "primary",
-                  // tone: "base",
-                  onClick: () => console.log("Upload clicked"),
-                },]}
-            />
-            <InstallWidgetsCard
-              pannelId="customize_widget"
-              onToggle={togglePanel}
-              isOpen={panelState["customize_widget"]}
-              title="Customize the review widget"
-              description="Change the look and feel of your review display to match your brand."
-              buttons={[
-                {
-                  label: "Go to widget settings",
-                  variant: "primary",
-                  tone: "base",
-                  onClick: () => console.log("Widget settings clicked"),
-                },
-              ]}
-            />
-            <InstallWidgetsCard
-              title=" Add store logo and check email styling"
-              description="Add store logo and check email styling"
-              buttons={[
-                {
-                  label: "Edit email template styling",
-                  variant: "primary",
-                  tone: "base",
-                  onClick: () => console.log("Upload clicked"),
-                },]}
-            />
-
-            <InstallWidgetsCard
-              title="Review request schedule"
-              description=" Review request schedule"
-              buttonprimary="Review  schedule"
-              buttons={[
-                {
-                  label: "Review  schedule",
-                  variant: "primary",
-                  tone: "base",
-                  onClick: () => console.log("Upload clicked"),
-                },]} />
-            <InstallWidgetsCard
-              title="Personalize review request email"
-              description="Edit your subject line, header text, and more to create on-brand email requests."
-              buttonprimary="Customize Email"
-
-              buttons={[
-                {
-                  label: "Customize Email",
-                  variant: "primary",
-                  tone: "base",
-                  onClick: () => console.log("Upload clicked"),
-                },]} />
-            <InstallWidgetsCard
-              title=" Grab your free Judge.me Awesome trial"
-              description="Try all premium features free for 15 days - If you love it, you can keep it for just $15/month."
-              buttons={[
-                {
-                  label: "Start free trial",
-                  variant: "primary",
-                  tone: "base",
-                  onClick: () => console.log("Upload clicked"),
-                },
-                {
-                  label: "Dismiss",
-                  // variant: "primary",
-                  tone: "base",
-                  onClick: () => console.log("Upload clicked"),
-                },]}
-            />
-          </Box>
-        )}
-
+          <InstallWidgetsCard
+            title="Review request schedule"
+            description=" Review request schedule"
+            buttonprimary="Review  schedule"
+            buttons={[
+              {
+                label: "Review  schedule",
+                variant: "primary",
+                tone: "base",
+                onClick: () => console.log("Upload clicked"),
+              },
+            ]}
+          />
+          <InstallWidgetsCard
+            title="Personalize review request email"
+            description="Edit your subject line, header text, and more to create on-brand email requests."
+            buttonprimary="Customize Email"
+            buttons={[
+              {
+                label: "Customize Email",
+                variant: "primary",
+                tone: "base",
+                onClick: () => console.log("Upload clicked"),
+              },
+            ]}
+          />
+          <InstallWidgetsCard
+            title=" Grab your free Judge.me Awesome trial"
+            description="Try all premium features free for 15 days - If you love it, you can keep it for just $15/month."
+            buttons={[
+              {
+                label: "Start free trial",
+                variant: "primary",
+                tone: "base",
+                onClick: () => console.log("Upload clicked"),
+              },
+              {
+                label: "Dismiss",
+                // variant: "primary",
+                tone: "base",
+                onClick: () => console.log("Upload clicked"),
+              },
+            ]}
+          />
+        </Box>
+      )}
     </Card>
   );
 }
