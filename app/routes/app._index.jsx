@@ -128,7 +128,7 @@ export default function Index() {
           </s-link>{" "}
           mutation in our API references.
         </s-paragraph>
-        <s-stack direction="inline" gap="base">
+        <s-InlineStack   direction="inline" gap="base">
           <s-button
             onClick={generateProduct}
             {...(isLoading ? { loading: true } : {})}
@@ -148,10 +148,10 @@ export default function Index() {
               Edit product
             </s-button>
           )}
-        </s-stack>
+        </s-InlineStack  >
         {fetcher.data?.product && (
           <s-section heading="productCreate mutation">
-            <s-stack direction="block" gap="base">
+            <s-InlineStack   direction="block" gap="base">
               <s-box
                 padding="base"
                 borderWidth="base"
@@ -174,7 +174,7 @@ export default function Index() {
                   <code>{JSON.stringify(fetcher.data.variant, null, 2)}</code>
                 </pre>
               </s-box>
-            </s-stack>
+            </s-InlineStack  >
           </s-section>
         )}
       </s-section>

@@ -1,6 +1,9 @@
 import React, { useCallback, useState } from 'react'
-import { Card, Tabs, Page, Button, Text, Box, InlineStack, Badge } from "@shopify/polaris";
+// import PolarisPkg from '@shopify/polaris';
+// const  {InlineStack  } = PolarisPkg;
+import { Card, Tabs, Page, Button, Text, Box , Badge ,InlineStack   } from "@shopify/polaris";
 import "@shopify/polaris/build/esm/styles.css";
+import AllReaviews from "./AllReaviews"
 export default function Coordinator() {
     const [selected, setSelected] = useState(0);
 
@@ -38,13 +41,13 @@ export default function Coordinator() {
     const renderTabContent = () => {
         switch (selected) {
             case 0:
-                return <AllCustomers />;
+                return <AllReaviews />;
             case 1:
-                return <AcceptsMarketing />;
+                return <Text>Yet to build 2 </Text>;
             case 2:
-                return <RepeatCustomers />;
+                return <Text>Yet to build 3</Text>;
             case 3:
-                return <Prospects />;
+                return <Text>Yet to build 4</Text>;
             default:
                 return null;
         }
@@ -52,25 +55,16 @@ export default function Coordinator() {
 
 
     return (
-        <Page>
-            <style>{`
-        .Polaris-Tabs__Tab--selected {
-          background: #d1f7d6 !important;   /* light green */
-          border-radius: 6px;
-        }
-        .Polaris-Tabs__Tab {
-          transition: 0.2s;
-        }
-           `}</style>
+        <>
 
-            <InlineStack distribution="space-between" align="center">
+            <InlineStack   distribution="space-between" align="center">
                 <Box>
-                    <Text variant="headingLg" as="h2"></Text>
+                    <Text variant="headingLg" as="h2">sdfdf</Text>
                     <Badge tone="success" variant="outline">
                         Auto Publish
                     </Badge>
                 </Box>
-                <Box>
+                <InlineStack   gap="2">
                     <Button>
                         Import
                     </Button>
@@ -83,18 +77,17 @@ export default function Coordinator() {
                     <Button>
                         Export
                     </Button>
-                </Box>
+                </InlineStack  >
 
-            </InlineStack>
-            <LegacyCard>
+            </InlineStack  >
+
+            <Card>
                 <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}>
-                    <LegacyCard.Section title={tabs[selected].content}>
+                    <Card.Section title={tabs[selected].content}>
                         {renderTabContent()}
-                    </LegacyCard.Section>
+                    </Card.Section>
                 </Tabs>
-            </LegacyCard>
-
-
-        </Page>
+            </Card>
+        </>
     )
 }

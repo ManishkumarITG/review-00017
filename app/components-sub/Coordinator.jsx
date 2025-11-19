@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 
-import Polaris, { AppProvider } from '@shopify/polaris';
+import Polaris from '@shopify/polaris';
 const {  Tabs,  Button, Text,  Badge, InlineStack, LegacyCard } = Polaris;
 
 // import InlineStack from "@shopify/polaris";
@@ -13,7 +13,7 @@ export default function Coordinator() {
 
     const handleTabChange = useCallback((selectedTabIndex) => {
         setSelected(selectedTabIndex);
-    }, []); 
+    }, []);
 
 
     const tabs = [
@@ -63,8 +63,6 @@ export default function Coordinator() {
 
     return (
         <>
-        <AppProvider>
-
             <InlineStack alignment="space-between" align="space-between" padding="400">
                 <InlineStack gap="200">
                     <Text variant="headingLg" as="h2">Reviews</Text>
@@ -89,14 +87,13 @@ export default function Coordinator() {
 
             </InlineStack  >
 
-            <LegacyCard>
+            {/* <LegacyCard> */}
                 <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}>
                     <LegacyCard.Section title={tabs[selected].content}>
                         {renderTabContent()}
                     </LegacyCard.Section>
                 </Tabs>
-            </LegacyCard>
-        </AppProvider>
+            {/* </LegacyCard> */}
         </>
     )
 }
