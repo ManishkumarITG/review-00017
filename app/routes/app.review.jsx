@@ -99,4 +99,19 @@ export default function Coordinator() {
         </AppProvider>
         </>
     )
+  return (
+    <AppProvider>
+      <Page fullWidth={true}>
+        <Card padding="50">
+          <LegacyTabs
+            tabs={tabs}
+            selected={selected}
+            onSelect={handleTabChange}
+          ></LegacyTabs>
+        </Card>
+    
+
+      </Page>
+    </AppProvider>
+  );
 }
