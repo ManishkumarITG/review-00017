@@ -158,7 +158,7 @@ export default function AllReaviews() {
                     { title: 'Customer' },
                     { title: 'Create' },
                     { title: 'Rating' },
-                    { title: 'Status'},
+                    { title: 'Status' , },
                 ]}
                 primaryId="id"
             >
