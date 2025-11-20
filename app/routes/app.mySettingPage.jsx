@@ -16,27 +16,29 @@ import "@shopify/polaris/build/esm/styles.css";
 import { PaintBrushRoundIcon, StarIcon } from "@shopify/polaris-icons";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import en from "@shopify/polaris/locales/en.json";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Widget from "../components/Widget"
+import Branding from "../components/Branding"
+
 
 function MySettingPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [isPage , setIsPage] = useState("widgets")
 
   useEffect(() => {
-    navigate("/app/mySettingPage/widget");
+     const params = new URLSearchParams(window.location.search);
+     params.set("key", "widgets");
+     const newUrl = window.location.pathname + "?" + params.toString();
+     window.history.pushState({}, "", newUrl);
   }, []);
 
   const handlePageChange = (page) => {
-    switch (page) {
-      case "widgets":
-        navigate("/app/mySettingPage/widget");
-        break;
-      case "branding":
-        navigate("/app/mySettingPage/branding");
-        break;
-      default:
-        break;
-    }
+    const params = new URLSearchParams(window.location.search);
+    params.set("key", page);
+    const newUrl = window.location.pathname + "?" + params.toString();
+    window.history.pushState({}, "", newUrl);
+    setIsPage(page)
   };
   return (
     <AppProvider i18n={en}>
@@ -59,7 +61,8 @@ function MySettingPage() {
             <Box padding="400" width="100%">
               <Text as="p">REVIEW DISPLAY</Text>
               <Link
-                removeUnderline={true}
+                 monochrome
+                removeUnderline
                 onClick={() => {
                   handlePageChange("widgets");
                 }}
@@ -106,7 +109,9 @@ function MySettingPage() {
             <Divider />
           </Card>{" "}
           <Box key={location.key}>
-            <Outlet />
+            {
+              isPage == "widgets" ? <Widget/> : <Branding/>
+            }
           </Box>
         </InlineGrid>
       </Page>
