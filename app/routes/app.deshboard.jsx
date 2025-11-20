@@ -91,12 +91,13 @@ export default function Deshboard() {
             date: "yesterday"
         },
         {
-            id: 2,
+            id: 6,
             title: "Average Rating",
-            number: 87,
-            percentage: 8,
-            date: "2025-11-20"
+            number: 90,
+            percentage: 9,
+            date: "2025-09-15"
         },
+
         {
             id: 3,
             title: "Request sent",
@@ -111,20 +112,8 @@ export default function Deshboard() {
             percentage: -3,
             date: "2025-11-10"
         },
-        {
-            id: 5,
-            title: "Reviews",
-            number: 540,
-            percentage: 6,
-            date: "2025-10-02"
-        },
-        {
-            id: 6,
-            title: "Average Rating",
-            number: 90,
-            percentage: 9,
-            date: "2025-09-15"
-        }
+
+
     ];
 
 

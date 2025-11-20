@@ -30,13 +30,13 @@ import {
 import { useColorTheme } from "../routes/ColorContext";
 
 function Branding() {
-    const {hexCode, color, setColor, setHexCode , hsbaToHex } = useColorTheme()
+  const { hexCode, color, setColor, setHexCode, hsbaToHex } = useColorTheme()
   const [isOpenColorPicker, setIsOpenColorPicker] = useState(false);
 
   const [checked, setChecked] = useState(true);
   const handleChange = useCallback((newChecked) => setChecked(newChecked), []);
 
- 
+
 
   useEffect(() => {
     setHexCode(hsbaToHex(color));
@@ -56,7 +56,7 @@ function Branding() {
                 <Button
                   textAlign="end"
                   variant="plain"
-                  onClick={() => {}}
+                  onClick={() => { }}
                   accessibilityLabel="Preview"
                 >
                   Result To Default

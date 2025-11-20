@@ -81,7 +81,7 @@ function IndexFiltersDefaultExample() {
     "Product Reviews",
     "Store Reviews",
     "Spam",
-    "Arvichiv",
+    "Archive",
   ]);
 
   // const deleteView = (index) => {
@@ -132,7 +132,7 @@ function IndexFiltersDefaultExample() {
 
   const [sortSelected, setSortSelected] = useState(["order asc"]);
   const { mode, setMode } = useSetIndexFiltersMode();
-  const onHandleCancel = () => {};
+  const onHandleCancel = () => { };
   const onHandleSave = async () => {
     await sleep(1);
     return true;
@@ -505,7 +505,7 @@ function IndexFiltersDefaultExample() {
               onQueryChange={handleFiltersQueryChange}
               onQueryClear={() => setQueryValue("")}
               onSort={setSortSelected}
-              
+
               cancelAction={{
                 onAction: onHandleCancel,
                 disabled: false,
@@ -519,12 +519,12 @@ function IndexFiltersDefaultExample() {
               onClearAll={handleFiltersClearAll}
               mode={mode}
               setMode={setMode}
-              onCreateNewView={undefined} 
+              onCreateNewView={undefined}
               canCreateNewView={false}
             />
 
             <IndexTable
-              
+
               itemCount={orders.length}
               selectedItemsCount={
                 allResourcesSelected ? "All" : selectedResources.length
