@@ -22,24 +22,163 @@ import {
   InlineGrid,
 } from "@shopify/polaris";
 
-import { useState, useCallback, useContext } from "react";
+import { useState, useCallback } from "react";
 import "@shopify/polaris/build/esm/styles.css";
 import {
   ChevronDownIcon,
   HeartIcon,
   MenuHorizontalIcon,
   PinIcon,
-  StarFilledIcon,
-  StarIcon,
   UndoIcon,
 } from "@shopify/polaris-icons";
 import StarRating from "../components/Ratting.jsx";
 import { useColorTheme } from "./ColorContext.jsx";
-import "../components/style.css"
+import "../components/style.css"; 
+
+
+const orders = [
+  {
+    id: 1,
+    userName: "Manish",
+    item: "Bag",
+    time: "2 days",
+    Rating: 4.3,
+    comment: "Great!",
+    tag: "test",
+  },
+  {
+    id: 2,
+    userName: "Amit",
+    item: "Shoes",
+    time: "1 day ago",
+    Rating: 4.8,
+    comment: "Excellent",
+    tag: "verified",
+  },
+  {
+    id: 3,
+    userName: "Rahul",
+    item: "Watch",
+    time: "3 days",
+    Rating: 4.1,
+    comment: "Good quality",
+    tag: "hot",
+  },
+  {
+    id: 4,
+    userName: "Suresh",
+    item: "T-Shirt",
+    time: "5 days",
+    Rating: 3.9,
+    comment: "Decent",
+    tag: "new",
+  },
+  {
+    id: 5,
+    userName: "Vikas",
+    item: "Laptop",
+    time: "12 hours",
+    Rating: 4.9,
+    comment: "Amazing!",
+    tag: "pro",
+  },
+  {
+    id: 6,
+    userName: "Neha",
+    item: "Mobile",
+    time: "4 days",
+    Rating: 4.5,
+    comment: "Very smooth",
+    tag: "verified",
+  },
+  {
+    id: 7,
+    userName: "Priya",
+    item: "Headphones",
+    time: "6 hours",
+    Rating: 3.8,
+    comment: "Okay product",
+    tag: "test",
+  },
+  {
+    id: 8,
+    userName: "Rohit",
+    item: "Bag",
+    time: "7 days",
+    Rating: 4.0,
+    comment: "Nice build",
+    tag: "sale",
+  },
+  {
+    id: 9,
+    userName: "Aman",
+    item: "Shoes",
+    time: "2 hours",
+    Rating: 4.7,
+    comment: "Fits well",
+    tag: "verified",
+  },
+  {
+    id: 10,
+    userName: "Deepak",
+    item: "Keyboard",
+    time: "3 days ago",
+    Rating: 4.2,
+    comment: "Smooth typing",
+    tag: "hot",
+  },
+  {
+    id: 11,
+    userName: "Mohan",
+    item: "Mouse",
+    time: "9 hours",
+    Rating: 3.6,
+    comment: "Average",
+    tag: "test",
+  },
+  {
+    id: 12,
+    userName: "Nitin",
+    item: "Monitor",
+    time: "1 week",
+    Rating: 4.4,
+    comment: "Crisp display",
+    tag: "pro",
+  },
+  {
+    id: 13,
+    userName: "Kunal",
+    item: "Charger",
+    time: "13 hours",
+    Rating: 3.9,
+    comment: "Works fine",
+    tag: "new",
+  },
+  {
+    id: 14,
+    userName: "Sneha",
+    item: "Powerbank",
+    time: "8 days",
+    Rating: 4.6,
+    comment: "Long backup",
+    tag: "verified",
+  },
+  {
+    id: 15,
+    userName: "Harshit",
+    item: "Speaker",
+    time: "11 hours",
+    Rating: 4.1,
+    comment: "Good sound",
+    tag: "hot",
+  },
+];
 
 function IndexFiltersDefaultExample() {
   const { hexCode } = useColorTheme();
 
+
+  const [filteredOrders, setFilteredOrders] = useState(orders);
   const [selectedData, setSelectedDta] = useState(0);
 
   const handleTabChange = useCallback((selectedTabIndex) => {
@@ -84,20 +223,6 @@ function IndexFiltersDefaultExample() {
     "Arvichiv",
   ]);
 
-  // const deleteView = (index) => {
-  // 	const newItemStrings = [...itemStrings];
-  // 	newItemStrings.splice(index, 1);
-  // 	setItemStrings(newItemStrings);
-  // 	setSelected(0);
-  // };
-
-  // const duplicateView = async (name) => {
-  // 	setItemStrings([...itemStrings, name]);
-  // 	setSelected(itemStrings.length);
-  // 	await sleep(1);
-  // 	return true;
-  // };
-
   const tabs = itemStrings.map((item, index) => ({
     content: item,
     index,
@@ -116,8 +241,6 @@ function IndexFiltersDefaultExample() {
   }));
 
   const [selected, setSelected] = useState(0);
-
-
 
   const sortOptions = [
     { label: "Coustomer", value: "order asc", directionLabel: "Ascending" },
@@ -138,63 +261,81 @@ function IndexFiltersDefaultExample() {
     return true;
   };
 
-  // 	const primaryAction =
-  // 		selected === 0
-  // 			? {
-  // 					type: "save-as",
-  // 					onAction: onCreateNewView,
-  // 					disabled: false,
-  // 					loading: false,
-  // 				}
-  // 			: {
-  // 					type: "save",
-  // 					onAction: onHandleSave,
-  // 					disabled: false,
-  // 					loading: false,
-  // 				};
-
   const [accountStatus, setAccountStatus] = useState(undefined);
   const [moneySpent, setMoneySpent] = useState(undefined);
   const [taggedWith, setTaggedWith] = useState("");
   const [queryValue, setQueryValue] = useState("");
 
+
+  const filterOrders = useCallback(
+    (query) => {
+      if (!query) {
+        setFilteredOrders(orders);
+        return;
+      }
+
+      const lowerCaseQuery = query.toLowerCase();
+
+      const newFilteredOrders = orders.filter((order) => {
+     
+        const matchesName = order.userName.toLowerCase().includes(lowerCaseQuery);
+        const matchesId = String(order.id).includes(lowerCaseQuery);
+        const matchesTag = order.tag.toLowerCase().includes(lowerCaseQuery);
+
+        return matchesName || matchesId || matchesTag;
+      });
+
+      setFilteredOrders(newFilteredOrders);
+    },
+    [orders] 
+  );
+
+
+  const handleFiltersQueryChange = useCallback(
+    (value) => {
+      setQueryValue(value);
+      filterOrders(value); 
+    },
+    [filterOrders]
+  );
+  
+ 
+  const onQueryClear = useCallback(() => {
+    setQueryValue("");
+    filterOrders("");
+  }, [filterOrders]);
+
+
   const handleAccountStatusChange = useCallback(
     (value) => setAccountStatus(value),
-    [],
+    []
   );
   const handleMoneySpentChange = useCallback(
     (value) => setMoneySpent(value),
-    [],
+    []
   );
-  const handleTaggedWithChange = useCallback(
-    (value) => setTaggedWith(value),
-    [],
-  );
-  const handleFiltersQueryChange = useCallback(
-    (value) => setQueryValue(value),
-    [],
-  );
+  const handleTaggedWithChange = useCallback((value) => setTaggedWith(value), []);
 
   const handleAccountStatusRemove = useCallback(
     () => setAccountStatus(undefined),
-    [],
+    []
   );
   const handleMoneySpentRemove = useCallback(
     () => setMoneySpent(undefined),
-    [],
+    []
   );
   const handleTaggedWithRemove = useCallback(() => setTaggedWith(""), []);
-  const handleQueryValueRemove = useCallback(() => setQueryValue(""), []);
+
 
   const handleFiltersClearAll = useCallback(() => {
     handleAccountStatusRemove();
     handleMoneySpentRemove();
     handleTaggedWithRemove();
-    handleQueryValueRemove();
+    onQueryClear(); 
   }, [
     handleAccountStatusRemove,
     handleMoneySpentRemove,
-    handleQueryValueRemove,
+    onQueryClear,
     handleTaggedWithRemove,
   ]);
 
@@ -281,153 +422,11 @@ function IndexFiltersDefaultExample() {
     });
   }
 
-  const orders = [
-    {
-      id: 1,
-      userName: "Manish",
-      item: "Bag",
-      time: "2 days",
-      Rating: 4.3,
-      comment: "Great!",
-      tag: "test",
-    },
-    {
-      id: 2,
-      userName: "Amit",
-      item: "Shoes",
-      time: "1 day ago",
-      Rating: 4.8,
-      comment: "Excellent",
-      tag: "verified",
-    },
-    {
-      id: 3,
-      userName: "Rahul",
-      item: "Watch",
-      time: "3 days",
-      Rating: 4.1,
-      comment: "Good quality",
-      tag: "hot",
-    },
-    {
-      id: 4,
-      userName: "Suresh",
-      item: "T-Shirt",
-      time: "5 days",
-      Rating: 3.9,
-      comment: "Decent",
-      tag: "new",
-    },
-    {
-      id: 5,
-      userName: "Vikas",
-      item: "Laptop",
-      time: "12 hours",
-      Rating: 4.9,
-      comment: "Amazing!",
-      tag: "pro",
-    },
-    {
-      id: 6,
-      userName: "Neha",
-      item: "Mobile",
-      time: "4 days",
-      Rating: 4.5,
-      comment: "Very smooth",
-      tag: "verified",
-    },
-    {
-      id: 7,
-      userName: "Priya",
-      item: "Headphones",
-      time: "6 hours",
-      Rating: 3.8,
-      comment: "Okay product",
-      tag: "test",
-    },
-    {
-      id: 8,
-      userName: "Rohit",
-      item: "Bag",
-      time: "7 days",
-      Rating: 4.0,
-      comment: "Nice build",
-      tag: "sale",
-    },
-    {
-      id: 9,
-      userName: "Aman",
-      item: "Shoes",
-      time: "2 hours",
-      Rating: 4.7,
-      comment: "Fits well",
-      tag: "verified",
-    },
-    {
-      id: 10,
-      userName: "Deepak",
-      item: "Keyboard",
-      time: "3 days ago",
-      Rating: 4.2,
-      comment: "Smooth typing",
-      tag: "hot",
-    },
-    {
-      id: 11,
-      userName: "Mohan",
-      item: "Mouse",
-      time: "9 hours",
-      Rating: 3.6,
-      comment: "Average",
-      tag: "test",
-    },
-    {
-      id: 12,
-      userName: "Nitin",
-      item: "Monitor",
-      time: "1 week",
-      Rating: 4.4,
-      comment: "Crisp display",
-      tag: "pro",
-    },
-    {
-      id: 13,
-      userName: "Kunal",
-      item: "Charger",
-      time: "13 hours",
-      Rating: 3.9,
-      comment: "Works fine",
-      tag: "new",
-    },
-    {
-      id: 14,
-      userName: "Sneha",
-      item: "Powerbank",
-      time: "8 days",
-      Rating: 4.6,
-      comment: "Long backup",
-      tag: "verified",
-    },
-    {
-      id: 15,
-      userName: "Harshit",
-      item: "Speaker",
-      time: "11 hours",
-      Rating: 4.1,
-      comment: "Good sound",
-      tag: "hot",
-    },
-  ];
-
-  const resourceName = {
-    singular: "order",
-    plural: "orders",
-  };
-
+  
   const { selectedResources, allResourcesSelected, handleSelectionChange } =
-    useIndexResourceState(orders);
+    useIndexResourceState(filteredOrders);
 
-  const rowMarkup = orders.map(
+  const rowMarkup = filteredOrders.map( 
     ({ id, userName, item, time, Rating, comment, tag }, index) => (
       <IndexTable.Row
         id={id}
@@ -482,7 +481,7 @@ function IndexFiltersDefaultExample() {
           </InlineStack>
         </IndexTable.Cell>
       </IndexTable.Row>
-    ),
+    )
   );
 
   return (
@@ -502,10 +501,9 @@ function IndexFiltersDefaultExample() {
               sortSelected={sortSelected}
               queryValue={queryValue}
               queryPlaceholder="Searching in all"
-              onQueryChange={handleFiltersQueryChange}
-              onQueryClear={() => setQueryValue("")}
+              onQueryChange={handleFiltersQueryChange} 
+              onQueryClear={onQueryClear} 
               onSort={setSortSelected}
-              
               cancelAction={{
                 onAction: onHandleCancel,
                 disabled: false,
@@ -519,13 +517,12 @@ function IndexFiltersDefaultExample() {
               onClearAll={handleFiltersClearAll}
               mode={mode}
               setMode={setMode}
-              onCreateNewView={undefined} 
-              canCreateNewView={false}
+              onCreateNewView={undefined}
+              canCreateNewView={false} 
             />
 
             <IndexTable
-              
-              itemCount={orders.length}
+              itemCount={filteredOrders.length} 
               selectedItemsCount={
                 allResourcesSelected ? "All" : selectedResources.length
               }
