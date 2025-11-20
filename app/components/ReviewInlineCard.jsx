@@ -1,5 +1,6 @@
-import { InlineGrid, Text, Box, Image, Card,Button } from '@shopify/polaris'
+import { InlineGrid, Text, Box, Image, Card, Button } from '@shopify/polaris'
 import React from 'react'
+import "./style.css"
 
 function ReviewInlineCard({ title, imageurl, buttontext, textcontent }) {
     return (

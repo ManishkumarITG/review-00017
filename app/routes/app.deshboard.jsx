@@ -1,15 +1,19 @@
 import React, { useState } from "react";
-import { BlockStack, Button, Card, Page, InlineGrid, Text, Popover, OptionList, InlineStack, Badge, Box, Image, } from "@shopify/polaris";
+import { BlockStack, Button, Card, Page, InlineGrid, Text, Popover, OptionList, InlineStack, Badge, Box, Image, Link, } from "@shopify/polaris";
 import { AppProvider } from "@shopify/polaris"
 import en from "@shopify/polaris/locales/en.json";
-import "@shopify/polaris/build/esm/styles.css";
+import '@shopify/polaris/build/esm/styles.css';
 import { CalendarIcon, PlusIcon, ChartVerticalIcon, } from '@shopify/polaris-icons';
 import DeshboardCard from "../components/deshboardCard";
 import ReviewInlineCard from "../components/ReviewInlineCard";
 import DeshboardGuidense from "../components/DeshboardGuidense";
 import DeshboardimageWithText from "../components/DeshboardImageWithText";
+import { useNavigate, useLocation } from "react-router";
+import DeshboardHeader from "../components/DeshboardHeader"
+
 export default function Deshboard() {
 
+    const navigate = useNavigate()
     const ranges = [
         {
             title: "Last 30 days",
@@ -78,14 +82,100 @@ export default function Deshboard() {
             period: null,
         },
     ];
+    const carddata = [
+        {
+            id: 1,
+            title: "Reviews",
+            number: 1284,
+            percentage: 12,
+            date: "yesterday"
+        },
+        {
+            id: 2,
+            title: "Average Rating",
+            number: 87,
+            percentage: 8,
+            date: "2025-11-20"
+        },
+        {
+            id: 3,
+            title: "Request sent",
+            number: 1120,
+            percentage: 15,
+            date: "2025-11-18"
+        },
+        {
+            id: 4,
+            title: "Revenue Form",
+            number: 42,
+            percentage: -3,
+            date: "2025-11-10"
+        },
+        {
+            id: 5,
+            title: "Reviews",
+            number: 540,
+            percentage: 6,
+            date: "2025-10-02"
+        },
+        {
+            id: 6,
+            title: "Average Rating",
+            number: 90,
+            percentage: 9,
+            date: "2025-09-15"
+        }
+    ];
+
+
+    const handleNavigate = () => { navigate("/app/reveiwpage"); console.log("hello") }
+
+    const now = new Date();
 
     const [selected, setSelected] = useState(ranges[0]);
     const [popoverActive, setPopoverActive] = useState(false);
+    const [filteredData, setFilteredData] = useState(carddata);
+
+    function filterresult(value) {
+        const newSelected = ranges.find((range) => range.alias === value[0]);
+        setSelected(newSelected);
+
+        // Filter logic
+        if (newSelected.alias === "alltime") {
+            setFilteredData(carddata);
+        } else if (newSelected.alias === "today") {
+            setFilteredData(carddata.filter(i => i.date === "2025-11-20"));
+        } else if (newSelected.alias === "yesterday") {
+            setFilteredData(carddata.filter(i => i.date === "yesterday"));
+        } else if (newSelected.alias === "last7days") {
+            setFilteredData(carddata.filter(i => {
+                const d = new Date(i.date);
+                const diff = (new Date() - d) / (1000 * 60 * 60 * 24);
+                return diff <= 7;
+            }));
+        } else if (newSelected.alias === "last30days") {
+            setFilteredData(carddata.filter(i => {
+                const d = new Date(i.date);
+                const diff = (new Date() - d) / (1000 * 60 * 60 * 24);
+                return diff <= 30;
+            }));
+        } else {
+            setFilteredData(carddata);
+        }
+
+        setPopoverActive(false);
+
+    }
+    // setSelected
+    const fil = carddata.filter((item) => {
+        return item.date === selected.alias;
+    })
+
     return (
         <AppProvider i18n={en}>
-            <Page>
+            <DeshboardHeader />
+            <Page  >
                 <DeshboardGuidense />
-
             </Page>
             <Page>
                 <Card roundedAbove="sm">
@@ -97,13 +187,18 @@ export default function Deshboard() {
                             <InlineGrid columns="auto auto" gap="100" align="center">
 
                                 <Popover
+                                    onClose={() => {
+                                        console.log("closed")
+                                    }}
                                     autofocusTarget="none"
                                     preferredAlignment="left"
                                     preferInputActivator={false}
                                     preferredPosition="below"
                                     activator={
                                         <Button
-                                            onClick={() => setPopoverActive(!popoverActive)}
+                                            onClick={() => {
+                                                setPopoverActive(!popoverActive)
+                                            }}
                                             icon={CalendarIcon}
                                         >
                                             {selected.title}
@@ -112,27 +207,39 @@ export default function Deshboard() {
                                     active={popoverActive}
                                 >
                                     <OptionList
-                                        options={ranges.map((range) => ({
+                                        options={ranges?.map((range) => ({
                                             value: range.alias,
                                             label: range.title,
                                         }))}
                                         selected={selected.alias}
+
                                         onChange={(value) => {
-                                            setSelected(ranges.find((range) => range.alias === value[0]));
-                                            setPopoverActive(false);
+                                            filterresult(value)
                                         }}
                                     />
                                 </Popover>
-                                
-                                <Button icon={ChartVerticalIcon}>View Report</Button>
+
+                                <Button
+                                    icon={ChartVerticalIcon}
+                                    onClick={() => navigate("/app/filterTable")}
+
+                                >
+                                    View Report
+                                </Button>
+
                             </InlineGrid>
                         </InlineGrid>
-                        <InlineGrid columns="1fr 1fr 1fr 1fr 1fr " gap="200">
+                        <InlineGrid columns={{
+                            xs: "1fr",
+                            sm: "1fr 1fr ",
+                            md: "1fr 1fr 1fr 1fr 1fr"
+                        }} gap="200">
 
-                            <DeshboardCard title="Reviews" number="0" percentage="0" />
-                            <DeshboardCard title="Average Rating" number="0" percentage="0" />
-                            <DeshboardCard title="Request Sent" number="0" percentage="0" />
-                            <DeshboardCard title="Revenue form" number="$0" percentage="0" />
+                            {filteredData.map((items, index) => (
+                                <DeshboardCard title={items.title} number={items.number} percentage={items.percentage} key={index} />
+                            ))
+                            }
+
                             <Card>
                                 <Text as="h2" variant="headingSm">
                                     Trust score
@@ -146,7 +253,11 @@ export default function Deshboard() {
                             </Card>
                         </InlineGrid>
 
-                        <InlineGrid columns="1fr auto" gap="200">
+                        <InlineGrid columns={{
+                            xs: "1fr",
+                            sm: "3fr  ",
+                            md: "2fr auto"
+                        }} gap="200">
                             <Card>
                                 <InlineStack gap="200" align="start">
                                     <Box>
@@ -195,11 +306,30 @@ export default function Deshboard() {
                 </Card>
             </Page>
             <Page>
-                <InlineGrid gap="400" align="start" columns="1fr 1fr">
-                    {/* Top Products Card */}
-                    <ReviewInlineCard title="Top products" imageurl="https://pub-images.judge.me/judgeme/empty-product" buttontext="View all reviews " textcontent="A list of top reviewed products will show here. " />
-                    <ReviewInlineCard title="Top products" imageurl="https://pub-images.judge.me/judgeme/empty-review" buttontext="Request reviews" textcontent="You can view your recent reviews here.<" />
+                <InlineGrid
+                    gap="400"
+                    // align="start"
+                    columns={{
+                        xs: "1fr",           // mobile: stack cards vertically
+                        sm: "1fr ",       // tablet: give equal width real estate
+                        md: "auto auto",     // desktop: fit-content sizing for that polished admin look
+                    }}
+                >
+                    <ReviewInlineCard
+                        title="Top products"
+                        imageurl="https://pub-images.judge.me/judgeme/empty-product"
+                        buttontext="View all reviews"
+                        textcontent="A list of top reviewed products will show here."
+                    />
+
+                    <ReviewInlineCard
+                        title="Recent activity"
+                        imageurl="https://pub-images.judge.me/judgeme/empty-review"
+                        buttontext="Request reviews"
+                        textcontent="You can view your recent reviews here."
+                    />
                 </InlineGrid>
+
             </Page>
             <Page>
                 <DeshboardimageWithText

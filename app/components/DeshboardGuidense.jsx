@@ -15,6 +15,7 @@ import {
   ChevronDownIcon,
   CheckCircleIcon,
 } from "@shopify/polaris-icons";
+import '@shopify/polaris/build/esm/styles.css';
 
 import InstallWidgetsCard from "./InstallWidgetsCard";
 function DashboardGuidance() {
@@ -41,7 +42,7 @@ function DashboardGuidance() {
     <Card roundedAbove="sm">
       <BlockStack gap="200">
         {/* Top row: progress + menu */}
-        <InlineGrid columns="1fr auto">
+        <InlineGrid columns="1fr auto" padding="@container(inline-size >500px) large-400,small">
           <Text as="span" variant="bodySm">
             3 of 6 tasks complete
           </Text>
