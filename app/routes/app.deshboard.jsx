@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { BlockStack, Button, Card, Page, InlineGrid, Text, Popover, OptionList, InlineStack, Badge, Box, Image, } from "@shopify/polaris";
 import { AppProvider } from "@shopify/polaris"
 import en from "@shopify/polaris/locales/en.json";
-import "@shopify/polaris/build/esm/styles.css";
+import '@shopify/polaris/build/esm/styles.css';
 import { CalendarIcon, PlusIcon, ChartVerticalIcon, } from '@shopify/polaris-icons';
 import DeshboardCard from "../components/deshboardCard";
 import ReviewInlineCard from "../components/ReviewInlineCard";
@@ -83,9 +83,8 @@ export default function Deshboard() {
     const [popoverActive, setPopoverActive] = useState(false);
     return (
         <AppProvider i18n={en}>
-            <Page>
+            <Page  >
                 <DeshboardGuidense />
-
             </Page>
             <Page>
                 <Card roundedAbove="sm">
@@ -123,11 +122,15 @@ export default function Deshboard() {
                                         }}
                                     />
                                 </Popover>
-                                
+
                                 <Button icon={ChartVerticalIcon}>View Report</Button>
                             </InlineGrid>
                         </InlineGrid>
-                        <InlineGrid columns="1fr 1fr 1fr 1fr 1fr " gap="200">
+                        <InlineGrid columns={{
+                            xs: "1fr",
+                            sm: "1fr 1fr ",
+                            md: "1fr 1fr 1fr 1fr 1fr"
+                        }} gap="200">
 
                             <DeshboardCard title="Reviews" number="0" percentage="0" />
                             <DeshboardCard title="Average Rating" number="0" percentage="0" />
@@ -146,7 +149,11 @@ export default function Deshboard() {
                             </Card>
                         </InlineGrid>
 
-                        <InlineGrid columns="1fr auto" gap="200">
+                        <InlineGrid columns={{
+                            xs: "1fr",
+                            sm: "3fr  ",
+                            md: "2fr auto"
+                        }} gap="200">
                             <Card>
                                 <InlineStack gap="200" align="start">
                                     <Box>
@@ -195,11 +202,30 @@ export default function Deshboard() {
                 </Card>
             </Page>
             <Page>
-                <InlineGrid gap="400" align="start" columns="1fr 1fr">
-                    {/* Top Products Card */}
-                    <ReviewInlineCard title="Top products" imageurl="https://pub-images.judge.me/judgeme/empty-product" buttontext="View all reviews " textcontent="A list of top reviewed products will show here. " />
-                    <ReviewInlineCard title="Top products" imageurl="https://pub-images.judge.me/judgeme/empty-review" buttontext="Request reviews" textcontent="You can view your recent reviews here.<" />
+                <InlineGrid
+                    gap="400"
+                    // align="start"
+                    columns={{
+                        xs: "1fr",           // mobile: stack cards vertically
+                        sm: "1fr ",       // tablet: give equal width real estate
+                        md: "auto auto",     // desktop: fit-content sizing for that polished admin look
+                    }}
+                >
+                    <ReviewInlineCard
+                        title="Top products"
+                        imageurl="https://pub-images.judge.me/judgeme/empty-product"
+                        buttontext="View all reviews"
+                        textcontent="A list of top reviewed products will show here."
+                    />
+
+                    <ReviewInlineCard
+                        title="Recent activity"
+                        imageurl="https://pub-images.judge.me/judgeme/empty-review"
+                        buttontext="Request reviews"
+                        textcontent="You can view your recent reviews here."
+                    />
                 </InlineGrid>
+
             </Page>
             <Page>
                 <DeshboardimageWithText

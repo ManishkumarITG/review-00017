@@ -1,5 +1,6 @@
 import { Box, Card, Image, InlineGrid, MediaCard } from '@shopify/polaris';
 import React from 'react';
+import '@shopify/polaris/build/esm/styles.css';
 
 function DeshboardImageWithText({ title, imageurl, buttontext, textcontent }) {
     return (

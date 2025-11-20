@@ -1,5 +1,6 @@
 import { BlockStack, Text, InlineStack, Card } from '@shopify/polaris'
 import React from 'react'
+import '@shopify/polaris/build/esm/styles.css';
 
 function DeshboardCard({ title, number, percentage }) {
     return (

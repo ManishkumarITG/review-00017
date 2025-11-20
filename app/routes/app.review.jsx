@@ -109,7 +109,7 @@
 //             onSelect={handleTabChange}
 //           ></LegacyTabs>
 //         </Card>
-    
+
 
 //       </Page>
 //     </AppProvider>
@@ -118,12 +118,28 @@
 
 
 import React from 'react'
-
+import ReviewDetailsPage from '../components/ReviewDetails.jsx'
+import ReviewsPage from "../components/ReviewsPage.jsx"
+import { AppProvider } from '@shopify/polaris'
+import { Route, Router, Routes } from 'react-router';
 function Review() {
+  const reviews = [
+    { id: "R123", date: "2025-11-19", rating: 4.5, description: "Great product!", salesItems: ["Payouts"] },
+    { id: "R124", date: "2025-11-18", rating: 3.8, description: "Good quality!", salesItems: ["Total Sales"] },
+    { id: "R125", date: "2025-11-17", rating: 5, description: "Excellent!", salesItems: ["Payouts", "Total Sales"] },
+  ];
   return (
-    <div>
+    <AppProvider>
       hello review
-    </div>
+      {/* <Router> */}
+      {/* <Routes>
+          <Route path="/" element={<ReviewsPage reviews={reviews} />} />
+          <Route path="/review/:id" element={<ReviewDetailsPage reviews={reviews} />} />
+        </Routes>
+      </Router> */}
+      <ReviewsPage reviews={reviews} />
+      <ReviewDetailsPage reviews={reviews} />
+    </AppProvider>
   )
 }
 
