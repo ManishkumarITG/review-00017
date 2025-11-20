@@ -103,13 +103,8 @@ function IndexFiltersDefaultExample() {
     index,
     onAction: () => {
       const params = new URLSearchParams(window.location.search);
-<<<<<<< HEAD
-      console.log(item)
-      params.set("key", item);
-=======
       console.log(item);
       params.set("table", item);
->>>>>>> 396dd8245f8d82f3f17198c46a57a91dc0e614db
 
       const newUrl = window.location.pathname + "?" + params.toString();
 
@@ -137,28 +132,12 @@ function IndexFiltersDefaultExample() {
 
   const [sortSelected, setSortSelected] = useState(["order asc"]);
   const { mode, setMode } = useSetIndexFiltersMode();
-  const onHandleCancel = () => { };
+  const onHandleCancel = () => {};
   const onHandleSave = async () => {
     await sleep(1);
     return true;
   };
 
-<<<<<<< HEAD
-  const primaryAction =
-    selected === 0
-      ? {
-        type: "save-as",
-        onAction: onCreateNewView,
-        disabled: false,
-        loading: false,
-      }
-      : {
-        type: "save",
-        onAction: onHandleSave,
-        disabled: false,
-        loading: false,
-      };
-=======
   // 	const primaryAction =
   // 		selected === 0
   // 			? {
@@ -173,7 +152,6 @@ function IndexFiltersDefaultExample() {
   // 					disabled: false,
   // 					loading: false,
   // 				};
->>>>>>> 396dd8245f8d82f3f17198c46a57a91dc0e614db
 
   const [accountStatus, setAccountStatus] = useState(undefined);
   const [moneySpent, setMoneySpent] = useState(undefined);
@@ -336,7 +314,7 @@ function IndexFiltersDefaultExample() {
       userName: "Suresh",
       item: "T-Shirt",
       time: "5 days",
-      Rating: 1,
+      Rating: 3.9,
       comment: "Decent",
       tag: "new",
     },
@@ -509,34 +487,6 @@ function IndexFiltersDefaultExample() {
 
   return (
     <AppProvider>
-<<<<<<< HEAD
-      <LegacyCard>
-        <IndexFilters
-          sortOptions={sortOptions}
-          sortSelected={sortSelected}
-          queryValue={queryValue}
-          queryPlaceholder="Searching in all"
-          onQueryChange={handleFiltersQueryChange}
-          onQueryClear={() => setQueryValue("")}
-          onSort={setSortSelected}
-          primaryAction={primaryAction}
-          cancelAction={{
-            onAction: onHandleCancel,
-            disabled: false,
-            loading: false,
-          }}
-          tabs={tabs}
-          selected={selected}
-          onSelect={setSelected}
-          canCreateNewView
-          onCreateNewView={onCreateNewView}
-          filters={filters} 
-          appliedFilters={appliedFilters}
-          onClearAll={handleFiltersClearAll}
-          mode={mode}
-          setMode={setMode}
-        />
-=======
       <Page>
         <InlineGrid gap="400">
           <Card padding="025">
@@ -572,7 +522,6 @@ function IndexFiltersDefaultExample() {
               onCreateNewView={undefined} 
               canCreateNewView={false}
             />
->>>>>>> 396dd8245f8d82f3f17198c46a57a91dc0e614db
 
             <IndexTable
               
