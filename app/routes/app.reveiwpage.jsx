@@ -16,9 +16,13 @@ import {
   BlockStack,
   Box,
   ButtonGroup,
+  Page,
+  Card,
+  LegacyTabs,
+  InlineGrid,
 } from "@shopify/polaris";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext } from "react";
 import "@shopify/polaris/build/esm/styles.css";
 import {
   ChevronDownIcon,
@@ -30,11 +34,45 @@ import {
   UndoIcon,
 } from "@shopify/polaris-icons";
 import StarRating from "../components/Ratting.jsx";
-import { useLocation, useNavigate } from "react-router";
+import { useColorTheme } from "./ColorContext.jsx";
+import "../components/style.css"
 
 function IndexFiltersDefaultExample() {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const { hexCode } = useColorTheme();
+
+  const [selectedData, setSelectedDta] = useState(0);
+
+  const handleTabChange = useCallback((selectedTabIndex) => {
+    setSelectedDta(selectedTabIndex);
+    const params = new URLSearchParams(window.location.search);
+    params.set("key", selectedTabIndex);
+    const newUrl = window.location.pathname + "?" + params.toString();
+    window.history.pushState({}, "", newUrl);
+  }, []);
+
+  const tabsdata = [
+    {
+      id: "all-customers-1",
+      content: "All",
+      accessibilityLabel: "All customers",
+      panelID: "all-customers-content-1",
+    },
+    {
+      id: "accepts-marketing-1",
+      content: "Accepts marketing",
+      panelID: "accepts-marketing-content-1",
+    },
+    {
+      id: "repeat-customers-1",
+      content: "Repeat customers",
+      panelID: "repeat-customers-content-1",
+    },
+    {
+      id: "prospects-1",
+      content: "Prospects",
+      panelID: "prospects-content-1",
+    },
+  ];
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -47,17 +85,17 @@ function IndexFiltersDefaultExample() {
   ]);
 
   // const deleteView = (index) => {
-  //   const newItemStrings = [...itemStrings];
-  //   newItemStrings.splice(index, 1);
-  //   setItemStrings(newItemStrings);
-  //   setSelected(0);
+  // 	const newItemStrings = [...itemStrings];
+  // 	newItemStrings.splice(index, 1);
+  // 	setItemStrings(newItemStrings);
+  // 	setSelected(0);
   // };
 
   // const duplicateView = async (name) => {
-  //   setItemStrings([...itemStrings, name]);
-  //   setSelected(itemStrings.length);
-  //   await sleep(1);
-  //   return true;
+  // 	setItemStrings([...itemStrings, name]);
+  // 	setSelected(itemStrings.length);
+  // 	await sleep(1);
+  // 	return true;
   // };
 
   const tabs = itemStrings.map((item, index) => ({
@@ -65,8 +103,13 @@ function IndexFiltersDefaultExample() {
     index,
     onAction: () => {
       const params = new URLSearchParams(window.location.search);
+<<<<<<< HEAD
       console.log(item)
       params.set("key", item);
+=======
+      console.log(item);
+      params.set("table", item);
+>>>>>>> 396dd8245f8d82f3f17198c46a57a91dc0e614db
 
       const newUrl = window.location.pathname + "?" + params.toString();
 
@@ -79,13 +122,7 @@ function IndexFiltersDefaultExample() {
 
   const [selected, setSelected] = useState(0);
 
-  const onCreateNewView = async (value) => {
-    console.log("hello");
-    await sleep(500);
-    setItemStrings([...itemStrings, value]);
-    setSelected(itemStrings.length);
-    return true;
-  };
+
 
   const sortOptions = [
     { label: "Coustomer", value: "order asc", directionLabel: "Ascending" },
@@ -106,6 +143,7 @@ function IndexFiltersDefaultExample() {
     return true;
   };
 
+<<<<<<< HEAD
   const primaryAction =
     selected === 0
       ? {
@@ -120,6 +158,22 @@ function IndexFiltersDefaultExample() {
         disabled: false,
         loading: false,
       };
+=======
+  // 	const primaryAction =
+  // 		selected === 0
+  // 			? {
+  // 					type: "save-as",
+  // 					onAction: onCreateNewView,
+  // 					disabled: false,
+  // 					loading: false,
+  // 				}
+  // 			: {
+  // 					type: "save",
+  // 					onAction: onHandleSave,
+  // 					disabled: false,
+  // 					loading: false,
+  // 				};
+>>>>>>> 396dd8245f8d82f3f17198c46a57a91dc0e614db
 
   const [accountStatus, setAccountStatus] = useState(undefined);
   const [moneySpent, setMoneySpent] = useState(undefined);
@@ -396,18 +450,7 @@ function IndexFiltersDefaultExample() {
     useIndexResourceState(orders);
 
   const rowMarkup = orders.map(
-    (
-      {
-        id,
-        userName,
-        item,
-        time,
-        Rating,
-        comment,
-        tag,
-      },
-      index,
-    ) => (
+    ({ id, userName, item, time, Rating, comment, tag }, index) => (
       <IndexTable.Row
         id={id}
         key={id}
@@ -437,7 +480,7 @@ function IndexFiltersDefaultExample() {
         <IndexTable.Cell>
           <BlockStack>
             <Box>
-              <StarRating rating={Rating} color={"#000000"} />
+              <StarRating rating={Rating} color={hexCode} />
             </Box>
             <Text fontWeight="bold">{comment}</Text>
             <Text fontWeight="bold">{tag}</Text>
@@ -466,6 +509,7 @@ function IndexFiltersDefaultExample() {
 
   return (
     <AppProvider>
+<<<<<<< HEAD
       <LegacyCard>
         <IndexFilters
           sortOptions={sortOptions}
@@ -492,25 +536,63 @@ function IndexFiltersDefaultExample() {
           mode={mode}
           setMode={setMode}
         />
+=======
+      <Page>
+        <InlineGrid gap="400">
+          <Card padding="025">
+            <LegacyTabs
+              tabs={tabsdata}
+              selected={selectedData}
+              onSelect={handleTabChange}
+            ></LegacyTabs>
+          </Card>
+          <LegacyCard>
+            <IndexFilters
+              sortOptions={sortOptions}
+              sortSelected={sortSelected}
+              queryValue={queryValue}
+              queryPlaceholder="Searching in all"
+              onQueryChange={handleFiltersQueryChange}
+              onQueryClear={() => setQueryValue("")}
+              onSort={setSortSelected}
+              
+              cancelAction={{
+                onAction: onHandleCancel,
+                disabled: false,
+                loading: false,
+              }}
+              tabs={tabs}
+              selected={selected}
+              onSelect={setSelected}
+              filters={filters}
+              appliedFilters={appliedFilters}
+              onClearAll={handleFiltersClearAll}
+              mode={mode}
+              setMode={setMode}
+              onCreateNewView={undefined} 
+              canCreateNewView={false}
+            />
+>>>>>>> 396dd8245f8d82f3f17198c46a57a91dc0e614db
 
-        <IndexTable
-          resourceName={resourceName}
-          itemCount={orders.length}
-          selectedItemsCount={
-            allResourcesSelected ? "All" : selectedResources.length
-          }
-          onSelectionChange={handleSelectionChange}
-          headings={[
-            { title: "Customer" },
-            { title: "Created" },
-            { title: "Ratting" },
-
-            { title: "status" },
-          ]}
-        >
-          {rowMarkup}
-        </IndexTable>
-      </LegacyCard>
+            <IndexTable
+              
+              itemCount={orders.length}
+              selectedItemsCount={
+                allResourcesSelected ? "All" : selectedResources.length
+              }
+              onSelectionChange={handleSelectionChange}
+              headings={[
+                { title: "Customer" },
+                { title: "Created" },
+                { title: "Ratting" },
+                { title: "status" },
+              ]}
+            >
+              {rowMarkup}
+            </IndexTable>
+          </LegacyCard>
+        </InlineGrid>
+      </Page>
     </AppProvider>
   );
 

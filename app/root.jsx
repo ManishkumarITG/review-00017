@@ -1,4 +1,6 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import { ColorProvider } from "./routes/ColorContext";
+
 
 export default function App() {
   return (
@@ -15,9 +17,12 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
-        <ScrollRestoration />
-        <Scripts />
+          <ColorProvider>
+             <Outlet />
+          <ScrollRestoration />
+          <Scripts />
+          </ColorProvider>
+       
       </body>
     </html>
   );

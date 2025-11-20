@@ -27,13 +27,16 @@ import {
   StarIcon,
   ThumbsUpIcon,
 } from "@shopify/polaris-icons";
+import { useColorTheme } from "../routes/ColorContext";
 
 function Branding() {
+    const {hexCode, color, setColor, setHexCode , hsbaToHex } = useColorTheme()
   const [isOpenColorPicker, setIsOpenColorPicker] = useState(false);
 
   const [checked, setChecked] = useState(true);
   const handleChange = useCallback((newChecked) => setChecked(newChecked), []);
 
+<<<<<<< HEAD
   const [color, setColor] = useState({
     hue: 120,
     brightness: 0.55625,
@@ -71,6 +74,9 @@ function Branding() {
   };
 
   const [hexCode, setHexCode] = useState(() => hsbaToHex(color));
+=======
+ 
+>>>>>>> 396dd8245f8d82f3f17198c46a57a91dc0e614db
 
   useEffect(() => {
     setHexCode(hsbaToHex(color));

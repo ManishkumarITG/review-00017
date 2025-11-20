@@ -1,3 +1,7 @@
 .Polaris-LegacyCard + .Polaris-LegacyCard {
   margin-top: 0 !important;
 }
+
+.Polaris-IndexFilters__CreateView {
+  display: none !important;
+}
