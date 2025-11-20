@@ -1,4 +1,4 @@
-export const reviewData = [
+export const reviews = [
   {
     id: 1,
     userName: "Manish",
@@ -135,3 +135,29 @@ export const reviewData = [
     tag: "hot",
   },
 ];
+
+export const tabsdata = [
+    {
+      id: "all-customers-1",
+      content: "All",
+      accessibilityLabel: "All customers",
+      panelID: "all-customers-content-1",
+    },
+    {
+      id: "accepts-marketing-1",
+      content: "Accepts marketing",
+      panelID: "accepts-marketing-content-1",
+    },
+    {
+      id: "repeat-customers-1",
+      content: "Repeat customers",
+      panelID: "repeat-customers-content-1",
+    },
+    {
+      id: "prospects-1",
+      content: "Prospects",
+      panelID: "prospects-content-1",
+    },
+  ];
+
+  export  const allReviewsContent = reviews.length
