@@ -1,130 +1,45 @@
-// import React, { useCallback, useState } from 'react'
+import {LegacyCard, LegacyTabs} from '@shopify/polaris';
+import {useState, useCallback} from 'react';
+import IndexFiltersDefaultExample from "../components/filterTable"
+export default function Reveiw() {
+  const [selected, setSelected] = useState(0);
 
-// import Polaris, { AppProvider } from '@shopify/polaris';
-// const {  Tabs,  Button, Text,  Badge, InlineStack, LegacyCard } = Polaris;
+  const handleTabChange = useCallback(
+    (selectedTabIndex) => setSelected(selectedTabIndex),
+    [],
+  );
 
-// // import InlineStack from "@shopify/polaris";
-// import "@shopify/polaris/build/esm/styles.css";
-// import AllReaviews from '../components/AllReaviews';
+  const tabs = [
+    {
+      id: 'all-customers-1',
+      content: 'All',
+      accessibilityLabel: 'All customers',
+      panelID: 'all-customers-content-1',
+    },
+    {
+      id: 'accepts-marketing-1',
+      content: 'Accepts marketing',
+      panelID: 'accepts-marketing-content-1',
+    },
+    {
+      id: 'repeat-customers-1',
+      content: 'Repeat customers',
+      panelID: 'repeat-customers-content-1',
+    },
+    {
+      id: 'prospects-1',
+      content: 'Prospects',
+      panelID: 'prospects-content-1',
+    },
+  ];
 
-
-// export default function Coordinator() {
-//     const [selected, setSelected] = useState(0);
-
-//     const handleTabChange = useCallback((selectedTabIndex) => {
-//         setSelected(selectedTabIndex);
-//     }, []); 
-
-
-//     const tabs = [
-//         {
-//             id: 'all-customers-4',
-//             content: 'All Reviews',
-//             accessibilityLabel: 'All customers',
-//             panelID: 'all-customers-content-4',
-//         },
-//         {
-//             id: 'accepts-marketing-4',
-//             content: 'Product Reviews',
-//             panelID: 'accepts-marketing-content-4',
-//         },
-//         {
-//             id: 'repeat-customers-4',
-//             content: 'Store Reviews',
-//             panelID: 'repeat-customers-content-4',
-//         },
-//         {
-//             id: 'prospects-4',
-//             content: 'Spam  ',
-//             panelID: 'prospects-content-4',
-//         },
-//         {
-//             id: 'prospects-5',
-//             content: 'Archivs',
-//             panelID: 'prospects-content-4',
-//         },
-//     ];
-
-
-//     const renderTabContent = () => {
-//         switch (selected) {
-//             case 0:
-//                 return <AllReaviews />;
-//             case 1:
-//                 return <Text>Yet to build 2 </Text>;
-//             case 2:
-//                 return <Text>Yet to build 3</Text>;
-//             case 3:
-//                 return <Text>Yet to build 4</Text>;
-//             default:
-//                 return null;
-//         }
-//     };
-
-//     // return (
-//     //     <>
-//     //     <AppProvider>
-
-//     //         <InlineStack alignment="space-between" align="space-between" padding="400">
-//     //             <InlineStack gap="200">
-//     //                 <Text variant="headingLg" as="h2">Reviews</Text>
-//     //                 <Badge tone="success" variant="outline" spacing="tight" progress="complete">
-//     //                     Auto Publish
-//     //                 </Badge>
-//     //             </InlineStack>
-//     //             <InlineStack gap="200">
-//     //                 <Button>
-//     //                     Import
-//     //                 </Button>
-//     //                 <Button>
-//     //                     Publish an Mordarate
-//     //                 </Button>
-//     //                 <Button>
-//     //                     Edit product review  group
-//     //                 </Button>
-//     //                 <Button>
-//     //                     Export
-//     //                 </Button>
-//     //             </InlineStack  >
-
-//     //         </InlineStack  >
-
-//     //         <LegacyCard>
-//     //             <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}>
-//     //                 <LegacyCard.Section title={tabs[selected].content}>
-//     //                     {renderTabContent()}
-//     //                 </LegacyCard.Section>
-//     //             </Tabs>
-//     //         </LegacyCard>
-//     //     </AppProvider>
-//     //     </>
-//     // )
-//   return (
-//     <AppProvider>
-//       <Page fullWidth={true}>
-//         <Card padding="50">
-//           <LegacyTabs
-//             tabs={tabs}
-//             selected={selected}
-//             onSelect={handleTabChange}
-//           ></LegacyTabs>
-//         </Card>
-    
-
-//       </Page>
-//     </AppProvider>
-//   );
-// }
-
-
-import React from 'react'
-
-function Review() {
   return (
-    <div>
-      hello review
-    </div>
-  )
+    <LegacyCard>
+      <LegacyTabs tabs={tabs} selected={selected} onSelect={handleTabChange}>
+        <LegacyCard.Section title={tabs[selected].content}>
+          <p>Tab {selected} selected</p>
+        </LegacyCard.Section>
+      </LegacyTabs>
+    </LegacyCard>
+  );
 }
-
-export default Review

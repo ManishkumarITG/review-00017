@@ -14,89 +14,74 @@ import {
   Button,
   InlineStack,
   BlockStack,
+  Box,
+  ButtonGroup,
 } from "@shopify/polaris";
 
 import { useState, useCallback } from "react";
 import "@shopify/polaris/build/esm/styles.css";
 import {
+  ChevronDownIcon,
   HeartIcon,
+  MenuHorizontalIcon,
   PinIcon,
   StarFilledIcon,
   StarIcon,
+  UndoIcon,
 } from "@shopify/polaris-icons";
+import StarRating from "../components/Ratting.jsx";
+import { useLocation, useNavigate } from "react-router";
 
 function IndexFiltersDefaultExample() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const [itemStrings, setItemStrings] = useState([
-    "All",
-    "Unpaid",
-    "Open",
-    "Closed",
-    "Local delivery",
-    "Local pickup",
+    "All Reviews",
+    "Product Reviews",
+    "Store Reviews",
+    "Spam",
+    "Arvichiv",
   ]);
 
-  const deleteView = (index) => {
-    const newItemStrings = [...itemStrings];
-    newItemStrings.splice(index, 1);
-    setItemStrings(newItemStrings);
-    setSelected(0);
-  };
+  // const deleteView = (index) => {
+  //   const newItemStrings = [...itemStrings];
+  //   newItemStrings.splice(index, 1);
+  //   setItemStrings(newItemStrings);
+  //   setSelected(0);
+  // };
 
-  const duplicateView = async (name) => {
-    setItemStrings([...itemStrings, name]);
-    setSelected(itemStrings.length);
-    await sleep(1);
-    return true;
-  };
+  // const duplicateView = async (name) => {
+  //   setItemStrings([...itemStrings, name]);
+  //   setSelected(itemStrings.length);
+  //   await sleep(1);
+  //   return true;
+  // };
 
   const tabs = itemStrings.map((item, index) => ({
     content: item,
     index,
-    onAction: () => {},
+    onAction: () => {
+      console.log()
+      const params = new URLSearchParams(window.location.search);
+      console.log(item)
+      params.set("key", item); 
+
+      const newUrl = window.location.pathname + "?" + params.toString();
+
+      window.history.pushState({}, "", newUrl);
+      console.log("hello");
+    },
     id: `${item}-${index}`,
-    isLocked: index === 0,
-    actions:
-      index === 0
-        ? []
-        : [
-            {
-              type: "rename",
-              onAction: () => {},
-              onPrimaryAction: async (value) => {
-                const newItemsStrings = tabs.map((tabItem, idx) => {
-                  if (idx === index) return value;
-                  return tabItem.content;
-                });
-                await sleep(1);
-                setItemStrings(newItemsStrings);
-                return true;
-              },
-            },
-            {
-              type: "duplicate",
-              onPrimaryAction: async (value) => {
-                await sleep(1);
-                duplicateView(value);
-                return true;
-              },
-            },
-            { type: "edit" },
-            {
-              type: "delete",
-              onPrimaryAction: async () => {
-                await sleep(1);
-                deleteView(index);
-                return true;
-              },
-            },
-          ],
+    actions: [],
   }));
 
   const [selected, setSelected] = useState(0);
 
   const onCreateNewView = async (value) => {
+    console.log("hello");
     await sleep(500);
     setItemStrings([...itemStrings, value]);
     setSelected(itemStrings.length);
@@ -458,18 +443,30 @@ function IndexFiltersDefaultExample() {
         <IndexTable.Cell> {time}</IndexTable.Cell>
         <IndexTable.Cell>
           <BlockStack>
-            {" "}
+            <Box>
+              <StarRating rating={Rating} color={"#000000"} />
+            </Box>
             <Text fontWeight="bold">{comment}</Text>
             <Text fontWeight="bold">{tag}</Text>
           </BlockStack>
         </IndexTable.Cell>
         <IndexTable.Cell>
-          <Text as="span" alignment="end" numeric>
-            {total}
-          </Text>
+          <InlineStack
+            align="end"
+            blockAlign="center"
+            style={{ width: "100%" }}
+          >
+            <InlineStack gap="800">
+              <Button icon={ChevronDownIcon} iconPosition="end">
+                Published
+              </Button>
+              <ButtonGroup>
+                <Button icon={UndoIcon} iconPosition="end"></Button>
+                <Button icon={MenuHorizontalIcon} iconPosition="end"></Button>
+              </ButtonGroup>
+            </InlineStack>
+          </InlineStack>
         </IndexTable.Cell>
-        <IndexTable.Cell>{paymentStatus}</IndexTable.Cell>
-        <IndexTable.Cell>{fulfillmentStatus}</IndexTable.Cell>
       </IndexTable.Row>
     ),
   );
@@ -514,9 +511,8 @@ function IndexFiltersDefaultExample() {
             { title: "Customer" },
             { title: "Created" },
             { title: "Ratting" },
-            { title: "Total", alignment: "end" },
-            { title: "Payment status" },
-            { title: "Fulfillment status" },
+
+            { title: "status" },
           ]}
         >
           {rowMarkup}

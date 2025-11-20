@@ -1,9 +1,8 @@
 import React from "react";
-import PolarisPkg, { Box } from '@shopify/polaris';
-const { InlineStack } = PolarisPkg;
+
 
 import { StarFilledIcon, StarIcon } from "@shopify/polaris-icons";
-import { Icon } from "@shopify/polaris";
+import { Icon , InlineStack } from "@shopify/polaris";
 
 export default function StarRating({ rating , color}) {
     const totalStars = 5;
@@ -23,7 +22,7 @@ export default function StarRating({ rating , color}) {
                 </span>
             );
         } else {
-            stars.push(<Icon key={i} source={StarIcon} />);
+            stars.push(<span><Icon key={i} source={StarIcon} /></span>);
         }
     }
 

@@ -14,7 +14,7 @@ import {
 } from "@shopify/polaris";
 
 import { CaretDownIcon } from "@shopify/polaris-icons";
-import "../components/style.css";
+import "./style.css";
 
 export default function Widget() {
   const [selected, setSelected] = useState("today");

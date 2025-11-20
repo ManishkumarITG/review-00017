@@ -46,14 +46,14 @@ function Branding() {
     let s = saturation;
     let b = brightness;
 
-    const i = Math.floor(h / 60);
-    const f = h / 60 - i;
-    const p = b * (1 - s);
-    const q = b * (1 - f * s);
-    const t = b * (1 - (1 - f) * s);
-    const r = [b, q, p, p, p, t, b][i];
-    const g = [t, b, b, q, p, p][i];
-    const bChannel = [p, p, t, b, b, q][i];
+    const i = Math.floor(h / 60)
+    const f = h / 60 - i
+    const p = b * (1 - s)
+    const q = b * (1 - f * s)
+    const t = b * (1 - (1 - f) * s)
+    const r = [b, q, p, p, p, t, b][i]
+    const g = [t, b, b, q, p, p][i]
+    const bChannel = [p, p, t, b, b, q][i]
 
     const toHex = (x) => {
       const hex = Math.round(x * 255).toString(16);
