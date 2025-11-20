@@ -5,7 +5,6 @@ import { authenticate } from "../shopify.server";
 // import LayoutExample from "./app.setting";
 import en from "@shopify/polaris/locales/en.json";
 
-
 export const loader = async ({ request }) => {
   await authenticate.admin(request);
 

@@ -185,7 +185,7 @@ function IndexFiltersDefaultExample() {
         handleTaggedWithRemove,
     ]);
 
-    // const [variant, setVariant] = useState('secondary');
+    const [variant, setVariant] = useState('secondary');
 
     // const handleLike = () => {
     //     if (variant === 'secondary') {
@@ -459,7 +459,7 @@ function IndexFiltersDefaultExample() {
                         <Text>Via Web</Text>
                         <InlineStack gap={200}>
                             
-                            <Button >
+                            <Button variant={variant} onClick={handleLike}>
                                 <Icon source={HeartIcon} tone="base" />
                             </Button>
                             <Button>
