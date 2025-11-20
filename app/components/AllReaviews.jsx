@@ -112,7 +112,7 @@ export default function AllReaviews() {
                         <Box>
                             {tag}
                         </Box>
-                    </BlockStack  >
+                    </BlockStack>
                 </IndexTable.Cell>
 
                 <IndexTable.Cell>
