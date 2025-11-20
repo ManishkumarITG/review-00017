@@ -13,6 +13,7 @@ import {
     useIndexResourceState,
     LegacyCard,
     ButtonGroup,
+    EmptyState,
 } from "@shopify/polaris";
 
 import { ChevronDownIcon, MenuHorizontalIcon, UndoIcon } from '@shopify/polaris-icons';
@@ -58,6 +59,7 @@ export default function AllReaviews() {
 
     const rowMarkup = reviews.map(
         ({ id, userName, item, time, Rating, comment, tag }, index) => (
+
             <IndexTable.Row
                 id={id.toString()}
                 key={id.toString()}
@@ -82,7 +84,6 @@ export default function AllReaviews() {
                                     source={HeartIcon}
                                     tone="base"
                                 />
-
 
                             </Button>
                             <Button>
@@ -145,7 +146,21 @@ export default function AllReaviews() {
 
     return (
         <LegacyCard>
-            <div className="topAlignTable">
+            {
+                reviews.length === 0 ? (
+                    <EmptyState
+                        heading="Your Product has no reviews"
+                        action={{ content: '' }}
+                        image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
+                        fullWidth
+                    >
+                        <p>
+                            We need atlest on revieiw to show 
+                        </p>
+                    </EmptyState>
+
+                ):
+                    <div className="topAlignTable">
             <IndexTable
                 selectable={true}
                 resourceName={resourceName}
@@ -158,14 +173,19 @@ export default function AllReaviews() {
                     { title: 'Customer' },
                     { title: 'Create' },
                     { title: 'Rating' },
-                    { title: 'Status' , },
+                    { title: 'Status', },
                 ]}
                 primaryId="id"
             >
                 {rowMarkup}
             </IndexTable>
-            </div>
-        </LegacyCard>
+        </div>
+            }
+        </LegacyCard >
 
     )
+
+
+
+
 }

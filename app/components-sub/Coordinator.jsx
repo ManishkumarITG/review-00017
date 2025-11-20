@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 
 import Polaris from '@shopify/polaris';
-const {  Tabs,  Button, Text,  Badge, InlineStack, LegacyCard } = Polaris;
+const { Tabs, Button, Text, Badge, InlineStack, LegacyCard } = Polaris;
 
 // import InlineStack from "@shopify/polaris";
 import "@shopify/polaris/build/esm/styles.css";
@@ -96,4 +96,11 @@ export default function Coordinator() {
             {/* </LegacyCard> */}
         </>
     )
+
+
+
+
+
+
+
 }
