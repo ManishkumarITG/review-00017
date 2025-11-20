@@ -17,20 +17,19 @@ import { PaintBrushRoundIcon, StarIcon } from "@shopify/polaris-icons";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import en from "@shopify/polaris/locales/en.json";
 import { useEffect, useState } from "react";
-import Widget from "../components/Widget"
-import Branding from "../components/Branding"
-
+import Widget from "../components/Widget";
+import Branding from "../components/Branding";
 
 function MySettingPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [isPage , setIsPage] = useState("widgets")
+  const [isPage, setIsPage] = useState("widgets");
 
   useEffect(() => {
-     const params = new URLSearchParams(window.location.search);
-     params.set("key", "widgets");
-     const newUrl = window.location.pathname + "?" + params.toString();
-     window.history.pushState({}, "", newUrl);
+    const params = new URLSearchParams(window.location.search);
+    params.set("key", "widgets");
+    const newUrl = window.location.pathname + "?" + params.toString();
+    window.history.pushState({}, "", newUrl);
   }, []);
 
   const handlePageChange = (page) => {
@@ -38,7 +37,7 @@ function MySettingPage() {
     params.set("key", page);
     const newUrl = window.location.pathname + "?" + params.toString();
     window.history.pushState({}, "", newUrl);
-    setIsPage(page)
+    setIsPage(page);
   };
   return (
     <AppProvider i18n={en}>
@@ -60,13 +59,7 @@ function MySettingPage() {
 
             <Box padding="400" width="100%">
               <Text as="p">REVIEW DISPLAY</Text>
-              <Link
-                 monochrome
-                removeUnderline
-                onClick={() => {
-                  handlePageChange("widgets");
-                }}
-              >
+            
                 <Box
                   style={{
                     display: "flex",
@@ -74,23 +67,21 @@ function MySettingPage() {
                     gap: "5px",
                     cursor: "pointer",
                   }}
+                   onClick={() => {
+                  handlePageChange("widgets");
+                }}
                 >
                   <StarIcon width="20" />
                   <Text variant="headingMd" as="h1" tone="base">
                     Widgets
                   </Text>
                 </Box>
-              </Link>
+              
             </Box>
             <Divider />
             <Box padding="400" width="100%">
               <Text as="p">GENERAL</Text>
-              <Link
-                removeUnderline={true}
-                onClick={() => {
-                  handlePageChange("branding");
-                }}
-              >
+            
                 <Box
                   style={{
                     display: "flex",
@@ -98,20 +89,23 @@ function MySettingPage() {
                     gap: "5px",
                     cursor: "pointer",
                   }}
+                  as="div"
+                  outlineWidth="0"
+                   onClick={() => {
+                  handlePageChange("branding");
+                }}
                 >
                   <PaintBrushRoundIcon width="20" />
                   <Text variant="headingMd" as="span" tone="base">
                     Branding
                   </Text>
                 </Box>
-              </Link>
+              
             </Box>
             <Divider />
           </Card>{" "}
           <Box key={location.key}>
-            {
-              isPage == "widgets" ? <Widget/> : <Branding/>
-            }
+            {isPage == "widgets" ? <Widget /> : <Branding />}
           </Box>
         </InlineGrid>
       </Page>
