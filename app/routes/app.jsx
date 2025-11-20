@@ -5,7 +5,6 @@ import { authenticate } from "../shopify.server";
 // import LayoutExample from "./app.setting";
 import en from "@shopify/polaris/locales/en.json";
 
-
 export const loader = async ({ request }) => {
   await authenticate.admin(request);
 
@@ -22,9 +21,9 @@ export default function App() {
         <s-link href="/app">Home</s-link>
         <s-link href="/app/additional">Additional page</s-link>
         <s-link href="/app/deshboard">Deshboard</s-link>
-        <s-link href="/app/review">Review</s-link>
+        <s-link href="/app/reveiwpage">Review</s-link>
         <s-link href="/app/mySettingPage">Settings</s-link>
-        {/* <s-link href="/app/table">Table </s-link> */}
+        <s-link href="/app/filterTable">Filter Review</s-link>
       </s-app-nav>
       <Outlet />
     </AppProvider>
