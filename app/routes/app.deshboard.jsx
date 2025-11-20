@@ -210,7 +210,7 @@ export default function Deshboard() {
 
                                 <Button
                                     icon={ChartVerticalIcon}
-                                    onClick={() => navigate("/app/filterTable")}
+                                    onClick={() => navigate("/app/reveiwpage")}
 
                                 >
                                     View Report
