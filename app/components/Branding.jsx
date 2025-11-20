@@ -36,47 +36,7 @@ function Branding() {
   const [checked, setChecked] = useState(true);
   const handleChange = useCallback((newChecked) => setChecked(newChecked), []);
 
-<<<<<<< HEAD
-  const [color, setColor] = useState({
-    hue: 120,
-    brightness: 0.55625,
-    saturation: 0.859375,
-    alpha: 1,
-  });
-
-  const hsbaToHex = ({ hue, saturation, brightness, alpha }) => {
-    let h = hue;
-    let s = saturation;
-    let b = brightness;
-
-    const i = Math.floor(h / 60)
-    const f = h / 60 - i
-    const p = b * (1 - s)
-    const q = b * (1 - f * s)
-    const t = b * (1 - (1 - f) * s)
-    const r = [b, q, p, p, p, t, b][i]
-    const g = [t, b, b, q, p, p][i]
-    const bChannel = [p, p, t, b, b, q][i]
-
-    const toHex = (x) => {
-      const hex = Math.round(x * 255).toString(16);
-      return hex.length === 1 ? "0" + hex : hex;
-    };
-
-    const hex = `#${toHex(r)}${toHex(g)}${toHex(bChannel)}`;
-
-    if (alpha < 1) {
-      const alphaHex = Math.round(alpha * 255).toString(16);
-      return `${hex}${alphaHex.length === 1 ? "0" + alphaHex : alphaHex}`.toUpperCase();
-    }
-
-    return hex.toUpperCase();
-  };
-
-  const [hexCode, setHexCode] = useState(() => hsbaToHex(color));
-=======
  
->>>>>>> 396dd8245f8d82f3f17198c46a57a91dc0e614db
 
   useEffect(() => {
     setHexCode(hsbaToHex(color));
