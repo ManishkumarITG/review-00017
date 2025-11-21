@@ -9,28 +9,24 @@ import {
   InlineGrid,
   BlockStack,
   Box,
-  InlineStack,
   Badge,
   Divider,
-  ButtonGroup,
   Button,
   TextField,
   Icon,
   Checkbox,
   Link,
-  Popover,
 } from "@shopify/polaris";
 
 import {
   ChevronRightIcon,
   StarFilledIcon,
-  StarIcon,
   ThumbsUpIcon,
 } from "@shopify/polaris-icons";
 import { useColorTheme } from "../routes/ColorContext";
 
 function Branding() {
-  const { hexCode, color, setColor, setHexCode, hsbaToHex } = useColorTheme()
+  const {hexCode, color, setColor, setHexCode , hsbaToHex } = useColorTheme()
   const [isOpenColorPicker, setIsOpenColorPicker] = useState(false);
 
   const [checked, setChecked] = useState(true);

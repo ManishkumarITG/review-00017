@@ -35,7 +35,7 @@ import { reviews, tabsdata } from "../data/reviewData.js";
 
 function IndexFiltersDefaultExample() {
   const { hexCode } = useColorTheme();
-  
+
   const [filteredOrders, setFilteredOrders] = useState(reviews);
   const [selectedData, setSelectedDta] = useState(0);
   const [taggedWith, setTaggedWith] = useState("");
@@ -115,7 +115,7 @@ function IndexFiltersDefaultExample() {
     [reviews, itemStrings],
   );
 
-  const allReviewsContent = `All Reviews (${reviews.length})`;
+const allReviewsContent = `All Reviews (${reviews.length})`;
 
   const tabs = itemStrings.map((item, index) => ({
     content: index === 0 ? allReviewsContent : item,
@@ -240,7 +240,7 @@ function IndexFiltersDefaultExample() {
 
   return (
     <AppProvider>
-      <Page>
+      <Page fullWidth>
         <InlineGrid gap="400">
           <Card padding="025">
             <LegacyTabs
@@ -250,11 +250,7 @@ function IndexFiltersDefaultExample() {
             ></LegacyTabs>
           </Card>
 
-          <InlineStack
-            alignment="space-between"
-            align="space-between"
-            padding="400"
-          >
+        
             <InlineStack gap="200">
               <Text variant="headingLg" as="h2">
                 Reviews
@@ -268,14 +264,7 @@ function IndexFiltersDefaultExample() {
                 Auto Publish
               </Badge>
             </InlineStack>
-            <InlineStack gap="200">
-              <Button>Import</Button>
-              <Button>Publish an Mordarate</Button>
-              <Button>Edit product review group</Button>
-              <Button>Export</Button>
-            </InlineStack>
-          </InlineStack>
-
+        
           <LegacyCard>
             <IndexFilters
               sortSelected={sortSelected}
