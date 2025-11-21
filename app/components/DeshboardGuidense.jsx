@@ -12,8 +12,6 @@ import {
 } from "@shopify/polaris";
 import {
   MenuHorizontalIcon,
-  ChevronDownIcon,
-  CheckCircleIcon,
 } from "@shopify/polaris-icons";
 import '@shopify/polaris/build/esm/styles.css';
 

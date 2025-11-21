@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { BlockStack, Button, Card, Page, InlineGrid, Text, Popover, OptionList, InlineStack, Badge, Box, Image, Link, } from "@shopify/polaris";
 import { AppProvider } from "@shopify/polaris"
 import en from "@shopify/polaris/locales/en.json";
-import '@shopify/polaris/build/esm/styles.css';
+ import '@shopify/polaris/build/esm/styles.css';
 import { CalendarIcon, PlusIcon, ChartVerticalIcon, } from '@shopify/polaris-icons';
 import DeshboardCard from "../components/deshboardCard";
 import ReviewInlineCard from "../components/ReviewInlineCard";

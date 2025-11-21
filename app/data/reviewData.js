@@ -143,21 +143,61 @@ export const tabsdata = [
       accessibilityLabel: "All customers",
       panelID: "all-customers-content-1",
     },
-    {
-      id: "accepts-marketing-1",
-      content: "Accepts marketing",
-      panelID: "accepts-marketing-content-1",
-    },
-    {
-      id: "repeat-customers-1",
-      content: "Repeat customers",
-      panelID: "repeat-customers-content-1",
-    },
-    {
-      id: "prospects-1",
-      content: "Prospects",
-      panelID: "prospects-content-1",
-    },
   ];
 
-  export  const allReviewsContent = reviews.length
+export  const simplifiedMediaCardData = [
+    {
+      title: "Review Widget",
+      description: "Collect and display product reviews on your product pages.",
+      imageSrc: "https://pub-images.judge.me/judgeme/review-widget-2025",
+      key: 1,
+    },
+    {
+      title: "Photo & Video Reviews",
+      description: "Boost conversion with rich media reviews from customers.",
+      imageSrc: "https://pub-images.judge.me/judgeme/photo-video-reviews",
+      key: 2,
+    },
+    {
+      title: "Carousel & Badges",
+      description:
+        "Showcase your best reviews on your homepage using carousels.",
+      imageSrc: "https://pub-images.judge.me/judgeme/carousel-badges",
+      key: 3,
+    },
+    {
+      title: "Q&A (Questions & Answers)",
+      description:
+        "Allow customers to ask and answer questions directly on the product page.",
+      imageSrc: "https://pub-images.judge.me/judgeme/qna-widget",
+      key: 4,
+    },
+    {
+      title: "Google Shopping Feed",
+      description:
+        "Synchronize review stars with your Google Shopping listings.",
+      imageSrc: "https://pub-images.judge.me/judgeme/google-shopping",
+      key: 5,
+    },
+    {
+      title: "Product Sharing",
+      description:
+        "Encourage customers to share their great reviews on social media.",
+      imageSrc: "https://pub-images.judge.me/judgeme/social-sharing",
+      key: 6,
+    },
+    {
+      title: "All Reviews Page",
+      description:
+        "Display all collected reviews in a dedicated, searchable page.",
+      imageSrc: "https://pub-images.judge.me/judgeme/all-reviews-page",
+      key: 7,
+    },
+    {
+      title: "All Reviews Page",
+      description:
+        "Display all collected reviews in a dedicated, searchable page.",
+      imageSrc: "https://pub-images.judge.me/judgeme/all-reviews-page",
+      key: 8,
+    },
+  ];  

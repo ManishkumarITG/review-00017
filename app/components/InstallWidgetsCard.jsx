@@ -14,8 +14,6 @@ function InstallWidgetsCard({
   description,
   buttons = [],
   pannelId,
-  isOpen,
-  onToggle,
 }) {
   const [selected, setSelected] = useState(["hidden"]);
   const [open, setOpen] = useState(false);
