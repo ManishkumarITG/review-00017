@@ -1,4 +1,13 @@
 {% assign avg_rating = block.settings.product.metafields.demo.avg_rating.value | round %}
+
+<div>
+<span>
+ Customer Reviews
+</span>
+
+</div>
+
+
 <span style="color:{{ block.settings.colour }}">
   {% render 'stars', rating: avg_rating %}
 </span>
@@ -10,11 +19,11 @@
 
 {% schema %}
 {
-  "name": "Star Rating",
+  "name": "main Rating",
   "target": "section",
   "settings": [
     { "type": "product", "id": "product", "label": "product", "autofill": true },
-    { "type": "color", "id": "colour", "label": "Star Colour", "default": "#00eeffff" }
+    { "type": "color", "id": "colour", "label": "Star Colour", "default": "#ff0000ff" }
   ]
 }
 {% endschema %}
