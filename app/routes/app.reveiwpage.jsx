@@ -21,6 +21,7 @@ import {
 
 import { useState, useCallback } from "react";
 import "@shopify/polaris/build/esm/styles.css";
+
 import {
   ChevronDownIcon,
   HeartIcon,
@@ -28,6 +29,7 @@ import {
   PinIcon,
   UndoIcon,
 } from "@shopify/polaris-icons";
+
 import StarRating from "../components/Ratting.jsx";
 import { useColorTheme } from "./ColorContext.jsx";
 import "../components/style.css";
@@ -35,7 +37,7 @@ import { reviews, tabsdata } from "../data/reviewData.js";
 
 function IndexFiltersDefaultExample() {
   const { hexCode } = useColorTheme();
-  
+
   const [filteredOrders, setFilteredOrders] = useState(reviews);
   const [selectedData, setSelectedDta] = useState(0);
   const [taggedWith, setTaggedWith] = useState("");
@@ -138,7 +140,7 @@ function IndexFiltersDefaultExample() {
 
   const [sortSelected, setSortSelected] = useState(["order asc"]);
   const { mode, setMode } = useSetIndexFiltersMode();
-  const onHandleCancel = () => {};
+  const onHandleCancel = () => { };
   const onHandleSave = async () => {
     await sleep(1);
     return true;
@@ -240,7 +242,7 @@ function IndexFiltersDefaultExample() {
 
   return (
     <AppProvider>
-      <Page>
+      <Page fullWidth={true}>
         <InlineGrid gap="400">
           <Card padding="025">
             <LegacyTabs
@@ -276,27 +278,33 @@ function IndexFiltersDefaultExample() {
             </InlineStack>
           </InlineStack>
 
-          <LegacyCard>
-            <IndexFilters
-              sortSelected={sortSelected}
-              queryValue={queryValue}
-              queryPlaceholder="Searching in all"
-              onQueryChange={handleFiltersQueryChange}
-              onQueryClear={onQueryClear}
-              onSort={setSortSelected}
-              cancelAction={{
-                onAction: onHandleCancel,
-                disabled: false,
-                loading: false,
-              }}
-              tabs={tabs}
-              filters={[]}
-              onClearAll={handleFiltersClearAll}
-              mode={mode}
-              setMode={setMode}
-              onCreateNewView={undefined}
-              canCreateNewView={false}
-            />
+          <LegacyCard >
+            <Box style={{ '--selected-tab-background': "#f80808ff" }}>
+
+              <IndexFilters
+                sortSelected={sortSelected}
+                queryValue={queryValue}
+                queryPlaceholder="Searching in all"
+                onQueryChange={handleFiltersQueryChange}
+                onQueryClear={onQueryClear}
+                onSort={setSortSelected}
+                cancelAction={{
+                  onAction: onHandleCancel,
+                  disabled: false,
+                  loading: false,
+                }}
+                tabs={tabs}
+                filters={[]}
+                onClearAll={handleFiltersClearAll}
+                mode={mode}
+                setMode={setMode}
+                onCreateNewView={undefined}
+                canCreateNewView={false}
+                hideFilters={true}
+                // hideQueryField={true}
+                filteringAccessibilityTooltip={"x"}
+              />
+            </Box>
 
             <IndexTable
               itemCount={filteredOrders.length}
