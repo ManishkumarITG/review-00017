@@ -21,7 +21,6 @@ import {
 
 import { useState, useCallback } from "react";
 import "@shopify/polaris/build/esm/styles.css";
-
 import {
   ChevronDownIcon,
   HeartIcon,
@@ -29,7 +28,6 @@ import {
   PinIcon,
   UndoIcon,
 } from "@shopify/polaris-icons";
-
 import StarRating from "../components/Ratting.jsx";
 import { useColorTheme } from "./ColorContext.jsx";
 import "../components/style.css";
@@ -117,7 +115,7 @@ function IndexFiltersDefaultExample() {
     [reviews, itemStrings],
   );
 
-  const allReviewsContent = `All Reviews (${reviews.length})`;
+const allReviewsContent = `All Reviews (${reviews.length})`;
 
   const tabs = itemStrings.map((item, index) => ({
     content: index === 0 ? allReviewsContent : item,
@@ -140,7 +138,7 @@ function IndexFiltersDefaultExample() {
 
   const [sortSelected, setSortSelected] = useState(["order asc"]);
   const { mode, setMode } = useSetIndexFiltersMode();
-  const onHandleCancel = () => { };
+  const onHandleCancel = () => {};
   const onHandleSave = async () => {
     await sleep(1);
     return true;
@@ -242,7 +240,7 @@ function IndexFiltersDefaultExample() {
 
   return (
     <AppProvider>
-      <Page fullWidth={true}>
+      <Page fullWidth>
         <InlineGrid gap="400">
           <Card padding="025">
             <LegacyTabs
@@ -252,11 +250,7 @@ function IndexFiltersDefaultExample() {
             ></LegacyTabs>
           </Card>
 
-          <InlineStack
-            alignment="space-between"
-            align="space-between"
-            padding="400"
-          >
+        
             <InlineStack gap="200">
               <Text variant="headingLg" as="h2">
                 Reviews
@@ -270,41 +264,28 @@ function IndexFiltersDefaultExample() {
                 Auto Publish
               </Badge>
             </InlineStack>
-            <InlineStack gap="200">
-              <Button>Import</Button>
-              <Button>Publish an Mordarate</Button>
-              <Button>Edit product review group</Button>
-              <Button>Export</Button>
-            </InlineStack>
-          </InlineStack>
-
-          <LegacyCard >
-            <Box style={{ '--selected-tab-background': "#f80808ff" }}>
-
-              <IndexFilters
-                sortSelected={sortSelected}
-                queryValue={queryValue}
-                queryPlaceholder="Searching in all"
-                onQueryChange={handleFiltersQueryChange}
-                onQueryClear={onQueryClear}
-                onSort={setSortSelected}
-                cancelAction={{
-                  onAction: onHandleCancel,
-                  disabled: false,
-                  loading: false,
-                }}
-                tabs={tabs}
-                filters={[]}
-                onClearAll={handleFiltersClearAll}
-                mode={mode}
-                setMode={setMode}
-                onCreateNewView={undefined}
-                canCreateNewView={false}
-                hideFilters={true}
-                // hideQueryField={true}
-                filteringAccessibilityTooltip={"x"}
-              />
-            </Box>
+        
+          <LegacyCard>
+            <IndexFilters
+              sortSelected={sortSelected}
+              queryValue={queryValue}
+              queryPlaceholder="Searching in all"
+              onQueryChange={handleFiltersQueryChange}
+              onQueryClear={onQueryClear}
+              onSort={setSortSelected}
+              cancelAction={{
+                onAction: onHandleCancel,
+                disabled: false,
+                loading: false,
+              }}
+              tabs={tabs}
+              filters={[]}
+              onClearAll={handleFiltersClearAll}
+              mode={mode}
+              setMode={setMode}
+              onCreateNewView={undefined}
+              canCreateNewView={false}
+            />
 
             <IndexTable
               itemCount={filteredOrders.length}
