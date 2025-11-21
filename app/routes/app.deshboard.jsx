@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { BlockStack, Button, Card, Page, InlineGrid, Text, Popover, OptionList, InlineStack, Badge, Box, Image, Link, } from "@shopify/polaris";
 import { AppProvider } from "@shopify/polaris"
 import en from "@shopify/polaris/locales/en.json";
- import '@shopify/polaris/build/esm/styles.css';
+import '@shopify/polaris/build/esm/styles.css';
 import { CalendarIcon, PlusIcon, ChartVerticalIcon, } from '@shopify/polaris-icons';
 import DeshboardCard from "../components/deshboardCard";
 import ReviewInlineCard from "../components/ReviewInlineCard";
@@ -295,29 +295,31 @@ export default function Deshboard() {
                 </Card>
             </Page>
             <Page>
-                <InlineGrid
-                    gap="400"
-                    // align="start"
-                    columns={{
-                        xs: "1fr",           // mobile: stack cards vertically
-                        sm: "1fr ",       // tablet: give equal width real estate
-                        md: "auto auto",     // desktop: fit-content sizing for that polished admin look
-                    }}
-                >
-                    <ReviewInlineCard
-                        title="Top products"
-                        imageurl="https://pub-images.judge.me/judgeme/empty-product"
-                        buttontext="View all reviews"
-                        textcontent="A list of top reviewed products will show here."
-                    />
+                <Box padding="300">
+                    <InlineGrid
+                        gap="400"
 
-                    <ReviewInlineCard
-                        title="Recent activity"
-                        imageurl="https://pub-images.judge.me/judgeme/empty-review"
-                        buttontext="Request reviews"
-                        textcontent="You can view your recent reviews here."
-                    />
-                </InlineGrid>
+                        columns={{
+                            xs: "1fr",
+                            sm: "1fr ",
+                            md: "auto auto",
+                        }}
+                    >
+                        <ReviewInlineCard
+                            title="Top products"
+                            imageurl="https://pub-images.judge.me/judgeme/empty-product"
+                            buttontext="View all reviews"
+                            textcontent="A list of top reviewed products will show here."
+                        />
+
+                        <ReviewInlineCard
+                            title="Recent activity"
+                            imageurl="https://pub-images.judge.me/judgeme/empty-review"
+                            buttontext="Request reviews"
+                            textcontent="You can view your recent reviews here."
+                        />
+                    </InlineGrid>
+                </Box>
 
             </Page>
             <Page>

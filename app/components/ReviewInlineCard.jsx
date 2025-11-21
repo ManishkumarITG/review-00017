@@ -1,10 +1,10 @@
 import { InlineGrid, Text, Box, Image, Card, Button } from '@shopify/polaris'
-import React from 'react'
 import "./style.css"
 
 function ReviewInlineCard({ title, imageurl, buttontext, textcontent }) {
     return (
-        <InlineGrid gap="600" width="100%" borderBottom="solid" >
+        
+        <InlineGrid gap="600" width="100%" borderBottom="solid">
 
             <Text as="h2" variant="headingMd" padding="200">
                 {title}

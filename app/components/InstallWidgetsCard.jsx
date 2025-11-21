@@ -19,9 +19,9 @@ function InstallWidgetsCard({
   const [selected, setSelected] = useState([]);
   const [open, setOpen] = useState(false);
   const handleChange = useCallback((value) => {
-    setSelected(value), []
+    setSelected(value)
     setOpen(prev => !prev);
-  });
+  },[]);
 
   return (
     <Box>
