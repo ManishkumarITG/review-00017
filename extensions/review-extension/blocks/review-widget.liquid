@@ -1,0 +1,176 @@
+<div class="my-review-widget">
+  <h2 style="color: {{ block.settings.heading_color }}; font-size: {{block.settings.heading_font}}px">
+    {{ block.settings.heading }}
+  </h2>
+
+
+  {% assign dummy_reviews = 
+    "Alice|Great product! Totally worth it.|5,
+     Rohan|Good quality, fast delivery.|4,
+     Priya|Amazing! Will buy again.|5,
+     Mark|Satisfied with the purchase.|4,
+     Sara|Excellent customer service.|5"
+  | split: "," %}
+
+  {% for i in (1..5) %}
+
+    {% assign author_key = "review_" | append: i | append: "_author" %}
+    {% assign text_key = "review_" | append: i | append: "_text" %}
+    {% assign rating_key = "review_" | append: i | append: "_rating" %}
+
+    {% assign author = block.settings[author_key] %}
+    {% assign text = block.settings[text_key] %}
+    {% assign rating = block.settings[rating_key] %}
+
+    {% assign dummy = dummy_reviews[i-1] | split: "|" %}
+    {% assign dummy_author = dummy[0] %}
+    {% assign dummy_text = dummy[1] %}
+    {% assign dummy_rating = dummy[2] %}
+
+    {% if author == blank %}
+      {% assign author = dummy_author %}
+    {% endif %}
+    {% if text == blank %}
+      {% assign text = dummy_text %}
+    {% endif %}
+    {% if rating == blank %}
+      {% assign rating = dummy_rating %}
+    {% endif %}
+
+    <div class="review-item" style="color: {{ block.settings.text_color }}; margin-bottom: 20px;">
+      <div class="review-rating" style="color: {{ block.settings.star_color }};">
+        {% for star in (1..rating) %}
+          ★
+        {% endfor %}
+      </div>
+
+      <strong>{{ author }}</strong>
+      <p>{{ text }}</p>
+    </div>
+
+  {% endfor %}
+</div>
+
+
+{% schema %}
+{
+  "name": "Static Review Widget",
+  "target": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Customer Reviews"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#000000"
+    },
+
+     {
+  "type": "number",
+  "id": "heading_font",
+  "label": "Heading size (px)",
+  "default": 15,
+},
+
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star Color",
+      "default": "#FFB400"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "id": "text_color",
+      "label": "Review Text Color",
+      "default": "#444444"
+    },
+
+    {
+      "type": "textarea",
+      "id": "paragraph",
+      "label": "paragraph",
+      "default": "my text is ram "
+    },
+
+     {
+      "type": "color",
+      "id": "paragraph_color",
+      "label": "paragraph Color",
+      "default": "#24ce5dff"
+    },
+
+
+
+    /* --- REVIEW 1 --- */
+    { "type": "header", "content": "Review 1" },
+    { "type": "text", "id": "review_1_author", "label": "Author" },
+    { "type": "textarea", "id": "review_1_text", "label": "Review Text" },
+    {
+      "type": "range",
+      "id": "review_1_rating",
+      "label": "Star Rating",
+      "min": 1,
+      "max": 5,
+      "default": 5
+    },
+
+    /* --- REVIEW 2 --- */
+    { "type": "header", "content": "Review 2" },
+    { "type": "text", "id": "review_2_author", "label": "Author" },
+    { "type": "textarea", "id": "review_2_text", "label": "Review Text" },
+    {
+      "type": "range",
+      "id": "review_2_rating",
+      "label": "Star Rating",
+      "min": 1,
+      "max": 5,
+      "default": 5
+    },
+
+    /* --- REVIEW 3 --- */
+    { "type": "header", "content": "Review 3" },
+    { "type": "text", "id": "review_3_author", "label": "Author" },
+    { "type": "textarea", "id": "review_3_text", "label": "Review Text" },
+    {
+      "type": "range",
+      "id": "review_3_rating",
+      "label": "Star Rating",
+      "min": 1,
+      "max": 5,
+      "default": 5
+    },
+
+    /* --- REVIEW 4 --- */
+    { "type": "header", "content": "Review 4" },
+    { "type": "text", "id": "review_4_author", "label": "Author" },
+    { "type": "textarea", "id": "review_4_text", "label": "Review Text" },
+    {
+      "type": "range",
+      "id": "review_4_rating",
+      "label": "Star Rating",
+      "min": 1,
+      "max": 5,
+      "default": 5
+    },
+
+    /* --- REVIEW 5 --- */
+    { "type": "header", "content": "Review 5" },
+    { "type": "text", "id": "review_5_author", "label": "Author" },
+    { "type": "textarea", "id": "review_5_text", "label": "Review Text" },
+    {
+      "type": "range",
+      "id": "review_5_rating",
+      "label": "Star Rating",
+      "min": 1,
+      "max": 5,
+      "default": 2
+    }
+  ]
+}
+{% endschema %}
