@@ -25,6 +25,7 @@ export default function App() {
         <s-link href="/app/deshboard">Deshboard</s-link>
         <s-link href="/app/reveiwpage">Review</s-link>
         <s-link href="/app/mySettingPage">Settings</s-link>
+        <s-link href="/app/review">On-Reveiws</s-link>
       </s-app-nav>
       <Outlet />
     </AppProvider>
