@@ -1,10 +1,10 @@
-{{ 'ratings.stars.label' | t }}:
-
-{%- for i in (1..rating) -%}
-  ★
-{%- endfor -%}
-{%- assign blank_stars = 5 | minus: rating -%}
-{%- for i in (1..blank_stars) -%}
-  ☆
-{%- endfor -%}
-
+{% assign r = rating | plus: 0 %}
+<span class="jm-stars">
+  {% for i in (1..5) %}
+    {% if i <= r %}
+      <span class="jm-star filled">★</span>
+    {% else %}
+      <span class="jm-star empty">☆</span>
+    {% endif %}
+  {% endfor %}
+</span>
