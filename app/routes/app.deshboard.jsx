@@ -112,13 +112,13 @@ export default function Deshboard() {
             percentage: -3,
             date: "2025-11-10"
         },
-        //    {
-        //     id: 5,
-        //     title: "Trust score",
-        //     number: 42,
-        //     percentage: -3,
-        //     date: "2025-11-10"
-        // },
+           {
+            id: 5,
+            title: "Trust score",
+            number: "Transparency",
+            percentage: "Authenticity",
+            date: "2025-11-10"
+        },
 
 
     ];
@@ -252,7 +252,7 @@ export default function Deshboard() {
                                 <DeshboardCard key={index} element={items}/>
                             ))
                             }
-
+{/* 
                             <Card>
                                 <Text as="h2" variant="headingSm">
                                     Trust score
@@ -263,7 +263,7 @@ export default function Deshboard() {
                                 <Text as="p" variant="small">
                                     Authenticity
                                 </Text>
-                            </Card>
+                            </Card> */}
                         </InlineGrid>
 
                         <InlineGrid columns={{

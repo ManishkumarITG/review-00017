@@ -20,7 +20,10 @@
         font-size: {{block.settings.star_size}}px;
       "
     >
-      {% render 'stars', rating: 5 %}
+      {% render 'stars', rating: 3 %}
+    <span style="font-weight:600;">4.07 out of 5</span>
+
+
     </span>
 
     <div class="jm-actions">
@@ -81,6 +84,7 @@
                 {% render 'stars', rating: r %}
                 <p style="color: {{ block.settings.author_color }};">{{ a }}</p>
               </div>
+
               <div class="jm-date">{{ d }}</div>
             </div>
 
@@ -137,6 +141,7 @@
     { "type": "text", "id": "heading", "label": "Heading", "default": "Customer Reviews" },
     { "type": "color", "id": "heading_color", "label": "Heading color", "default": "#2a2a2a" },
     { "type": "range", "id": "heading_font", "label": "Heading font size", "default": 22, "min": 12, "max": 48 },
+
 
     { "type": "color", "id": "star_color", "label": "Star color", "default": "#108474" },
     { "type": "range", "id": "star_size", "label": "Star size", "default": 16, "min": 10, "max": 40 },

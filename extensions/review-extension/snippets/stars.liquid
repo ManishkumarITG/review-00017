@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-{%- for i in (1..rating) -%}
-  ★
-{%- endfor -%}
-{%- assign blank_stars = 5 | minus: rating -%}
-{%- for i in (1..blank_stars) -%}
-  ☆
-{%- endfor -%}
-
-  
-=======
 {% assign r = rating | plus: 0 %}
 <span class="jm-stars">
   {% for i in (1..5) %}
@@ -19,4 +8,3 @@
     {% endif %}
   {% endfor %}
 </span>
->>>>>>> aaa4ddededc8a34d80afaee978061ea9e4204e97
