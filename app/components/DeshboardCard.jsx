@@ -2,25 +2,26 @@ import { BlockStack, Text, InlineStack, Card } from '@shopify/polaris'
 import '@shopify/polaris/build/esm/styles.css';
 
 // Deshboard card show report 
-function DeshboardCard({ title, number, percentage }) {
+function DeshboardCard({ element }) {
     return (
         <>
             <Card>
                 <BlockStack gap="200">
                     {/* Title of card */}
                     <Text as="h3" variant="headingSm">
-                        {title}
+                        {element.title}
                     </Text>
 
                     <InlineStack align="start" gap="100">
                         {/*data in number */}
                         <Text as="span" variant="headingLg" blockAlign="center">
-                            {number}
+                            {element.number}
+
                         </Text>
                         {/* data in persentages */}
                         <Text as="span" variant="bodyMd" blockAlign="center" color="success">
 
-                            —{percentage}%
+                            —{element.percentage}%
                         </Text>
                     </InlineStack>
                 </BlockStack>

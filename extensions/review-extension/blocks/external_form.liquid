@@ -1,0 +1,231 @@
+<div 
+  style="
+    background: {{ block.settings.bg_color }};
+    color: {{ block.settings.text_color }};
+    padding: {{ block.settings.padding }};
+    margin: {{ block.settings.margin }};
+    text-align: {{ block.settings.text_align }};
+    border-radius: {{ block.settings.radius }};
+    border: {{ block.settings.border }};
+    width: {{ block.settings.width }};
+    height: {{ block.settings.height }};
+    position: {{ block.settings.position }};
+  "
+>
+  <h2>{{ block.settings.page_title }}</h2>
+
+  <p
+    style="
+      font-size: {{ block.settings.subtitle_font_size }};
+      color: {{ block.settings.subtitle_color }};
+      margin: {{ block.settings.subtitle_margin }};
+      font-weight: {{ block.settings.subtitle_weight }};
+      text-align: {{ block.settings.subtitle_align }};
+    "
+  >
+    {{ block.settings.page_subtitle }}
+  </p>
+
+  <h3
+    style="
+      font-size: {{ block.settings.productname_font_size }};
+      color: {{ block.settings.productname_color }};
+      font-weight: {{ block.settings.productname_weight }};
+      margin: {{ block.settings.productname_margin }};
+      text-align: {{ block.settings.productname_align }};
+    "
+  >
+    {{ block.settings.productname }}
+  </h3>
+
+</div>
+
+
+{% schema %}
+{
+  "name": "External Form",
+  "target": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "page_title",
+      "label": "Page Title",
+      "default": "How would you rate this product?"
+    },
+
+    /* --- BASIC CSS OPTIONS FOR OUTER DIV --- */
+
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "Padding",
+      "default": "10px"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Margin",
+      "default": "10px 0"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "radius",
+      "label": "Border Radius",
+      "default": "5px"
+    },
+    {
+      "type": "text",
+      "id": "border",
+      "label": "Border",
+      "default": "1px solid #ddd"
+    },
+    {
+      "type": "text",
+      "id": "width",
+      "label": "Width",
+      "default": "100%"
+    },
+    {
+      "type": "text",
+      "id": "height",
+      "label": "Height",
+      "default": "auto"
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "Position",
+      "options": [
+        { "value": "static", "label": "Static" },
+        { "value": "relative", "label": "Relative" },
+        { "value": "absolute", "label": "Absolute" },
+        { "value": "fixed", "label": "Fixed" }
+      ],
+      "default": "static"
+    },
+    /*----- BASIC CSS OPTIONS FOR PAGE SUB Title -----*/
+    {
+      "type": "text",
+      "id": "page_subtitle",
+      "label": "Page Subtitle",
+      "default": "We would love it if you would share a bit about your experience."
+    },
+{
+  "type": "text",
+  "id": "subtitle_font_size",
+  "label": "Font Size (e.g. 16px, 1.2rem)",
+  "default": "16px"
+},
+{
+  "type": "color",
+  "id": "subtitle_color",
+  "label": "Text Color",
+  "default": "#333333"
+},
+{
+  "type": "text",
+  "id": "subtitle_margin",
+  "label": "Margin (e.g. 10px 0)",
+  "default": "12px 0"
+},
+{
+  "type": "select",
+  "id": "subtitle_weight",
+  "label": "Font Weight",
+  "options": [
+    { "value": "300", "label": "Light" },
+    { "value": "400", "label": "Regular" },
+    { "value": "500", "label": "Medium" },
+    { "value": "600", "label": "Semi-bold" },
+    { "value": "700", "label": "Bold" }
+  ],
+  "default": "400"
+},
+{
+  "type": "select",
+  "id": "subtitle_align",
+  "label": "Text Alignment",
+  "options": [
+    { "value": "left", "label": "Left" },
+    { "value": "center", "label": "Center" },
+    { "value": "right", "label": "Right" }
+  ],
+  "default": "left"
+},
+/*----- BASIC CSS OPTIONS FOR THE PRODUCT  -----*/
+{
+  "type": "text",
+  "id": "productname",
+  "label": "Product Name",
+  "default": "Sample Product Name"
+},
+{
+  "type": "text",
+  "id": "productname_font_size",
+  "label": "Font Size (e.g. 20px, 1.5rem)",
+  "default": "22px"
+},
+{
+  "type": "color",
+  "id": "productname_color",
+  "label": "Text Color",
+  "default": "#000000"
+},
+{
+  "type": "select",
+  "id": "productname_weight",
+  "label": "Font Weight",
+  "options": [
+    { "value": "300", "label": "Light" },
+    { "value": "400", "label": "Regular" },
+    { "value": "500", "label": "Medium" },
+    { "value": "600", "label": "Semi-bold" },
+    { "value": "700", "label": "Bold" }
+  ],
+  "default": "600"
+},
+{
+  "type": "text",
+  "id": "productname_margin",
+  "label": "Margin (e.g. 0 0 12px 0)",
+  "default": "0 0 12px 0"
+},
+{
+  "type": "select",
+  "id": "productname_align",
+  "label": "Text Alignment",
+  "options": [
+    { "value": "left", "label": "Left" },
+    { "value": "center", "label": "Center" },
+    { "value": "right", "label": "Right" }
+  ],
+  "default": "left"
+}
+
+
+ ]
+}
+{% endschema %}

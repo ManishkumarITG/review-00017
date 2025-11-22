@@ -112,14 +112,42 @@ export default function Deshboard() {
             percentage: -3,
             date: "2025-11-10"
         },
+        //    {
+        //     id: 5,
+        //     title: "Trust score",
+        //     number: 42,
+        //     percentage: -3,
+        //     date: "2025-11-10"
+        // },
 
 
     ];
 
+    const ReviewInlineCardArray = [
+        {
+            title: "Top products",
+            imageurl: "https://pub-images.judge.me/judgeme/empty-product",
+            buttontext: "View all reviews",
+            textcontent: "A list of top reviewed products will show here.",
+        },
+        {
+            title: "Recent activity",
+            imageurl: "https://pub-images.judge.me/judgeme/empty-review",
+            buttontext: "Request reviews",
+            textcontent: "You can view your recent reviews here.",
+        },
+    ]
 
-    const handleNavigate = () => { navigate("/app/reveiwpage"); console.log("hello") }
+    const deshboardImages = [
+        {
+            title: "Build trust. Grow sales. Try Awesome FREE.",
+            imageurl: "https://assets.judge.me/core/cover/awesome-2025.webp",
+            buttontext: "Explore features",
+            textcontent:
+                "Get more reviews, build trust and grow store visits. Increase retention & referrals. FREE for 15 days and then just $15/month. Cancel anytime.",
+        }
+    ];
 
-    const now = new Date();
 
     const [selected, setSelected] = useState(ranges[0]);
     const [popoverActive, setPopoverActive] = useState(false);
@@ -155,15 +183,11 @@ export default function Deshboard() {
         setPopoverActive(false);
 
     }
-    // setSelected
-    const fil = carddata.filter((item) => {
-        return item.date === selected.alias;
-    })
 
     return (
         <AppProvider i18n={en}>
             <DeshboardHeader />
-            <Page  >
+            <Page>
                 <DeshboardGuidense />
             </Page>
             <Page>
@@ -225,7 +249,7 @@ export default function Deshboard() {
                         }} gap="200">
 
                             {filteredData.map((items, index) => (
-                                <DeshboardCard title={items.title} number={items.number} percentage={items.percentage} key={index} />
+                                <DeshboardCard key={index} element={items}/>
                             ))
                             }
 
@@ -291,43 +315,32 @@ export default function Deshboard() {
                             </Card>
                         </InlineGrid>
                     </BlockStack>
-
                 </Card>
             </Page>
             <Page>
                 <Box padding="300">
                     <InlineGrid
                         gap="400"
-
                         columns={{
                             xs: "1fr",
                             sm: "1fr ",
                             md: "auto auto",
                         }}
                     >
-                        <ReviewInlineCard
-                            title="Top products"
-                            imageurl="https://pub-images.judge.me/judgeme/empty-product"
-                            buttontext="View all reviews"
-                            textcontent="A list of top reviewed products will show here."
-                        />
+                        {ReviewInlineCardArray.map((card, index) => (
+                            <ReviewInlineCard key={index} card={card} />
+                        ))}
 
-                        <ReviewInlineCard
-                            title="Recent activity"
-                            imageurl="https://pub-images.judge.me/judgeme/empty-review"
-                            buttontext="Request reviews"
-                            textcontent="You can view your recent reviews here."
-                        />
                     </InlineGrid>
                 </Box>
 
             </Page>
             <Page>
-                <DeshboardimageWithText
-                    title="Build trust. Grow sales. Try Awesome FREE."
-                    imageurl="https://assets.judge.me/core/cover/awesome-2025.webp"
-                    buttontext="Explore features"
-                    textcontent="Get more reviews, build trust and grow store visits. Increase retention & referrals. FREE for 15 days and then just $15/month. Cancel anytime." />
+                {
+                    deshboardImages.map((element, index) => (
+                        <DeshboardimageWithText key={index} card={element} />
+                    ))
+                }
             </Page>
         </AppProvider>
     );
