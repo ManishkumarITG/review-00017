@@ -1,0 +1,28 @@
+  {% assign reviews = 14 %}
+  {% assign numbers = (1..5) %}
+  {% assign Rating = 3  %}
+  {% assign rounded_rating = Rating | round %}
+<p style="color:black">
+<span style="color:{{ block.settings.colour }} ; font-size: {{block.settings.size}}px">
+
+ {% render 'stars', rating: rounded_rating %}
+
+
+</span>
+{{reviews}} reviews
+</p>
+
+  
+  
+
+{% schema %}
+{
+  "name": "Product Theme",
+  "target": "section",
+  "settings": [
+    { "type": "color", "id": "colour", "label": "Star Colour", "default": "#a9e060ff" },
+    { "type": "range", "id": "size","min": 10, "max":38 , "label": "Star Size", "default": 26 },
+    
+  ]
+}
+{% endschema %}

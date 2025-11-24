@@ -1,0 +1,31 @@
+{% assign avg_reviews = 3.2 %}
+{% assign rounded_rating = avg_reviews | round %}
+
+{% assign reviews = 14 %}
+
+<div>
+  <p style="color: {{block.settings.colour}}; text-align: center; width: 100vw;">
+    <span style="font-size: 26px;">
+      {{ avg_reviews }} 
+    </span>
+
+    <span  style="font-size: 22px;">
+{% render 'stars', rating: rounded_rating %}
+    </span>
+
+    <span style="font-size: 22px;">
+      | {{ avg_reviews }} out of 5 stars based on {{ reviews }} reviews | Verify
+    </span>
+  </p>
+</div>
+
+{% schema %}
+{
+  "name": "Reviews Text",
+  "target": "section",
+  "settings": [
+    { "type": "color", "id": "colour", "label": "Star Colour", "default": "#8fda2dff" },
+    { "type": "range", "id": "size","min": 10, "max":38 , "label": "Star Size", "default": 26 }
+  ]
+}
+{% endschema %}

@@ -1,5 +1,5 @@
 // import { Text } from "@shopify/polaris";
-
+import PublishingAndModeration from "../components/PublishingAndModeration"
 
 export default function AdditionalPage() {
   return (  
@@ -37,6 +37,7 @@ export default function AdditionalPage() {
           </s-unordered-list>
         </s-section>
       </s-page>
+      <PublishingAndModeration/>
     </>
   );
 }
