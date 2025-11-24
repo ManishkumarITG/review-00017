@@ -4,6 +4,7 @@ export const reviews = [
     userName: "Manish",
     item: "Bag",
     time: "2 days",
+    date: "2025-02-16",
     Rating: 4.3,
     comment: "Great!",
     tag: "test",
@@ -13,6 +14,7 @@ export const reviews = [
     userName: "Amit",
     item: "Shoes",
     time: "1 day ago",
+    date: "2025-02-17",
     Rating: 4.8,
     comment: "Excellent",
     tag: "verified",
@@ -22,6 +24,7 @@ export const reviews = [
     userName: "Rahul",
     item: "Watch",
     time: "3 days",
+    date: "2025-02-15",
     Rating: 4.1,
     comment: "Good quality",
     tag: "hot",
@@ -31,6 +34,7 @@ export const reviews = [
     userName: "Suresh",
     item: "T-Shirt",
     time: "5 days",
+    date: "2025-02-13",
     Rating: 3.9,
     comment: "Decent",
     tag: "new",
@@ -40,6 +44,7 @@ export const reviews = [
     userName: "Vikas",
     item: "Laptop",
     time: "12 hours",
+    date: "2025-02-18",
     Rating: 4.9,
     comment: "Amazing!",
     tag: "pro",
@@ -49,6 +54,7 @@ export const reviews = [
     userName: "Neha",
     item: "Mobile",
     time: "4 days",
+    date: "2025-02-14",
     Rating: 4.5,
     comment: "Very smooth",
     tag: "verified",
@@ -58,6 +64,7 @@ export const reviews = [
     userName: "Priya",
     item: "Headphones",
     time: "6 hours",
+    date: "2025-02-18",
     Rating: 3.8,
     comment: "Okay product",
     tag: "test",
@@ -67,6 +74,7 @@ export const reviews = [
     userName: "Rohit",
     item: "Bag",
     time: "7 days",
+    date: "2025-02-11",
     Rating: 4.0,
     comment: "Nice build",
     tag: "sale",
@@ -76,6 +84,7 @@ export const reviews = [
     userName: "Aman",
     item: "Shoes",
     time: "2 hours",
+    date: "2025-02-18",
     Rating: 4.7,
     comment: "Fits well",
     tag: "verified",
@@ -85,6 +94,7 @@ export const reviews = [
     userName: "Deepak",
     item: "Keyboard",
     time: "3 days ago",
+    date: "2025-02-15",
     Rating: 4.2,
     comment: "Smooth typing",
     tag: "hot",
@@ -94,6 +104,7 @@ export const reviews = [
     userName: "Mohan",
     item: "Mouse",
     time: "9 hours",
+    date: "2025-02-18",
     Rating: 3.6,
     comment: "Average",
     tag: "test",
@@ -103,6 +114,7 @@ export const reviews = [
     userName: "Nitin",
     item: "Monitor",
     time: "1 week",
+    date: "2025-02-09",
     Rating: 4.4,
     comment: "Crisp display",
     tag: "pro",
@@ -112,6 +124,7 @@ export const reviews = [
     userName: "Kunal",
     item: "Charger",
     time: "13 hours",
+    date: "2025-02-18",
     Rating: 3.9,
     comment: "Works fine",
     tag: "new",
@@ -121,6 +134,7 @@ export const reviews = [
     userName: "Sneha",
     item: "Powerbank",
     time: "8 days",
+    date: "2025-02-10",
     Rating: 4.6,
     comment: "Long backup",
     tag: "verified",
@@ -130,6 +144,7 @@ export const reviews = [
     userName: "Harshit",
     item: "Speaker",
     time: "11 hours",
+    date: "2025-02-18",
     Rating: 4.1,
     comment: "Good sound",
     tag: "hot",
@@ -137,67 +152,65 @@ export const reviews = [
 ];
 
 export const tabsdata = [
-    {
-      id: "all-customers-1",
-      content: "All",
-      accessibilityLabel: "All customers",
-      panelID: "all-customers-content-1",
-    },
-  ];
+  {
+    id: "all-customers-1",
+    content: "All",
+    accessibilityLabel: "All customers",
+    panelID: "all-customers-content-1",
+  },
+];
 
-export  const simplifiedMediaCardData = [
-    {
-      title: "Review Widget",
-      description: "Collect and display product reviews on your product pages.",
-      imageSrc: "https://pub-images.judge.me/judgeme/review-widget-2025",
-      key: 1,
-    },
-    {
-      title: "Photo & Video Reviews",
-      description: "Boost conversion with rich media reviews from customers.",
-      imageSrc: "https://pub-images.judge.me/judgeme/photo-video-reviews",
-      key: 2,
-    },
-    {
-      title: "Carousel & Badges",
-      description:
-        "Showcase your best reviews on your homepage using carousels.",
-      imageSrc: "https://pub-images.judge.me/judgeme/carousel-badges",
-      key: 3,
-    },
-    {
-      title: "Q&A (Questions & Answers)",
-      description:
-        "Allow customers to ask and answer questions directly on the product page.",
-      imageSrc: "https://pub-images.judge.me/judgeme/qna-widget",
-      key: 4,
-    },
-    {
-      title: "Google Shopping Feed",
-      description:
-        "Synchronize review stars with your Google Shopping listings.",
-      imageSrc: "https://pub-images.judge.me/judgeme/google-shopping",
-      key: 5,
-    },
-    {
-      title: "Product Sharing",
-      description:
-        "Encourage customers to share their great reviews on social media.",
-      imageSrc: "https://pub-images.judge.me/judgeme/social-sharing",
-      key: 6,
-    },
-    {
-      title: "All Reviews Page",
-      description:
-        "Display all collected reviews in a dedicated, searchable page.",
-      imageSrc: "https://pub-images.judge.me/judgeme/all-reviews-page",
-      key: 7,
-    },
-    {
-      title: "All Reviews Page",
-      description:
-        "Display all collected reviews in a dedicated, searchable page.",
-      imageSrc: "https://pub-images.judge.me/judgeme/all-reviews-page",
-      key: 8,
-    },
-  ];  
+export const simplifiedMediaCardData = [
+  {
+    title: "Review Widget",
+    description: "Collect and display product reviews on your product pages.",
+    imageSrc: "https://pub-images.judge.me/judgeme/review-widget-2025",
+    key: 1,
+  },
+  {
+    title: "Photo & Video Reviews",
+    description: "Boost conversion with rich media reviews from customers.",
+    imageSrc: "https://pub-images.judge.me/judgeme/photo-video-reviews",
+    key: 2,
+  },
+  {
+    title: "Carousel & Badges",
+    description: "Showcase your best reviews on your homepage using carousels.",
+    imageSrc: "https://pub-images.judge.me/judgeme/carousel-badges",
+    key: 3,
+  },
+  {
+    title: "Q&A (Questions & Answers)",
+    description:
+      "Allow customers to ask and answer questions directly on the product page.",
+    imageSrc: "https://pub-images.judge.me/judgeme/qna-widget",
+    key: 4,
+  },
+  {
+    title: "Google Shopping Feed",
+    description: "Synchronize review stars with your Google Shopping listings.",
+    imageSrc: "https://pub-images.judge.me/judgeme/google-shopping",
+    key: 5,
+  },
+  {
+    title: "Product Sharing",
+    description:
+      "Encourage customers to share their great reviews on social media.",
+    imageSrc: "https://pub-images.judge.me/judgeme/social-sharing",
+    key: 6,
+  },
+  {
+    title: "All Reviews Page",
+    description:
+      "Display all collected reviews in a dedicated, searchable page.",
+    imageSrc: "https://pub-images.judge.me/judgeme/all-reviews-page",
+    key: 7,
+  },
+  {
+    title: "All Reviews Page",
+    description:
+      "Display all collected reviews in a dedicated, searchable page.",
+    imageSrc: "https://pub-images.judge.me/judgeme/all-reviews-page",
+    key: 8,
+  },
+];
