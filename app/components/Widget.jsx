@@ -1,10 +1,6 @@
 import React, { useCallback, useState } from "react";
 import {
-  Card,
-  Tabs,
   Page,
-  Button,
-  Text,
   Box,
   AppProvider,
   Select,
@@ -16,8 +12,10 @@ import {
 import { CaretDownIcon } from "@shopify/polaris-icons";
 import "./style.css";
 import { simplifiedMediaCardData } from "../data/reviewData";
+import { useNavigate } from "react-router";
 
 export default function Widget() {
+  const nevigate = useNavigate();
   const [selected, setSelected] = useState("today");
 
   const handleSelectChange = useCallback((value) => setSelected(value), []);
@@ -28,7 +26,6 @@ export default function Widget() {
     { label: "Horizon", value: "Horizon" },
   ];
 
- 
   return (
     <AppProvider>
       <Page
@@ -71,7 +68,9 @@ export default function Widget() {
               portrait={true}
               primaryAction={{
                 content: "Customize",
-                onAction: () => {},
+                onAction: () => {
+                  nevigate("/app/reviewWidgets");
+                },
               }}
               description={card.description}
             >

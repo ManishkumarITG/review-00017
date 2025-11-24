@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 
 import {
   Card,
   Page,
   Text,
   AppProvider,
-  ColorPicker,
   InlineGrid,
   BlockStack,
   Box,
@@ -24,24 +23,23 @@ import {
   ThumbsUpIcon,
 } from "@shopify/polaris-icons";
 import { useColorTheme } from "../routes/ColorContext";
+import ColorPickerCircle from "./ColorPicker";
 
 function Branding() {
-  const {hexCode, color, setColor, setHexCode , hsbaToHex } = useColorTheme()
-  const [isOpenColorPicker, setIsOpenColorPicker] = useState(false);
+  const { getHexCode } = useColorTheme();
+
+  const starColor = getHexCode("star");
 
   const [checked, setChecked] = useState(true);
-  const handleChange = useCallback((newChecked) => setChecked(newChecked), []);
-
- 
-
-  useEffect(() => {
-    setHexCode(hsbaToHex(color));
-  }, [color]);
+  const handleChange = useCallback((newChecked) => {
+    setChecked(newChecked);
+  }, []);
 
   return (
     <AppProvider i18n={{}}>
       <Page title="Branding" fullWidth={true}>
         <InlineGrid gap="400" columns={1}>
+          {/* ---------- Color Card ---------- */}
           <Card padding="0">
             <Box width="100%" padding="400" gap="400">
               <InlineGrid columns={2}>
@@ -55,7 +53,7 @@ function Branding() {
                   onClick={() => {}}
                   accessibilityLabel="Preview"
                 >
-                  Result To Default
+                  Reset To Default
                 </Button>
               </InlineGrid>
             </Box>
@@ -72,28 +70,13 @@ function Branding() {
                     gap: "10px",
                   }}
                 >
-                  <Button
-                    variant="plain"
-                    onClick={() => {
-                      setIsOpenColorPicker(!isOpenColorPicker);
-                      console.log("clicked");
-                    }}
-                  >
-                    <Box
-                      style={{
-                        background: hexCode,
-                        height: "48px",
-                        width: "48px",
-                        borderRadius: "100%",
-                      }}
-                    ></Box>
-                  </Button>
+                  <ColorPickerCircle type="star" />
                   <Box>
                     <Text element="span" variant="headingSm" tone="base">
                       Primary color
                     </Text>
 
-                    <Text variant="headingSm">{hexCode}</Text>
+                    <Text variant="headingSm">{starColor}</Text>
                   </Box>
                 </BlockStack>
                 <Text>
@@ -101,20 +84,8 @@ function Branding() {
                   all widgets and emails.
                 </Text>
               </InlineGrid>
-
-              {/* Color Picker */}
             </Box>
           </Card>
-          {isOpenColorPicker && (
-            <Box
-              zIndex="20"
-              position="absolute"
-              insetInlineEnd="3200"
-              insetBlockStart="3200"
-            >
-              <ColorPicker onChange={setColor} color={color} />
-            </Box>
-          )}
 
           <Card padding="0">
             <BlockStack style={{ padding: "20px" }} gap="400">
@@ -133,7 +104,7 @@ function Branding() {
                 <TextField
                   label={
                     <Box style={{ display: "flex", gap: "5px" }}>
-                      <Text tone="base">Rating icon</Text>{" "}
+                      <Text tone="base">Rating icon</Text>
                       <Badge icon={<Icon source={ThumbsUpIcon} />} tone="info">
                         Awesome
                       </Badge>
@@ -151,7 +122,7 @@ function Branding() {
                     border: "1px solid #E1E3E5",
                     width: "fit-content",
                     display: "flex",
-                    color: hexCode,
+                    color: starColor || "#108474",
                     fontSize: "50px",
                   }}
                 >
@@ -170,13 +141,17 @@ function Branding() {
                 >
                   <InlineGrid columns={2}>
                     <Box gap="100">
-                      {" "}
                       <Text variant="headingMd">Store logo</Text>
                       <Text>Update your logo in Email styling setting</Text>
                     </Box>
 
-                    <Box gap="100" insetInlineStart="200">
-                      {" "}
+                    <Box
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-end",
+                      }}
+                    >
                       <Icon source={ChevronRightIcon} />
                     </Box>
                   </InlineGrid>
@@ -208,7 +183,7 @@ function Branding() {
 
                 <Checkbox
                   disabled
-                  label="Show ‘Verified Checkmark’ in widgets"
+                  label="Show Verified Checkmark in widgets"
                   checked={checked}
                   onChange={handleChange}
                 />
