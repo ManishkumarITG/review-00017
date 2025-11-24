@@ -32,10 +32,14 @@ import StarRating from "../components/Ratting.jsx";
 import { useColorTheme } from "./ColorContext.jsx";
 import "../components/style.css";
 import { reviews, tabsdata } from "../data/reviewData.js";
+import ColorPickerCircle from "../components/ColorPicker.jsx";
 
 function IndexFiltersDefaultExample() {
-  const { hexCode } = useColorTheme();
+  const { getHexCode } = useColorTheme();
+// console.log(ColorPickerCircle,"colorpicker");
+const starColor=getHexCode("text");
 
+// const textColor=getHexCode("text");
   const [filteredOrders, setFilteredOrders] = useState(reviews);
   const [selectedData, setSelectedDta] = useState(0);
   const [taggedWith, setTaggedWith] = useState("");
@@ -199,7 +203,7 @@ const allReviewsContent = `All Reviews (${reviews.length})`;
         <IndexTable.Cell>
           <BlockStack>
             <Box>
-              <StarRating rating={Rating} color={hexCode} />
+              <StarRating rating={Rating} color={starColor} />
             </Box>
             <Text fontWeight="bold">{comment}</Text>
             <Text fontWeight="bold">{tag}</Text>
@@ -231,12 +235,15 @@ const allReviewsContent = `All Reviews (${reviews.length})`;
                   onClick={(e) => e.stopPropagation()}
                 ></Button>
               </ButtonGroup>
+                {/* <ColorPickerCircle type="starColor" /> */}
+
             </InlineStack>
           </InlineStack>
         </IndexTable.Cell>
       </IndexTable.Row>
     ),
   );
+console.log("tabsdata",tabsdata);
 
   return (
     <AppProvider>

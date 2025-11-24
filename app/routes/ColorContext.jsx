@@ -138,6 +138,7 @@ export const ColorProvider = ({ children }) => {
     getColorObject,
     hsbaToHex,
     hexToHsba,
+    
     isOpenColorPicker,
     setIsOpenColorPicker,
   };
