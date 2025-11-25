@@ -69,7 +69,7 @@ export default function Widget() {
               primaryAction={{
                 content: "Customize",
                 onAction: () => {
-                  nevigate("/app/reviewWidgets");
+                  nevigate(card.path);
                 },
               }}
               description={card.description}

@@ -34,7 +34,10 @@ import "../components/style.css";
 import { reviews, tabsdata } from "../data/reviewData.js";
 
 function IndexFiltersDefaultExample() {
-  const { hexCode } = useColorTheme();
+  const { getHexCode } = useColorTheme();
+
+  // import all hex code
+  const starColor = getHexCode("star");
 
   const [filteredOrders, setFilteredOrders] = useState(reviews);
   const [selectedData, setSelectedDta] = useState(0);
@@ -115,7 +118,7 @@ function IndexFiltersDefaultExample() {
     [reviews, itemStrings],
   );
 
-const allReviewsContent = `All Reviews (${reviews.length})`;
+  const allReviewsContent = `All Reviews (${reviews.length})`;
 
   const tabs = itemStrings.map((item, index) => ({
     content: index === 0 ? allReviewsContent : item,
@@ -199,7 +202,7 @@ const allReviewsContent = `All Reviews (${reviews.length})`;
         <IndexTable.Cell>
           <BlockStack>
             <Box>
-              <StarRating rating={Rating} color={hexCode} />
+              <StarRating rating={Rating} color={starColor} />
             </Box>
             <Text fontWeight="bold">{comment}</Text>
             <Text fontWeight="bold">{tag}</Text>
@@ -250,21 +253,20 @@ const allReviewsContent = `All Reviews (${reviews.length})`;
             ></LegacyTabs>
           </Card>
 
-        
-            <InlineStack gap="200">
-              <Text variant="headingLg" as="h2">
-                Reviews
-              </Text>
-              <Badge
-                tone="success"
-                variant="outline"
-                spacing="tight"
-                progress="complete"
-              >
-                Auto Publish
-              </Badge>
-            </InlineStack>
-        
+          <InlineStack gap="200">
+            <Text variant="headingLg" as="h2">
+              Reviews
+            </Text>
+            <Badge
+              tone="success"
+              variant="outline"
+              spacing="tight"
+              progress="complete"
+            >
+              Auto Publish
+            </Badge>
+          </InlineStack>
+
           <LegacyCard>
             <IndexFilters
               sortSelected={sortSelected}

@@ -99,14 +99,14 @@ export const ColorProvider = ({ children }) => {
     };
   }
 
-  const updateColor = (type, newColor) => {
+  const updateColor = (type, newColor, saveBarId) => {
     setColors((prev) => ({
       ...prev,
       [type]: newColor,
     }));
 
     if (typeof shopify !== "undefined" && shopify.saveBar) {
-      shopify.saveBar.show("my-save-bar");
+      shopify.saveBar.show(saveBarId);
     }
   };
 

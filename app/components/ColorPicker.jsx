@@ -1,69 +1,3 @@
-// import { useColorTheme } from "../routes/ColorContext";
-// import { Box, Popover, ColorPicker } from "@shopify/polaris";
-// import { SaveBar } from "@shopify/app-bridge-react";
-
-// function ColorPickerCircle() {
-//   const {
-//     hexCode,
-//     color,
-//     setColor,
-//     setIsOpenColorPicker,
-//     isOpenColorPicker,
-//     setHexCode,
-//   } = useColorTheme();
-//   const toggleActive = (id) => () => {
-//     setIsOpenColorPicker((activeId) => (activeId !== id ? id : null));
-//   };
-
-//   const handleSave = () => {
-//     localStorage.setItem("color", hexCode);
-//     toggleActive("popover");
-//     console.log("Saving");
-//     shopify.saveBar.hide("my-save-bar");
-//   };
-
-//   const handleDiscard = () => {
-//     const savedColor = localStorage.getItem("color") || "#ffffff";
-//     setHexCode(savedColor);
-//     toggleActive("popover");
-//     shopify.saveBar.hide("my-save-bar");
-//   };
-
-//   return (
-//     <>
-//       <SaveBar id="my-save-bar">
-//         <button variant="primary" onClick={handleSave}></button>
-//         <button onClick={handleDiscard}></button>
-//       </SaveBar>
-//       <Popover
-//         active={isOpenColorPicker == "popover"}
-//         preferredAlignment="right"
-//         activator={
-//           <Box
-//             className="color-trigger"
-//             onClick={toggleActive("popover")}
-//             style={{
-//               background: hexCode || "#108474",
-//               height: "48px",
-//               width: "48px",
-//               borderRadius: "100%",
-//               cursor: "pointer",
-//               border: "2px solid #ddd",
-//             }}
-//             aria-label="Open color picker"
-//           />
-//         }
-//         autofocusTarget="first-node"
-//         onClose={toggleActive("popover")}
-//       >
-//         <ColorPicker onChange={setColor} color={color} />
-//       </Popover>
-//     </>
-//   );
-// }
-
-// export default ColorPickerCircle;
-
 import { useColorTheme } from "../routes/ColorContext";
 import { Box, Popover, ColorPicker } from "@shopify/polaris";
 import { SaveBar } from "@shopify/app-bridge-react";
@@ -81,6 +15,7 @@ function ColorPickerCircle({ type }) {
   const currentHex = getHexCode(type);
 
   const popoverId = `popover_${type}`;
+  const saveBarId = `save-bar-${type}`;
 
   const toggleActive = () => {
     setIsOpenColorPicker((activeId) =>
@@ -89,22 +24,20 @@ function ColorPickerCircle({ type }) {
   };
 
   const handleSave = () => {
+    console.log(type);
     localStorage.setItem(type, currentHex);
-
-    toggleActive();
     console.log(`Saving ${type}`);
-    if (typeof shopify !== "undefined") shopify.saveBar.hide("my-save-bar");
+    shopify.saveBar.hide(saveBarId);
   };
 
   const handleDiscard = () => {
     toggleActive();
-    if (typeof shopify !== "undefined") shopify.saveBar.hide("my-save-bar");
-    window.location.reload();
+    shopify.saveBar.hide(saveBarId);
   };
 
   return (
     <>
-      <SaveBar id="my-save-bar">
+      <SaveBar id={saveBarId}>
         <button variant="primary" onClick={handleSave}></button>
         <button onClick={handleDiscard}></button>
       </SaveBar>
@@ -130,7 +63,7 @@ function ColorPickerCircle({ type }) {
         onClose={toggleActive}
       >
         <ColorPicker
-          onChange={(newColor) => updateColor(type, newColor)}
+          onChange={(newColor) => updateColor(type, newColor, saveBarId)}
           color={currentColor}
         />
       </Popover>

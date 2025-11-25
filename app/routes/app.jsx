@@ -15,8 +15,6 @@ export const loader = async ({ request }) => {
 export default function App() {
   const { apiKey } = useLoaderData();
 
-  console.log("apikey" ,apiKey)
-
   return (
     <AppProvider i18n={en} embedded apiKey={apiKey}>
       <s-app-nav>
@@ -25,7 +23,6 @@ export default function App() {
         <s-link href="/app/deshboard">Deshboard</s-link>
         <s-link href="/app/reveiwpage">Review</s-link>
         <s-link href="/app/mySettingPage">Settings</s-link>
-        <s-link href="/app/review">On-Reveiws</s-link>
       </s-app-nav>
       <Outlet />
     </AppProvider>
