@@ -90,7 +90,6 @@ function ColorPickerCircle({ type }) {
 
   const handleSave = () => {
     localStorage.setItem(type, currentHex);
-
     toggleActive();
     console.log(`Saving ${type}`);
     if (typeof shopify !== "undefined") shopify.saveBar.hide("my-save-bar");

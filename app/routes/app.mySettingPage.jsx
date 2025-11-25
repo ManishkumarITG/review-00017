@@ -12,7 +12,6 @@ import {
   Divider,
 } from "@shopify/polaris";
 import { AppProvider } from "@shopify/shopify-app-react-router/react";
-import "@shopify/polaris/build/esm/styles.css";
 import { PaintBrushRoundIcon, StarIcon } from "@shopify/polaris-icons";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import en from "@shopify/polaris/locales/en.json";
@@ -25,6 +24,7 @@ function MySettingPage() {
   const navigate = useNavigate();
   const [isPage, setIsPage] = useState("widgets");
 
+  
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     params.set("key", "widgets");

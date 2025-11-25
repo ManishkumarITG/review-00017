@@ -4,6 +4,12 @@ import { AppProvider } from "@shopify/shopify-app-react-router/react";
 import { authenticate } from "../shopify.server";
 // import LayoutExample from "./app.setting";
 import en from "@shopify/polaris/locales/en.json";
+// import polarisStyles from "@shopify/polaris/build/esm/styles.css";
+import '@shopify/polaris/build/esm/styles.css';
+
+// export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
+
+ 
 
 export const loader = async ({ request }) => {
   await authenticate.admin(request);
@@ -18,7 +24,7 @@ export default function App() {
   // console.log("apikey" ,apiKey)
 
   return (
-    <AppProvider i18n={en} embedded apiKey={apiKey}>
+    <AppProvider  i18n={en} embedded apiKey={apiKey}>
       <s-app-nav>
         <s-link href="/app">Home</s-link>
         <s-link href="/app/additional">Additional page</s-link>

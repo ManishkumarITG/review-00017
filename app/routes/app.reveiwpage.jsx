@@ -20,7 +20,6 @@ import {
 } from "@shopify/polaris";
 
 import { useState, useCallback } from "react";
-import "@shopify/polaris/build/esm/styles.css";
 import {
   ChevronDownIcon,
   HeartIcon,
@@ -37,9 +36,9 @@ import ColorPickerCircle from "../components/ColorPicker.jsx";
 function IndexFiltersDefaultExample() {
   const { getHexCode } = useColorTheme();
 // console.log(ColorPickerCircle,"colorpicker");
-const starColor=getHexCode("text");
+const starColor=getHexCode("star");
 
-// const textColor=getHexCode("text");
+const textColor=getHexCode("textColor");
   const [filteredOrders, setFilteredOrders] = useState(reviews);
   const [selectedData, setSelectedDta] = useState(0);
   const [taggedWith, setTaggedWith] = useState("");
@@ -183,7 +182,7 @@ const allReviewsContent = `All Reviews (${reviews.length})`;
         <IndexTable.Cell>
           <BlockStack gap={100}>
             <Text fontWeight="bold" style={{ textDecoration: "underline" }}>
-              <span style={{ textDecoration: "underline" }}>{userName}</span>
+              <span style={{ textDecoration: "underline" ,color:textColor}}>{userName}</span>
             </Text>
             <Text>
               <span style={{ textDecoration: "underline" }}>{item}</span>
@@ -246,7 +245,7 @@ const allReviewsContent = `All Reviews (${reviews.length})`;
 console.log("tabsdata",tabsdata);
 
   return (
-    <AppProvider>
+    <AppProvider> 
       <Page fullWidth>
         <InlineGrid gap="400">
           <Card padding="025">
