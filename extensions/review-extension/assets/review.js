@@ -53,4 +53,20 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   });
+
+
+   const form = document.getElementById("reviewForm");
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const payload = {};
+
+    formData.forEach((value, key) => {
+      payload[key] = value;
+    });
+
+    console.log("form data captured 🔥:", payload);
+  });
 });
