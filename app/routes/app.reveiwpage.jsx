@@ -17,9 +17,11 @@ import {
   Card,
   LegacyTabs,
   InlineGrid,
+  Popover,
+  ActionList,
 } from "@shopify/polaris";
 
-import { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import "@shopify/polaris/build/esm/styles.css";
 import {
   ChevronDownIcon,
@@ -35,15 +37,49 @@ import { reviews, tabsdata } from "../data/reviewData.js";
 
 function IndexFiltersDefaultExample() {
   const { getHexCode } = useColorTheme();
-
-  // import all hex code
   const starColor = getHexCode("star");
 
   const [filteredOrders, setFilteredOrders] = useState(reviews);
+
   const [selectedData, setSelectedDta] = useState(0);
+  console.log(selectedData);
   const [taggedWith, setTaggedWith] = useState("");
   const [queryValue, setQueryValue] = useState("");
   const [selectedTab, setSelectedTab] = useState(0);
+  const [expanded, setExpanded] = useState(false);
+  const [PopoverValues, setPopoverValues] = useState({});
+  const [selectedButtons, setSelectedButtons] = useState([]);
+  const [pinButton, setPinButton] = useState([]);
+  const [active, setActive] = useState(null);
+  const [openPopoverId, setOpenPopoverId] = useState(null);
+  const [openMenu, setOpenMenu] = useState(null);
+  const [openNevigation, setOpenNevigation] = useState(null);
+  const [currentTab, setCurrentTab] = useState(1);
+  const [itemRenderLimit, setitemRenderLimit] = useState(0);
+
+  //Like button
+
+  const toggleButton = (id) => {
+    setSelectedButtons((prev) =>
+      prev.includes(id) ? prev.filter((btnId) => btnId !== id) : [...prev, id],
+    );
+  };
+
+  const togglePinButton = (id) => {
+    setPinButton((prev) =>
+      prev.includes(id) ? prev.filter((btnId) => btnId !== id) : [...prev, id],
+    );
+  };
+
+  const togglePopover = (id) => {
+    setOpenPopoverId((prev) => (prev === id ? null : id));
+  };
+  const toggleMenu = (id) => {
+    setOpenMenu((prev) => (prev === id ? null : id));
+  };
+  const togglenavigation = (id) => {
+    setOpenNevigation((prev) => (prev === id ? null : id));
+  };
 
   const handleTabChange = useCallback((selectedTabIndex) => {
     setSelectedDta(selectedTabIndex);
@@ -52,6 +88,10 @@ function IndexFiltersDefaultExample() {
     const newUrl = window.location.pathname + "?" + params.toString();
     window.history.pushState({}, "", newUrl);
   }, []);
+
+  const toggleActive = (id) => () => {
+    setActive((activeId) => (activeId !== id ? id : null));
+  };
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -62,6 +102,8 @@ function IndexFiltersDefaultExample() {
     "Spam",
     "Arvichiv",
   ]);
+
+  const buttonRefs = useRef([]);
 
   const filterOrders = useCallback(
     (query, currentTab) => {
@@ -97,8 +139,8 @@ function IndexFiltersDefaultExample() {
           );
           break;
         case "Spam":
-          finalFilteredOrders = filteredByQuery.filter((order) =>
-            order.comment.toLowerCase().includes("spamfilter"),
+          finalFilteredOrders = filteredByQuery.filter(
+            (order) => order.isSpamed === true,
           );
           if (finalFilteredOrders.length === 0) {
             finalFilteredOrders = [];
@@ -168,11 +210,16 @@ function IndexFiltersDefaultExample() {
     onQueryClear();
   }, [onQueryClear, handleTaggedWithRemove]);
 
+  const splitedfilteredOrders = filteredOrders.slice(
+    itemRenderLimit,
+    itemRenderLimit + 10,
+  );
+
   const { selectedResources, allResourcesSelected, handleSelectionChange } =
     useIndexResourceState(filteredOrders);
 
-  const rowMarkup = filteredOrders.map(
-    ({ id, userName, item, time, Rating, comment, tag }, index) => (
+  const rowMarkup = splitedfilteredOrders.map(
+    ({ id, userName, item, time, Rating, comment, tag, isSpamed }, index) => (
       <IndexTable.Row
         id={id}
         key={id}
@@ -189,10 +236,22 @@ function IndexFiltersDefaultExample() {
             </Text>
             <Text>Via Web</Text>
             <InlineStack gap={200}>
-              <Button onClick={(e) => e.stopPropagation()}>
+              <Button
+                variant={selectedButtons.includes(id) ? "primary" : "secondary"}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleButton(id);
+                }}
+              >
                 <Icon source={HeartIcon} tone="base" />
               </Button>
-              <Button onClick={(e) => e.stopPropagation()}>
+              <Button
+                variant={pinButton.includes(id) ? "primary" : "secondary"}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  togglePinButton(id);
+                }}
+              >
                 <Icon source={PinIcon} tone="base" />
               </Button>
             </InlineStack>
@@ -215,24 +274,133 @@ function IndexFiltersDefaultExample() {
             style={{ width: "100%" }}
           >
             <InlineStack gap="800">
-              <Button
-                icon={ChevronDownIcon}
-                iconPosition="end"
-                onClick={(e) => e.stopPropagation()}
+              <Popover
+                active={openPopoverId === id}
+                fullWidth={true}
+                preferredAlignment="right"
+                activator={
+                  <Button
+                    ref={(el) => (buttonRefs.current[index] = el)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleActive("popover1")();
+                      togglePopover(id);
+                      setOpenMenu(null);
+                      setOpenNevigation(null);
+                    }}
+                    icon={ChevronDownIcon}
+                    accessibilityLabel="Other save actions"
+                  >
+                    Published
+                  </Button>
+                }
+                autofocusTarget="first-node"
+                onClose={() => setOpenPopoverId(null)}
               >
-                Published
-              </Button>
+                <ActionList
+                  actionRole="menuitem"
+                  items={[
+                    {
+                      content: "Spam",
+                      onAction: (e) => {
+                        console.log("action", id);
+                        isSpamed = !isSpamed;
+                      },
+                    },
+                    {
+                      content: "Froud",
+                      onAction: (e) => {
+                        e.stopPropagation();
+                      },
+                    },
+                    {
+                      content: "Delete",
+                      onAction: (e) => {
+                        e.stopPropagation();
+                      },
+                    },
+                  ]}
+                />
+              </Popover>
               <ButtonGroup>
-                <Button
-                  icon={UndoIcon}
-                  iconPosition="end"
-                  onClick={(e) => e.stopPropagation()}
-                ></Button>
-                <Button
-                  icon={MenuHorizontalIcon}
-                  iconPosition="end"
-                  onClick={(e) => e.stopPropagation()}
-                ></Button>
+                <Popover
+                  active={openNevigation === id}
+                  preferredAlignment="right"
+                  activator={
+                    <Button
+                      icon={UndoIcon}
+                      ref={(el) => (buttonRefs.current[index] = el)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleActive("popover1")();
+                        togglenavigation(id);
+                        setOpenMenu(null);
+                        setOpenPopoverId(null);
+                      }}
+                      accessibilityLabel="Other save actions"
+                    />
+                  }
+                  autofocusTarget="first-node"
+                  onClose={() => setOpenNevigation(null)}
+                >
+                  <div onClick={(e) => e.stopPropagation()}>
+                    <ActionList
+                      actionRole="menuitem"
+                      items={[
+                        {
+                          content: "leave",
+                          onAction: (e) => {
+                            e.stopPropagation();
+                          },
+                        },
+                        {
+                          content: "More",
+                          onAction: (e) => {
+                            e.stopPropagation();
+                          },
+                        },
+                      ]}
+                    />
+                  </div>
+                </Popover>
+                <Popover
+                  active={openMenu === id}
+                  preferredAlignment="left"
+                  activator={
+                    <Button
+                      icon={MenuHorizontalIcon}
+                      ref={(el) => (buttonRefs.current[index] = el)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleActive("popover1")();
+                        toggleMenu(id);
+                        setOpenPopoverId(null);
+                        setOpenNevigation(null);
+                      }}
+                      accessibilityLabel="Other save actions"
+                    />
+                  }
+                  autofocusTarget="first-node"
+                  onClose={() => setOpenMenu(null)}
+                >
+                  <ActionList
+                    actionRole="menuitem"
+                    items={[
+                      {
+                        content: "Edit",
+                        onAction: (e) => {
+                          e.stopPropagation();
+                        },
+                      },
+                      {
+                        content: "Share",
+                        onAction: (e) => {
+                          e.stopPropagation();
+                        },
+                      },
+                    ]}
+                  />
+                </Popover>
               </ButtonGroup>
             </InlineStack>
           </InlineStack>
@@ -299,13 +467,44 @@ function IndexFiltersDefaultExample() {
                 { title: "Customer" },
                 { title: "Created" },
                 { title: "Ratting" },
-                { title: "status" },
+                { title: "status", alignment: "end" },
               ]}
             >
               {rowMarkup}
             </IndexTable>
           </LegacyCard>
         </InlineGrid>
+
+        {reviews.length > 10 ? (
+          <Card gap={200} style={{ margin: "30px 0" }}>
+            <InlineStack gap={900} align="space-between">
+              <Button
+                disabled={currentTab === 1}
+                variant="primary"
+                onClick={() => {
+                  setCurrentTab((prev) => prev - 1);
+                  setitemRenderLimit((pre) => pre - 10);
+                }}
+              >
+                Previus
+              </Button>
+              {currentTab}
+              <Button
+                variant="primary"
+                onClick={() => {
+                  setCurrentTab((prev) => prev + 1);
+                  setitemRenderLimit((pre) => pre + 10);
+                }}
+                disabled={itemRenderLimit + 10 >= reviews.length}
+              >
+                Next
+              </Button>
+              {console.log("lengths", itemRenderLimit + 10, reviews.length)}
+            </InlineStack>
+          </Card>
+        ) : (
+          ""
+        )}
       </Page>
     </AppProvider>
   );

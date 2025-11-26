@@ -8,6 +8,7 @@ export const reviews = [
     Rating: 4.3,
     comment: "Great!",
     tag: "test",
+    isSpamed: false,
   },
   {
     id: 2,
@@ -18,6 +19,7 @@ export const reviews = [
     Rating: 4.8,
     comment: "Excellent",
     tag: "verified",
+    isSpamed: true,
   },
   {
     id: 3,
@@ -28,6 +30,7 @@ export const reviews = [
     Rating: 4.1,
     comment: "Good quality",
     tag: "hot",
+    isSpamed: false,
   },
   {
     id: 4,
@@ -38,6 +41,7 @@ export const reviews = [
     Rating: 3.9,
     comment: "Decent",
     tag: "new",
+    isSpamed: false,
   },
   {
     id: 5,
@@ -48,6 +52,7 @@ export const reviews = [
     Rating: 4.9,
     comment: "Amazing!",
     tag: "pro",
+    isSpamed: false,
   },
   {
     id: 6,
@@ -58,6 +63,7 @@ export const reviews = [
     Rating: 4.5,
     comment: "Very smooth",
     tag: "verified",
+    isSpamed: false,
   },
   {
     id: 7,
@@ -68,6 +74,7 @@ export const reviews = [
     Rating: 3.8,
     comment: "Okay product",
     tag: "test",
+    isSpamed: false,
   },
   {
     id: 8,
@@ -78,6 +85,7 @@ export const reviews = [
     Rating: 4.0,
     comment: "Nice build",
     tag: "sale",
+    isSpamed: false,
   },
   {
     id: 9,
@@ -88,6 +96,7 @@ export const reviews = [
     Rating: 4.7,
     comment: "Fits well",
     tag: "verified",
+    isSpamed: false,
   },
   {
     id: 10,
@@ -98,6 +107,7 @@ export const reviews = [
     Rating: 4.2,
     comment: "Smooth typing",
     tag: "hot",
+    isSpamed: false,
   },
   {
     id: 11,
@@ -108,6 +118,7 @@ export const reviews = [
     Rating: 3.6,
     comment: "Average",
     tag: "test",
+    isSpamed: false,
   },
   {
     id: 12,
@@ -118,6 +129,7 @@ export const reviews = [
     Rating: 4.4,
     comment: "Crisp display",
     tag: "pro",
+    isSpamed: false,
   },
   {
     id: 13,
@@ -128,6 +140,7 @@ export const reviews = [
     Rating: 3.9,
     comment: "Works fine",
     tag: "new",
+    isSpamed: false,
   },
   {
     id: 14,
@@ -138,6 +151,7 @@ export const reviews = [
     Rating: 4.6,
     comment: "Long backup",
     tag: "verified",
+    isSpamed: false,
   },
   {
     id: 15,
@@ -148,6 +162,7 @@ export const reviews = [
     Rating: 4.1,
     comment: "Good sound",
     tag: "hot",
+    isSpamed: false,
   },
 ];
 
