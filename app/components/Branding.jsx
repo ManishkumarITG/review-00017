@@ -50,7 +50,7 @@ function Branding() {
                 <Button
                   textAlign="end"
                   variant="plain"
-                  onClick={() => {}}
+                  onClick={() => { }}
                   accessibilityLabel="Preview"
                 >
                   Reset To Default

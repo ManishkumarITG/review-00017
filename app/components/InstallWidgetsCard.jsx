@@ -5,6 +5,7 @@ import {
   InlineStack,
   ChoiceList,
   BlockStack,
+  Link,
 } from "@shopify/polaris";
 import "@shopify/polaris/build/esm/styles.css";
 import React, { useCallback, useState } from "react";
@@ -15,9 +16,12 @@ function InstallWidgetsCard({
   buttons = [],
   pannelId,
 }) {
-  const [selected, setSelected] = useState(["hidden"]);
+  const [selected, setSelected] = useState([]);
   const [open, setOpen] = useState(false);
-  const handleChange = useCallback((value) => setSelected(value), []);
+  const handleChange = useCallback((value) => {
+    setSelected(value)
+    setOpen(prev => !prev);
+  },[]);
 
   return (
     <Box>
@@ -38,22 +42,30 @@ function InstallWidgetsCard({
           <BlockStack gap="300">
             <Text>{description}</Text>
 
-            <InlineStack gap="300">
-              {buttons.map((btn, index) => (
-                <Button
-                  key={index}
-                  variant={btn.variant || "primary"}
-                  tone={btn.tone || "base"}
-                  onClick={btn.onClick || (() => {})}
-                >
-                  {btn.label}
-                </Button>
-              ))}
-            </InlineStack>
-          </BlockStack>
+           <InlineStack gap="300">
+  {buttons.map((btn, index) => (
+    btn.tone === "plain" ? (
+      <Link key={index} onClick={btn.onClick}>
+        {btn.label}
+      </Link>
+    ) : (
+      <Button
+        key={index}
+        variant={btn.variant}
+        tone={btn.tone}
+        onClick={btn.onClick || (() => {})}
+      >
+        {btn.label}
+      </Button>
+    )
+  ))}
+</InlineStack>
+
+        </BlockStack>
         </Box>
-      )}
-    </Box>
+  )
+}
+    </Box >
   );
 }
 

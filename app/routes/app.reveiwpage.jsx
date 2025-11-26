@@ -37,17 +37,14 @@ import { reviews, tabsdata } from "../data/reviewData.js";
 
 function IndexFiltersDefaultExample() {
   const { getHexCode } = useColorTheme();
+
   const starColor = getHexCode("star");
 
   const [filteredOrders, setFilteredOrders] = useState(reviews);
-
   const [selectedData, setSelectedDta] = useState(0);
-  console.log(selectedData);
   const [taggedWith, setTaggedWith] = useState("");
   const [queryValue, setQueryValue] = useState("");
   const [selectedTab, setSelectedTab] = useState(0);
-  const [expanded, setExpanded] = useState(false);
-  const [PopoverValues, setPopoverValues] = useState({});
   const [selectedButtons, setSelectedButtons] = useState([]);
   const [pinButton, setPinButton] = useState([]);
   const [active, setActive] = useState(null);
@@ -219,7 +216,10 @@ function IndexFiltersDefaultExample() {
     useIndexResourceState(filteredOrders);
 
   const rowMarkup = splitedfilteredOrders.map(
-    ({ id, userName, item, time, Rating, comment, tag, isSpamed }, index) => (
+    (
+      { id, userName, item, time, Rating, comment, tag, isPin, isSpamed },
+      index,
+    ) => (
       <IndexTable.Row
         id={id}
         key={id}
@@ -303,6 +303,7 @@ function IndexFiltersDefaultExample() {
                     {
                       content: "Spam",
                       onAction: (e) => {
+                        // e.stopPropagation();
                         console.log("action", id);
                         isSpamed = !isSpamed;
                       },

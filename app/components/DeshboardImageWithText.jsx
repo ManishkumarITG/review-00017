@@ -2,30 +2,32 @@ import { Box, Card, Image, InlineGrid, MediaCard } from '@shopify/polaris';
 import React from 'react';
 import '@shopify/polaris/build/esm/styles.css';
 
-function DeshboardImageWithText({ title, imageurl, buttontext, textcontent }) {
+function DeshboardImageWithText({ card }) {
     return (
         <>
-            <MediaCard
-                title={title}
-                primaryAction={{
-                    content: buttontext,
-                    onAction: () => { },
-                }}
-                description={textcontent}
-                // popoverActions={[{ content: 'Dismiss', onAction: () => { } }]}
-                size="small"
-            >
-                <img
-                    alt=""
-                    width="100%"
-                    height="100%"
-                    style={{
-                        objectFit: 'cover',
-                        objectPosition: 'center',
+            <Box padding="300">
+                <MediaCard
+                    title={card.title}
+                    primaryAction={{
+                        content: card.buttontext,
+                        onAction: () => { },
                     }}
-                    src={imageurl}
-                />
-            </MediaCard>
+                    description={card.textcontent}
+                    // popoverActions={[{ content: 'Dismiss', onAction: () => { } }]}
+                    size="small"
+                >
+                    <img
+                        alt=""
+                        width="100%"
+                        height="100%"
+                        style={{
+                            objectFit: 'cover',
+                            objectPosition: 'center',
+                        }}
+                        src={card.imageurl}
+                    />
+                </MediaCard>
+            </Box>
 
         </>
     );

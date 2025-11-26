@@ -1,120 +1,358 @@
 {{ 'review.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'review.js' | asset_url }}" defer></script>
 
+<script>
+  function handleClick() {
+    console.log("clicked from Liquid");
+    const formDIV = document.getElementById('popupForm');
+    formDIV.style.display = formDIV.style.display === 'block' ? 'none' : 'block';
+  }
+</script>
+
+{% assign actual_rating = 3 %}
+{% assign progress_percent = count | times: 100.0 | divided_by: total_reviews %}
+
+
+
 <div class="jm-review-widget my-review-widget" id="jm-review-{{ section.id }}">
-  <!-- Header -->
-  <div class="jm-header">
-    <h2
-      class="jm-heading"
-      style="
-        color: {{ block.settings.heading_color }};
-        font-size: {{ block.settings.heading_font }}px;
-      "
-    >
-      {{ block.settings.heading }}
-    </h2>
+   <!-- Header -->
+<div class="jm-header" style="display:flex; flex-direction:column; gap:5px;">
 
-    <span
-      style="
-        color: {{block.settings.star_color}};
-        font-size: {{block.settings.star_size}}px;
-      "
-    >
-      {% render 'stars', rating: 5 %}
-    </span>
+<div style="
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+">
 
-    <div class="jm-actions">
-      <button
-        class="jm-write"
-        style="
-          background: {{ block.settings.button_color }};
-          color: {{ block.settings.button_text_color }};
-        "
-      >
-        Write a review
-      </button>
+      <h2
+         class="jm-heading"
+         style="
+         color: {{ block.settings.heading_color }};
+         font-size: {{ block.settings.heading_font }}px;
+         "
+         >
+         {{ block.settings.heading }}
+      </h2>
+      <div>
 
-      <div class="jm-sort">
-        <select class="jm-sort-select">
-          <option value="most_recent">Most Recent</option>
-          <option value="highest">Highest Rating</option>
-          <option value="lowest">Lowest Rating</option>
-        </select>
-      </div>
-    </div>
+<div style=" align-items:center; gap:0px; flex-direction:row;">
+      <span
+         style="
+         color: {{block.settings.star_color}};
+         font-size: {{block.settings.star_size}}px;
+         display:flex;
+         gap:8px;
+         align-items:center;
+         "
+         >
+       {% render 'stars', rating: actual_rating %}
+       <span style="font-weight:normal; color:black; font-size:14px;">{{ actual_rating }} out of 5</span>
+      </span>
   </div>
+       <span>Based on 15 reviews</span>
 
-  <!-- Review List -->
-  <div class="jm-list" id="jm-list-{{ section.id }}">
-    {% if block.settings.review_source == 'dummy' %}
-      {%- assign dummy_reviews = '
-        Alice|This is a sample review to demonstrate Judge.me review widget.|5|2025-10-01,
-        John Smith|Sample review body. Ut et excepturi et modi.|5|2025-09-21,
-        Rohan|Good quality, fast delivery.|4|2025-08-10,
-        Priya|Amazing product!|5|2025-07-05,
-        Mark|Satisfied with the purchase.|4|2025-06-12
-      '
-        | split: ','
-      -%}
+</div>
 
-      {%- for i in (0..4) -%}
-        {%- assign row = dummy_reviews[i] | split: '|' -%}
-        {%- assign a = row[0] | strip -%}
-        {%- assign b = row[1] | strip -%}
-        {%- assign r = row[2] | strip -%}
-        {%- assign d = row[3] | strip -%}
+<! ------- render stars with progress barr  ------- >
+       <div>
 
-        <article class="jm-item">
-          <div class="jm-item-left">
-            <div class="jm-avatar">{{ a | slice: 0, 1 }}</div>
-          </div>
+        {% assign star_counts = "8,3,1,3,0" | split: "," %} 
+        {% assign total_reviews = 0 %}
 
-          <div class="jm-item-right">
-            <div class="jm-topline">
+        {% for c in star_counts %}
+          {% assign total_reviews = total_reviews | plus: c %}
+        {% endfor %}
+
+        {% for i in (1..5) reversed %}
+          {% assign index = forloop.index0 %}
+          {% assign count = star_counts[index] | plus: 0 %}
+
+          {% if total_reviews > 0 %}
+            {% assign progress_percent = count | times: 100.0 | divided_by: total_reviews %}
+          {% else %}
+            {% assign progress_percent = 0 %}
+          {% endif %}
+
+          <div style="display:flex; align-items:center; gap:5px;">
+
+            <!-- LEFT: static stars (5 to 1) -->
+            <span
+              style="
+                color: {{ block.settings.star_color }};
+                font-size: {{ block.settings.star_size }}px;
+                width: 90px;
+                display:flex;
+              "
+            >
+              {% render 'stars', rating: i %}
+            </span>
+
+            <!-- MIDDLE: progress bar -->
+            <div style="background:#e5e7eb; height:14px; width:140px; border-radius:0px; overflow:hidden;">
               <div
-                class="jm-stars-inline"
                 style="
-                  color: {{ block.settings.star_color }};
-                  font-size: {{ block.settings.star_size }}px;
+                  height:14px;
+                  width:{{ progress_percent }}%;
+                  background: {{ block.settings.progress_bg_color }};
+                  border-radius:0px;
                 "
-              >
-                {% render 'stars', rating: r %}
-                <p style="color: {{ block.settings.author_color }};">{{ a }}</p>
-              </div>
-              <div class="jm-date">{{ d }}</div>
+              ></div>
             </div>
 
-            <div class="jm-body" style="color: {{ block.settings.text_color }};">
-              <p>{{ b }}</p>
-            </div>
+            <!-- RIGHT: count -->
+            <span style="color:#888888;">
+              {{ count }}
+            </span>
+
           </div>
-        </article>
+        {% endfor %}
+      </div>
+</div>
+ <! ------- render stars with progress barr  ------- >
+
+      <div class="jm-actions">
+         <button
+            class="jm-write"
+            style="    background: {{ block.settings.btn_bg }};
+    color: {{ block.settings.btn_text }};
+    border-radius: {{ block.settings.btn_radius }};
+    padding: {{ block.settings.btn_padding }};
+    font-size: {{ block.settings.btn_font_size }};
+    margin: {{ block.settings.btn_margin }};
+    display: {{ block.settings.btn_display }};
+    text-align: {{ block.settings.btn_align }};
+    position: {{ block.settings.btn_position }};
+    top: {{ block.settings.btn_top }};
+    right: {{ block.settings.btn_right }};
+    bottom: {{ block.settings.btn_bottom }};
+    left: {{ block.settings.btn_left }};"
+            onClick="handleClick()"
+            >
+         Write a review
+         </button>
+         <div class="jm-sort">
+            <select class="jm-sort-select">
+               <option value="most_recent">Most Recent</option>
+               <option value="highest">Highest Rating</option>
+               <option value="lowest">Lowest Rating</option>
+            </select>
+         </div>
+      </div>
+   </div>
+
+   <!-- Review List -->
+   
+   <div class="jm-list" id="jm-list-{{ section.id }}">
+      {% if block.settings.review_source == 'dummy' %}
+      {%- assign dummy_reviews = '
+      Alice|This is a sample review to demonstrate Judge.me review widget.|5|2025-10-01,
+      John Smith|Sample review body. Ut et excepturi et modi.|5|2025-09-21,
+      Rohan|Good quality, fast delivery.|4|2025-08-10,  
+      Priya|Amazing product!|5|2025-07-05,
+      Mark|Satisfied with the purchase.|4|2025-06-12
+      '
+      | split: ','
+      -%}
+      {%- for i in (0..4) -%}
+      {%- assign row = dummy_reviews[i] | split: '|' -%}
+      {%- assign a = row[0] | strip -%}
+      {%- assign b = row[1] | strip -%}
+      {%- assign r = row[2] | strip -%}
+      {%- assign d = row[3] | strip -%}
+      <article class="jm-item">
+         <div class="jm-item-left">
+            <div class="jm-avatar">{{ a | slice: 0, 1 }}</div>
+         </div>
+         <div class="jm-item-right">
+            <div class="jm-topline">
+               <div
+                  class="jm-stars-inline"
+                  style="
+                  color: {{ block.settings.star_color }};
+                  font-size: {{ block.settings.star_size }}px;"
+                  >
+                  {% render 'stars', rating: r %}
+                  <p style="color: {{ block.settings.author_color }};">{{ a }}</p>
+               </div>
+              
+
+            </div>
+            <div class="jm-body" style="color: {{ block.settings.text_color }};">
+               <p>{{ b }}</p>
+            </div>
+         </div>
+      </article>
       {% endfor %}
-
-    {% else %}
-
+      {% else %}
       <div class="jm-db-placeholder">
-        <span
-          style="
+         <span
+            style="
             color: {{block.settings.star_color}};
             font-size: {{block.settings.star_size}}px;
-          "
-        >
-          {% render 'stars', rating: 5 %}
-        </span>
-
-        <button
-          class="jm-write"
-          style="
+            "
+            >
+         {% render 'stars', rating: 5 %}
+         </span>
+         <button
+            class="jm-write"
+            style="
             background: {{ block.settings.button_color }};
             color: {{ block.settings.button_text_color }};
-          "
-        >
-          Write a review
-        </button>
+            "
+            >
+         Write a review
+         </button>
       </div>
-    {% endif %}
+      {% endif %}
+   </div>
+
+   <div 
+  id="popupForm"
+  style="
+    display:none; 
+    max-width:360px; 
+    margin:20px 0; 
+    padding:24px; 
+    background:#fff;
+    border-radius:16px; 
+    box-shadow:0 6px 20px rgba(0,0,0,0.08); 
+    font-family:Arial, sans-serif;
+  "
+>
+<form>
+
+  <!-- Star Rating -->
+  <label
+    style="
+      font-size:{{block.settings.label_font_size}}px;
+      font-weight:{{block.settings.label_font_weight}};
+      color:{{block.settings.label_text_color}};
+      display:block;
+      margin-bottom:6px;
+    "
+  >
+    {{ block.settings.star_label }}
+  </label>
+
+  <div id="formStars" style="display:flex; gap:4px; margin-bottom:20px;">
+      {% for i in (1..5) %}
+    <span 
+      class="form-star"
+      data-value="{{ i }}"
+      style="
+        font-size: {{ block.settings.star_size }}px;
+        color:#ccc;
+        cursor:pointer;
+      "
+    >★</span>
+  {% endfor %}
   </div>
+  <input type="hidden" id="selectedRating" name="rating" value="0">
+
+
+  <!-- Display Name -->
+  <label
+    style="
+      font-size:{{block.settings.label_font_size}}px;
+      font-weight:{{block.settings.label_font_weight}};
+      color:{{block.settings.label_text_color}};
+      display:block;
+      margin-bottom:6px;
+    "
+  >
+    {{ block.settings.display_name_label }}
+  </label>
+  <input
+    type="text"
+    value="{{ block.settings.display_name_placeholder }}"
+    style="
+      width:100%;
+      padding:10px 12px;
+      border:1px solid {{ block.settings.border_color }};
+      border-radius: {{ block.settings.border_radius }}px;
+      margin-bottom:16px;
+      font-size:14px;
+    "
+  />
+
+  <!-- Email -->
+  <label
+    style="
+      font-size:{{block.settings.label_font_size}}px;
+      font-weight:{{block.settings.label_font_weight}};
+      color:{{block.settings.label_text_color}};
+      display:block;
+      margin-bottom:6px;
+    "
+  >
+    {{ block.settings.email_label }}
+  </label>
+  <input
+    type="email"
+    value="{{ block.settings.email_placeholder }}"
+    style="
+      width:100%;
+      padding:10px 12px;
+      border:1px solid {{ block.settings.border_color }};
+      border-radius: {{ block.settings.border_radius }}px;
+      margin-bottom:16px;
+      font-size:14px;
+    "
+  />
+
+  <!-- Description -->
+  <label
+    style="
+      font-size:{{block.settings.label_font_size}}px;
+      font-weight:{{block.settings.label_font_weight}};
+      color:{{block.settings.label_text_color}};
+      display:block;
+      margin-bottom:6px;
+    "
+  >
+    {{ block.settings.description_label }}
+  </label>
+  <textarea
+    value="{{ block.settings.description_placeholder }}"
+    style="
+      width:100%;
+      min-height:100px;
+      border:1px solid {{ block.settings.border_color }};
+      padding:10px 12px;
+      font-size:14px;
+      resize:vertical;
+      border-radius: {{ block.settings.border_radius }}px;
+      margin-bottom:16px;
+    "
+  ></textarea>
+
+
+  <!-- Submit Button -->
+  <button type="submit"
+    style="
+      width:100%;
+      margin-top:16px;
+      padding:12px 0;
+      border:none;
+      border-radius:10px;
+      background: {{ block.settings.star_color }};
+      color: {{ block.settings.form_button_text_color }};
+      font-size:15px;
+      font-weight:600;
+      cursor:pointer;
+    "
+  >
+    {{ block.settings.submit_text }}
+  </button>
+
+
+</form>
+
+
+ 
+</div>
+
 </div>
 
 {% schema %}
@@ -145,7 +383,178 @@
     { "type": "color", "id": "author_color", "label": "Author name color", "default": "#0f8b79" },
 
     { "type": "color", "id": "button_color", "label": "Write button color", "default": "#108474" },
-    { "type": "color", "id": "button_text_color", "label": "Write button text color", "default": "#ffffff" }
+    { "type": "color", "id": "button_text_color", "label": "Write button text color", "default": "#ffffff" },
+    { "type": "text", "id": "write_review_button_width", "label": "Button Width", "default": "50%" },
+
+    { "type": "color", "id": "progress_bg_color", "label": "Progress bar background color", "default": "#0F8B79" },
+    { "type": "color", "id": "avg_color", "label": "Average Rating colour", "default": "#0F8B79" },
+
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Write a Review"
+    },
+
+    {
+      "type": "color",
+      "id": "btn_bg",
+      "label": "Button Background Color",
+      "default": "#108474"
+    },
+    {
+      "type": "color",
+      "id": "btn_text",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    },
+
+    {
+      "type": "range",
+      "id": "btn_radius",
+      "label": "Border Radius",
+      "min": 0,
+      "max": 50,
+      "default": 5,
+      "unit": "px"
+    },
+
+    {
+      "type": "text",
+      "id": "btn_padding",
+      "label": "Padding",
+      "default": "10px 20px"
+    },
+
+    {
+      "type": "range",
+      "id": "btn_font_size",
+      "label": "Font Size",
+      "min": 10,
+      "max": 40,
+      "default": 14,
+      "unit": "px"
+    },
+
+    {
+      "type": "select",
+      "id": "btn_align",
+      "label": "Text Alignment",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "btn_display",
+      "label": "Display",
+      "default": "inline-block",
+      "options": [
+        { "value": "inline", "label": "Inline" },
+        { "value": "inline-block", "label": "Inline Block" },
+        { "value": "block", "label": "Block" }
+      ]
+    },
+
+    {
+      "type": "select",
+      "id": "btn_position",
+      "label": "Button Position",
+      "default": "static",
+      "options": [
+        { "value": "static", "label": "Static" },
+        { "value": "relative", "label": "Relative" },
+        { "value": "absolute", "label": "Absolute" },
+        { "value": "fixed", "label": "Fixed" }
+      ]
+    },
+
+    { "type": "text", "id": "btn_top", "label": "Top", "default": "auto" },
+    { "type": "text", "id": "btn_right", "label": "Right", "default": "auto" },
+    { "type": "text", "id": "btn_bottom", "label": "Bottom", "default": "auto" },
+    { "type": "text", "id": "btn_left", "label": "Left", "default": "auto" },
+
+    { "type": "text", "id": "btn_margin", "label": "Margin", "default": "10px 0" },
+
+    { "type": "text", "id": "label_text", "label": "Label Text", "default": "Review content" },
+    { "type": "text", "id": "label_font_size", "label": "Label Font Size", "default": "10px" },
+    { "type": "text", "id": "label_font_weight", "label": "Label Font Weight", "default": "400" },
+    { "type": "color", "id": "label_text_color", "label": "Label Font Colour", "default": "#108474" },
+
+    { "type": "text", "id": "textarea_text", "label": "Textarea Placeholder", "default": "Type your name..." },
+    { "type": "text", "id": "submit_text", "label": "Submit Button Text", "default": "Submit" },
+
+    {
+      "type": "color",
+      "id": "form_button_text_color",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Textarea Border Color",
+      "default": "#108474"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Border Radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 10,
+      "unit": "px"
+    },
+    {
+  "type": "text",
+  "id": "display_name_label",
+  "label": "Display name label",
+  "default": "Display Name"
+},
+{
+  "type": "text",
+  "id": "display_name_placeholder",
+  "label": "Display name placeholder",
+  "default": "Enter your display name"
+},
+
+{
+  "type": "text",
+  "id": "email_label",
+  "label": "Email label",
+  "default": "Email"
+},
+{
+  "type": "text",
+  "id": "email_placeholder",
+  "label": "Email placeholder",
+  "default": "Enter your email"
+},
+
+{
+  "type": "text",
+  "id": "description_label",
+  "label": "Description label",
+  "default": "Description"
+},
+{
+  "type": "text",
+  "id": "description_placeholder",
+  "label": "Description placeholder",
+  "default": "Write your review…"
+},
+
+{
+  "type": "text",
+  "id": "star_label",
+  "label": "Star Label",
+  "default": "Rate the product"
+}
+
   ]
 }
 {% endschema %}
