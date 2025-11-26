@@ -44,7 +44,7 @@ export default function ReviewWidgets() {
   const nevigate = useNavigate();
 
   // import color context
-  const { getHexCode } = useColorTheme();
+  const { getHexCode, isChange } = useColorTheme();
 
   // import all hex code
   const starColor = getHexCode("star");
@@ -94,7 +94,11 @@ export default function ReviewWidgets() {
   };
 
   const handlePageChange = async () => {
-    nevigate("/app/mySettingPage");
+    if (isChange) {
+      shopify.saveBar.leaveConfirmation();
+    } else {
+      nevigate("/app/mySettingPage");
+    }
   };
 
   return (

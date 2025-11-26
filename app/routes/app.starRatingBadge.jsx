@@ -41,7 +41,7 @@ import { useColorTheme } from "./ColorContext";
 export default function appStarRatting() {
   const nevigate = useNavigate();
 
-  const { getHexCode } = useColorTheme();
+  const { getHexCode, isChange } = useColorTheme();
 
   const starColor = getHexCode("star");
 
@@ -56,6 +56,15 @@ export default function appStarRatting() {
       setIsAllowed(false);
     }
   }, []);
+
+  const handlePgeChange = () => {
+    if (isChange) {
+      shopify.saveBar.leaveConfirmation();
+    } else {
+      nevigate("/app/mySettingPage");
+    }
+  };
+
   return (
     <AppProvider>
       <Page fullWidth={true}>
@@ -70,12 +79,7 @@ export default function appStarRatting() {
             <Box padding="400">
               <BlockStack gap={600}>
                 <InlineStack gap={400}>
-                  <Button
-                    icon={ArrowLeftIcon}
-                    onClick={() => {
-                      nevigate("/app/mySettingPage");
-                    }}
-                  />
+                  <Button icon={ArrowLeftIcon} onClick={handlePgeChange} />
                   <Text as="h2" variant="headingSm">
                     Rating Badge
                   </Text>

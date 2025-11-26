@@ -184,17 +184,11 @@ export const simplifiedMediaCardData = [
     path: "/app/reviewWidgets",
   },
   {
-    title: "Photo & Video Reviews",
-    description: "Boost conversion with rich media reviews from customers.",
-    imageSrc: "https://pub-images.judge.me/judgeme/photo-video-reviews",
+    title: "Star Rating Badge",
+    description:
+      "Show the average rating of your products and how many reviews they've received.",
+    imageSrc: "https://pub-images.judge.me/judgeme/star-rating-badge-2025",
     key: 2,
-    path: "/app/starRatingBadge",
-  },
-  {
-    title: "Carousel & Badges",
-    description: "Showcase your best reviews on your homepage using carousels.",
-    imageSrc: "https://pub-images.judge.me/judgeme/carousel-badges",
-    key: 3,
     path: "/app/starRatingBadge",
   },
 ];

@@ -11,6 +11,7 @@ function ColorPickerCircle({ type }) {
     isOpenColorPicker,
     setColors,
     hexToHsba,
+    setIsChnage,
   } = useColorTheme();
 
   const currentColor = getColorObject(type);
@@ -30,6 +31,7 @@ function ColorPickerCircle({ type }) {
     localStorage.setItem(type, currentHex);
     console.log(`Saving ${type}`);
     shopify.saveBar.hide(saveBarId);
+    setIsChnage(false);
   };
 
   const handleDiscard = () => {
@@ -43,6 +45,7 @@ function ColorPickerCircle({ type }) {
       [type]: hsbcode,
     }));
     shopify.saveBar.hide(saveBarId);
+    setIsChnage(false);
   };
 
   return (

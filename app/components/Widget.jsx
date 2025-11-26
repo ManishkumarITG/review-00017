@@ -82,7 +82,7 @@ export default function Widget() {
                   objectFit: "cover",
                   objectPosition: "center",
                 }}
-                src="https://pub-images.judge.me/judgeme/review-widget-2025"
+                src={card.imageSrc}
               />
             </MediaCard>
           ))}

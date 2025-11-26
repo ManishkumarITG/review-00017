@@ -11,6 +11,7 @@ const DEFAULT_HSBA = {
 
 export const ColorProvider = ({ children }) => {
   const [isOpenColorPicker, setIsOpenColorPicker] = useState(null);
+  const [isChange, setIsChnage] = useState(false);
 
   const [colors, setColors] = useState({});
 
@@ -108,6 +109,7 @@ export const ColorProvider = ({ children }) => {
 
     if (typeof shopify !== "undefined" && shopify.saveBar) {
       shopify.saveBar.show(saveBarId);
+      setIsChnage(true);
     }
   };
 
@@ -142,6 +144,8 @@ export const ColorProvider = ({ children }) => {
     isOpenColorPicker,
     setIsOpenColorPicker,
     setColors,
+    isChange,
+    setIsChnage,
   };
 
   return (
