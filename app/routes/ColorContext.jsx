@@ -100,6 +100,7 @@ export const ColorProvider = ({ children }) => {
   }
 
   const updateColor = (type, newColor, saveBarId) => {
+    console.log("new colors", newColor);
     setColors((prev) => ({
       ...prev,
       [type]: newColor,
@@ -140,6 +141,7 @@ export const ColorProvider = ({ children }) => {
     hexToHsba,
     isOpenColorPicker,
     setIsOpenColorPicker,
+    setColors,
   };
 
   return (
