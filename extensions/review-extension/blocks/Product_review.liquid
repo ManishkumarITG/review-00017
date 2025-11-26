@@ -1,28 +1,28 @@
-  {% assign reviews = 14 %}
-  {% assign numbers = (1..5) %}
-  {% assign Rating = 3  %}
-  {% assign rounded_rating = Rating | round %}
-<p style="color:black">
-<span style="color:{{ block.settings.colour }} ; font-size: {{block.settings.size}}px">
+{{ 'starratting.css' | asset_url | stylesheet_tag }}
 
- {% render 'stars', rating: rounded_rating %}
+{% assign reviews = 14 %}
+{% assign rating = 3 %}
+{% assign rounded_rating = rating | round %}
 
-
-</span>
-{{reviews}} reviews
-</p>
-
-  
-  
+<div class="starRatting">
+  <span style="color:{{ block.settings.colour }} ; font-size: {{block.settings.size}}px">
+    {% render 'stars', rating: rounded_rating %}
+  </span>
+  {% if block.settings.show_review_text %}
+    {{ reviews }}
+    {{ block.settings.review_text }}
+  {% endif %}
+</div>
 
 {% schema %}
 {
   "name": "Product Theme",
   "target": "section",
   "settings": [
-    { "type": "color", "id": "colour", "label": "Star Colour", "default": "#a9e060ff" },
-    { "type": "range", "id": "size","min": 10, "max":38 , "label": "Star Size", "default": 26 },
-    
+    { "type": "color", "id": "colour", "label": "Star Colour", "default": "#108474" },
+    { "type": "range", "id": "size", "min": 10, "max": 38, "label": "Star Size", "default": 20 },
+    { "type": "text", "id": "review_text", "label": "Review text", "default": "review" },
+    { "type": "checkbox", "id": "show_review_text", "label": "Show review text", "default": true }
   ]
 }
 {% endschema %}
