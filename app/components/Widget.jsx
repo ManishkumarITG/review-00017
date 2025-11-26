@@ -69,7 +69,7 @@ export default function Widget() {
               primaryAction={{
                 content: "Customize",
                 onAction: () => {
-                  nevigate("/app/reviewWidgets");
+                  nevigate(card.path);
                 },
               }}
               description={card.description}
@@ -82,7 +82,7 @@ export default function Widget() {
                   objectFit: "cover",
                   objectPosition: "center",
                 }}
-                src="https://pub-images.judge.me/judgeme/review-widget-2025"
+                src={card.imageSrc}
               />
             </MediaCard>
           ))}

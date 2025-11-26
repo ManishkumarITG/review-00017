@@ -11,6 +11,7 @@ const DEFAULT_HSBA = {
 
 export const ColorProvider = ({ children }) => {
   const [isOpenColorPicker, setIsOpenColorPicker] = useState(null);
+  const [isChange, setIsChnage] = useState(false);
 
   const [colors, setColors] = useState({});
 
@@ -99,14 +100,16 @@ export const ColorProvider = ({ children }) => {
     };
   }
 
-  const updateColor = (type, newColor) => {
+  const updateColor = (type, newColor, saveBarId) => {
+    console.log("new colors", newColor);
     setColors((prev) => ({
       ...prev,
       [type]: newColor,
     }));
 
     if (typeof shopify !== "undefined" && shopify.saveBar) {
-      shopify.saveBar.show("my-save-bar");
+      shopify.saveBar.show(saveBarId);
+      setIsChnage(true);
     }
   };
 
@@ -140,6 +143,9 @@ export const ColorProvider = ({ children }) => {
     hexToHsba,
     isOpenColorPicker,
     setIsOpenColorPicker,
+    setColors,
+    isChange,
+    setIsChnage,
   };
 
   return (

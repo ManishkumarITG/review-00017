@@ -5,11 +5,9 @@ import { authenticate } from "../shopify.server";
 // import LayoutExample from "./app.setting";
 import en from "@shopify/polaris/locales/en.json";
 // import polarisStyles from "@shopify/polaris/build/esm/styles.css";
-import '@shopify/polaris/build/esm/styles.css';
+import "@shopify/polaris/build/esm/styles.css";
 
 // export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
-
- 
 
 export const loader = async ({ request }) => {
   await authenticate.admin(request);
@@ -21,17 +19,14 @@ export const loader = async ({ request }) => {
 export default function App() {
   const { apiKey } = useLoaderData();
 
-  // console.log("apikey" ,apiKey)
-
   return (
-    <AppProvider  i18n={en} embedded apiKey={apiKey}>
+    <AppProvider i18n={en} embedded apiKey={apiKey}>
       <s-app-nav>
         <s-link href="/app">Home</s-link>
         <s-link href="/app/additional">Additional page</s-link>
         <s-link href="/app/deshboard">Deshboard</s-link>
         <s-link href="/app/reveiwpage">Review</s-link>
         <s-link href="/app/mySettingPage">Settings</s-link>
-        <s-link href="/app/review">On-Reveiws</s-link>
       </s-app-nav>
       <Outlet />
     </AppProvider>
