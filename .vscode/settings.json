@@ -1,0 +1,20 @@
+{
+    "folder-color.pathColors": [
+        {
+            "folderPath": "reviewapp\\extensions\\review-extension\\blocks\\external_form.liquid\\",
+            "color": "foldercolorizer.color_00cc00"
+        },
+        {
+            "folderPath": "reviewapp\\extensions\\review-extension\\blocks\\",
+            "color": "foldercolorizer.color_00cc00"
+        },
+        {
+            "folderPath": "reviewapp\\app\\",
+            "color": "foldercolorizer.color_00ccff"
+        },
+        {
+            "folderPath": "reviewapp\\extensions\\",
+            "color": "foldercolorizer.color_99ffcc"
+        }
+    ]
+}

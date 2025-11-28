@@ -1,5 +1,3 @@
-
-
 export const loader = async ({ request }) => {
     try {
         console.log('-----------------------------------------------------------hit api');
@@ -14,6 +12,5 @@ export const loader = async ({ request }) => {
         });
     } catch (error) {
         console.log("catch error in test loader :", error);
-
     }
 };
