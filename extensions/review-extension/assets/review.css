@@ -28,7 +28,7 @@
   gap: 6px;
 }
 .jm-stars {
-  display: block;
+  display: flex;
   line-height: 1;
 }
 .jm-average-number {
@@ -98,7 +98,6 @@
 .jm-list {
   margin-top: 20px;
   border-top: 1px solid #e9f2f1;
-  padding-top: 16px;
 }
 .jm-item {
   display: flex;
@@ -113,18 +112,7 @@
   justify-content: center;
   align-items: flex-start;
 }
-.jm-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #e8f6f3;
-  color: #0f8b79;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  margin-top: 4px;
-}
+
 .jm-item-right {
   flex: 1;
 }
@@ -132,6 +120,7 @@
   display: flex;
   gap: 12px;
   align-items: center;
+  justify-content: space-between;
 }
 .jm-stars-inline .jm-star.filled {
   color: inherit;
@@ -156,7 +145,7 @@
 .jm-body p {
   margin: 8px 0 0 0;
   line-height: 1.5;
-  color: #444;
+  color: #0f0909;
 }
 
 .jm-modal {
@@ -253,7 +242,7 @@
 
 .jm-item {
   display: flex;
-  gap: 15px;
+  gap: 0px;
   padding: 20px 0;
   border-bottom: 1px solid #eee;
 }
@@ -265,13 +254,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 50%;
+  border-radius: 10%;
   font-weight: 600;
 }
 
 .jm-stars-inline {
   display: flex;
-  gap: 10px;
+  gap: 0px;
   align-items: center;
 }
 
@@ -281,5 +270,17 @@
 }
 
 .jm-body p {
-  margin-top: 5px;
+  margin-top: 2px;
+}
+.error-msg {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}
+.jm-Stars-Progressbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
 }
