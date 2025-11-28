@@ -41,12 +41,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const stars = document.querySelectorAll("#formStars .form-star");
   const ratingInput = document.getElementById("selectedRating");
+  // const noReviewRating = document.getElementById("NoReviewSelectedRating");
 
   stars.forEach((star) => {
     star.addEventListener("click", () => {
       const selectedValue = star.getAttribute("data-value");
       ratingInput.value = selectedValue;
-
+      // noReviewRating.value = selectedValue;
       stars.forEach((s) => {
         s.style.color =
           s.getAttribute("data-value") <= selectedValue ? "#108474" : "#ccc";
@@ -54,19 +55,85 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  function resetStars() {
+    ratingInput.value = ""; // remove selected rating
 
-   const form = document.getElementById("reviewForm");
+    stars.forEach((s) => {
+      s.style.color = "#ccc"; // reset to default color
+    });
+  }
 
+  const form = document.getElementById("reviewForm");
+  const regexExpression = /^(?!\s*$).+/;
+  const emailRegexExpression = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  // const ratingInput = document.getElementById("selectedRating");
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
+    let isValid = true;
     const formData = new FormData(form);
     const payload = {};
 
+    form.querySelectorAll(".input-error").forEach((el) => el.classList.remove("input-error"));
+    form.querySelectorAll(".error-msg").forEach((el) => (el.textContent = ""));
+
     formData.forEach((value, key) => {
+      let inputEl = form.querySelector(`[name="${key}"]`);
+
+      // Empty Field Check
+      if (!regexExpression.test(value)) {
+        ShowError(inputEl, `${key} field is required`);
+        isValid = false;
+        return;
+      }
+
+      // Email Check
+      if (key.toLowerCase() === "email" && !emailRegexExpression.test(value)) {
+        ShowError(inputEl, `Email is not valid`);
+        isValid = false;
+        return;
+      }
+
+      // Rating check
+      if (key.toLowerCase() === "rating" && (value === "0" || value === "")) {
+        ShowError(inputEl, `${key} is required`);
+        isValid = false;
+        return;
+      }
+
+      // If all good, add to payload
       payload[key] = value;
     });
 
-    console.log("form data captured 🔥:", payload);
+    console.log("isValid →", isValid);
+
+    if (!isValid) {
+      console.log("Form is not submitted, validation failed ");
+      return;
+    }
+    console.log(ratingInput.value, "ratingInput");
+
+    form.querySelectorAll(".error-msg").forEach((el) => (el.textContent = ""));
+    console.log("Review Form Data:", payload);
+    form.reset();
+    resetStars();
   });
+
+  function ShowError(inputElement, message) {
+    // form.querySelectorAll(".error-msg").forEach((el) => (el.textContent = ""));
+    const wrapper = inputElement.parentElement;
+
+    let errorEl = wrapper.querySelector(".error-msg");
+    if (errorEl) {
+      errorEl.textContent = message;
+      return;
+    }
+
+    inputElement.classList.add("input-error");
+    const errorElement = document.createElement("span");
+    errorElement.classList.add("error-msg");
+    errorElement.textContent = message;
+    inputElement.after(errorElement);
+  }
+
 });
