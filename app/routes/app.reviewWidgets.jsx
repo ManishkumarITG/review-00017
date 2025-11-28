@@ -46,7 +46,8 @@ export default function ReviewWidgets() {
   const nevigate = useNavigate();
 
   // import color context
-  const { getHexCode, isChange, colors, setIsChnage } = useColorTheme();
+  const { getHexCode, isChange, colors, setIsChnage, updateColor } =
+    useColorTheme();
 
   // import all hex code
   const starColor = getHexCode("star");
@@ -118,11 +119,13 @@ export default function ReviewWidgets() {
       value: newValue,
     });
     shopify.saveBar.show("review_widgets");
+    setIsChnage(true);
   }, []);
 
   const handleChange = useCallback((newChecked) => {
     setDateChecked(newChecked);
     shopify.saveBar.show("review_widgets");
+    setIsChnage(true);
   }, []);
 
   const toggleActive = (id) => () => {
@@ -208,14 +211,21 @@ export default function ReviewWidgets() {
     }
   };
 
-  // const handleDiscard = () => {
-  //   setColors((prev) => ({
-  //     ...prev,
-  //     [type]: hexCodeColor,
-  //   }));
-  //   shopify.saveBar.hide("review_widgets");
-  //   setIsChnage(false);
-  // };
+  const handleDiscard = () => {
+    setDateChecked(setting.theme[0].isChecked);
+    setting.text.forEach((text) => {
+      dispatch({
+        field: text.settingName,
+        value: text.isvalue,
+      });
+    });
+    setting.color.forEach((color) => {
+      updateColor(color.type, color.isvalue, "review_widgets");
+    });
+
+    shopify.saveBar.hide("review_widgets");
+    setIsChnage(false);
+  };
 
   return (
     <AppProvider>
@@ -225,7 +235,7 @@ export default function ReviewWidgets() {
           variant="primary"
           onClick={handleSave}
         ></button>
-        <button onClick={() => {}}></button>
+        <button onClick={handleDiscard}></button>
       </SaveBar>
       <Page>
         <Card title="Credit card" sectioned>
