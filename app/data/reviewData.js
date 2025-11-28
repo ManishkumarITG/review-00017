@@ -191,4 +191,12 @@ export const simplifiedMediaCardData = [
     key: 2,
     path: "/app/starRatingBadge",
   },
+
+  {
+    title: "Write a Review",
+    description: "A pre-installed widget to help your customers write reviews",
+    imageSrc: "https://pub-images.judge.me/judgeme/write-review-card.webp",
+    key: 3,
+    path: "/app/writeReview",
+  },
 ];
