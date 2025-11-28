@@ -22,7 +22,7 @@ import {
   StarFilledIcon,
   ThumbsUpIcon,
 } from "@shopify/polaris-icons";
-import { useColorTheme } from "../routes/ColorContext";
+import { useColorTheme } from "../ColorContext";
 import ColorPickerCircle from "./ColorPicker";
 
 function Branding() {
@@ -50,7 +50,7 @@ function Branding() {
                 <Button
                   textAlign="end"
                   variant="plain"
-                  onClick={() => { }}
+                  onClick={() => {}}
                   accessibilityLabel="Preview"
                 >
                   Reset To Default

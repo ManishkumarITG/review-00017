@@ -22,12 +22,12 @@ import {
   PlusIcon,
   ChartVerticalIcon,
 } from "@shopify/polaris-icons";
-import DeshboardCard from "../components/deshboardCard";
-import ReviewInlineCard from "../components/ReviewInlineCard";
-import DeshboardGuidense from "../components/DeshboardGuidense";
-import DeshboardimageWithText from "../components/DeshboardImageWithText";
+import DeshboardCard from "./components/deshboardCard";
+import ReviewInlineCard from "./components/ReviewInlineCard";
+import DeshboardGuidense from "./components/DeshboardGuidense";
+import DeshboardimageWithText from "./components/DeshboardImageWithText";
 import { useNavigate, useLocation } from "react-router";
-import DeshboardHeader from "../components/DeshboardHeader";
+import DeshboardHeader from "./components/DeshboardHeader";
 
 export default function Deshboard() {
   const navigate = useNavigate();

@@ -1,14 +1,14 @@
 // import { Text } from "@shopify/polaris";
-import PublishingAndModeration from "../components/PublishingAndModeration"
+import PublishingAndModeration from "./components/PublishingAndModeration";
 
 export default function AdditionalPage() {
-  return (  
+  return (
     <>
       <s-page heading="Additional page">
         <s-section heading="Multiple pages">
           <s-paragraph>
-            The app template comes with an additional page which demonstrates how
-            to create multiple pages within app navigation using{" "}
+            The app template comes with an additional page which demonstrates
+            how to create multiple pages within app navigation using{" "}
             <s-link
               href="https://shopify.dev/docs/apps/tools/app-bridge"
               target="_blank"
@@ -18,8 +18,8 @@ export default function AdditionalPage() {
             .
           </s-paragraph>
           <s-paragraph>
-            To create your own page and have it show up in the app navigation, add
-            a page inside <code>app/routes</code>, and a link to it in the{" "}
+            To create your own page and have it show up in the app navigation,
+            add a page inside <code>app/routes</code>, and a link to it in the{" "}
             <code>&lt;ui-nav-menu&gt;</code> component found in{" "}
             <code>app/routes/app.jsx</code>.
           </s-paragraph>
@@ -37,7 +37,6 @@ export default function AdditionalPage() {
           </s-unordered-list>
         </s-section>
       </s-page>
-      <PublishingAndModeration/>
     </>
   );
 }

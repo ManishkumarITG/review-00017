@@ -30,10 +30,10 @@ import {
   PinIcon,
   UndoIcon,
 } from "@shopify/polaris-icons";
-import StarRating from "../components/Ratting.jsx";
+import StarRating from "./components/Ratting.jsx";
 import { useColorTheme } from "./ColorContext.jsx";
-import "../components/style.css";
-import { reviews, tabsdata } from "../data/reviewData.js";
+import "./components/style.css";
+import { reviews, tabsdata } from "./data/reviewData.js";
 
 function IndexFiltersDefaultExample() {
   const { getHexCode } = useColorTheme();

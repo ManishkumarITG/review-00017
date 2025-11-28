@@ -1,12 +1,12 @@
 import { Page, InlineGrid, Card, Text, Box, Divider } from "@shopify/polaris";
 import { AppProvider } from "@shopify/shopify-app-react-router/react";
 import "@shopify/polaris/build/esm/styles.css";
-import { PaintBrushRoundIcon, StarIcon } from "@shopify/polaris-icons";
+import { StarIcon } from "@shopify/polaris-icons";
 import { useLocation } from "react-router";
 import en from "@shopify/polaris/locales/en.json";
 import { useEffect, useState } from "react";
-import Widget from "../components/Widget";
-import Branding from "../components/Branding";
+import Widget from "./components/Widget";
+import Branding from "./components/Branding";
 
 function MySettingPage() {
   const location = useLocation();

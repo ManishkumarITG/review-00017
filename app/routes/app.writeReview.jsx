@@ -24,9 +24,9 @@ import {
   StarFilledIcon,
   StarIcon,
 } from "@shopify/polaris-icons";
-import ColorPickerCircle from "../components/ColorPicker.jsx";
-import CollapsibleBox from "../components/Collapsible.jsx";
-import DropZoneWithImageFileUpload from "../components/ImageDrop.jsx";
+import ColorPickerCircle from "./components/ColorPicker.jsx";
+import CollapsibleBox from "./components/Collapsible.jsx";
+import DropZoneWithImageFileUpload from "./components/ImageDrop.jsx";
 import { useNavigate } from "react-router";
 
 const initialState = {
