@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BlockStack,
   Button,
@@ -13,6 +13,7 @@ import {
   Box,
   Image,
   Link,
+  Spinner
 } from "@shopify/polaris";
 import { AppProvider } from "@shopify/polaris";
 import en from "@shopify/polaris/locales/en.json";
@@ -31,6 +32,92 @@ import DeshboardHeader from "../components/DeshboardHeader";
 
 export default function Deshboard() {
   const navigate = useNavigate();
+  const [carddata, setCardData] = useState([]);
+
+
+
+  function Loding() {
+    return <>
+      <InlineStack align="center" gap="100" type="center">
+        <Spinner size="large" accessibilityLabel="Loading content" />
+      </InlineStack>
+
+    </>;
+  }
+
+  async function CardData() {
+    try {
+      const response = await fetch('/api/getcarddata', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) throw new Error("API offline");
+
+      const data = await response.json();
+      console.log("CardData (Live API)", data);
+      return data;
+
+    } catch (error) {
+      console.log("CardData fallback mode activated API unavailable", error);
+
+      const carddata = [
+        {
+          id: 1,
+          title: "Reviews",
+          number: 1284,
+          percentage: 12,
+          date: "yesterday",
+        },
+        {
+          id: 6,
+          title: "Average Rating",
+          number: 90,
+          percentage: 9,
+          date: "2025-09-15",
+        },
+
+        {
+          id: 3,
+          title: "Request sent",
+          number: 1120,
+          percentage: 15,
+          date: "2025-11-18",
+        },
+        {
+          id: 4,
+          title: "Revenue Form",
+          number: 42,
+          percentage: -3,
+          date: "2025-11-10",
+        },
+        {
+          id: 5,
+          title: "Trust score",
+          number: "Transparency",
+          percentage: "Authenticity",
+          date: "2025-11-10",
+        },
+      ];
+
+      console.log("CardData (Mock Fallback)", carddata);
+      return carddata;
+    }
+  }
+
+  useEffect(() => {
+    CardData().then((data) => {
+      console.log("Enter in useEffect", data);
+      setCardData(data);
+    }).catch((error) => {
+      console.error("Error fetching card data:", error);
+    });
+  }, []);
+
+  console.log("card data in open world ", carddata);
+
   const ranges = [
     {
       title: "Last 30 days",
@@ -99,44 +186,6 @@ export default function Deshboard() {
       period: null,
     },
   ];
-  const carddata = [
-    {
-      id: 1,
-      title: "Reviews",
-      number: 1284,
-      percentage: 12,
-      date: "yesterday",
-    },
-    {
-      id: 6,
-      title: "Average Rating",
-      number: 90,
-      percentage: 9,
-      date: "2025-09-15",
-    },
-
-    {
-      id: 3,
-      title: "Request sent",
-      number: 1120,
-      percentage: 15,
-      date: "2025-11-18",
-    },
-    {
-      id: 4,
-      title: "Revenue Form",
-      number: 42,
-      percentage: -3,
-      date: "2025-11-10",
-    },
-    {
-      id: 5,
-      title: "Trust score",
-      number: "Transparency",
-      percentage: "Authenticity",
-      date: "2025-11-10",
-    },
-  ];
 
   const ReviewInlineCardArray = [
     {
@@ -166,6 +215,7 @@ export default function Deshboard() {
   const [selected, setSelected] = useState(ranges[0]);
   const [popoverActive, setPopoverActive] = useState(false);
   const [filteredData, setFilteredData] = useState(carddata);
+
 
   function filterresult(value) {
     const newSelected = ranges.find((range) => range.alias === value[0]);
@@ -202,156 +252,159 @@ export default function Deshboard() {
   }
 
   return (
-    <AppProvider i18n={en}>
-      <DeshboardHeader />
-      <Page>
-        <DeshboardGuidense />
-      </Page>
-      <Page>
-        <Card roundedAbove="sm">
-          <BlockStack gap="200">
-            <InlineGrid columns="1fr auto">
-              <Text as="h2" variant="headingMd">
-                Welcome to Judge.me
-              </Text>
-              <InlineGrid columns="auto auto" gap="100" align="center">
-                <Popover
-                  onClose={() => {
-                    console.log("closed");
-                  }}
-                  autofocusTarget="none"
-                  preferredAlignment="left"
-                  preferInputActivator={false}
-                  preferredPosition="below"
-                  activator={
-                    <Button
-                      onClick={() => {
-                        setPopoverActive(!popoverActive);
-                      }}
-                      icon={CalendarIcon}
-                    >
-                      {selected.title}
-                    </Button>
-                  }
-                  active={popoverActive}
-                >
-                  <OptionList
-                    options={ranges?.map((range) => ({
-                      value: range.alias,
-                      label: range.title,
-                    }))}
-                    selected={selected.alias}
-                    onChange={(value) => {
-                      filterresult(value);
+    <>
+      <AppProvider i18n={en}>
+        <DeshboardHeader />
+        <Page>
+          <DeshboardGuidense />
+        </Page>
+        <Page>
+          <Card roundedAbove="sm">
+            <BlockStack gap="200">
+              <InlineGrid columns="1fr auto">
+                <Text as="h2" variant="headingMd">
+                  Welcome to Judge.me
+                </Text>
+                <InlineGrid columns="auto auto" gap="100" align="center">
+                  <Popover
+                    onClose={() => {
+                      console.log("closed");
                     }}
-                  />
-                </Popover>
-
-                <Button
-                  icon={ChartVerticalIcon}
-                  onClick={() => navigate("/app/reveiwpage")}
-                >
-                  View Report
-                </Button>
-              </InlineGrid>
-            </InlineGrid>
-            <InlineGrid
-              columns={{
-                xs: "1fr",
-                sm: "1fr 1fr ",
-                md: "1fr 1fr 1fr 1fr 1fr",
-              }}
-              gap="200"
-            >
-              {filteredData.map((items, index) => (
-                <DeshboardCard key={index} element={items} />
-              ))}
-              {/* 
-                            <Card>
-                                <Text as="h2" variant="headingSm">
-                                    Trust score
-                                </Text>
-                                <Text as="p" variant="small">
-                                    Transparency
-                                </Text>
-                                <Text as="p" variant="small">
-                                    Authenticity
-                                </Text>
-                            </Card> */}
-            </InlineGrid>
-
-            <InlineGrid
-              columns={{
-                xs: "1fr",
-                sm: "3fr  ",
-                md: "2fr auto",
-              }}
-              gap="200"
-            >
-              <Card>
-                <InlineStack gap="200" align="start">
-                  <Box>
-                    <Text as="h2" variant="headingMd">
-                      Widgets
-                    </Text>
-                  </Box>
-                  <InlineStack gap="100">
-                    <Badge
-                      tone="success"
-                      progress="complete"
-                      toneAndProgressLabelOverride="Status: Published. Your online store is visible."
-                    >
-                      <s-paragraph>Embed </s-paragraph>
-                    </Badge>
-                    <Badge
-                      tone="success"
-                      progress="complete"
-                      toneAndProgressLabelOverride="Status: Published. Your online store is visible."
-                    >
-                      <s-paragraph>1 active</s-paragraph>
-                    </Badge>
-                  </InlineStack>
-                </InlineStack>
-              </Card>
-              <Card>
-                <InlineGrid columns="auto auto" gap="150" align="center">
-                  <Text as="h2" variant="headingSm">
-                    Request
-                  </Text>
-                  <Badge
-                    tone="success"
-                    progress="complete"
-                    toneAndProgressLabelOverride="Status: Published. Your online store is visible."
+                    autofocusTarget="none"
+                    preferredAlignment="left"
+                    preferInputActivator={false}
+                    preferredPosition="below"
+                    activator={
+                      <Button
+                        onClick={() => {
+                          setPopoverActive(!popoverActive);
+                        }}
+                        icon={CalendarIcon}
+                      >
+                        {selected.title}
+                      </Button>
+                    }
+                    active={popoverActive}
                   >
-                    <s-paragraph>Requests enabled</s-paragraph>
-                  </Badge>
+                    <OptionList
+                      options={ranges?.map((range) => ({
+                        value: range.alias,
+                        label: range.title,
+                      }))}
+                      selected={selected.alias}
+                      onChange={(value) => {
+                        filterresult(value);
+                      }}
+                    />
+                  </Popover>
+
+                  <Button
+                    icon={ChartVerticalIcon}
+                    onClick={() => navigate("/app/reveiwpage")}
+                  >
+                    View Report
+                  </Button>
                 </InlineGrid>
-              </Card>
+              </InlineGrid>
+  
+
+              {filteredData?.length <=0 ? (
+                <InlineGrid
+
+                  alignItems="center"
+                  gap="200"
+                >
+                  <Loding />
+
+                </InlineGrid>
+              ) : (<InlineGrid
+                columns={{
+                  xs: "1fr",
+                  sm: "1fr 1fr",
+                  md: "1fr 1fr 1fr 1fr 1fr",
+                }}
+                alignItems="center"
+                gap="200"
+              >
+                {filteredData.map((element, idx) => (
+                  <DeshboardCard key={idx} element={element} />
+                ))}
+              </InlineGrid>)
+              }
+              <InlineGrid
+                columns={{
+                  xs: "1fr",
+                  sm: "3fr  ",
+                  md: "2fr auto",
+                }}
+                gap="200"
+              >
+                <Card>
+                  <InlineStack gap="200" align="start">
+                    <Box>
+                      <Text as="h2" variant="headingMd">
+                        Widgets
+                      </Text>
+                    </Box>
+                    <InlineStack gap="100">
+                      <Badge
+                        tone="success"
+                        progress="complete"
+                        toneAndProgressLabelOverride="Status: Published. Your online store is visible."
+                      >
+                        <s-paragraph>Embed </s-paragraph>
+                      </Badge>
+                      <Badge
+                        tone="success"
+                        progress="complete"
+                        toneAndProgressLabelOverride="Status: Published. Your online store is visible."
+                      >
+                        <s-paragraph>1 active</s-paragraph>
+                      </Badge>
+                    </InlineStack>
+                  </InlineStack>
+                </Card>
+                <Card>
+                  <InlineGrid columns="auto auto" gap="150" align="center">
+                    <Text as="h2" variant="headingSm">
+                      Request
+                    </Text>
+                    <Badge
+                      tone="success"
+                      progress="complete"
+                      toneAndProgressLabelOverride="Status: Published. Your online store is visible."
+                    >
+                      <s-paragraph>Requests enabled</s-paragraph>
+                    </Badge>
+                  </InlineGrid>
+                </Card>
+              </InlineGrid>
+            </BlockStack>
+          </Card>
+        </Page>
+        <Page>
+          <Box padding="300">
+            <InlineGrid
+              gap="400"
+              columns={{
+                xs: "1fr",
+                sm: "1fr ",
+                md: "auto auto",
+              }}
+            >
+              {ReviewInlineCardArray.map((card, index) => (
+                <ReviewInlineCard key={index} card={card} />
+              ))}
             </InlineGrid>
-          </BlockStack>
-        </Card>
-      </Page>
-      <Page>
-        <Box padding="300">
-          <InlineGrid
-            gap="400"
-            columns={{
-              xs: "1fr",
-              sm: "1fr ",
-              md: "auto auto",
-            }}
-          >
-            {ReviewInlineCardArray.map((card, index) => (
-              <ReviewInlineCard key={index} card={card} />
-            ))}
-          </InlineGrid>
-        </Box>
-      </Page>
-      <Page>
-        {deshboardImages.map((element, index) => (
-          <DeshboardimageWithText key={index} card={element} />
-        ))}
-      </Page>
-    </AppProvider>
+          </Box>
+        </Page>
+        <Page>
+          {deshboardImages.map((element, index) => (
+            <DeshboardimageWithText key={index} card={element} />
+          ))}
+        </Page>
+      </AppProvider>
+    </>
+
   );
 }
