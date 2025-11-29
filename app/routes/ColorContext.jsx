@@ -101,36 +101,24 @@ export const ColorProvider = ({ children }) => {
   }
 
   const updateColor = (type, newColor, saveBarId) => {
-    console.log("new colors", newColor);
     setColors((prev) => ({
       ...prev,
       [type]: newColor,
     }));
-
-    if (typeof shopify !== "undefined" && shopify.saveBar) {
-      shopify.saveBar.show(saveBarId);
-      setIsChnage(true);
-    }
+    shopify.saveBar.show(saveBarId);
+    setIsChnage(true);
   };
 
   const getHexCode = (type) => {
     if (!colors[type]) {
-      if (typeof window !== "undefined") {
-        const saved = window.localStorage.getItem(type);
-        if (saved) return saved;
-      }
       return hsbaToHex(DEFAULT_HSBA);
     }
-    return hsbaToHex(colors[type]);
+    return colors[type];
   };
 
-  const getColorObject = (type) => {
-    if (colors[type]) return colors[type];
-
-    if (typeof window !== "undefined") {
-      const savedHex = window.localStorage.getItem(type);
-      if (savedHex) return hexToHsba(savedHex);
-    }
+  const getColorObject = (type, hexcode) => {
+    if (colors[type]) return hexToHsba(colors[type]);
+    if (hexcode) return hexToHsba(hexcode);
     return DEFAULT_HSBA;
   };
 

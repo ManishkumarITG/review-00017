@@ -13,22 +13,24 @@ import {
   Avatar,
   Checkbox,
   TextField,
+  Spinner,
 } from "@shopify/polaris";
 import "@shopify/polaris/build/esm/styles.css";
-import Ratting from "../components/Ratting.jsx";
+import Ratting from "./components/Ratting.jsx";
 import { useColorTheme } from "./ColorContext";
-import { useCallback, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer, useState } from "react";
 import { ArrowLeftIcon, ChevronDownIcon } from "@shopify/polaris-icons";
-import CustomProgressBar from "../components/CustomProgressBar.jsx";
-import { reviews } from "../data/reviewData.js";
-import ColorPickerCircle from "../components/ColorPicker.jsx";
-import CollapsibleBox from "../components/Collapsible.jsx";
+import CustomProgressBar from "./components/CustomProgressBar.jsx";
+import { reviews } from "./data/reviewData.js";
+import ColorPickerCircle from "./components/ColorPicker.jsx";
+import CollapsibleBox from "./components/Collapsible.jsx";
 import { useNavigate } from "react-router";
+import { SaveBar } from "@shopify/app-bridge-react";
 
 const initialState = {
-  Widget_title: "Costomer review",
-  Average_rating_text: 4.07,
-  button_text: "Write a review",
+  "Widget title": "Costomer review",
+  "Average rating text": 4.07,
+  "Button Text": "Write a review",
 };
 
 function reducer(state, action) {
@@ -44,13 +46,14 @@ export default function ReviewWidgets() {
   const nevigate = useNavigate();
 
   // import color context
-  const { getHexCode, isChange } = useColorTheme();
+  const { getHexCode, isChange, colors, setIsChnage } = useColorTheme();
 
   // import all hex code
   const starColor = getHexCode("star");
   const textColor = getHexCode("text");
   const buttonColor = getHexCode("button");
   const buttonTextColor = getHexCode("buttonTextColor");
+
   const rattingArray = [
     { rating: 5, pepole: 8 },
     { rating: 4, pepole: 3 },
@@ -71,7 +74,39 @@ export default function ReviewWidgets() {
 
   const [btnText, setBtnText] = useState("Sempal Data");
 
-  // const [loging, setLoding] = useState(false);
+  const [setting, setSetting] = useState(null);
+
+  const [lodaing, setLodaing] = useState(null);
+
+  const getColorSetting = async () => {
+    try {
+      const res = await fetch("/api/routes/setting/getByTitle", {
+        method: "POST",
+        body: JSON.stringify({
+          title: "Review Widget Setting",
+        }),
+      });
+
+      const resData = await res.json();
+      const data = resData;
+      return data;
+    } catch (error) {
+      console.log("color setting fetch error", error);
+    }
+  };
+
+  useEffect(() => {
+    async function setColorData() {
+      const colorSettingData = await getColorSetting();
+      const settigngObj = colorSettingData.data.sectionSettings;
+      setSetting(settigngObj);
+      setDateChecked(settigngObj.theme[0].isChecked);
+      settigngObj.text.forEach((text) => {
+        initialState[text.settingName] = text.isvalue;
+      });
+    }
+    setColorData();
+  }, []);
 
   const toggleDataBtn = (id) => () => {
     setdataBtn((activeId) => (activeId !== id ? id : null));
@@ -82,12 +117,13 @@ export default function ReviewWidgets() {
       field: id,
       value: newValue,
     });
+    shopify.saveBar.show("review_widgets");
   }, []);
 
-  const handleChange = useCallback(
-    (newChecked) => setDateChecked(newChecked),
-    [],
-  );
+  const handleChange = useCallback((newChecked) => {
+    setDateChecked(newChecked);
+    shopify.saveBar.show("review_widgets");
+  }, []);
 
   const toggleActive = (id) => () => {
     setActive((activeId) => (activeId !== id ? id : null));
@@ -101,8 +137,96 @@ export default function ReviewWidgets() {
     }
   };
 
+  const handleSave = async () => {
+    try {
+      setLodaing("true");
+      const res = await fetch("/api/routes/setting/updateByTitle", {
+        method: "POST",
+        body: JSON.stringify({
+          title: "Review Widget Setting",
+          sectionSettings: {
+            color: [
+              {
+                type: "star",
+                settingName: "Star Color",
+                isvalue: colors.star,
+              },
+              {
+                type: "text",
+                settingName: "Text Color",
+                isvalue: colors.text,
+              },
+              {
+                type: "button",
+                settingName: "Button Color",
+                isvalue: colors.button,
+              },
+              {
+                type: "buttonTextColor",
+                settingName: " Button Text Color",
+                isvalue: colors.buttonTextColor,
+              },
+            ],
+            theme: [
+              {
+                type: "checkbox",
+                settingName: "show date",
+                isChecked: dateChecked,
+                isvalue: "",
+              },
+            ],
+            text: [
+              {
+                type: "text",
+                settingName: "Widget title",
+                isvalue: state["Widget title"],
+              },
+              {
+                type: "text",
+                settingName: "Average rating text",
+                isvalue: state["Average rating text"],
+              },
+              {
+                type: "text",
+                settingName: "Button Text",
+                isvalue: state["Button Text"],
+              },
+            ],
+          },
+        }),
+      });
+
+      const resData = await res.json();
+      console.log("hello world", resData);
+      shopify.saveBar.hide("review_widgets");
+      console.log("color", colors, "text", state, "theme", dateChecked);
+      setIsChnage(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLodaing(null);
+    }
+  };
+
+  // const handleDiscard = () => {
+  //   setColors((prev) => ({
+  //     ...prev,
+  //     [type]: hexCodeColor,
+  //   }));
+  //   shopify.saveBar.hide("review_widgets");
+  //   setIsChnage(false);
+  // };
+
   return (
     <AppProvider>
+      <SaveBar id="review_widgets">
+        <button
+          loading={lodaing}
+          variant="primary"
+          onClick={handleSave}
+        ></button>
+        <button onClick={() => {}}></button>
+      </SaveBar>
       <Page>
         <Card title="Credit card" sectioned>
           <InlineGrid
@@ -123,170 +247,102 @@ export default function ReviewWidgets() {
                 </InlineStack>
 
                 <CollapsibleBox id="color-collapsible" boxName="Color">
-                  <Box
-                    borderStyle="solid"
-                    borderBlockStartWidth="025"
-                    padding="200"
-                    borderColor="border-brand"
-                  >
-                    <InlineStack>
-                      <ColorPickerCircle type="star" />
-                      <Box gap="400">
-                        <Text variant="headingMd" as="p">
-                          Star Color
-                        </Text>
-                        <Text variant="headingsm" as="p">
-                          {starColor}
-                        </Text>
-                      </Box>
-                    </InlineStack>
-                  </Box>
-                  <Box
-                    borderStyle="solid"
-                    borderBlockStartWidth="025"
-                    padding="200"
-                    borderColor="border-brand"
-                  >
-                    <InlineStack>
-                      <ColorPickerCircle type="text" />
-                      <Box gap="400">
-                        <Text variant="headingMd" as="p">
-                          Text Color
-                        </Text>
-                        <Text variant="headingsm" as="p">
-                          {textColor}
-                        </Text>
-                      </Box>
-                    </InlineStack>
-                  </Box>
-                  <Box
-                    borderStyle="solid"
-                    borderBlockStartWidth="025"
-                    padding="200"
-                    borderColor="border-brand"
-                  >
-                    <InlineStack>
-                      <ColorPickerCircle type="button" />
-                      <Box gap="400">
-                        <Text variant="headingMd" as="p">
-                          Button Color
-                        </Text>
-                        <Text variant="headingsm" as="p">
-                          {buttonColor}
-                        </Text>
-                      </Box>
-                    </InlineStack>
-                  </Box>
-                  <Box
-                    borderStyle="solid"
-                    borderBlockStartWidth="025"
-                    padding="200"
-                    borderColor="border-brand"
-                  >
-                    <InlineStack>
-                      <ColorPickerCircle type="buttonTextColor" />
-                      <Box
-                        gap="400"
-                        borderStyle="solid"
-                        borderBlockStartWidth="025"
-                        padding="200"
-                        borderColor="border-brand"
-                      >
-                        <Text variant="headingMd" as="p">
-                          Text Color
-                        </Text>
-                        <Text variant="headingsm" as="p">
-                          {buttonTextColor}
-                        </Text>
-                      </Box>
-                    </InlineStack>
-                  </Box>
+                  {setting == null ? (
+                    <Spinner
+                      accessibilityLabel="Spinner example"
+                      size="large"
+                    />
+                  ) : (
+                    setting.color.map((color) => {
+                      return (
+                        <Box key={color._id} padding="200">
+                          <InlineStack>
+                            <ColorPickerCircle
+                              hexCodeColor={color.isvalue}
+                              type={color.type}
+                              saveBarId="review_widgets"
+                            />
+                            <Box gap="400">
+                              <Text variant="headingMd" as="p">
+                                {color.settingName}
+                              </Text>
+                              <Text variant="headingsm" as="p">
+                                {getHexCode(color.type)}
+                              </Text>
+                            </Box>
+                          </InlineStack>
+                        </Box>
+                      );
+                    })
+                  )}
                 </CollapsibleBox>
 
                 <CollapsibleBox id="theme-collapsible" boxName="Theme">
-                  {" "}
-                  <Box gap="400">
-                    <InlineStack>
-                      <Box
-                        borderStyle="solid"
-                        borderBlockStartWidth="025"
-                        padding="200"
-                        borderColor="border-brand"
-                        gap="200"
-                        width="100%"
-                      >
-                        <Checkbox
-                          label="show date"
-                          checked={dateChecked}
-                          onChange={handleChange}
-                        />
-                      </Box>
-                    </InlineStack>
-                  </Box>{" "}
+                  {setting == null ? (
+                    <Spinner
+                      accessibilityLabel="Spinner example"
+                      size="large"
+                    />
+                  ) : (
+                    setting.theme.map((theme) => {
+                      return (
+                        <Box key={theme._id} gap="400">
+                          <InlineStack>
+                            <Box
+                              borderStyle="solid"
+                              borderBlockStartWidth="025"
+                              padding="200"
+                              borderColor="border-brand"
+                              gap="200"
+                              width="100%"
+                            >
+                              <Checkbox
+                                label={theme.settingName}
+                                checked={dateChecked}
+                                onChange={handleChange}
+                              />
+                            </Box>
+                          </InlineStack>
+                        </Box>
+                      );
+                    })
+                  )}
                 </CollapsibleBox>
 
                 <CollapsibleBox id="text-collapsible" boxName="Text">
                   {" "}
                   <Box gap="400">
-                    <InlineStack>
-                      <Box
-                        borderStyle="solid"
-                        borderBlockStartWidth="025"
-                        padding="200"
-                        borderColor="border-brand"
-                        gap="200"
-                        width="100%"
-                      >
-                        <TextField
-                          label="Widget title"
-                          value={state.Widget_title}
-                          id="Widget_title"
-                          onChange={handleTextChnge}
-                          autoComplete="off"
-                          placeholder="Customer Reviews"
-                        />
-                      </Box>
-
-                      <Box
-                        borderStyle="solid"
-                        borderBlockStartWidth="025"
-                        padding="200"
-                        borderColor="border-brand"
-                        gap="200"
-                        width="100%"
-                      >
-                        <TextField
-                          label="Average rating text"
-                          value={state.Average_rating_text}
-                          id="Average_rating_text"
-                          onChange={handleTextChnge}
-                          autoComplete="off"
-                          type="number"
-                          placeholder="{{ average_rating }} out of 5"
-                          min="0"
-                          max="5"
-                        />
-                      </Box>
-
-                      <Box
-                        borderStyle="solid"
-                        borderBlockStartWidth="025"
-                        padding="200"
-                        borderColor="border-brand"
-                        gap="200"
-                        width="100%"
-                      >
-                        <TextField
-                          label="Button Text"
-                          value={state.button_text}
-                          id="button_text"
-                          onChange={handleTextChnge}
-                          autoComplete="off"
-                          placeholder="Write a review"
-                        />
-                      </Box>
-                    </InlineStack>
-                  </Box>{" "}
+                    {setting == null ? (
+                      <Spinner
+                        accessibilityLabel="Spinner example"
+                        size="large"
+                      />
+                    ) : (
+                      setting.text.map((text) => {
+                        const titelValue = text.settingName;
+                        return (
+                          <Box
+                            key={text._id}
+                            borderStyle="solid"
+                            borderBlockStartWidth="025"
+                            padding="200"
+                            borderColor="border-brand"
+                            gap="200"
+                            width="100%"
+                          >
+                            <TextField
+                              label={text.settingName}
+                              value={state[titelValue]}
+                              id={text.settingName}
+                              onChange={handleTextChnge}
+                              autoComplete="off"
+                              placeholder="Customer Reviews"
+                            />
+                          </Box>
+                        );
+                      })
+                    )}
+                  </Box>
                 </CollapsibleBox>
               </BlockStack>
             </Box>
@@ -356,18 +412,18 @@ export default function ReviewWidgets() {
               <InlineStack align="center" gap="300">
                 <BlockStack gap="400">
                   <Text variant="headingLg" alignment="cetenr" as="h2">
-                    {state.Widget_title}
+                    {state["Widget title"]}
                   </Text>
                   <InlineStack as="div" align="center">
                     <Ratting
                       rating={
-                        review.length == 0 ? 0 : state.Average_rating_text
+                        review.length == 0 ? 0 : state["Average rating text"]
                       }
                       color={starColor}
                     />
                     {review.length !== 0 && (
                       <Text as="span">
-                        {state.Average_rating_text} out of 5
+                        {state["Average rating text"]} out of 5
                       </Text>
                     )}
                   </InlineStack>
@@ -414,7 +470,7 @@ export default function ReviewWidgets() {
                   cursor: "pointer",
                 }}
               >
-                {state.button_text}
+                {state["Button Text"]}
               </Box>
 
               <Popover

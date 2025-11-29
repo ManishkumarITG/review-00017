@@ -43,7 +43,7 @@
 </script>
 
 {% assign actual_rating = block.settings.actual_rating %}
-{% assign progress_percent = count | times: 100.0 | divided_by: total_reviews %}
+{% comment %} {% assign progress_percent = count | times: 100.0 | divided_by: total_reviews %} {% endcomment %}
 
 <div class="jm-review-widget my-review-widget" id="jm-review-{{ section.id }}">
   {% comment %} <!-- Header --> {% endcomment %}

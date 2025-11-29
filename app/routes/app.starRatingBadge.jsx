@@ -29,10 +29,10 @@ import {
 
 // costom copnents
 
-import CollapsibleBox from "../components/Collapsible";
-import ThumbnailSkeleton from "../components/ThumbnailSkeleton.jsx";
-import StarRating from "../components/Ratting";
-import ColorPickerCircle from "../components/ColorPicker";
+import CollapsibleBox from "./components/Collapsible.jsx";
+import ThumbnailSkeleton from "./components/ThumbnailSkeleton.jsx";
+import StarRating from "./components/Ratting.jsx";
+import ColorPickerCircle from "./components/ColorPicker.jsx";
 
 import { useNavigate } from "react-router";
 import { useCallback, useState } from "react";

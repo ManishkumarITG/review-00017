@@ -10,31 +10,16 @@
 
 // export default prisma;
 
+import mongoss from "mongoose";
+import { DB_URL } from "./api/configs/env";
 
-import dotenv from "dotenv";
-dotenv.config();
-
-import mongoose from "mongoose"
-
-// Function to establish a connection to the MongoDB database
-export const dbConnection = async () => {
+const mongoConnect = async () => {
   try {
-    // Using mongoose.connect to establish a connection to the MongoDB database
-    //const connectionString = process.env.NODE_ENV !== 'production' ? `${process.env.DB_URL}/${process.env.DB_NAME}?authSource=admin` : process.env.DB_URL;
-    const connectionString = `${process.env.DB_URL}/${process.env.DB_NAME}?authSource=admin`;
-
-
-
-    console.log(connectionString, '::: --- DataBase connection string ---');
-
-    // Connect to the MongoDB database
-    await mongoose.connect(connectionString);
-
-    // Log a success message once the connection is successful
-    console.log(`--- Connected to MongoDB (${process.env.NODE_ENV}) Successfully ---`);
+    await mongoss.connect(DB_URL);
+    console.log("db connect");
   } catch (error) {
-    console.error(error, `--- MongoDB Connection Failed (${process.env.NODE_ENV}) ---`);
+    console.log("mongoose db ccnnection error", error);
   }
 };
-dbConnection();
-export default dbConnection
+
+export default mongoConnect;

@@ -74,7 +74,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const formData = new FormData(form);
     const payload = {};
 
-    form.querySelectorAll(".input-error").forEach((el) => el.classList.remove("input-error"));
+    form
+      .querySelectorAll(".input-error")
+      .forEach((el) => el.classList.remove("input-error"));
     form.querySelectorAll(".error-msg").forEach((el) => (el.textContent = ""));
 
     formData.forEach((value, key) => {
@@ -135,5 +137,4 @@ document.addEventListener("DOMContentLoaded", () => {
     errorElement.textContent = message;
     inputElement.after(errorElement);
   }
-
 });

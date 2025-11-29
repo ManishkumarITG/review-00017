@@ -23,12 +23,12 @@ import {
   PlusIcon,
   ChartVerticalIcon,
 } from "@shopify/polaris-icons";
-import DeshboardCard from "../components/deshboardCard";
-import ReviewInlineCard from "../components/ReviewInlineCard";
-import DeshboardGuidense from "../components/DeshboardGuidense";
-import DeshboardimageWithText from "../components/DeshboardImageWithText";
+import DeshboardCard from "./components/deshboardCard";
+import ReviewInlineCard from "./components/ReviewInlineCard";
+import DeshboardGuidense from "./components/DeshboardGuidense";
+import DeshboardimageWithText from "./components/DeshboardImageWithText";
 import { useNavigate, useLocation } from "react-router";
-import DeshboardHeader from "../components/DeshboardHeader";
+import DeshboardHeader from "./components/DeshboardHeader";
 
 export default function Deshboard() {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ export default function Deshboard() {
 
   async function CardData() {
     try {
-      const response = await fetch('/api/getcarddata', {
+      const response = await fetch('/app/getcardData', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -57,11 +57,11 @@ export default function Deshboard() {
       if (!response.ok) throw new Error("API offline");
 
       const data = await response.json();
-      console.log("CardData (Live API)", data);
+      console.log("CardData fetch successfully", data);
       return data;
 
     } catch (error) {
-      console.log("CardData fallback mode activated API unavailable", error);
+      console.log("Error in Fetching data in Deshboard Cards", error);
 
       const carddata = [
         {
@@ -102,21 +102,19 @@ export default function Deshboard() {
         },
       ];
 
-      console.log("CardData (Mock Fallback)", carddata);
+      console.log("CardData", carddata);
       return carddata;
     }
   }
 
   useEffect(() => {
     CardData().then((data) => {
-      console.log("Enter in useEffect", data);
       setCardData(data);
     }).catch((error) => {
       console.error("Error fetching card data:", error);
     });
-  }, []);
+  }, [carddata]);
 
-  console.log("card data in open world ", carddata);
 
   const ranges = [
     {
@@ -251,6 +249,9 @@ export default function Deshboard() {
     setPopoverActive(false);
   }
 
+
+  console.log(filteredData);
+
   return (
     <>
       <AppProvider i18n={en}>
@@ -306,9 +307,9 @@ export default function Deshboard() {
                   </Button>
                 </InlineGrid>
               </InlineGrid>
-  
 
-              {filteredData?.length <=0 ? (
+
+              {filteredData?.length <= 0 ? (
                 <InlineGrid
 
                   alignItems="center"
