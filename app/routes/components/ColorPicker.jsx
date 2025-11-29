@@ -1,5 +1,5 @@
 import { useColorTheme } from "../ColorContext";
-import { Box, Popover, ColorPicker, hsbToHex } from "@shopify/polaris";
+import { Box, Popover, ColorPicker } from "@shopify/polaris";
 import { useEffect, useState } from "react";
 
 function ColorPickerCircle({ type, hexCodeColor, saveBarId }) {
@@ -15,6 +15,7 @@ function ColorPickerCircle({ type, hexCodeColor, saveBarId }) {
 
   const [hex, setHexColor] = useState(hexCodeColor);
   const currentColor = getColorObject(type, hex);
+  console.log(currentColor);
   const currentHex = getHexCode(type);
 
   const popoverId = `popover_${type}`;
@@ -45,10 +46,9 @@ function ColorPickerCircle({ type, hexCodeColor, saveBarId }) {
         preferredAlignment="right"
         activator={
           <Box
-            className="color-trigger"
             onClick={toggleActive}
             style={{
-              background: hex,
+              background: currentHex,
               height: "48px",
               width: "48px",
               borderRadius: "100%",

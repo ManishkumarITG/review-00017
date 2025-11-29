@@ -18,7 +18,7 @@ import {
 import "@shopify/polaris/build/esm/styles.css";
 import Ratting from "./components/Ratting.jsx";
 import { useColorTheme } from "./ColorContext";
-import { useCallback, useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ArrowLeftIcon, ChevronDownIcon } from "@shopify/polaris-icons";
 import CustomProgressBar from "./components/CustomProgressBar.jsx";
 import { reviews } from "./data/reviewData.js";
@@ -27,27 +27,24 @@ import CollapsibleBox from "./components/Collapsible.jsx";
 import { useNavigate } from "react-router";
 import { SaveBar } from "@shopify/app-bridge-react";
 
-const initialState = {
-  "Widget title": "Costomer review",
-  "Average rating text": 4.07,
-  "Button Text": "Write a review",
-};
-
-function reducer(state, action) {
-  return {
-    ...state,
-    [action.field]: action.value,
-  };
-}
-
 export default function ReviewWidgets() {
   // usenevigate for back to setting page
 
   const nevigate = useNavigate();
 
   // import color context
-  const { getHexCode, isChange, colors, setIsChnage, updateColor } =
-    useColorTheme();
+  const {
+    getHexCode,
+    setIsChnage,
+    setting,
+    dateChecked,
+    setDateChecked,
+    state,
+    dispatch,
+    handleSave,
+    handleDiscard,
+    lodaing,
+  } = useColorTheme();
 
   // import all hex code
   const starColor = getHexCode("star");
@@ -63,51 +60,13 @@ export default function ReviewWidgets() {
     { rating: 1, pepole: 0 },
   ];
 
-  const [state, dispatch] = useReducer(reducer, initialState);
-
   const [active, setActive] = useState(null);
-
-  const [dateChecked, setDateChecked] = useState(false);
 
   const [dataBtn, setdataBtn] = useState(null);
 
   const [review, setReview] = useState(reviews);
 
   const [btnText, setBtnText] = useState("Sempal Data");
-
-  const [setting, setSetting] = useState(null);
-
-  const [lodaing, setLodaing] = useState(null);
-
-  const getColorSetting = async () => {
-    try {
-      const res = await fetch("/api/routes/setting/getByTitle", {
-        method: "POST",
-        body: JSON.stringify({
-          title: "Review Widget Setting",
-        }),
-      });
-
-      const resData = await res.json();
-      const data = resData;
-      return data;
-    } catch (error) {
-      console.log("color setting fetch error", error);
-    }
-  };
-
-  useEffect(() => {
-    async function setColorData() {
-      const colorSettingData = await getColorSetting();
-      const settigngObj = colorSettingData.data.sectionSettings;
-      setSetting(settigngObj);
-      setDateChecked(settigngObj.theme[0].isChecked);
-      settigngObj.text.forEach((text) => {
-        initialState[text.settingName] = text.isvalue;
-      });
-    }
-    setColorData();
-  }, []);
 
   const toggleDataBtn = (id) => () => {
     setdataBtn((activeId) => (activeId !== id ? id : null));
@@ -131,100 +90,9 @@ export default function ReviewWidgets() {
   const toggleActive = (id) => () => {
     setActive((activeId) => (activeId !== id ? id : null));
   };
-
+  // handle page change
   const handlePageChange = async () => {
-    if (isChange) {
-      shopify.saveBar.leaveConfirmation();
-    } else {
-      nevigate("/app/mySettingPage");
-    }
-  };
-
-  const handleSave = async () => {
-    try {
-      setLodaing("true");
-      const res = await fetch("/api/routes/setting/updateByTitle", {
-        method: "POST",
-        body: JSON.stringify({
-          title: "Review Widget Setting",
-          sectionSettings: {
-            color: [
-              {
-                type: "star",
-                settingName: "Star Color",
-                isvalue: colors.star,
-              },
-              {
-                type: "text",
-                settingName: "Text Color",
-                isvalue: colors.text,
-              },
-              {
-                type: "button",
-                settingName: "Button Color",
-                isvalue: colors.button,
-              },
-              {
-                type: "buttonTextColor",
-                settingName: " Button Text Color",
-                isvalue: colors.buttonTextColor,
-              },
-            ],
-            theme: [
-              {
-                type: "checkbox",
-                settingName: "show date",
-                isChecked: dateChecked,
-                isvalue: "",
-              },
-            ],
-            text: [
-              {
-                type: "text",
-                settingName: "Widget title",
-                isvalue: state["Widget title"],
-              },
-              {
-                type: "text",
-                settingName: "Average rating text",
-                isvalue: state["Average rating text"],
-              },
-              {
-                type: "text",
-                settingName: "Button Text",
-                isvalue: state["Button Text"],
-              },
-            ],
-          },
-        }),
-      });
-
-      const resData = await res.json();
-      console.log("hello world", resData);
-      shopify.saveBar.hide("review_widgets");
-      console.log("color", colors, "text", state, "theme", dateChecked);
-      setIsChnage(false);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLodaing(null);
-    }
-  };
-
-  const handleDiscard = () => {
-    setDateChecked(setting.theme[0].isChecked);
-    setting.text.forEach((text) => {
-      dispatch({
-        field: text.settingName,
-        value: text.isvalue,
-      });
-    });
-    setting.color.forEach((color) => {
-      updateColor(color.type, color.isvalue, "review_widgets");
-    });
-
-    shopify.saveBar.hide("review_widgets");
-    setIsChnage(false);
+    nevigate("/app/mySettingPage");
   };
 
   return (
@@ -233,9 +101,9 @@ export default function ReviewWidgets() {
         <button
           loading={lodaing}
           variant="primary"
-          onClick={handleSave}
+          onClick={() => handleSave("review_widgets", "review_widgets")}
         ></button>
-        <button onClick={handleDiscard}></button>
+        <button onClick={() => handleDiscard("review_widgets")}></button>
       </SaveBar>
       <Page>
         <Card title="Credit card" sectioned>
@@ -263,12 +131,13 @@ export default function ReviewWidgets() {
                       size="large"
                     />
                   ) : (
-                    setting.color.map((color) => {
+                    setting?.color?.map((color) => {
+                      const crrColor = getHexCode(color.type);
                       return (
                         <Box key={color._id} padding="200">
                           <InlineStack>
                             <ColorPickerCircle
-                              hexCodeColor={color.isvalue}
+                              hexCodeColor={crrColor}
                               type={color.type}
                               saveBarId="review_widgets"
                             />
@@ -277,7 +146,7 @@ export default function ReviewWidgets() {
                                 {color.settingName}
                               </Text>
                               <Text variant="headingsm" as="p">
-                                {getHexCode(color.type)}
+                                {crrColor}
                               </Text>
                             </Box>
                           </InlineStack>
@@ -294,7 +163,7 @@ export default function ReviewWidgets() {
                       size="large"
                     />
                   ) : (
-                    setting.theme.map((theme) => {
+                    setting?.theme?.map((theme) => {
                       return (
                         <Box key={theme._id} gap="400">
                           <InlineStack>
@@ -328,27 +197,29 @@ export default function ReviewWidgets() {
                         size="large"
                       />
                     ) : (
-                      setting.text.map((text) => {
+                      setting?.text?.map((text) => {
                         const titelValue = text.settingName;
                         return (
-                          <Box
-                            key={text._id}
-                            borderStyle="solid"
-                            borderBlockStartWidth="025"
-                            padding="200"
-                            borderColor="border-brand"
-                            gap="200"
-                            width="100%"
-                          >
-                            <TextField
-                              label={text.settingName}
-                              value={state[titelValue]}
-                              id={text.settingName}
-                              onChange={handleTextChnge}
-                              autoComplete="off"
-                              placeholder="Customer Reviews"
-                            />
-                          </Box>
+                          text.type == "text" && (
+                            <Box
+                              key={text._id}
+                              borderStyle="solid"
+                              borderBlockStartWidth="025"
+                              padding="200"
+                              borderColor="border-brand"
+                              gap="200"
+                              width="100%"
+                            >
+                              <TextField
+                                label={text.settingName}
+                                value={state[titelValue]}
+                                id={text.settingName}
+                                onChange={handleTextChnge}
+                                autoComplete="off"
+                                placeholder="Customer Reviews"
+                              />
+                            </Box>
+                          )
                         );
                       })
                     )}

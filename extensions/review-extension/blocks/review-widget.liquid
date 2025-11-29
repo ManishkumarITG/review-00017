@@ -1,16 +1,5 @@
 {{ 'review.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'review.js' | asset_url }}" defer></script>
-{% comment %} <script src="{{ 'reviewFilter.js' | asset_url }}" defer></script> {% endcomment %}
-{% comment %}
-  <script>
-    // Expose Liquid variables to JS
-    window.reviewConfig = {
-      reviewSource: "{{ block.settings.review_source }}",
-         reviews: {{ reviews | json }},
-      sortedReviews: {{ sorted | json }}
-    };
-  </script>
-{% endcomment %}
 
 <script>
   window.reviewSettings = {
@@ -43,7 +32,6 @@
 </script>
 
 {% assign actual_rating = block.settings.actual_rating %}
-{% assign progress_percent = count | times: 100.0 | divided_by: total_reviews %}
 
 <div class="jm-review-widget my-review-widget" id="jm-review-{{ section.id }}">
   {% comment %} <!-- Header --> {% endcomment %}
@@ -167,46 +155,7 @@
           </select>
         </div>
       </div>
-      {%- comment -%} <!-- Dummy Reviews List --> {%- endcomment -%}
-      {% comment %}
-        {%- for i in (0..4) -%}
-          {%- assign row = dummy_reviews[i] | split: '|' -%}
-          {%- assign a = row[0] | strip -%}
-          {%- assign b = row[1] | strip -%}
-          {%- assign r = row[2] | strip -%}
-          {%- assign d = row[3] | strip -%}
-          <div class="jm-item">
-            <div class="jm-item-left">
-              <div style="color:{{block.settings.star_color}}" class="jm-avatar">{{ a | slice: 0, 1 }}</div>
-            </div>
-            <div class="jm-item-right">
-              <div class="jm-topline">
-                <div
-                  class="jm-stars-inline"
-                  style="
-                    color: {{ block.settings.star_color }};
-                    font-size: {{ block.settings.star_size }}px;
-                    display:flex;
-                    flex-direction:column;
-                    align-items: flex-start;
-                  "
-                >
-                  {% render 'stars', rating: r %}
-                  <p style="color: {{ block.settings.star_color }}; margin:0px">{{ a }}</p>
-                </div>
-                {% if block.settings.show_date %}
-                  <div>
-                    <p>{{ d }}</p>
-                  </div>
-                {% endif %}
-              </div>
-              <div class="jm-body" style="color: {{ block.settings.text_color }};">
-                <p>{{ b }}</p>
-              </div>
-            </div>
-          </div>
-        {% endfor %}
-      {% endcomment %}
+
       <div id="reviewsList" style="display:flex; flex-direction:column; gap:18px; margin-top:20px;"></div>
     {% elsif block.settings.review_source == 'real' %}
       <div
@@ -313,60 +262,7 @@
           </select>
         </div>
       </div>
-      <div id="reviewsList" style="display:flex; flex-direction:column; gap:18px; margin-top:20px;">
-        {% comment %}
-          {% for item in real_reviews %}
-            {% assign row = item | split: '|' %}
-            {% assign name = row[0] | strip %}
-            {% assign rating = row[1] | strip %}
-            {% assign text = row[2] | strip %}
-            {% assign date = row[3] | strip %}
-
-            <div
-              style="
-                display:flex; gap:14px; padding:16px;
-                {% comment %} border:1px solid #e5e7eb;
-                border-radius:12px; {% endcomment %}
-                box-shadow:0 2px 8px rgba(0,0,0,0.04);
-              "
-            >
-              {% comment %} <!-- Avatar --> {% endcomment %}
-              <div
-                class="jm-avatar"
-                style="
-                  color:{{ block.settings.star_color }};
-                  font-size:18px;
-                "
-              >
-                {{ name | slice: 0, 1 | upcase }}
-              </div>
-
-              <div style="flex:1;">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <div>
-                    <p style="margin:0; font-weight:600; color:{{block.settings.star_color}}">
-                      {{ name }}
-                    </p>
-                    <div style="color:{{ block.settings.star_color }}; font-size:16px;">
-                      {% render 'stars', rating: rating %}
-                    </div>
-                  </div>
-
-                  {% if block.settings.show_date %}
-                    <div>
-                      <p style="margin:0; color:#888888;">{{ date }}</p>
-                    </div>
-                  {% endif %}
-                </div>
-
-                <p style="margin-top:10px; color:{{ block.settings.text_color }};">
-                  {{ text }}
-                </p>
-              </div>
-            </div>
-          {% endfor %}
-        {% endcomment %}
-      </div>
+      <div id="reviewsList" style="display:flex; flex-direction:column; gap:18px; margin-top:20px;"></div>
 
     {% elsif block.settings.review_source == 'noReview' %}
       <div

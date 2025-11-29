@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
+import { createSettings, getColorSetting } from "./services/api.js";
 
 const ThemeContext = createContext();
 
@@ -9,9 +16,27 @@ const DEFAULT_HSBA = {
   alpha: 1,
 };
 
+const initialState = {
+  "Widget title": "Costomer review",
+  "Average rating text": 4.07,
+  "Button Text": "Write a review",
+  "Show text and stars": true,
+};
+
+function reducer(state, action) {
+  return {
+    ...state,
+    [action.field]: action.value,
+  };
+}
+
 export const ColorProvider = ({ children }) => {
   const [isOpenColorPicker, setIsOpenColorPicker] = useState(null);
   const [isChange, setIsChnage] = useState(false);
+  const [setting, setSetting] = useState(null);
+  const [lodaing, setLodaing] = useState(null);
+  const [dateChecked, setDateChecked] = useState(false);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const [colors, setColors] = useState({});
 
@@ -105,8 +130,10 @@ export const ColorProvider = ({ children }) => {
       ...prev,
       [type]: newColor,
     }));
-    shopify.saveBar.show(saveBarId);
-    setIsChnage(true);
+    if (saveBarId) {
+      shopify.saveBar.show(saveBarId);
+      setIsChnage(true);
+    }
   };
 
   const getHexCode = (type) => {
@@ -122,6 +149,125 @@ export const ColorProvider = ({ children }) => {
     return DEFAULT_HSBA;
   };
 
+  const handleSave = async (islodaing, savBarId) => {
+    setLodaing(islodaing);
+    try {
+      const res = await fetch("/api/routes/setting/updateByTitle", {
+        method: "POST",
+        body: JSON.stringify({
+          title: "Review Widget Setting",
+          sectionSettings: {
+            color: [
+              {
+                type: "star",
+                settingName: "Star Color",
+                isvalue: colors.star,
+              },
+              {
+                type: "text",
+                settingName: "Text Color",
+                isvalue: colors.text,
+              },
+              {
+                type: "button",
+                settingName: "Button Color",
+                isvalue: colors.button,
+              },
+              {
+                type: "buttonTextColor",
+                settingName: " Button Text Color",
+                isvalue: colors.buttonTextColor,
+              },
+            ],
+            theme: [
+              {
+                type: "checkbox",
+                settingName: "show date",
+                isChecked: dateChecked,
+                isvalue: "",
+              },
+            ],
+            text: [
+              {
+                type: "text",
+                settingName: "Widget title",
+                isvalue: state["Widget title"],
+              },
+              {
+                type: "text",
+                settingName: "Average rating text",
+                isvalue: state["Average rating text"],
+              },
+              {
+                type: "text",
+                settingName: "Button Text",
+                isvalue: state["Button Text"],
+              },
+              {
+                type: "ChoiceList",
+                settingName: "Show text and stars",
+                isvalue: "hidden",
+                isChecked: state["Show text and stars"],
+              },
+            ],
+          },
+        }),
+      });
+
+      const resData = await res.json();
+      console.log("hello world", resData);
+      shopify.saveBar.hide(savBarId);
+      console.log("color", colors);
+      setIsChnage(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLodaing(null);
+    }
+  };
+
+  const handleDiscard = (saveBarId) => {
+    setDateChecked(setting.theme[0].isChecked);
+    setting.text.forEach((text) => {
+      dispatch({
+        field: text.settingName,
+        value: text.isvalue,
+      });
+    });
+    setting.color.forEach((color) => {
+      updateColor(color.type, color.isvalue, null);
+    });
+
+    shopify.saveBar.hide(saveBarId);
+    setIsChnage(false);
+  };
+
+  useEffect(() => {
+    async function setColorData() {
+      const createSetting = await createSettings();
+
+      console.log(createSetting);
+
+      const colorSettingData = await getColorSetting();
+
+      const settigngObj = colorSettingData.data.sectionSettings;
+
+      setSetting(settigngObj);
+
+      // add color
+      settigngObj.color.forEach((color) => {
+        updateColor(color.type, color.isvalue, null);
+      });
+
+      setDateChecked(settigngObj?.theme[0]?.isChecked);
+      // add text in state
+      settigngObj.text?.forEach((text) => {
+        initialState[text.settingName] = text.isvalue;
+      });
+    }
+    setColorData();
+  }, []);
+
   const value = {
     colors,
     updateColor,
@@ -134,6 +280,16 @@ export const ColorProvider = ({ children }) => {
     setColors,
     isChange,
     setIsChnage,
+    setting,
+    setSetting,
+    handleSave,
+    dateChecked,
+    setDateChecked,
+    initialState,
+    state,
+    dispatch,
+    handleDiscard,
+    lodaing,
   };
 
   return (

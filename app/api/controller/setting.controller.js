@@ -3,62 +3,88 @@ import {
   getAllSettings,
   updateSetting,
   updateSetting,
-  deleteSetting,
   getSettingByTitle,
 } from "../services/setting.service.js";
 import { responseHandler } from "../utils/responseHandler.js";
+import STATUS_CODE from "../contents/statusCode.js";
+import MESSAGE from "../contents/message.js";
 
-export const create = async (settingData) => {
+export const create = async (shopDomain, settingData) => {
   try {
-    const data = await createSetting(settingData);
-    return responseHandler(200, "ok", data);
+    const data = await createSetting(shopDomain, settingData);
+    return responseHandler(STATUS_CODE.CREATED, MESSAGE, data);
   } catch (error) {
     console.log(error);
-    return responseHandler(500, "setting get error", null);
+    return responseHandler(
+      STATUS_CODE.INTERNAL_SERVER_ERROR,
+      error.message,
+      null,
+    );
   }
 };
 
 export const getAll = async (req, res) => {
   try {
     const data = await getAllSettings();
-    return responseHandler(200, "ok", data);
+    return responseHandler(STATUS_CODE.OK, "ok", data);
   } catch (error) {
-    responseHandler(500, "setting get error", null);
+    responseHandler(
+      STATUS_CODE.INTERNAL_SERVER_ERROR,
+      "setting get error",
+      null,
+    );
   }
 };
 
-export const getByTitle = async (name) => {
+export const getByTitle = async (shopDomain, name) => {
   try {
-    console.log("hello -------------------------- heloos");
-    const data = await getSettingByTitle(name);
+    const data = await getSettingByTitle(shopDomain, name);
     if (!data) {
-      return responseHandler(500, "setting is not found", null);
+      console.log("not found", data);
+      return responseHandler(
+        STATUS_CODE.NOT_FOUND,
+        "setting is not found",
+        null,
+      );
     }
-    return responseHandler(200, "ok", data);
+    return responseHandler(STATUS_CODE.OK, "ok", data);
   } catch (error) {
-    return responseHandler(500, "setting get error", null);
+    return responseHandler(
+      STATUS_CODE.INTERNAL_SERVER_ERROR,
+      "setting get error",
+      null,
+    );
   }
 };
 
-export const update = async (settingData) => {
+export const update = async (shopDomain, settingData) => {
   try {
-    const data = await updateSetting(settingData);
+    console.log(
+      "-------------------------------- data",
+      shopDomain,
+      settingData,
+    );
+    const data = await updateSetting(shopDomain, settingData);
 
-    return responseHandler(200, "update successful", data);
+    return responseHandler(STATUS_CODE.OK, "update successful", data);
   } catch (error) {
-    return responseHandler(500, error.message, null);
+    return responseHandler(
+      STATUS_CODE.INTERNAL_SERVER_ERROR,
+      error.message,
+      null,
+    );
   }
 };
 
-export const remove = async (req, res) => {
-  try {
-    const data = await deleteSetting(req.params.id);
+// export const remove = async (req, res) => {
+//   try {
+//     const data = await deleteSetting(req.params.id);
 
-    if (!data)
-      return res.status(404).json({ success: false, message: "Not Found" });
+//     if (!data)
+//       return res.status(404).json({ success: false, message: "Not Found" });
 
-    res.status(200).json({ success: true, message: "Deleted Successfully" });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
+//     res.status(200).json({ success: true, message: "Deleted Successfully" });
+//   } catch (error) {
+//     res.status(500).json({ success: false, message: error.message });
+//   }
+// };
