@@ -1,5 +1,5 @@
 import { StarFilledIcon, StarIcon } from "@shopify/polaris-icons";
-import { Icon, InlineStack } from "@shopify/polaris";
+import { Icon, InlineStack, Box } from "@shopify/polaris";
 
 export default function StarRating({ rating, color }) {
   const totalStars = 5;
@@ -8,28 +8,24 @@ export default function StarRating({ rating, color }) {
   for (let i = 1; i <= totalStars; i++) {
     if (i <= Math.floor(rating)) {
       stars.push(
-        <span key={i} style={{ color: color }}>
+        <Box as="span" key={i} style={{ color: color }}>
           <Icon source={StarFilledIcon} />
-        </span>,
+        </Box>,
       );
     } else if (i - rating < 1 && i - rating > 0) {
       stars.push(
-        <span key={i} style={{ color: color }}>
+        <Box as="span" key={i} style={{ color: color }}>
           <Icon source={StarFilledIcon} style={{ opacity: 0.5 }} />
-        </span>,
+        </Box>,
       );
     } else {
       stars.push(
-        <span key={i}>
+        <Box as="span" key={i}>
           <Icon source={StarIcon} />
-        </span>,
+        </Box>,
       );
     }
   }
 
-  return (
-    <InlineStack style={{ maxWidth: "200px" }} gap="1">
-      {stars}
-    </InlineStack>
-  );
+  return <InlineStack gap="025">{stars}</InlineStack>;
 }

@@ -63,11 +63,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  const productIdliquid = window.__productId;
+
   const form = document.getElementById("reviewForm");
   const regexExpression = /^(?!\s*$).+/;
   const emailRegexExpression = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   // const ratingInput = document.getElementById("selectedRating");
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     let isValid = true;
@@ -117,8 +119,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
     form.querySelectorAll(".error-msg").forEach((el) => (el.textContent = ""));
     console.log("Review Form Data:", payload);
-    form.reset();
-    resetStars();
+    console.log("url name", window.location.origin);
+
+    try {
+      const datatoSend = {
+        author: payload.Name,
+        shop: window.location.host,
+        productId: productIdliquid,
+        email: payload.Email,
+        rating: payload.Rating,
+        description: payload.Discription,
+        images: "null",
+        orderId: "fsjgksdffdsdf",
+        customerId: "skdjghfgsdjh",
+      };
+      const baseUrl = window.location.origin;
+      // const productId = window.__productId;
+
+      console.log("hello api", window.location);
+      const response = await fetch(
+        `${baseUrl}/apps/review/api/routes/reviewproduct/createproduct`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(datatoSend),
+        },
+      );
+
+      if (!response.ok) {
+        console.error("API threw hands:", response.status);
+        return null;
+      }
+
+      const data = await response.json();
+      console.log("API Success →", data);
+      form.reset();
+      resetStars();
+      return data; // return so parent can use it if needed
+    } catch (error) {
+      console.error("Submit Error →", error);
+      return null;
+    }
   });
 
   function ShowError(inputElement, message) {

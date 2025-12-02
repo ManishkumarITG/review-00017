@@ -1,24 +1,3 @@
 .Polaris-LegacyCard + .Polaris-LegacyCard {
   margin-top: 0 !important;
 }
-
-.Polaris-IndexFilters__CreateView {
-  display: none !important;
-}
-.Polaris-IndexFilters__Tabs .Polaris-Button--selected {
-  /* Backgound Color को हरा (green) सेट करें */
-  background-color: green !important; 
-  /* टेक्स्ट कलर को सफेद (white) सेट करें ताकि वह हरे बैकग्राउंड पर स्पष्ट दिखे */
-  color: white !important; 
-}
-
-/* चयनित टैब के नीचे की हरी लाइन */
-.Polaris-IndexFilters__Tabs .Polaris-Button--selected:after {
-  background-color: green !important;
-}
-
-/* अगर आप hover (माउस ले जाने) पर भी रंग बदलना चाहते हैं */
-.Polaris-IndexFilters__Tabs .Polaris-Button--selected:hover {
-  background-color: darkgreen !important;
-  color: white !important;
-}

@@ -1,20 +1,12 @@
 import { Page, InlineGrid, Card, Text, Box, Divider } from "@shopify/polaris";
 import { AppProvider } from "@shopify/shopify-app-react-router/react";
-import "@shopify/polaris/build/esm/styles.css";
-import { StarIcon } from "@shopify/polaris-icons";
-import { useLocation } from "react-router";
-import en from "@shopify/polaris/locales/en.json";
+import { PaintBrushRoundIcon, StarIcon } from "@shopify/polaris-icons";
 import { useEffect, useState } from "react";
 import Widget from "./components/Widget";
 import Branding from "./components/Branding";
 
 function MySettingPage() {
-  const location = useLocation();
   const [isPage, setIsPage] = useState("widgets");
-  const tapsData = [
-    { title: "REVIEW DISPLAY", content: "Widgets", page: "widgets" },
-    { title: "GENERAL", content: "Branding", page: "branding" },
-  ];
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -31,8 +23,8 @@ function MySettingPage() {
     setIsPage(page);
   };
   return (
-    <AppProvider i18n={en}>
-      <Page fullWidth={{ xm: false, md: true }}>
+    <AppProvider>
+      <Page>
         <InlineGrid
           gap={{ xs: "100", sm: "200", md: "300", lg: "400", xl: "500" }}
           columns={{
@@ -42,45 +34,55 @@ function MySettingPage() {
           }}
         >
           <Card>
-            <s-search-field
-              label="Search"
-              labelAccessibilityVisibility="exclusive"
-              placeholder="Search items"
-            />
+            <Box>
+              <Box padding="400" width="100%">
+                <Text as="p">REVIEW DISPLAY</Text>
 
-            {tapsData.length !== 0
-              ? tapsData.map((tabs) => {
-                  return (
-                    <Box key={tabs.title}>
-                      <Box padding="400" width="100%">
-                        <Text as="p">{tabs.title}</Text>
+                <Box
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    handlePageChange("widgets");
+                  }}
+                >
+                  <StarIcon width={25} />
+                  <Text variant="headingMd" as="h1" tone="base">
+                    Widgets
+                  </Text>
+                </Box>
+              </Box>
+              <Divider />
+            </Box>
 
-                        <Box
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "5px",
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            handlePageChange(tabs.page);
-                          }}
-                        >
-                          <StarIcon width="20" />
-                          <Text variant="headingMd" as="h1" tone="base">
-                            {tabs.content}
-                          </Text>
-                        </Box>
-                      </Box>
-                      <Divider />
-                    </Box>
-                  );
-                })
-              : ""}
+            <Box>
+              <Box padding="400" width="100%">
+                <Text as="p">GENERAL</Text>
+
+                <Box
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    handlePageChange("branding");
+                  }}
+                >
+                  <PaintBrushRoundIcon width={25} />
+                  <Text variant="headingMd" as="h1" tone="base">
+                    Branding
+                  </Text>
+                </Box>
+              </Box>
+              <Divider />
+            </Box>
           </Card>{" "}
-          <Box key={location.key}>
-            {isPage == "widgets" ? <Widget /> : <Branding />}
-          </Box>
+          {isPage == "widgets" ? <Widget /> : <Branding />}
         </InlineGrid>
       </Page>
     </AppProvider>

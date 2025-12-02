@@ -1,5 +1,3 @@
-import React, { useState, useCallback } from "react";
-
 import {
   Card,
   Page,
@@ -13,30 +11,32 @@ import {
   Button,
   TextField,
   Icon,
-  Checkbox,
-  Link,
+  Spinner,
+  InlineStack,
 } from "@shopify/polaris";
 
-import {
-  ChevronRightIcon,
-  StarFilledIcon,
-  ThumbsUpIcon,
-} from "@shopify/polaris-icons";
+import { ThumbsUpIcon } from "@shopify/polaris-icons";
 import { useColorTheme } from "../ColorContext";
 import ColorPickerCircle from "./ColorPicker";
+import { SaveBar } from "@shopify/app-bridge-react";
+import StarRating from "./Ratting";
 
 function Branding() {
-  const { getHexCode } = useColorTheme();
+  const { getHexCode, setting, handleSave, handleDiscard, lodaing } =
+    useColorTheme();
 
   const starColor = getHexCode("star");
 
-  const [checked, setChecked] = useState(true);
-  const handleChange = useCallback((newChecked) => {
-    setChecked(newChecked);
-  }, []);
-
   return (
     <AppProvider i18n={{}}>
+      <SaveBar id="review_widgets">
+        <button
+          loading={lodaing}
+          variant="primary"
+          onClick={() => handleSave("review_widgets", "review_widgets")}
+        ></button>
+        <button onClick={() => handleDiscard("review_widgets")}></button>
+      </SaveBar>
       <Page title="Branding" fullWidth={true}>
         <InlineGrid gap="400" columns={1}>
           {/* ---------- Color Card ---------- */}
@@ -70,14 +70,36 @@ function Branding() {
                     gap: "10px",
                   }}
                 >
-                  <ColorPickerCircle type="star" />
-                  <Box>
-                    <Text element="span" variant="headingSm" tone="base">
-                      Primary color
-                    </Text>
-
-                    <Text variant="headingSm">{starColor}</Text>
-                  </Box>
+                  {setting == null ? (
+                    <Spinner
+                      accessibilityLabel="Spinner example"
+                      size="large"
+                    />
+                  ) : (
+                    setting.color.map((color) => {
+                      return (
+                        color.type == "star" && (
+                          <Box key={color._id} padding="200">
+                            <InlineStack>
+                              <ColorPickerCircle
+                                hexCodeColor={color.isvalue}
+                                type={color.type}
+                                saveBarId="review_widgets"
+                              />
+                              <Box gap="400">
+                                <Text variant="headingMd" as="p">
+                                  Primary color
+                                </Text>
+                                <Text variant="headingsm" as="p">
+                                  {getHexCode(color.type)}
+                                </Text>
+                              </Box>
+                            </InlineStack>
+                          </Box>
+                        )
+                      );
+                    })
+                  )}
                 </BlockStack>
                 <Text>
                   Used for the star color, buttons, links and link buttons on
@@ -105,7 +127,7 @@ function Branding() {
                   label={
                     <Box style={{ display: "flex", gap: "5px" }}>
                       <Text tone="base">Rating icon</Text>
-                      <Badge icon={<Icon source={ThumbsUpIcon} />} tone="info">
+                      <Badge icon={ThumbsUpIcon} tone="info">
                         Awesome
                       </Badge>
                     </Box>
@@ -116,82 +138,7 @@ function Branding() {
                 />
                 <Text>This will be used in widgets.</Text>
 
-                <Box
-                  style={{
-                    padding: "10px",
-                    border: "1px solid #E1E3E5",
-                    width: "fit-content",
-                    display: "flex",
-                    color: starColor || "#108474",
-                    fontSize: "50px",
-                  }}
-                >
-                  <Icon source={StarFilledIcon} />
-                  <Icon source={StarFilledIcon} />
-                  <Icon source={StarFilledIcon} />
-                  <Icon source={StarFilledIcon} />
-                  <Icon source={StarFilledIcon} />
-                </Box>
-
-                <Box
-                  borderColor="border"
-                  borderWidth="025"
-                  padding="400"
-                  width="100%"
-                >
-                  <InlineGrid columns={2}>
-                    <Box gap="100">
-                      <Text variant="headingMd">Store logo</Text>
-                      <Text>Update your logo in Email styling setting</Text>
-                    </Box>
-
-                    <Box
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "flex-end",
-                      }}
-                    >
-                      <Icon source={ChevronRightIcon} />
-                    </Box>
-                  </InlineGrid>
-                </Box>
-              </InlineGrid>
-            </BlockStack>
-          </Card>
-
-          <Card padding="0">
-            <BlockStack style={{ padding: "20px" }} gap="400">
-              <InlineGrid columns={1}>
-                <Text as="h2" variant="headingLg">
-                  Judge.me trust marks (Recommended){" "}
-                  <Badge tone="info">Awesome</Badge>
-                </Text>
-              </InlineGrid>
-            </BlockStack>
-
-            <Divider />
-
-            <BlockStack style={{ padding: "20px" }}>
-              <InlineGrid columns={1} gap="100">
-                <Checkbox
-                  disabled
-                  label="Show Powered by Judge.me in emails"
-                  checked={checked}
-                  onChange={handleChange}
-                />
-
-                <Checkbox
-                  disabled
-                  label="Show Verified Checkmark in widgets"
-                  checked={checked}
-                  onChange={handleChange}
-                />
-
-                <Text tone="base">
-                  <Link url="#">Learn more</Link> about where the Judge.me
-                  branding can be removed
-                </Text>
+                <StarRating rating={5} color={starColor || "#108474"} />
               </InlineGrid>
             </BlockStack>
           </Card>

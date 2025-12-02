@@ -38,10 +38,14 @@ const sectionSettingsSchema = new Schema(
 );
 
 const settingSchema = new Schema({
-  title: {
+  shop: {
     type: String,
     required: true,
     unique: true,
+  },
+  title: {
+    type: String,
+    required: true,
   },
 
   sectionSettings: {

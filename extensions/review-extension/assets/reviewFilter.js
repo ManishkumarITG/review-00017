@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   let dummydata = [
     "Rohan|0|Bro product legit fire|2025-01-05",
     "Aditi|4|Pretty solid ngl|2025-11-26",
@@ -7,33 +7,56 @@ document.addEventListener("DOMContentLoaded", () => {
     "Vikram|1|Terrible quality, do not buy!|2024-10-30",
   ];
 
-  let dbdata = [
-    "balwan|0|Bro product legit fire|2025-01-05",
-    "manish|4|Pretty solid ngl|2025-11-26",
-    "Mark|3|Decent but packaging could’ve been better.|2024-12-22",
-    "parth|2|Not what I expected.|2024-11-15",
-    "Vikram|1|Terrible quality, do not buy!|2024-10-30",
-  ];
+  async function apidata() {
+    try {
+      const baseUrl = window.location.origin;
+      const response = await fetch(
+        `${baseUrl}/apps/review/api/routes/reviewproduct/reviews?limit=28`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
 
-  let realdata = [];
+      const data = await response.json(); // now this works
+      // realdata = data.data.data
+      console.log(data);
+
+      console.log("data from api", data.data.data);
+
+      return data.data.data;
+    } catch (error) {
+      console.error("Error fetching API data:", error);
+    }
+  }
+
+  console.log(apidata());
+
+  // apidata();
+
+  let realdata = await apidata();
+
+  // console.log(realdata);
 
   const ui = window.reviewSettings;
   if (ui.reviewSource == "dummy") {
     realdata = dummydata;
   } else if (ui.reviewSource == "real") {
-    realdata = dbdata;
+    realdata = await apidata();
   } else {
     realdata = [];
   }
   const filterSelect = document.getElementsByClassName("jm-sort-select")[0];
   const parsedData = realdata.map((data) => {
-    const [author, rating, body, date] = data.split("|");
+    const { author, rating, description, createdAt } = data;
 
     return {
-      author,
+      author: author || "Anonymous",
       rating: Number(rating),
-      body,
-      date: date.trim(),
+      description,
+      date: createdAt ? createdAt.split("T")[0] : "",
     };
   });
 
@@ -41,47 +64,47 @@ document.addEventListener("DOMContentLoaded", () => {
     reviewsList.innerHTML = "";
 
     list.forEach((review) => {
+      console.log(review);
+
       const avatar = review.author.trim().charAt(0).toUpperCase();
 
       const reviewItem = document.createElement("div");
       reviewItem.className = "review-item";
 
-      reviewItem.innerHTML = `
-<div style="
-  display:flex; gap:14px; padding:16px;
-  box-shadow:0 2px 8px rgba(0,0,0,0.04);
-  border-radius:12px;
-">
-  <div class="jm-avatar" style="color:${ui.starColor}; font-size:18px;">
-    ${avatar}
-  </div>
+      reviewItem.innerHTML = `<div style="
+              display:flex; gap:14px; padding:16px;
+              box-shadow:0 2px 8px rgba(0,0,0,0.04);
+              border-radius:12px;
+              ">
+              <div class="jm-avatar" style="color:${ui.starColor}; font-size:18px;">
+                  ${avatar}
+              </div>
+              <div style="flex:1;">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <div style="color:${ui.starColor}; font-size:16px;">
+                          ${"★".repeat(review.rating)}${"☆".repeat(5 - review.rating)}
+                        </div>
+                        <p style="margin:0; font-weight:600; color:${ui.starColor}">
+                          ${review.author}
+                        </p>
+                    </div>
+                    ${
+                      ui.showDate
+                        ? `
+                    <div>
+                        <p style="margin:0; color:#888;">${review.date}</p>
+                    </div>
+                    `
+                        : ""
+                    }
+                  </div>
+                  <p style="margin-top:10px; color:${ui.textColor}">
+                  ${review.description}
 
-  <div style="flex:1;">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <div>
-<div style="color:${ui.starColor}; font-size:16px;">
-          ${"★".repeat(review.rating)}${"☆".repeat(5 - review.rating)}
-        </div>
-        <p style="margin:0; font-weight:600; color:${ui.starColor}">
-          ${review.author}
-        </p>
-        
-        
-      </div>
-
-      ${
-        ui.showDate
-          ? `<div><p style="margin:0; color:#888;">${review.date}</p></div>`
-          : ""
-      }
-    </div>
-
-    <p style="margin-top:10px; color:${ui.textColor}">
-      ${review.body}
-    </p>
-  </div>
-</div>
-`;
+                  </p>
+              </div>
+            </div>`;
 
       reviewsList.appendChild(reviewItem);
     });

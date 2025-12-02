@@ -1,6 +1,5 @@
 import {
   IndexTable,
-  LegacyCard,
   IndexFilters,
   useSetIndexFiltersMode,
   useIndexResourceState,
@@ -20,21 +19,12 @@ import {
   Popover,
   ActionList,
   useBreakpoints,
-  FormLayout,
-  TextField,
-  Form,
 } from "@shopify/polaris";
 
-
-import { Modal, TitleBar, useAppBridge } from '@shopify/app-bridge-react';
-
-
-// import "../components/style.css"
-import "../routes/components/style.css"
-import { useState, useCallback, useEffect, useRef } from "react";
+import { Modal, TitleBar, useAppBridge } from "@shopify/app-bridge-react";
+import { useState, useCallback, useRef } from "react";
 import "@shopify/polaris/build/esm/styles.css";
 
-// C:\Users\Itgeeks\Desktop\reviewapp\reviewapp\app\routes\components\style.css
 import {
   ChevronDownIcon,
   HeartIcon,
@@ -44,22 +34,18 @@ import {
 } from "@shopify/polaris-icons";
 import StarRating from "./components/Ratting.jsx";
 import { useColorTheme } from "./ColorContext.jsx";
+import { reviews, tabsdata } from "./data/reviewData.js";
 import EditReviewForm from "./components/EditReviewForm.jsx";
-import { reviews, tabsdata } from "./data/reviewData";
 
 function IndexFiltersDefaultExample() {
-
-
-
   const shopify = useAppBridge();
-
 
   const { getHexCode } = useColorTheme();
 
-
   const starColor = getHexCode("star");
+
   const [filteredOrders, setFilteredOrders] = useState(reviews);
-  const [selectedData, setSelectedDta] = useState(0);
+  const [selectedData, setSelectedData] = useState(0);
   const [_taggedWith, setTaggedWith] = useState("");
   const [queryValue, setQueryValue] = useState("");
   const [selectedTab, setSelectedTab] = useState(0);
@@ -76,10 +62,13 @@ function IndexFiltersDefaultExample() {
   const [formActive, setFormActive] = useState(false);
   const [sortSelected, setSortSelected] = useState(["order asc"]);
   const { mode, setMode } = useSetIndexFiltersMode();
-  const [dataLength, setDataLength] = useState(reviews.length);
-
-
-
+  const [itemStrings, setItemStrings] = useState([
+    "All Reviews",
+    "Product Reviews",
+    "Store Reviews",
+    "Spam",
+    "Archives",
+  ]);
 
   //form changes
   const HandleFormChanges = (value, name) => {
@@ -89,35 +78,28 @@ function IndexFiltersDefaultExample() {
     }));
   };
 
-
-
-
   //Like button
   const toggleButton = (id) => {
     setSelectedButtons((prev) =>
-      prev.includes(id)
-        ? prev.filter((btnId) => btnId !== id)
-        : [...prev, id]
+      prev.includes(id) ? prev.filter((btnId) => btnId !== id) : [...prev, id],
     );
   };
 
-
   // Form toggle
-  const handleActionClick = useCallback((id) => (event) => {
-    event.stopPropagation();
-    setFormActive(!formActive);
-  }, []);
-
+  const handleActionClick = useCallback(
+    (id) => (event) => {
+      event.stopPropagation();
+      setFormActive(!formActive);
+    },
+    [],
+  );
 
   // Pin button
   const togglePinButton = (id) => {
     setPinButton((prev) =>
-      prev.includes(id)
-        ? prev.filter((btnId) => btnId !== id)
-        : [...prev, id]
+      prev.includes(id) ? prev.filter((btnId) => btnId !== id) : [...prev, id],
     );
   };
-
 
   // Popover toggles
   const togglePopover = (id) => {
@@ -130,44 +112,22 @@ function IndexFiltersDefaultExample() {
     setOpenNevigation((prev) => (prev === id ? null : id));
   };
 
-
-
   const handleTabChange = useCallback((selectedTabIndex) => {
-    setSelectedDta(selectedTabIndex);
+    setSelectedData(selectedTabIndex);
     const params = new URLSearchParams(window.location.search);
     params.set("key", selectedTabIndex);
     const newUrl = window.location.pathname + "?" + params.toString();
     window.history.pushState({}, "", newUrl);
-
-
   }, []);
-
 
   const toggleActive = (id) => () => {
     setActive((activeId) => (activeId !== id ? id : null));
   };
 
-
-  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-
-  const [itemStrings, setItemStrings] = useState([
-    "All Reviews",
-    "Product Reviews",
-    "Store Reviews",
-    "Spam",
-    "Arvichiv",
-  ]);
-
-
-  const buttonRefs = useRef([]);
-
-
   const filterOrders = useCallback(
     (query, currentTab) => {
       let filteredByQuery = filteredOrders;
       const lowerCaseQuery = query ? query.toLowerCase() : "";
-
 
       if (lowerCaseQuery) {
         filteredByQuery = reviews.filter((order) => {
@@ -177,60 +137,57 @@ function IndexFiltersDefaultExample() {
           const matchesId = String(order.id).includes(lowerCaseQuery);
           const matchesTag = order.tag.toLowerCase().includes(lowerCaseQuery);
 
-
           return matchesName || matchesId || matchesTag;
         });
       }
 
-
       const tabName = itemStrings[currentTab];
       let finalFilteredOrders = filteredByQuery;
-
 
       switch (tabName) {
         case "All Reviews":
           break;
         case "Product Reviews":
+          setCurrentTab(1);
+          setitemRenderLimit(0);
           finalFilteredOrders = filteredByQuery.filter(
             (order) => order.tag === "hot" || order.tag === "pro",
           );
           break;
         case "Store Reviews":
+          setCurrentTab(1);
+          setitemRenderLimit(0);
           finalFilteredOrders = filteredByQuery.filter(
             (order) => order.tag === "test" || order.tag === "sale",
           );
           break;
         case "Spam":
+          setCurrentTab(1);
+          setitemRenderLimit(0);
           finalFilteredOrders = filteredByQuery.filter((order) => {
-            return order.isSpamed === true
-          }
-
-
-          );
+            return order.isSpamed === true;
+          });
           if (finalFilteredOrders.length === 0) {
             finalFilteredOrders = [];
           }
           break;
-        case "Arvichiv":
-          finalFilteredOrders = filteredByQuery.filter(
-            (order) => {
-              return order.isPin === true
-            }
-          );
+        case "Archives":
+          setCurrentTab(1);
+          setitemRenderLimit(0);
+          finalFilteredOrders = filteredByQuery.filter((order) => {
+            return order.isPin === true;
+          });
           break;
         default:
           finalFilteredOrders = filteredByQuery;
       }
-
 
       setFilteredOrders(finalFilteredOrders);
     },
     [reviews, itemStrings],
   );
 
-
-  const allReviewsContent = `All Reviews (${dataLength})`;
-
+  const allReviewsContent = ` ${"All Reviews (" + reviews.length + ")"}`;
 
   const tabs = itemStrings.map((item, index) => ({
     content: index === 0 ? allReviewsContent : item,
@@ -239,7 +196,6 @@ function IndexFiltersDefaultExample() {
       setSelected(index);
       setSelectedTab(index);
       filterOrders(queryValue, index);
-
 
       const params = new URLSearchParams(window.location.search);
       params.set("table", item);
@@ -250,13 +206,7 @@ function IndexFiltersDefaultExample() {
     actions: [],
   }));
 
-
-
-
   const onHandleCancel = () => { };
-
-
-
 
   const handleFiltersQueryChange = useCallback(
     (value) => {
@@ -266,15 +216,12 @@ function IndexFiltersDefaultExample() {
     [filterOrders, selectedTab],
   );
 
-
   const onQueryClear = useCallback(() => {
     setQueryValue("");
     filterOrders("", selectedTab);
   }, [filterOrders, selectedTab]);
 
-
   const handleTaggedWithRemove = useCallback(() => setTaggedWith(""), []);
-
 
   const handleFiltersClearAll = useCallback(() => {
     handleAccountStatusRemove();
@@ -282,28 +229,21 @@ function IndexFiltersDefaultExample() {
     onQueryClear();
   }, [onQueryClear, handleTaggedWithRemove]);
 
-
   const splitedfilteredOrders = filteredOrders.slice(
     itemRenderLimit,
     itemRenderLimit + 10,
   );
 
-
   const resourceName = {
-    singular: 'splitedfilteredOrder',
-    plural: 'splitedfilteredOrders',
+    singular: "splitedfilteredOrder",
+    plural: "splitedfilteredOrders",
   };
-
 
   const { selectedResources, allResourcesSelected, handleSelectionChange } =
     useIndexResourceState(splitedfilteredOrders);
 
-
   const rowMarkup = splitedfilteredOrders.map(
-    (
-      { id, userName, item, time, Rating, comment, tag },
-      index,
-    ) => (
+    ({ id, userName, item, time, Rating, comment, tag }, index) => (
       <IndexTable.Row
         id={id}
         key={id}
@@ -312,12 +252,10 @@ function IndexFiltersDefaultExample() {
       >
         <IndexTable.Cell>
           <BlockStack gap={100}>
-            <Box fontWeight="bold" >
-              <Text >{userName}</Text>
-            </Box>
-            <Box>
-              <Text>{item}</Text>
-            </Box>
+            <Text fontWeight="bold">{userName}</Text>
+
+            <Text>{item}</Text>
+
             <Text>Via Web</Text>
             <InlineStack gap={200}>
               <Button
@@ -333,18 +271,14 @@ function IndexFiltersDefaultExample() {
                 variant={pinButton.includes(id) ? "primary" : "secondary"}
                 onClick={(e) => {
                   e.stopPropagation();
-                  togglePinButton(id)
+                  togglePinButton(id);
                   splitedfilteredOrders.filter((review) => {
                     if (review.id === id) {
                       review.isPin = true;
-                      // setPinList((prev) => [...prev, review]);
                     }
-
-
-                  })
-
-
-                }}>
+                  });
+                }}
+              >
                 <Icon source={PinIcon} tone="base" />
               </Button>
             </InlineStack>
@@ -360,12 +294,9 @@ function IndexFiltersDefaultExample() {
             <Text fontWeight="bold">{tag}</Text>
           </BlockStack>
         </IndexTable.Cell>
+
         <IndexTable.Cell>
-          <InlineStack
-            align="end"
-            blockAlign="center"
-            style={{ width: "100%" }}
-          >
+          <InlineStack align="end" blockAlign="center">
             <InlineStack gap="800">
               <Popover
                 active={openPopoverId === id}
@@ -373,7 +304,6 @@ function IndexFiltersDefaultExample() {
                 preferredAlignment="right"
                 activator={
                   <Button
-                    ref={(el) => (buttonRefs.current[index] = el)}
                     onClick={(e) => {
                       e.stopPropagation();
                       toggleActive("popover1")();
@@ -396,8 +326,6 @@ function IndexFiltersDefaultExample() {
                     {
                       content: "Spam",
                       onAction: (e) => {
-                        console.log(e);
-
                         if (e) {
                           e.stopPropagation();
                         }
@@ -405,7 +333,7 @@ function IndexFiltersDefaultExample() {
                           if (review.id === id) {
                             review.isSpamed = true;
                           }
-                        })
+                        });
                       },
                     },
                     {
@@ -425,7 +353,7 @@ function IndexFiltersDefaultExample() {
                             }
                             setDataLength(reviews.length);
                           }
-                        })
+                        });
                       },
                     },
                   ]}
@@ -438,8 +366,6 @@ function IndexFiltersDefaultExample() {
                   activator={
                     <Button
                       icon={UndoIcon}
-
-
                       onClick={(e) => {
                         e.stopPropagation();
                         toggleActive("popover1")();
@@ -479,8 +405,6 @@ function IndexFiltersDefaultExample() {
                   activator={
                     <Button
                       icon={MenuHorizontalIcon}
-
-
                       onClick={(e) => {
                         e.stopPropagation();
                         toggleActive("popover1")();
@@ -502,28 +426,24 @@ function IndexFiltersDefaultExample() {
                       {
                         content: "Edit Review",
                         onAction: () => {
-                          shopify.modal.show('my-modal')
-
+                          shopify.modal.show("my-modal");
 
                           handleActionClick(id);
                           // setFormActive(!formActive);
-                          HandleFormChanges(id, "elementId")
+                          HandleFormChanges(id, "elementId");
                           setOpenMenu(null);
                           // e.stopPropagation();
 
-
                           splitedfilteredOrders.filter((review) => {
                             if (review.id === id) {
-                              HandleFormChanges(review.comment, "review")
-                              HandleFormChanges(review.userName, "title")
-                              HandleFormChanges(review.tag, "tag")
-                              HandleFormChanges(review.Rating, "rating")
-                              HandleFormChanges(review.item, "itemName")
+                              HandleFormChanges(review.comment, "review");
+                              HandleFormChanges(review.userName, "title");
+                              HandleFormChanges(review.tag, "tag");
+                              HandleFormChanges(review.Rating, "rating");
+                              HandleFormChanges(review.item, "itemName");
                             }
-                          })
-
-
-                        }
+                          });
+                        },
                       },
                       {
                         content: "Send a Response",
@@ -542,7 +462,6 @@ function IndexFiltersDefaultExample() {
     ),
   );
 
-
   return (
     <AppProvider>
       <Page fullWidth>
@@ -554,7 +473,6 @@ function IndexFiltersDefaultExample() {
               onSelect={handleTabChange}
             ></LegacyTabs>
           </Card>
-
 
           <InlineStack gap="200">
             <Text variant="headingLg" as="h2">
@@ -570,8 +488,7 @@ function IndexFiltersDefaultExample() {
             </Badge>
           </InlineStack>
 
-
-          <LegacyCard>
+          <Card>
             <IndexFilters
               sortSelected={sortSelected}
               queryValue={queryValue}
@@ -593,7 +510,6 @@ function IndexFiltersDefaultExample() {
               canCreateNewView={false}
             />
 
-
             <IndexTable
               condensed={useBreakpoints().smDown}
               itemCount={splitedfilteredOrders.length}
@@ -606,28 +522,28 @@ function IndexFiltersDefaultExample() {
               headings={[
                 { title: "Customer" },
                 { title: "Created" },
-                { title: "Ratting" },
+                { title: "Rating" },
                 { title: "status", alignment: "end" },
               ]}
             >
               {rowMarkup}
             </IndexTable>
-          </LegacyCard>
+          </Card>
         </InlineGrid>
 
-
         {reviews.length > 10 && (
-          <Card gap={200} >
+          <Card gap={200}>
             <InlineStack gap="800" align="space-between">
               <Button
                 disabled={currentTab === 1}
                 variant="primary"
                 onClick={() => {
-                  setCurrentTab(((prev) => prev - 1))
-                  setitemRenderLimit((pre) => pre - 10)
-                }
-                }
-              >Previus</Button>
+                  setCurrentTab((prev) => prev - 1);
+                  setitemRenderLimit((pre) => pre - 10);
+                }}
+              >
+                Previus
+              </Button>
               {currentTab}
               <Button
                 variant="primary"
@@ -642,19 +558,27 @@ function IndexFiltersDefaultExample() {
             </InlineStack>
           </Card>
         )}
-        <Modal id="my-modal" >
-
+        <Modal id="my-modal">
           <Box style={{ padding: "20px" }}>
-
-            <EditReviewForm formData={formData} HandleFormChanges={HandleFormChanges} />
+            <EditReviewForm
+              formData={formData}
+              HandleFormChanges={HandleFormChanges}
+            />
           </Box>
-          <TitleBar title="Review Edit" >
-            <button variant="primary" onClick={() => {
-              setFormActive(false);
-              console.log("form data", formData);
-              shopify.modal.hide('my-modal')
-            }} >Commit Changes</button>
-            <button onClick={() => shopify.modal.hide('my-modal')}>cancel</button>
+          <TitleBar title="Review Edit">
+            <button
+              variant="primary"
+              onClick={() => {
+                setFormActive(false);
+                console.log("form data", formData);
+                shopify.modal.hide("my-modal");
+              }}
+            >
+              Commit Changes
+            </button>
+            <button onClick={() => shopify.modal.hide("my-modal")}>
+              cancel
+            </button>
           </TitleBar>
         </Modal>
       </Page>
@@ -662,7 +586,4 @@ function IndexFiltersDefaultExample() {
   );
 }
 
-
 export default IndexFiltersDefaultExample;
-
-

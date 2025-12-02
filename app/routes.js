@@ -5,6 +5,7 @@ import { flatRoutes } from "@react-router/fs-routes";
 const routes = [
   route("/api/routes/test/*", "./api/routes/test.$.js"),
   route("/api/routes/setting/*", "./api/routes/setting.$.js"),
+  route("/api/routes/reviewproduct/*", "./api/routes/reviewproduct.$.js"),
   ...(await flatRoutes()),
 ];
 

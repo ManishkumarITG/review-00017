@@ -17,3 +17,8 @@ redirect_urls = [ "https://example.com/api/auth" ]
 
 [build]
 automatically_update_urls_on_dev = true
+
+[app_proxy]
+url = "https://balwan-singh-rajput-itg.myshopify.com"
+prefix = "apps"
+subpath = "review"

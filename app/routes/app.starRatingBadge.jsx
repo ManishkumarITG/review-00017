@@ -1,12 +1,10 @@
-// shopify components
-
 import {
   AppProvider,
   BlockStack,
   Box,
   Button,
   Card,
-  ChoiceList,
+  Checkbox,
   Icon,
   InlineGrid,
   InlineStack,
@@ -15,6 +13,7 @@ import {
   Page,
   SkeletonDisplayText,
   SkeletonPage,
+  Spinner,
   Text,
 } from "@shopify/polaris";
 
@@ -35,39 +34,48 @@ import StarRating from "./components/Ratting.jsx";
 import ColorPickerCircle from "./components/ColorPicker.jsx";
 
 import { useNavigate } from "react-router";
-import { useCallback, useState } from "react";
 import { useColorTheme } from "./ColorContext";
+import { SaveBar } from "@shopify/app-bridge-react";
 
 export default function appStarRatting() {
   const nevigate = useNavigate();
 
-  const { getHexCode, isChange } = useColorTheme();
+  const {
+    getHexCode,
+    setting,
+    handleSave,
+    handleDiscard,
+    lodaing,
+    state,
+    dispatch,
+  } = useColorTheme();
 
   const starColor = getHexCode("star");
 
-  const [isAllowed, setIsAllowed] = useState(true);
-
-  const handleChange = useCallback((value) => {
-    const selectedValue = value[0];
-
-    if (selectedValue === "hidden") {
-      setIsAllowed(true);
-    } else if (selectedValue === "optional") {
-      setIsAllowed(false);
-    }
-  }, []);
+  const handleChange = (newChecked, id) => {
+    console.log(newChecked, id);
+    dispatch({
+      field: id,
+      value: newChecked,
+    });
+    shopify.saveBar.show("review_widgets");
+  };
 
   const handlePgeChange = () => {
-    if (isChange) {
-      shopify.saveBar.leaveConfirmation();
-    } else {
-      nevigate("/app/mySettingPage");
-    }
+    nevigate("/app/mySettingPage");
   };
 
   return (
     <AppProvider>
-      <Page fullWidth={true}>
+      <SaveBar id="review_widgets">
+        <button
+          loading={lodaing}
+          variant="primary"
+          onClick={() => handleSave("review_widgets", "review_widgets")}
+        ></button>
+        <button onClick={() => handleDiscard("review_widgets")}></button>
+      </SaveBar>
+      <Page fullWidth>
         <Card>
           <InlineGrid
             columns={{
@@ -116,36 +124,61 @@ export default function appStarRatting() {
 
                 <CollapsibleBox id="text_Badge_Ratting" boxName="Text">
                   <Box padding="400">
-                    <ChoiceList
-                      choices={[
-                        { label: "Show text and stars", value: "hidden" },
-                        { label: "Show stars only", value: "optional" },
-                      ]}
-                      selected={isAllowed ? ["hidden"] : ["optional"]}
-                      onChange={handleChange}
-                    />
+                    {setting == null ? (
+                      <Spinner
+                        accessibilityLabel="Spinner example"
+                        size="large"
+                      />
+                    ) : (
+                      setting?.text?.map((text) => {
+                        return (
+                          text.type == "ChoiceList" && (
+                            <Box paddingInline="200" key={text._id}>
+                              <Checkbox
+                                checked={state[text.settingName]}
+                                label={text.settingName}
+                                id={text.settingName}
+                                onChange={handleChange}
+                              />
+                            </Box>
+                          )
+                        );
+                      })
+                    )}
                   </Box>
                 </CollapsibleBox>
 
                 <CollapsibleBox id="color-collapsible" boxName="Color">
-                  <Box
-                    borderStyle="solid"
-                    borderBlockStartWidth="025"
-                    padding="200"
-                    borderColor="border-brand"
-                  >
-                    <InlineStack>
-                      <ColorPickerCircle type="star" />
-                      <Box gap="400">
-                        <Text variant="headingMd" as="p">
-                          Star Color
-                        </Text>
-                        <Text variant="headingsm" as="p">
-                          {starColor}
-                        </Text>
-                      </Box>
-                    </InlineStack>
-                  </Box>
+                  {setting == null ? (
+                    <Spinner
+                      accessibilityLabel="Spinner example"
+                      size="large"
+                    />
+                  ) : (
+                    setting.color.map((color) => {
+                      return (
+                        color.type == "star" && (
+                          <Box key={color._id} padding="200">
+                            <InlineStack>
+                              <ColorPickerCircle
+                                hexCodeColor={color.isvalue}
+                                type={color.type}
+                                saveBarId="review_widgets"
+                              />
+                              <Box gap="400">
+                                <Text variant="headingMd" as="p">
+                                  Primary color
+                                </Text>
+                                <Text variant="headingsm" as="p">
+                                  {getHexCode(color.type)}
+                                </Text>
+                              </Box>
+                            </InlineStack>
+                          </Box>
+                        )
+                      );
+                    })
+                  )}
                 </CollapsibleBox>
               </BlockStack>
             </Box>
@@ -161,7 +194,7 @@ export default function appStarRatting() {
                           {" "}
                           <StarRating rating={5} color={starColor} />{" "}
                           <Text variant="headingMd" as="span">
-                            {isAllowed && "123 reviews"}
+                            {state["Show text and stars"] && "123 reviews"}
                           </Text>
                         </InlineStack>
 

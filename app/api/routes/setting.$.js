@@ -1,3 +1,4 @@
+import shopify from "../../shopify.server";
 import {
   create,
   getAll,
@@ -5,13 +6,17 @@ import {
   getByTitle,
 } from "../controller/setting.controller";
 import { responseHandler } from "../utils/responseHandler.js";
-import mongoConnect from "../../db.server";
 
 export const loader = async ({ request }) => {
   try {
     console.log(
       "-----------------------------------------------------------hit api",
     );
+
+    const { session } = await shopify.authenticate.admin(request);
+
+    const shopDomain = session.shop;
+    console.log("The shop domain is:", shopDomain);
 
     const url = request.url;
     const path = url.split("/").pop();
@@ -30,10 +35,18 @@ export const loader = async ({ request }) => {
 
 export const action = async ({ request }) => {
   try {
-    await mongoConnect();
+    // await mongoConnect();
     console.log(
       "-----------------------------------------------------------hit action  api",
     );
+
+    const { session } = await shopify.authenticate.admin(request);
+
+    console.log("-------------------------------- session", session);
+
+    // The shop domain is available in session.shop
+    const shopDomain = session.shop;
+    console.log("The shop domain is:", shopDomain);
 
     const data = await request.json();
 
@@ -46,11 +59,11 @@ export const action = async ({ request }) => {
 
     switch (path) {
       case "create":
-        return await create(data);
+        return await create(shopDomain, data);
       case "getByTitle":
-        return await getByTitle(data);
+        return await getByTitle(shopDomain, data);
       case "updateByTitle":
-        return await update(data);
+        return await update(shopDomain, data);
     }
   } catch (error) {
     console.log("catch error in test loader :", error);

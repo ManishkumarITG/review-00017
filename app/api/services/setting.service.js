@@ -1,7 +1,12 @@
 import Setting from "../models/setting.model.js";
-
 // Create Setting
-export const createSetting = async (data) => {
+export const createSetting = async (shopDomain, data) => {
+  const isShop = await Setting.exists({ shop: shopDomain });
+  if (isShop) {
+    throw new Error("shop is all rady exsit");
+  }
+
+  data.shop = shopDomain;
   const saved = await Setting.create(data);
   console.log("----------------------------------", saved);
   return saved.toObject();
@@ -13,17 +18,20 @@ export const getAllSettings = async () => {
 };
 
 // Get Setting by ID
-export const getSettingByTitle = async (name) => {
-  console.log("-------------------- name", name);
-  return await Setting.findOne(name);
+export const getSettingByTitle = async (shopDomain, name) => {
+  const { title } = name;
+  console.log(title, shopDomain);
+  return await Setting.findOne({ shop: shopDomain, title: title });
 };
 
 // Update Setting
-export const updateSetting = async (settingData) => {
+export const updateSetting = async (shopDomain, settingData) => {
   const { title } = settingData;
+  settingData.shop = shopDomain;
+  console.log(settingData);
   console.log("---------------------- hello", title, settingData);
   const updated = await Setting.findOneAndUpdate(
-    { title: title },
+    { shop: shopDomain },
     settingData,
     {
       new: true,
@@ -37,7 +45,9 @@ export const updateSetting = async (settingData) => {
   return updated.toObject();
 };
 
-// Delete Setting
-export const deleteSetting = async (id) => {
-  return await Setting.findByIdAndDelete(id);
-};
+// // Delete Setting
+// export const deleteSetting = async (id) => {
+//   return await Setting.findByIdAndDelete(id);
+// };
+
+

@@ -20,14 +20,14 @@ import en from "@shopify/polaris/locales/en.json";
 import "@shopify/polaris/build/esm/styles.css";
 import {
   CalendarIcon,
-  PlusIcon,
+
   ChartVerticalIcon,
 } from "@shopify/polaris-icons";
 import DeshboardCard from "./components/deshboardCard";
 import ReviewInlineCard from "./components/ReviewInlineCard";
 import DeshboardGuidense from "./components/DeshboardGuidense";
 import DeshboardimageWithText from "./components/DeshboardImageWithText";
-import { useNavigate, useLocation } from "react-router";
+import { useNavigate  } from "react-router";
 import DeshboardHeader from "./components/DeshboardHeader";
 
 export default function Deshboard() {
@@ -107,13 +107,15 @@ export default function Deshboard() {
     }
   }
 
+
+
   useEffect(() => {
     CardData().then((data) => {
       setCardData(data);
     }).catch((error) => {
       console.error("Error fetching card data:", error);
     });
-  }, [carddata]);
+  }, []);
 
 
   const ranges = [
