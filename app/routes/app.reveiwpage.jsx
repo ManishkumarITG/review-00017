@@ -216,7 +216,7 @@ function IndexFiltersDefaultExample() {
     actions: [],
   }));
 
-  const onHandleCancel = () => { };
+  const onHandleCancel = () => {};
 
   const handleFiltersQueryChange = useCallback(
     (value) => {
