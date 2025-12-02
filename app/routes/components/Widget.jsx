@@ -12,20 +12,10 @@ import { useNavigate } from "react-router";
 
 export default function Widget() {
   const nevigate = useNavigate();
-  // const [selected, setSelected] = useState("today");
-
-  // const handleSelectChange = useCallback((value) => setSelected(value), []);
-
-  // const options = [
-  //   { label: "Change theme", value: "Change theme" },
-  //   { label: "Horizon", value: "Horizon <live>" },
-  //   { label: "Horizon", value: "Horizon" },
-  // ];
-
   return (
     <AppProvider>
       <Page title="Widget" fullWidth={true}>
-        <InlineGrid gap="400" columns={{ xs: 1, sm: 2, md: 2, lg: 3, xl: 3 }}>
+        <InlineGrid gap="400" columns={{ xs: 1, sm: 2, md: 2, lg: 2, xl: 2 }}>
           {simplifiedMediaCardData.map((card) => (
             <MediaCard
               key={card.key}

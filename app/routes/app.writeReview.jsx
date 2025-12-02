@@ -1212,27 +1212,14 @@ import {
   StarIcon,
 } from "@shopify/polaris-icons";
 import ColorPickerCircle from "./components/ColorPicker.jsx";
-import CollapsibleBox from "./components/Collapsible.jsx";
 import DropZoneWithImageFileUpload from "./components/ImageDrop.jsx";
 import { useNavigate } from "react-router";
-
-const initialState = {
-  Widget_title: "Costomer review",
-  Average_rating_text: 4.07,
-  button_text: "Write a review",
-};
+import { SaveBar } from "@shopify/app-bridge-react";
 
 const colorInitialState = {
   defaultColor: true,
   customColor: false,
 };
-
-function reducer(state, action) {
-  return {
-    ...state,
-    [action.field]: action.value,
-  };
-}
 
 const colorReducer = (state, action) => {
   switch (action.type) {
@@ -1261,41 +1248,47 @@ export default function ReviewWidgets() {
   const nevigate = useNavigate();
 
   // import color context
-  const { getHexCode, isChange } = useColorTheme();
+  const {
+    getHexCode,
+    isChange,
+    shop,
+    setting,
+    handleSave,
+    handleDiscard,
+    lodaing,
+    state,
+  } = useColorTheme();
 
   // import all hex code
   const starColor = getHexCode("star");
-  const textColor = getHexCode("text");
-  const formBackgroundColor = getHexCode("formBackgroundColor");
+
   const buttonColor = getHexCode("button");
   const buttonTextColor = getHexCode("buttonTextColor");
-  const overlayColor = getHexCode("overlayColor");
 
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const [dateChecked, setDateChecked] = useState(false);
   const [selected, setSelected] = useState(0);
   const [rating, setRating] = useState(0);
   const [isFromOpen, setIsFromOpen] = useState(false);
   const [userReview, setUserReview] = useState("");
   const [reqData, setReqData] = useState(false);
-  const [isImageFrom, setIsImageFrom] = useState(false);
-  const [showThankYouPage, setShowThankYouPage] = useState(false);
+  const [pageCount, setPageCount] = useState(0);
 
   const handleSubmit = () => {
-    if (!isImageFrom) {
+    const count = pageCount + 1;
 
-      if (userReview.trim().length == 0) {
-        return setReqData(true);
-      }
-
-      // setReqData(false);
-      console.log(userReview);
-      setUserReview("");
-      setReqData(false)
-      setIsImageFrom(true);
-      return
+    if (count > 2) {
+      window.open(`https://${shop}`, "_blank");
+      setIsFromOpen(false);
+      console.log(isFromOpen);
+    } else {
+      setPageCount(count);
     }
-    setShowThankYouPage(true)
+
+    if (count == 2) {
+      setRating(0);
+    }
+
+    setReqData(false);
+    setUserReview("");
   };
 
   const handleReviewChange = useCallback((value) => setUserReview(value), []);
@@ -1303,6 +1296,7 @@ export default function ReviewWidgets() {
   const handleRating = (index) => {
     setRating(index + 1);
     setIsFromOpen(true);
+    setPageCount(0);
   };
 
   const [colorChangeState, colorDispatch] = useReducer(
@@ -1315,18 +1309,6 @@ export default function ReviewWidgets() {
       type: id,
     });
   };
-
-  const handleTextChnge = useCallback((newValue, id) => {
-    dispatch({
-      field: id,
-      value: newValue,
-    });
-  }, []);
-
-  const handleChange = useCallback(
-    (newChecked) => setDateChecked(newChecked),
-    [],
-  );
 
   const handlePageChange = async () => {
     if (isChange) {
@@ -1355,6 +1337,14 @@ export default function ReviewWidgets() {
 
   return (
     <AppProvider>
+      <SaveBar id="review_widgets">
+        <button
+          loading={lodaing}
+          variant="primary"
+          onClick={() => handleSave("review_widgets", "review_widgets")}
+        ></button>
+        <button onClick={() => handleDiscard("review_widgets")}></button>
+      </SaveBar>
       <Page>
         <Card title="Credit card" sectioned>
           <InlineGrid
@@ -1392,174 +1382,38 @@ export default function ReviewWidgets() {
 
                   {colorChangeState.customColor && (
                     <>
-                      {" "}
-                      <Box padding="200">
-                        <InlineStack>
-                          <ColorPickerCircle type="star" />
-                          <Box gap="400">
-                            <Text variant="headingMd" as="p">
-                              Star Color
-                            </Text>
-                            <Text variant="headingsm" as="p">
-                              {starColor}
-                            </Text>
-                          </Box>
-                        </InlineStack>
-                      </Box>
-                      <Box padding="200">
-                        <InlineStack>
-                          <ColorPickerCircle type="text" />
-                          <Box gap="400">
-                            <Text variant="headingMd" as="p">
-                              Text Color
-                            </Text>
-                            <Text variant="headingsm" as="p">
-                              {textColor}
-                            </Text>
-                          </Box>
-                        </InlineStack>
-                      </Box>
-                      <Box padding="200">
-                        <InlineStack>
-                          <ColorPickerCircle type="formBackgroundColor" />
-                          <Box gap="400">
-                            <Text variant="headingMd" as="p">
-                              Form background color
-                            </Text>
-                            <Text variant="headingsm" as="p">
-                              {formBackgroundColor}
-                            </Text>
-                          </Box>
-                        </InlineStack>
-                      </Box>
-                      <Box padding="200">
-                        <InlineStack>
-                          <ColorPickerCircle type="button" />
-                          <Box gap="400">
-                            <Text variant="headingMd" as="p">
-                              Button Color
-                            </Text>
-                            <Text variant="headingsm" as="p">
-                              {buttonColor}
-                            </Text>
-                          </Box>
-                        </InlineStack>
-                      </Box>
-                      <Box padding="200">
-                        <InlineStack>
-                          <ColorPickerCircle type="buttonTextColor" />
-                          <Box gap="400" padding="200">
-                            <Text variant="headingMd" as="p">
-                              Butoon Text Color
-                            </Text>
-                            <Text variant="headingsm" as="p">
-                              {buttonTextColor}
-                            </Text>
-                          </Box>
-                        </InlineStack>
-                      </Box>
-                      <Box padding="200">
-                        <InlineStack>
-                          <ColorPickerCircle type="overlayColor" />
-                          <Box gap="400" padding="200">
-                            <Text variant="headingMd" as="p">
-                              In-store page overlay color
-                            </Text>
-                            <Text variant="headingsm" as="p">
-                              {overlayColor}
-                            </Text>
-                          </Box>
-                        </InlineStack>
-                      </Box>{" "}
+                      {setting == null ? (
+                        <Spinner
+                          accessibilityLabel="Spinner example"
+                          size="large"
+                        />
+                      ) : (
+                        setting?.color?.map((color) => {
+                          const crrColor = getHexCode(color.type);
+                          return (
+                            <Box key={color._id} padding="200">
+                              <InlineStack>
+                                <ColorPickerCircle
+                                  hexCodeColor={crrColor}
+                                  type={color.type}
+                                  saveBarId="review_widgets"
+                                />
+                                <Box gap="400">
+                                  <Text variant="headingMd" as="p">
+                                    {color.settingName}
+                                  </Text>
+                                  <Text variant="headingsm" as="p">
+                                    {crrColor}
+                                  </Text>
+                                </Box>
+                              </InlineStack>
+                            </Box>
+                          );
+                        })
+                      )}
                     </>
                   )}
                 </Box>
-
-                <CollapsibleBox id="theme-collapsible" boxName="Theme">
-                  {" "}
-                  <Box gap="400">
-                    <InlineStack>
-                      <Box
-                        borderStyle="solid"
-                        borderBlockStartWidth="025"
-                        padding="200"
-                        borderColor="border-brand"
-                        gap="200"
-                        width="100%"
-                      >
-                        <Checkbox
-                          label="show date"
-                          checked={dateChecked}
-                          onChange={handleChange}
-                        />
-                      </Box>
-                    </InlineStack>
-                  </Box>{" "}
-                </CollapsibleBox>
-
-                <CollapsibleBox id="text-collapsible" boxName="Text">
-                  {" "}
-                  <Box gap="400">
-                    <InlineStack>
-                      <Box
-                        borderStyle="solid"
-                        borderBlockStartWidth="025"
-                        padding="200"
-                        borderColor="border-brand"
-                        gap="200"
-                        width="100%"
-                      >
-                        <TextField
-                          label="Widget title"
-                          value={state.Widget_title}
-                          id="Widget_title"
-                          onChange={handleTextChnge}
-                          autoComplete="off"
-                          placeholder="Customer Reviews"
-                        />
-                      </Box>
-
-                      <Box
-                        borderStyle="solid"
-                        borderBlockStartWidth="025"
-                        padding="200"
-                        borderColor="border-brand"
-                        gap="200"
-                        width="100%"
-                      >
-                        <TextField
-                          label="Average rating text"
-                          value={state.Average_rating_text}
-                          id="Average_rating_text"
-                          onChange={handleTextChnge}
-                          autoComplete="off"
-                          type="number"
-                          placeholder="{{ average_rating }} out of 5"
-                          min="0"
-                          max="5"
-                        />
-                      </Box>
-
-                      <Box
-                        borderStyle="solid"
-                        borderBlockStartWidth="025"
-                        padding="200"
-                        borderColor="border-brand"
-                        gap="200"
-                        width="100%"
-                      >
-                        <TextField
-                          label="Button Text"
-                          value={state.button_text}
-                          id="button_text"
-                          onChange={handleTextChnge}
-                          autoComplete="off"
-                          placeholder="Write a review"
-                        />
-                      </Box>
-                    </InlineStack>
-                  </Box>{" "}
-                </CollapsibleBox>
               </BlockStack>
             </Box>
 
@@ -1578,6 +1432,9 @@ export default function ReviewWidgets() {
 
               {selected == 0 ? (
                 <Box
+                  onClick={() => {
+                    handleFromOpem;
+                  }}
                   style={{
                     background: buttonColor,
                     textAlign: "center",
@@ -1589,7 +1446,7 @@ export default function ReviewWidgets() {
                     cursor: "pointer",
                   }}
                 >
-                  {state.button_text}
+                  {state["Button Text"]}
                 </Box>
               ) : (
                 <BlockStack gap="400">
@@ -1597,19 +1454,55 @@ export default function ReviewWidgets() {
                     <Banner title="This is a sample preview. Reviews submitted won't be saved." />
                   </Box>
 
-                  {!isImageFrom ? (
+                  {pageCount == 0 || pageCount == 2 ? (
                     <BlockStack gap="400">
                       {" "}
-                      <Text alignment="center" variant="heading2xl">
-                        How would you rate this product?
-                      </Text>
-                      <Text alignment="center" variant="headingMd" tone="base">
-                        We would love it if you would share a bit about your
-                        experience.
-                      </Text>
-                      <Text alignment="center" variant="headingLg">
-                        Yellow Snowboard
-                      </Text>
+                      {pageCount == 2 ? (
+                        <>
+                          <Text alignment="center" variant="heading2xl">
+                            Thanks for your review!
+                          </Text>
+                          <Text
+                            alignment="center"
+                            variant="headingMd"
+                            tone="base"
+                          >
+                            We are processing it and it will appear on the store
+                            soon. You can edit review by logging into your
+                            Judge.me profile.
+                          </Text>
+                          <Text alignment="center" variant="headingLg">
+                            Would you like to share your experience of shopping
+                            with us?
+                          </Text>
+
+                          <Text
+                            alignment="center"
+                            variant="headingMd"
+                            tone="base"
+                          >
+                            We value your feedback and use it to improve. Please
+                            share any thoughts or suggestions you have.
+                          </Text>
+                        </>
+                      ) : (
+                        <>
+                          <Text alignment="center" variant="heading2xl">
+                            How would you rate this product?
+                          </Text>
+                          <Text
+                            alignment="center"
+                            variant="headingMd"
+                            tone="base"
+                          >
+                            We would love it if you would share a bit about your
+                            experience.
+                          </Text>
+                          <Text alignment="center" variant="headingLg">
+                            Yellow Snowboard
+                          </Text>
+                        </>
+                      )}
                       <InlineStack gap="050" align="center">
                         {[...Array(5)].map((_, index) => (
                           <Box
@@ -1631,64 +1524,28 @@ export default function ReviewWidgets() {
                         ))}
                       </InlineStack>
                     </BlockStack>
-                  ) : showThankYouPage ? (
-                    <BlockStack gap="400" alignment="center">
-                      <Icon
-                        source="https://cdn-icons-png.flaticon.com/512/845/845646.png"
-                        color="base"
-                        backdrop={false}
-                        style={{ width: "100px", height: "100px" }}
-                      />
-                      <Text alignment="center" variant="headingLg">
-                        Thank you for your review!
-                      </Text>
-                      <Text alignment="center" variant="headingMd" tone="base">
-                        We appreciate you taking the time to provide feedback.
-                      </Text>
-                    </BlockStack>) : (
-                    <BlockStack>
-                      <Text alignment="center" variant="headingLg" tone="base">
-                        Share a picture
-                      </Text>
-                      <Text alignment="center" variant="headingsm">
-                        Upload a photo to support your review.
-                      </Text>
-                    </BlockStack>
+                  ) : (
+                    pageCount == 1 && (
+                      <BlockStack>
+                        <Text
+                          alignment="center"
+                          variant="headingLg"
+                          tone="base"
+                        >
+                          Share a picture
+                        </Text>
+                        <Text alignment="center" variant="headingsm">
+                          Upload a photo to support your review.
+                        </Text>
+                      </BlockStack>
+                    )
                   )}
-                  {/* // <BlockStack>
-                    //   <Text alignment="center" variant="headingLg" tone="base">
-                    //     Share a picture
-                    //   </Text>
-                    //   <Text alignment="center" variant="headingsm">
-                    //     Upload a photo to support your review.
-                    //   </Text>
-                    // </BlockStack> */}
-
-
-                  {/* {!isImageFrom && showThankYouPage && (
-
-                    <BlockStack gap="400" alignment="center">
-                      <Icon
-                        source="https://cdn-icons-png.flaticon.com/512/845/845646.png"
-                        color="base"
-                        backdrop={false}
-                        style={{ width: "100px", height: "100px" }}
-                      />
-                      <Text alignment="center" variant="headingLg">
-                        Thank you for your review!
-                      </Text>
-                      <Text alignment="center" variant="headingMd" tone="base">
-                        We appreciate you taking the time to provide feedback.
-                      </Text>
-                    </BlockStack>
-                  )} */}
-
 
                   <Box padding="400">
                     {isFromOpen && (
                       <Form>
                         <FormLayout>
-                          {!isImageFrom ? (
+                          {pageCount == 0 ? (
                             <TextField
                               value={userReview}
                               onChange={handleReviewChange}
@@ -1707,7 +1564,7 @@ export default function ReviewWidgets() {
                               }
                             />
                           ) : (
-                            <DropZoneWithImageFileUpload />
+                            pageCount == 1 && <DropZoneWithImageFileUpload />
                           )}
 
                           <Box
@@ -1723,7 +1580,7 @@ export default function ReviewWidgets() {
                               width: "100%",
                             }}
                           >
-                            Next
+                            {pageCount == 2 ? "Go to store" : "Next"}
                           </Box>
                         </FormLayout>
                       </Form>

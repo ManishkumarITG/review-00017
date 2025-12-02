@@ -23,9 +23,10 @@ export const create = async (shopDomain, settingData) => {
   }
 };
 
-export const getAll = async (req, res) => {
+export const getAll = async () => {
   try {
     const data = await getAllSettings();
+    console.log(data);
     return responseHandler(STATUS_CODE.OK, "ok", data);
   } catch (error) {
     responseHandler(

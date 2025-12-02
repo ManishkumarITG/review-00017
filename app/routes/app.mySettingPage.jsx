@@ -28,58 +28,60 @@ function MySettingPage() {
         <InlineGrid
           gap={{ xs: "100", sm: "200", md: "300", lg: "400", xl: "500" }}
           columns={{
-            xs: 1,
+            xs: 2,
             md: ["oneThird", "twoThirds"],
             lg: ["oneThird", "twoThirds"],
           }}
         >
           <Card>
-            <Box>
-              <Box padding="400" width="100%">
-                <Text as="p">REVIEW DISPLAY</Text>
+            <Box minHeight="100vh">
+              <Box>
+                <Box padding="400" width="100%">
+                  <Text as="p">REVIEW DISPLAY</Text>
 
-                <Box
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "5px",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => {
-                    handlePageChange("widgets");
-                  }}
-                >
-                  <StarIcon width={25} />
-                  <Text variant="headingMd" as="h1" tone="base">
-                    Widgets
-                  </Text>
+                  <Box
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      handlePageChange("widgets");
+                    }}
+                  >
+                    <StarIcon width={25} />
+                    <Text variant="headingMd" as="h1" tone="base">
+                      Widgets
+                    </Text>
+                  </Box>
                 </Box>
+                <Divider />
               </Box>
-              <Divider />
-            </Box>
 
-            <Box>
-              <Box padding="400" width="100%">
-                <Text as="p">GENERAL</Text>
+              <Box>
+                <Box padding="400" width="100%">
+                  <Text as="p">GENERAL</Text>
 
-                <Box
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "5px",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => {
-                    handlePageChange("branding");
-                  }}
-                >
-                  <PaintBrushRoundIcon width={25} />
-                  <Text variant="headingMd" as="h1" tone="base">
-                    Branding
-                  </Text>
+                  <Box
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      handlePageChange("branding");
+                    }}
+                  >
+                    <PaintBrushRoundIcon width={25} />
+                    <Text variant="headingMd" as="h1" tone="base">
+                      Branding
+                    </Text>
+                  </Box>
                 </Box>
+                <Divider />
               </Box>
-              <Divider />
             </Box>
           </Card>{" "}
           {isPage == "widgets" ? <Widget /> : <Branding />}

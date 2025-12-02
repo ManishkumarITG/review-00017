@@ -22,7 +22,7 @@ import {
 } from "@shopify/polaris";
 
 import { Modal, TitleBar, useAppBridge } from "@shopify/app-bridge-react";
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import "@shopify/polaris/build/esm/styles.css";
 
 import {
@@ -44,7 +44,7 @@ function IndexFiltersDefaultExample() {
 
   const starColor = getHexCode("star");
 
-  const [filteredOrders, setFilteredOrders] = useState(reviews);
+  const [filteredOrders, setFilteredOrders] = useState([]);
   const [selectedData, setSelectedData] = useState(0);
   const [_taggedWith, setTaggedWith] = useState("");
   const [queryValue, setQueryValue] = useState("");
@@ -62,6 +62,11 @@ function IndexFiltersDefaultExample() {
   const [formActive, setFormActive] = useState(false);
   const [sortSelected, setSortSelected] = useState(["order asc"]);
   const { mode, setMode } = useSetIndexFiltersMode();
+
+  useEffect(() => {
+    setFilteredOrders(reviews);
+  }, []);
+
   const [itemStrings, setItemStrings] = useState([
     "All Reviews",
     "Product Reviews",
@@ -127,10 +132,12 @@ function IndexFiltersDefaultExample() {
   const filterOrders = useCallback(
     (query, currentTab) => {
       let filteredByQuery = filteredOrders;
+      console.log("1", filteredOrders, "2", reviews);
+      console.log("frist data", filteredByQuery);
       const lowerCaseQuery = query ? query.toLowerCase() : "";
 
       if (lowerCaseQuery) {
-        filteredByQuery = reviews.filter((order) => {
+        filteredByQuery = filteredOrders.filter((order) => {
           const matchesName = order.userName
             .toLowerCase()
             .includes(lowerCaseQuery);
@@ -144,8 +151,11 @@ function IndexFiltersDefaultExample() {
       const tabName = itemStrings[currentTab];
       let finalFilteredOrders = filteredByQuery;
 
+      console.log("tapname", tabName, filteredByQuery, currentTab, query);
+
       switch (tabName) {
         case "All Reviews":
+          finalFilteredOrders = filteredOrders;
           break;
         case "Product Reviews":
           setCurrentTab(1);
@@ -184,10 +194,10 @@ function IndexFiltersDefaultExample() {
 
       setFilteredOrders(finalFilteredOrders);
     },
-    [reviews, itemStrings],
+    [filteredOrders, itemStrings],
   );
 
-  const allReviewsContent = ` ${"All Reviews (" + reviews.length + ")"}`;
+  const allReviewsContent = ` ${"All Reviews (" + filteredOrders.length + ")"}`;
 
   const tabs = itemStrings.map((item, index) => ({
     content: index === 0 ? allReviewsContent : item,
@@ -234,6 +244,11 @@ function IndexFiltersDefaultExample() {
     itemRenderLimit + 10,
   );
 
+  console.log(
+    "--------------------------- data in reviewpage",
+    splitedfilteredOrders,
+  );
+
   const resourceName = {
     singular: "splitedfilteredOrder",
     plural: "splitedfilteredOrders",
@@ -242,7 +257,7 @@ function IndexFiltersDefaultExample() {
   const { selectedResources, allResourcesSelected, handleSelectionChange } =
     useIndexResourceState(splitedfilteredOrders);
 
-  const rowMarkup = splitedfilteredOrders.map(
+  const rowMarkup = splitedfilteredOrders?.map(
     ({ id, userName, item, time, Rating, comment, tag }, index) => (
       <IndexTable.Row
         id={id}
@@ -345,13 +360,13 @@ function IndexFiltersDefaultExample() {
                     {
                       content: "Delete",
                       onAction: () => {
-                        reviews.filter((review) => {
+                        filteredOrders.filter((review) => {
                           if (review.id === id) {
-                            const index = reviews.indexOf(review);
+                            const index = filteredOrders.indexOf(review);
                             if (index > -1) {
-                              reviews.splice(index, 1);
+                              filteredOrders.splice(index, 1);
                             }
-                            setDataLength(reviews.length);
+                            setDataLength(filteredOrders.length);
                           }
                         });
                       },
@@ -531,7 +546,7 @@ function IndexFiltersDefaultExample() {
           </Card>
         </InlineGrid>
 
-        {reviews.length > 10 && (
+        {filteredOrders.length > 10 && (
           <Card gap={200}>
             <InlineStack gap="800" align="space-between">
               <Button

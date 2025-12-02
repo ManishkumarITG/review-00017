@@ -2,6 +2,7 @@ import Setting from "../models/setting.model.js";
 // Create Setting
 export const createSetting = async (shopDomain, data) => {
   const isShop = await Setting.exists({ shop: shopDomain });
+  console.log("----------------------------------- is Shop" , isShop)
   if (isShop) {
     throw new Error("shop is all rady exsit");
   }
@@ -20,8 +21,9 @@ export const getAllSettings = async () => {
 // Get Setting by ID
 export const getSettingByTitle = async (shopDomain, name) => {
   const { title } = name;
-  console.log(title, shopDomain);
-  return await Setting.findOne({ shop: shopDomain, title: title });
+  const setting = await Setting.findOne({ shop: shopDomain, title: title });
+  console.log("------------------------------ setting", setting);
+  return setting.toObject();
 };
 
 // Update Setting

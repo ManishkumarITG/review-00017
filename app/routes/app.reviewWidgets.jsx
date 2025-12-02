@@ -60,6 +60,8 @@ export default function ReviewWidgets() {
     { rating: 1, pepole: 0 },
   ];
 
+  const totalReview = 15;
+
   const [active, setActive] = useState(null);
 
   const [dataBtn, setdataBtn] = useState(null);
@@ -311,13 +313,13 @@ export default function ReviewWidgets() {
                 </BlockStack>
               </InlineStack>
               <Text alignment="center" as="span">
-                Based on 15 reviews
+                Based on {totalReview} reviews
               </Text>
 
               {review.length !== 0 && (
                 <Box padding="400">
                   {rattingArray.map((v) => {
-                    const ratingNumber = (v.rating / 5) * 100;
+                    const ratingNumber = (v.pepole / totalReview) * 100;
                     return (
                       <InlineStack
                         blockAlign="cemter"

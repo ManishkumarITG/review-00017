@@ -6,6 +6,11 @@ const routes = [
   route("/api/routes/test/*", "./api/routes/test.$.js"),
   route("/api/routes/setting/*", "./api/routes/setting.$.js"),
   route("/api/routes/reviewproduct/*", "./api/routes/reviewproduct.$.js"),
+  route("/api/routes/app/setting/*", "./api/routes/app/setting.$.js"),
+  route(
+    "/api/routes/extensions/setting/*",
+    "./api/routes/extensions/setting.$.js",
+  ),
   ...(await flatRoutes()),
 ];
 
