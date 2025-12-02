@@ -37,6 +37,7 @@ export const ColorProvider = ({ children }) => {
   const [lodaing, setLodaing] = useState(null);
   const [dateChecked, setDateChecked] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [shop, setShop] = useState("");
 
   const [colors, setColors] = useState({});
 
@@ -152,7 +153,7 @@ export const ColorProvider = ({ children }) => {
   const handleSave = async (islodaing, savBarId) => {
     setLodaing(islodaing);
     try {
-      const res = await fetch("/api/routes/setting/updateByTitle", {
+      const res = await fetch("/api/routes/app/setting/updateByTitle", {
         method: "POST",
         body: JSON.stringify({
           title: "Review Widget Setting",
@@ -251,7 +252,9 @@ export const ColorProvider = ({ children }) => {
       const colorSettingData = await getColorSetting();
 
       const settigngObj = colorSettingData.data.sectionSettings;
+      const newShop = colorSettingData.data.shop;
 
+      setShop(newShop);
       setSetting(settigngObj);
 
       // add color
@@ -290,6 +293,7 @@ export const ColorProvider = ({ children }) => {
     dispatch,
     handleDiscard,
     lodaing,
+    shop,
   };
 
   return (

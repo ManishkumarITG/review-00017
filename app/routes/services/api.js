@@ -1,6 +1,6 @@
 export const getColorSetting = async () => {
   try {
-    const res = await fetch("/api/routes/setting/getByTitle", {
+    const res = await fetch("/api/routes/app/setting/getByTitle", {
       method: "POST",
       body: JSON.stringify({
         title: "Review Widget Setting",
@@ -17,7 +17,7 @@ export const getColorSetting = async () => {
 
 export const createSettings = async () => {
   try {
-    const res = await fetch("/api/routes/setting/create", {
+    const res = await fetch("/api/routes/app/setting/create", {
       method: "POST",
       body: JSON.stringify({
         title: "Review Widget Setting",

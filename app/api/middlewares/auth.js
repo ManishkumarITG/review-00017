@@ -4,6 +4,9 @@ export const authenticateUser = async (req) => {
   try {
     const url = new URL(req.url);
     const queryShop = url.searchParams.get("shop");
+    const path = url.pathname.split("/").pop();
+
+    console.log("----------------------------------path", path);
 
     // Determine session and admin details based on queryShop presence
     const { session, admin } = queryShop
@@ -17,7 +20,7 @@ export const authenticateUser = async (req) => {
     req.currentShop = shop;
     req.session = session;
     req.admin = admin;
-    return { status: true };
+    return { status: true, shop, session, path };
   } catch (error) {
     console.error(`Catch Error in authenticateUser:`, error);
     return { status: false, message: `Shop `, httpCode: 500 };
