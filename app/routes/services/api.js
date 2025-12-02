@@ -74,6 +74,25 @@ export const createSettings = async () => {
               isvalue: "hidden",
               isChecked: true,
             },
+            {
+              type: "text",
+              settingName: "Screen title",
+              isvalue: "How would you rate this product?",
+              isChecked: false,
+            },
+            {
+              type: "text",
+              settingName: "Introduction",
+              isvalue:
+                "We would love it if you would share a bit about your experience.",
+              isChecked: false,
+            },
+            {
+              type: "text",
+              settingName: "display name",
+              isvalue: "Yellow Snowboard",
+              isChecked: false,
+            },
           ],
         },
       }),

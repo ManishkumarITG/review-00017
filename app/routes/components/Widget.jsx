@@ -15,7 +15,7 @@ export default function Widget() {
   return (
     <AppProvider>
       <Page title="Widget" fullWidth={true}>
-        <InlineGrid gap="400" columns={{ xs: 1, sm: 2, md: 2, lg: 2, xl: 2 }}>
+        <InlineGrid gap="400" columns={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2 }}>
           {simplifiedMediaCardData.map((card) => (
             <MediaCard
               key={card.key}

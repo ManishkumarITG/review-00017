@@ -342,6 +342,9 @@ export default function ReviewWidgets() {
               )}
 
               <Box
+                onClick={() => {
+                  nevigate("/app/writeReview");
+                }}
                 style={{
                   background: buttonColor,
                   textAlign: "center",

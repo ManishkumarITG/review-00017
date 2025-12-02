@@ -15,6 +15,7 @@ import {
   Icon,
   Form,
   FormLayout,
+  Spinner,
 } from "@shopify/polaris";
 import "@shopify/polaris/build/esm/styles.css";
 import { useColorTheme } from "./ColorContext";
@@ -28,6 +29,7 @@ import ColorPickerCircle from "./components/ColorPicker.jsx";
 import DropZoneWithImageFileUpload from "./components/ImageDrop.jsx";
 import { useNavigate } from "react-router";
 import { SaveBar } from "@shopify/app-bridge-react";
+import CollapsibleBox from "./components/Collapsible";
 
 const colorInitialState = {
   defaultColor: true,
@@ -70,6 +72,7 @@ export default function ReviewWidgets() {
     handleDiscard,
     lodaing,
     state,
+    dispatch,
   } = useColorTheme();
 
   // import all hex code
@@ -103,6 +106,18 @@ export default function ReviewWidgets() {
     setReqData(false);
     setUserReview("");
   };
+
+  const handleTextChnge = useCallback((newValue, id) => {
+    dispatch({
+      field: id,
+      value: newValue,
+    });
+    if (id !== "Button Text") {
+      setSelected(1);
+    }
+    shopify.saveBar.show("review_widgets");
+    setIsChnage(true);
+  }, []);
 
   const handleReviewChange = useCallback((value) => setUserReview(value), []);
 
@@ -227,6 +242,48 @@ export default function ReviewWidgets() {
                     </>
                   )}
                 </Box>
+
+                <CollapsibleBox id="write_a_review_page" boxName="text">
+                  {" "}
+                  <Box gap="400">
+                    {setting == null ? (
+                      <Spinner
+                        accessibilityLabel="Spinner example"
+                        size="large"
+                      />
+                    ) : (
+                      setting?.text?.map((text) => {
+                        const titelValue = text.settingName;
+                        return (
+                          ((text.type == "text" &&
+                            text.settingName == "Screen title") ||
+                            text.settingName == "Introduction" ||
+                            text.settingName == "display name" ||
+                            text.settingName == "Button Text") && (
+                            <Box
+                              key={text._id}
+                              borderStyle="solid"
+                              borderBlockStartWidth="025"
+                              padding="200"
+                              borderColor="border-brand"
+                              gap="200"
+                              width="100%"
+                            >
+                              <TextField
+                                label={text.settingName}
+                                value={state[titelValue]}
+                                id={text.settingName}
+                                onChange={handleTextChnge}
+                                autoComplete="off"
+                                placeholder="Customer Reviews"
+                              />
+                            </Box>
+                          )
+                        );
+                      })
+                    )}
+                  </Box>
+                </CollapsibleBox>
               </BlockStack>
             </Box>
 
@@ -301,18 +358,17 @@ export default function ReviewWidgets() {
                       ) : (
                         <>
                           <Text alignment="center" variant="heading2xl">
-                            How would you rate this product?
+                            {state["Screen title"]}
                           </Text>
                           <Text
                             alignment="center"
                             variant="headingMd"
                             tone="base"
                           >
-                            We would love it if you would share a bit about your
-                            experience.
+                            {state["Introduction"]}
                           </Text>
                           <Text alignment="center" variant="headingLg">
-                            Yellow Snowboard
+                            {state["display name"]}
                           </Text>
                         </>
                       )}
