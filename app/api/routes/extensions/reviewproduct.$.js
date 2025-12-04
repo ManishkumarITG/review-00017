@@ -4,6 +4,7 @@ import {
   getReviews,
   updatereview,
   getAllReviews,
+  getRatingSummary,
 } from "../../controller/review.controller";
 
 import { authenticateUser } from "../../middlewares/auth";
@@ -49,6 +50,8 @@ export const loader = async ({ request }) => {
           shop,
           idType,
         });
+      case "ratingSummary":
+        return await getRatingSummary(shop);
 
       default:
         return responseHandler(

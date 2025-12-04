@@ -123,3 +123,21 @@ export const updatereviewbyId = async (shop, payload) => {
 
   return updated.toObject();
 };
+
+export const getRatingSummaryService = async (shop) => {
+  const reviews = await Review.find({ shop });
+
+  const summary = [];
+
+  for (let r = 5; r >= 1; r--) {
+    summary.push({
+      rating: r,
+      pepole: reviews.filter((x) => x.rating === r).length,
+    });
+  }
+
+  return {
+    reviews: summary,
+    totalReview: reviews.length,
+  };
+};

@@ -21,11 +21,13 @@ import { useColorTheme } from "./ColorContext";
 import { useCallback, useState } from "react";
 import { ArrowLeftIcon, ChevronDownIcon } from "@shopify/polaris-icons";
 import CustomProgressBar from "./components/CustomProgressBar.jsx";
-import { reviews } from "./data/reviewData.js";
+import { rattingArray, reviews } from "./data/reviewData.js";
 import ColorPickerCircle from "./components/ColorPicker.jsx";
 import CollapsibleBox from "./components/Collapsible.jsx";
+import Loding from "./components/Loding.jsx";
 import { useNavigate } from "react-router";
 import { SaveBar } from "@shopify/app-bridge-react";
+import { getAllReviews, ratingSummary } from "./services/api.js";
 
 export default function ReviewWidgets() {
   // usenevigate for back to setting page
@@ -52,16 +54,6 @@ export default function ReviewWidgets() {
   const buttonColor = getHexCode("button");
   const buttonTextColor = getHexCode("buttonTextColor");
 
-  const rattingArray = [
-    { rating: 5, pepole: 8 },
-    { rating: 4, pepole: 3 },
-    { rating: 3, pepole: 1 },
-    { rating: 2, pepole: 3 },
-    { rating: 1, pepole: 0 },
-  ];
-
-  const totalReview = 15;
-
   const [active, setActive] = useState(null);
 
   const [dataBtn, setdataBtn] = useState(null);
@@ -70,8 +62,37 @@ export default function ReviewWidgets() {
 
   const [btnText, setBtnText] = useState("Sempal Data");
 
+  const [loding, setLoding] = useState(false);
+
+  const [rattingSummary, setRattingSummary] = useState(rattingArray.reviews);
+
+  const [totalReview, setTotalReview] = useState(rattingArray.totalReview);
+
+  const summary = async () => {
+    try {
+      const data = await ratingSummary();
+      console.log("data", data);
+      setRattingSummary(data.data.reviews);
+      setTotalReview(data.data.totalReview);
+    } catch (error) {}
+  };
+
   const toggleDataBtn = (id) => () => {
     setdataBtn((activeId) => (activeId !== id ? id : null));
+  };
+
+  const handleRealData = async () => {
+    try {
+      setLoding(true);
+      const resopanse = await getAllReviews();
+      await summary();
+      console.log(resopanse);
+      setReview(resopanse);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoding(false);
+    }
   };
 
   const handleTextChnge = useCallback((newValue, id) => {
@@ -267,6 +288,7 @@ export default function ReviewWidgets() {
                       <Button
                         onClick={() => {
                           setReview(reviews);
+                          setRattingSummary(rattingArray.reviews);
                           setBtnText("Sempal Data");
                         }}
                       >
@@ -274,7 +296,7 @@ export default function ReviewWidgets() {
                       </Button>
                       <Button
                         onClick={() => {
-                          setReview([]);
+                          handleRealData();
                           setBtnText("Real Data");
                         }}
                       >
@@ -316,28 +338,32 @@ export default function ReviewWidgets() {
                 Based on {totalReview} reviews
               </Text>
 
-              {review.length !== 0 && (
+              {rattingSummary.length !== 0 && (
                 <Box padding="400">
-                  {rattingArray.map((v) => {
-                    const ratingNumber = (v.pepole / totalReview) * 100;
-                    return (
-                      <InlineStack
-                        blockAlign="cemter"
-                        direction="row"
-                        as="div"
-                        align="center"
-                        gap="200"
-                        key={v.rating}
-                      >
-                        <Ratting rating={v.rating} color={starColor} />
-                        <CustomProgressBar
-                          progress={ratingNumber}
-                          color={starColor}
-                        />
-                        <Text>{v.pepole}</Text>
-                      </InlineStack>
-                    );
-                  })}
+                  {!loding ? (
+                    rattingSummary.map((v) => {
+                      const ratingNumber = (v.pepole / totalReview) * 100;
+                      return (
+                        <InlineStack
+                          blockAlign="cemter"
+                          direction="row"
+                          as="div"
+                          align="center"
+                          gap="200"
+                          key={v.rating}
+                        >
+                          <Ratting rating={v.rating} color={starColor} />
+                          <CustomProgressBar
+                            progress={ratingNumber}
+                            color={starColor}
+                          />
+                          <Text>{v.pepole}</Text>
+                        </InlineStack>
+                      );
+                    })
+                  ) : (
+                    <Loding />
+                  )}
                 </Box>
               )}
 
@@ -395,36 +421,42 @@ export default function ReviewWidgets() {
               </Popover>
 
               <BlockStack>
-                {review.length !== 0 &&
-                  review.map((review) => {
+                {!loding ? (
+                  review.length !== 0 &&
+                  review.map((v) => {
+                    const formattedDate = v.updatedAt;
+                    const tag = v.email.split("@")[0];
                     return (
-                      <Box key={review.userName} padding="100">
+                      <Box key={v.name} padding="100">
                         <InlineStack gap="100">
                           <Avatar customer name="Farrah" />
 
                           <Box>
-                            <Ratting color={starColor} rating={review.Rating} />
+                            <Ratting color={starColor} rating={v.rating} />
                             <Box
                               as="legend"
                               style={{
                                 color: starColor,
                               }}
                             >
-                              {review.userName}
+                              {v.name}
                             </Box>
                           </Box>
 
-                          <Box>{dateChecked && review.date}</Box>
+                          <Box>{dateChecked && formattedDate}</Box>
                         </InlineStack>
 
                         <Box style={{ color: textColor }} as="legend">
-                          {review.tag}
+                          {tag}
                         </Box>
 
-                        <Text as="p">{review.comment}</Text>
+                        <Text as="p">{v.description}</Text>
                       </Box>
                     );
-                  })}
+                  })
+                ) : (
+                  <Loding />
+                )}
               </BlockStack>
             </Box>
           </InlineGrid>

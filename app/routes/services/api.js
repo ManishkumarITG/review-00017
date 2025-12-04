@@ -12,6 +12,7 @@ export const getColorSetting = async () => {
     return data;
   } catch (error) {
     console.log("color setting fetch error", error);
+    return { messeage: error.messeage, data: null };
   }
 };
 
@@ -103,6 +104,7 @@ export const createSettings = async () => {
     return data;
   } catch (error) {
     console.log("color setting fetch error", error);
+    return { messeage: error.messeage, data: null };
   }
 };
 
@@ -111,9 +113,9 @@ export const getAllReviews = async () => {
     const res = await fetch("/api/routes/app/reviewproduct/getAllReviews");
     const resData = await res.json();
     const data = resData;
-    return data;
+    return data.data;
   } catch (error) {
-    console.log("get All reviews error", error);
+    return [];
   }
 };
 
@@ -127,6 +129,7 @@ export const getReviewsByType = async (type, limit, page) => {
     return data.data.items;
   } catch (error) {
     console.log("get reviews error", error);
+    return [];
   }
 };
 
@@ -139,6 +142,17 @@ export const updatedReview = async (data) => {
     const resData = await res.json();
     return resData.data;
   } catch (error) {
-    console.log("get reviews error", error);
+    return [];
+  }
+};
+
+export const ratingSummary = async () => {
+  try {
+    const res = await fetch("/api/routes/app/reviewproduct/ratingSummary");
+    const resData = await res.json();
+    const data = resData;
+    return data;
+  } catch (error) {
+    return [];
   }
 };
