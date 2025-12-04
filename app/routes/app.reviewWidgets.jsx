@@ -18,7 +18,7 @@ import {
 import "@shopify/polaris/build/esm/styles.css";
 import Ratting from "./components/Ratting.jsx";
 import { useColorTheme } from "./ColorContext";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { ArrowLeftIcon, ChevronDownIcon } from "@shopify/polaris-icons";
 import CustomProgressBar from "./components/CustomProgressBar.jsx";
 import { reviews } from "./data/reviewData.js";

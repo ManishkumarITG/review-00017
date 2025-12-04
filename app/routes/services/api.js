@@ -120,7 +120,7 @@ export const getAllReviews = async () => {
 export const getReviewsByType = async (type, limit, page) => {
   try {
     const res = await fetch(
-      `/api/routes/app/reviewproduct/reviews?idTYpe=${type}&limit=${limit}&page=${page}`,
+      `/api/routes/app/reviewproduct/reviews?idType=${type}&limit=${limit}&page=${page}`,
     );
     const resData = await res.json();
     const data = resData;

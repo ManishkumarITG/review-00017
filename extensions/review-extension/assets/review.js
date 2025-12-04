@@ -122,12 +122,12 @@ document.addEventListener("DOMContentLoaded", () => {
     form.querySelectorAll(".error-msg").forEach((el) => (el.textContent = ""));
     const shopDamian = window.location.host;
     const id = productIdliquid || shopDamian;
-    const idTYpe = productIdliquid ? "prodcut" : "store";
+    const idTYpe = productIdliquid ? "product" : "store";
     console.log("id , type", id, idTYpe);
 
     try {
       const datatoSend = {
-        author: payload.Name,
+        name: payload.Name,
         shop: shopDamian,
         targetId: id,
         idType: idTYpe,
@@ -135,6 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
         rating: payload.Rating,
         description: payload.Discription,
         images: "null",
+        customerId: "123",
       };
       const baseUrl = window.location.origin;
 

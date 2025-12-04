@@ -11,6 +11,7 @@ const routes = [
     "./api/routes/app/reviewproduct.$.js",
   ),
   route("/api/routes/app/setting/*", "./api/routes/app/setting.$.js"),
+  route("/api/routes/app/user/*", "./api/routes/app/user.$.js"),
 
   // extensions routes
   route(
@@ -21,6 +22,8 @@ const routes = [
     "/api/routes/extensions/reviewproduct/*",
     "./api/routes/extensions/reviewproduct.$.js",
   ),
+
+  route("/api/routes/extensions/user/*", "./api/routes/extensions/user.$.js"),
   ...(await flatRoutes()),
 ];
 

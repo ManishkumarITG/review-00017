@@ -55,8 +55,6 @@ function IndexFiltersDefaultExample() {
   const [_taggedWith, setTaggedWith] = useState("");
   const [queryValue, setQueryValue] = useState("");
   const [selectedTab, setSelectedTab] = useState(0);
-  const [selectedButtons, setSelectedButtons] = useState([]);
-  const [pinButton, setPinButton] = useState([]);
   const [_active, setActive] = useState(null);
   const [openPopoverId, setOpenPopoverId] = useState(null);
   const [openMenu, setOpenMenu] = useState(null);
@@ -117,13 +115,6 @@ function IndexFiltersDefaultExample() {
     }));
   };
 
-  //Like button
-  const toggleButton = (id) => {
-    setSelectedButtons((prev) =>
-      prev.includes(id) ? prev.filter((btnId) => btnId !== id) : [...prev, id],
-    );
-  };
-
   // Form toggle
   const handleActionClick = useCallback(
     (id) => (event) => {
@@ -132,13 +123,6 @@ function IndexFiltersDefaultExample() {
     },
     [],
   );
-
-  // Pin button
-  const togglePinButton = (id) => {
-    setPinButton((prev) =>
-      prev.includes(id) ? prev.filter((btnId) => btnId !== id) : [...prev, id],
-    );
-  };
 
   // Popover toggles
   const togglePopover = (id) => {
@@ -207,8 +191,6 @@ function IndexFiltersDefaultExample() {
     actions: [],
   }));
 
-  const onHandleCancel = () => {};
-
   const handleFiltersQueryChange = useCallback(
     (value) => {
       setQueryValue(value);
@@ -269,9 +251,20 @@ function IndexFiltersDefaultExample() {
     );
   });
 
-  const rowMarkup = splitedfilteredOrders?.map(
+  const rowMarkup = reviews?.map(
     (
-      { _id, userName, item, time, rating, description, email, spam },
+      {
+        _id,
+        userName,
+        item,
+        time,
+        rating,
+        description,
+        email,
+        spam,
+        like,
+        pinned,
+      },
       index,
     ) => (
       <IndexTable.Row
@@ -289,26 +282,19 @@ function IndexFiltersDefaultExample() {
             <Text>Via Web</Text>
             <InlineStack gap={200}>
               <Button
-                variant={
-                  selectedButtons.includes(_id) ? "primary" : "secondary"
-                }
+                variant={like ? "primary" : "secondary"}
                 onClick={(e) => {
                   e.stopPropagation();
-                  toggleButton(_id);
+                  handleUpdate(_id, { like: !like });
                 }}
               >
                 <Icon source={HeartIcon} tone="base" />
               </Button>
               <Button
-                variant={pinButton.includes(_id) ? "primary" : "secondary"}
+                variant={pinned ? "primary" : "secondary"}
                 onClick={(e) => {
                   e.stopPropagation();
-                  togglePinButton(_id);
-                  splitedfilteredOrders.filter((review) => {
-                    if (review.id === _id) {
-                      review.isPin = true;
-                    }
-                  });
+                  handleUpdate(_id, { pinned: !pinned });
                 }}
               >
                 <Icon source={PinIcon} tone="base" />
@@ -360,26 +346,6 @@ function IndexFiltersDefaultExample() {
                         content: "Spam",
                         onAction: () => {
                           handleUpdate(_id, { spam: true });
-                        },
-                      },
-                      {
-                        content: "Froud",
-                        onAction: (e) => {
-                          e.stopPropagation();
-                        },
-                      },
-                      {
-                        content: "Delete",
-                        onAction: () => {
-                          reviews.filter((review) => {
-                            if (review.id === _id) {
-                              const index = reviews.indexOf(review);
-                              if (index > -1) {
-                                reviews.splice(index, 1);
-                              }
-                              setDataLength(reviews.length);
-                            }
-                          });
                         },
                       },
                     ]}
@@ -493,19 +459,9 @@ function IndexFiltersDefaultExample() {
 
                           handleActionClick(_id);
                           // setFormActive(!formActive);
-                          HandleFormChanges(_id, "elementId");
+
                           setOpenMenu(null);
                           // e.stopPropagation();
-
-                          splitedfilteredOrders.filter((review) => {
-                            if (review.id === _id) {
-                              HandleFormChanges(review.comment, "review");
-                              HandleFormChanges(review.userName, "title");
-                              HandleFormChanges(review.tag, "tag");
-                              HandleFormChanges(review.Rating, "rating");
-                              HandleFormChanges(review.item, "itemName");
-                            }
-                          });
                         },
                       },
                       {
@@ -560,7 +516,6 @@ function IndexFiltersDefaultExample() {
               onQueryClear={onQueryClear}
               onSort={setSortSelected}
               cancelAction={{
-                onAction: onHandleCancel,
                 disabled: false,
                 loading: false,
               }}
@@ -594,33 +549,32 @@ function IndexFiltersDefaultExample() {
           </Card>
         </InlineGrid>
 
-        {reviews.length > 10 && (
-          <Card gap={200}>
-            <InlineStack gap="800" align="space-between">
-              <Button
-                disabled={currentTab === 1}
-                variant="primary"
-                onClick={() => {
-                  setCurrentTab((prev) => prev - 1);
-                  setitemRenderLimit((pre) => pre - 10);
-                }}
-              >
-                Previus
-              </Button>
-              {currentTab}
-              <Button
-                variant="primary"
-                onClick={() => {
-                  setCurrentTab((prev) => prev + 1);
-                  setitemRenderLimit((pre) => pre + 10);
-                }}
-                disabled={itemRenderLimit + 10 >= reviews.length}
-              >
-                Next
-              </Button>
-            </InlineStack>
-          </Card>
-        )}
+        <Card gap={200}>
+          <InlineStack gap="800" align="space-between">
+            <Button
+              disabled={currentTab === 1}
+              variant="primary"
+              onClick={() => {
+                setCurrentTab((prev) => prev - 1);
+                setitemRenderLimit((pre) => pre - 10);
+              }}
+            >
+              Previus
+            </Button>
+            {currentTab}
+            <Button
+              variant="primary"
+              onClick={() => {
+                setCurrentTab((prev) => prev + 1);
+                setitemRenderLimit((pre) => pre + 10);
+              }}
+              disabled={itemRenderLimit + 10 >= reviews.length}
+            >
+              Next
+            </Button>
+          </InlineStack>
+        </Card>
+
         <Modal id="my-modal">
           <Box style={{ padding: "20px" }}>
             <EditReviewForm

@@ -1,11 +1,27 @@
+const shopDomain = window.location.origin;
+
+const products = document.querySelectorAll(".product-card");
+
+const generateStarHTML = (rating, starColor) => {
+  const roundedRating = Math.round(rating);
+  let stars = "";
+
+  const fullStar = `<span style="color:${starColor};">★</span>`;
+  const emptyStar = '<span style="color:#ccc;">★</span>';
+
+  for (let i = 1; i <= 5; i++) {
+    stars += i <= roundedRating ? fullStar : emptyStar;
+  }
+  return stars;
+};
+
 const settingData = async () => {
   try {
-    const shopDomain = window.location.origin;
-    console.log(shopDomain);
     const res = await fetch(
       `${shopDomain}/apps/review/api/routes/extensions/setting/getByTitle`,
       {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title: "Review Widget Setting",
         }),
@@ -13,38 +29,25 @@ const settingData = async () => {
     );
 
     const resData = await res.json();
-    const data = resData;
-    console.log(data);
-    return data;
+    return resData;
   } catch (error) {
-    console.log("color setting fetch error", error);
+    console.error("Color setting fetch error:", error);
+    return null;
   }
 };
 
-window.onload = async () => {
-  const starSpan = document.querySelectorAll(".staraSpan");
-  const isReview = document.querySelectorAll(".review-text-style");
-  console.log("isReview", isReview);
-  const data = await settingData();
-  const colorArray = data?.data?.sectionSettings?.color;
-  const textArray = data?.data?.sectionSettings?.text;
-
-  colorArray?.forEach((v) => {
-    if (v.settingName === "Star Color") {
-      starSpan.forEach((span) => {
-        span.style.color = v.isvalue;
-      });
-    }
-  });
-
-  textArray?.forEach((v) => {
-    if (v.settingName === "Show text and stars") {
-      isReview.forEach((span) => {
-        console.log("checked", v.isChecked ? "block" : "none");
-        span.style.display = v.isChecked ? "block" : "none";
-      });
-    }
-  });
+const getProductReviews = async () => {
+  try {
+    const res = await fetch(
+      `${shopDomain}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=product&limit=100`,
+    );
+    const resData = await res.json();
+    console.log("resData", resData);
+    return resData.data.items || [];
+  } catch (error) {
+    console.error("Product reviews fetch error:", error);
+    return [];
+  }
 };
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -52,10 +55,10 @@ document.addEventListener("DOMContentLoaded", async function () {
   if (template) {
     const ratingHTML = template.innerHTML;
 
-    const productCards = document.querySelectorAll(".product-card__content");
+    products.forEach((product) => {
+      const id = product.getAttribute("data-product-id");
 
-    productCards.forEach((cardContent) => {
-      const targetElement = cardContent.querySelector(".card-gallery");
+      const targetElement = product.querySelector(".card-gallery");
 
       if (targetElement) {
         const ratingContainer = document.createElement("div");
@@ -65,9 +68,76 @@ document.addEventListener("DOMContentLoaded", async function () {
         targetElement.after(ratingContainer);
       } else {
         console.warn(
-          "Target element .card-gallery not found in this product card content.",
+          `Target element .card-gallery not found in product card (ID: ${id}).`,
         );
       }
     });
   }
 });
+
+window.onload = async () => {
+  const settingResponse = await settingData();
+  const reviews = await getProductReviews();
+
+  console.log("reviews", reviews);
+
+  const colorArray = settingResponse?.data?.sectionSettings?.color;
+  const textArray = settingResponse?.data?.sectionSettings?.text;
+
+  const starColorSetting = colorArray?.find(
+    (v) => v.settingName === "Star Color",
+  );
+  const starColor = starColorSetting?.isvalue || "#000000";
+
+  const showTextSetting = textArray?.find(
+    (v) => v.settingName === "Show text and stars",
+  );
+  const showReviewText = showTextSetting?.isChecked;
+
+  products.forEach((productCard) => {
+    const productId = productCard.getAttribute("data-product-id");
+
+    console.log("rrr1", productId);
+
+    reviews.forEach((r) => {
+      console.log("rrr", r);
+    });
+
+    const productReviewData = reviews.find(
+      (r) => r.targetId && r.targetId.toString() === productId,
+    );
+
+    console.log("data id", productReviewData);
+
+    const ratingContainer = productCard.querySelector(
+      ".extension-star-rating-wrapper",
+    );
+
+    if (ratingContainer) {
+      const starSpan = ratingContainer.querySelector(
+        ".staraSpan[data-star-rating]",
+      );
+      const reviewCountSpan = ratingContainer.querySelector(
+        ".review-text-style[data-review-count]",
+      );
+
+      let rating = 0;
+      let reviewCount = 0;
+
+      if (productReviewData) {
+        rating = productReviewData.rating || 0;
+        reviewCount++;
+      }
+
+      if (starSpan) {
+        starSpan.innerHTML = generateStarHTML(rating, starColor);
+      }
+
+      if (reviewCountSpan) {
+        reviewCountSpan.textContent = `${reviewCount} review${reviewCount !== 1 ? "s" : ""}`;
+
+        reviewCountSpan.style.display = showReviewText ? "inline" : "none";
+      }
+    }
+  });
+};
