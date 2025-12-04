@@ -74,6 +74,25 @@ export const createSettings = async () => {
               isvalue: "hidden",
               isChecked: true,
             },
+            {
+              type: "text",
+              settingName: "Screen title",
+              isvalue: "How would you rate this product?",
+              isChecked: false,
+            },
+            {
+              type: "text",
+              settingName: "Introduction",
+              isvalue:
+                "We would love it if you would share a bit about your experience.",
+              isChecked: false,
+            },
+            {
+              type: "text",
+              settingName: "display name",
+              isvalue: "Yellow Snowboard",
+              isChecked: false,
+            },
           ],
         },
       }),
@@ -84,5 +103,42 @@ export const createSettings = async () => {
     return data;
   } catch (error) {
     console.log("color setting fetch error", error);
+  }
+};
+
+export const getAllReviews = async () => {
+  try {
+    const res = await fetch("/api/routes/app/reviewproduct/getAllReviews");
+    const resData = await res.json();
+    const data = resData;
+    return data;
+  } catch (error) {
+    console.log("get All reviews error", error);
+  }
+};
+
+export const getReviewsByType = async (type, limit, page) => {
+  try {
+    const res = await fetch(
+      `/api/routes/app/reviewproduct/reviews?idTYpe=${type}&limit=${limit}&page=${page}`,
+    );
+    const resData = await res.json();
+    const data = resData;
+    return data.data.items;
+  } catch (error) {
+    console.log("get reviews error", error);
+  }
+};
+
+export const updatedReview = async (data) => {
+  try {
+    const res = await fetch(`/api/routes/app/reviewproduct/updatereview`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    const resData = await res.json();
+    return resData.data;
+  } catch (error) {
+    console.log("get reviews error", error);
   }
 };

@@ -1,37 +1,20 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  function handleClick(mode = "add") {
-    console.log("Entered handleClick with mode:", mode);
-
-    const errorEl = document.querySelector(".NoReviewerror-msg");
-
-    const url = window.location.origin;
-    console.log("url", url);
-
-    const formDIV = document.getElementById("FormParentDiv");
-    if (!formDIV) {
-      console.warn("popupForm missing in DOM");
-      return;
-    }
-
-    formDIV.style.display =
-      formDIV.style.display === "block" ? "none" : "block";
-
-    const emailInput = document.getElementById("formEmail");
-
-    if (!emailInput) {
-      console.warn("formEmail not found");
-      return;
-    }
-
-    if (mode === "edit") {
-      console.log("Edit mode active → disabling email field");
-      emailInput.disabled = true;
-    } else {
-      console.log("Add mode active → enabling email field");
-      emailInput.disabled = false;
-    }
-  }
-
+  let loding = true; // loding
+  let limit = 1; // limit of api response
+  // get importent Elements
+  const reviewsList = document.getElementById("reviewsList");
+  const filterSelect = document.getElementsByClassName("jm-sort-select")[0];
+  const writeButtons = document.querySelectorAll(".jm-write");
+  const submitButton = document.getElementById("submitButton");
+  // get variable for liquid
+  const productIdliquid = window.__productId;
+  const ui = window.reviewSettings;
+  // initial stage of reviews array
+  let realdata = [];
+  // check type of page for type of review store of product
+  let type =
+    ShopifyAnalytics.meta.page.pageType == "home" ? "store" : "product";
+  // dummy data for sample option
   const dummydata = [
     {
       _id: "1",
@@ -69,7 +52,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       date: "2024-10-30",
     },
   ];
-
+  // fack reviews
   const fakeReviews = [
     {
       _id: "1",
@@ -109,16 +92,45 @@ document.addEventListener("DOMContentLoaded", async () => {
       createdAt: "2025-01-18T08:20:39.703+00:00",
     },
   ];
+  // open for and check the type of more
+  function handleClick(mode = "add") {
+    console.log("Entered handleClick with mode:", mode);
 
-  let loding = false;
+    const errorEl = document.querySelector(".NoReviewerror-msg");
 
-  const reviewsList = document.getElementById("reviewsList");
-  const filterSelect = document.getElementsByClassName("jm-sort-select")[0];
-  const writeButtons = document.querySelectorAll(".jm-write");
+    const url = window.location.origin;
+    console.log("url", url);
 
+    const formDIV = document.getElementById("FormParentDiv");
+    if (!formDIV) {
+      console.warn("popupForm missing in DOM");
+      return;
+    }
+
+    formDIV.style.display =
+      formDIV.style.display === "block" ? "none" : "block";
+
+    const emailInput = document.getElementById("formEmail");
+
+    if (!emailInput) {
+      console.warn("formEmail not found");
+      return;
+    }
+
+    if (mode === "edit") {
+      // emailInput.value =
+      console.log("Edit mode active → disabling email field");
+      emailInput.disabled = true;
+    } else {
+      console.log("Add mode active → enabling email field");
+      emailInput.disabled = false;
+    }
+  }
+  // add Event listner ond write a review button
   writeButtons.forEach((btn) => {
     btn.addEventListener("click", () => handleClick("add"));
   });
+  // add Event listner on edit  icon
 
   reviewsList.addEventListener("click", (e) => {
     const editBtn = e.target.closest(".edit-btn");
@@ -133,31 +145,32 @@ document.addEventListener("DOMContentLoaded", async () => {
     handleClick("edit");
     openForm(reviews);
   });
+  // function to get data
   async function apidata() {
     try {
-      loding = true; // start loader
-      renderReviews([]); // show loader instantly
+      loding = true;
 
+      const type = productIdliquid ? "product" : "store";
       const baseUrl = window.location.origin;
+
       const response = await fetch(
-        `${baseUrl}/apps/review/api/routes/reviewproduct/reviews`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        },
+        `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/reviews?idTYpe=${type}&limit=${limit}`,
+        { method: "GET", headers: { "Content-Type": "application/json" } },
       );
+
       const data = await response.json();
-      return fakeReviews;
+      console.log(data.data);
+
+      return data?.data?.items || [];
     } catch (error) {
-      console.error("Error fetching API:", error);
+      console.error("API went off the rails:", error);
       return [];
     } finally {
       loding = false;
     }
   }
 
-  let realdata = [];
-  const ui = window.reviewSettings;
+  // check option of data
   if (ui.reviewSource == "dummy") {
     realdata = dummydata;
   } else if (ui.reviewSource == "real") {
@@ -165,7 +178,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   } else {
     realdata = [];
   }
-
+  // highlite stars in form
   function highlightStars(rating) {
     console.log(rating);
 
@@ -182,8 +195,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
+  // pass filterd data
   const parsedData = realdata.map((data) => {
-    const { userName, rating, description, createdAt, _id, customerId } = data;
+    const { userName, rating, description, createdAt, _id, customerId, email } =
+      data;
 
     const date = createdAt.split("T")[0];
     return {
@@ -193,11 +208,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       date: date,
       _id,
       customerId,
+      email,
     };
   });
-
+  //call renderReview Function to render all reviews
   renderReviews(parsedData);
 
+  // open edit form and asign devauld value
   function openForm(id) {
     console.log(ShopifyAnalytics.meta.page.customerId, "costomer Id : 👍");
     console.log();
@@ -220,9 +237,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   window.openForm = openForm;
-
+  // function to render review list
   function renderReviews(list) {
     console.log(list, "list for review");
+    console.log("loading i renderrevirews ", loding);
 
     if (loding) {
       reviewsList.innerHTML = `
@@ -250,7 +268,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             ${avatar}
           </div>
 
-          <div style="flex:1;">
+          <div style="flex:1; width:380px;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
 
               <div>
@@ -292,13 +310,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
       `;
         reviewsList.appendChild(reviewItem);
-
-        //         const editButtons = document.querySelectorAll(".edit-btn");
-        // console.log(editButtons, "editbuttons");
       });
+      const MoreReviews = document.createElement("sapn");
+      MoreReviews.innerText = "See More";
+      MoreReviews.addEventListener("click", () => {
+        limit = limit + limit;
+        console.log(limit);
+      });
+      reviewsList.appendChild(MoreReviews);
     }
   }
-
+  // filter data according option
   filterSelect.addEventListener("change", (e) => {
     const selectedFilter = e.target.value.trim();
 

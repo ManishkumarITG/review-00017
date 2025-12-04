@@ -98,7 +98,7 @@ export default function appStarRatting() {
                   borderRadius="100"
                   borderColor="border-brand"
                 >
-                  <BlockStack gap={500} fullWidth>
+                  <BlockStack gap={500}>
                     <Text as="h3" variant="headingSm">
                       Install
                     </Text>

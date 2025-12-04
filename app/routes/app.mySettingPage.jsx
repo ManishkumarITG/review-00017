@@ -1,5 +1,5 @@
 import { Page, InlineGrid, Card, Text, Box, Divider } from "@shopify/polaris";
-import { AppProvider } from "@shopify/shopify-app-react-router/react";
+import { AppProvider } from "@shopify/polaris";
 import { PaintBrushRoundIcon, StarIcon } from "@shopify/polaris-icons";
 import { useEffect, useState } from "react";
 import Widget from "./components/Widget";

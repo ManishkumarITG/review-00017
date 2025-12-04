@@ -342,6 +342,9 @@ export default function ReviewWidgets() {
               )}
 
               <Box
+                onClick={() => {
+                  nevigate("/app/writeReview");
+                }}
                 style={{
                   background: buttonColor,
                   textAlign: "center",
@@ -392,40 +395,36 @@ export default function ReviewWidgets() {
               </Popover>
 
               <BlockStack>
-                {review.length !== 0
-                  ? review.map((review) => {
-                      return (
-                        <Box key={review.userName} padding="100">
-                          <InlineStack gap="100">
-                            <Avatar customer name="Farrah" />
+                {review.length !== 0 &&
+                  review.map((review) => {
+                    return (
+                      <Box key={review.userName} padding="100">
+                        <InlineStack gap="100">
+                          <Avatar customer name="Farrah" />
 
-                            <Box>
-                              <Ratting
-                                color={starColor}
-                                rating={review.Rating}
-                              />
-                              <Box
-                                as="legend"
-                                style={{
-                                  color: starColor,
-                                }}
-                              >
-                                {review.userName}
-                              </Box>
+                          <Box>
+                            <Ratting color={starColor} rating={review.Rating} />
+                            <Box
+                              as="legend"
+                              style={{
+                                color: starColor,
+                              }}
+                            >
+                              {review.userName}
                             </Box>
-
-                            <Box>{dateChecked && review.date}</Box>
-                          </InlineStack>
-
-                          <Box style={{ color: textColor }} as="legend">
-                            {review.tag}
                           </Box>
 
-                          <Text as="p">{review.comment}</Text>
+                          <Box>{dateChecked && review.date}</Box>
+                        </InlineStack>
+
+                        <Box style={{ color: textColor }} as="legend">
+                          {review.tag}
                         </Box>
-                      );
-                    })
-                  : ""}
+
+                        <Text as="p">{review.comment}</Text>
+                      </Box>
+                    );
+                  })}
               </BlockStack>
             </Box>
           </InlineGrid>

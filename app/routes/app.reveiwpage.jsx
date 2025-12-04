@@ -19,10 +19,11 @@ import {
   Popover,
   ActionList,
   useBreakpoints,
+  SkeletonBodyText,
 } from "@shopify/polaris";
 
 import { Modal, TitleBar, useAppBridge } from "@shopify/app-bridge-react";
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import "@shopify/polaris/build/esm/styles.css";
 
 import {
@@ -34,8 +35,13 @@ import {
 } from "@shopify/polaris-icons";
 import StarRating from "./components/Ratting.jsx";
 import { useColorTheme } from "./ColorContext.jsx";
-import { reviews, tabsdata } from "./data/reviewData.js";
+import { tabsdata } from "./data/reviewData.js";
 import EditReviewForm from "./components/EditReviewForm.jsx";
+import {
+  getAllReviews,
+  getReviewsByType,
+  updatedReview,
+} from "./services/api.js";
 
 function IndexFiltersDefaultExample() {
   const shopify = useAppBridge();
@@ -44,7 +50,7 @@ function IndexFiltersDefaultExample() {
 
   const starColor = getHexCode("star");
 
-  const [filteredOrders, setFilteredOrders] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [selectedData, setSelectedData] = useState(0);
   const [_taggedWith, setTaggedWith] = useState("");
   const [queryValue, setQueryValue] = useState("");
@@ -61,10 +67,38 @@ function IndexFiltersDefaultExample() {
   const [formData, setFormData] = useState({});
   const [formActive, setFormActive] = useState(false);
   const [sortSelected, setSortSelected] = useState(["order asc"]);
+  const [loding, setLoding] = useState(false);
   const { mode, setMode } = useSetIndexFiltersMode();
 
+  const handleUpdate = async (id, data) => {
+    try {
+      setLoding(true);
+      const updateData = await updatedReview({ id, data });
+      console.log(updateData);
+      const reviews = await getAllReviews();
+      setReviews(reviews.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoding(false);
+    }
+  };
+
   useEffect(() => {
-    setFilteredOrders(reviews);
+    const getReviews = async () => {
+      try {
+        setLoding(true);
+        const resopanse = await getAllReviews();
+        console.log(resopanse.data);
+        setReviews(resopanse.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoding(false);
+      }
+    };
+
+    getReviews();
   }, []);
 
   const [itemStrings, setItemStrings] = useState([
@@ -129,75 +163,33 @@ function IndexFiltersDefaultExample() {
     setActive((activeId) => (activeId !== id ? id : null));
   };
 
-  const filterOrders = useCallback(
-    (query, currentTab) => {
-      let filteredByQuery = filteredOrders;
-      console.log("1", filteredOrders, "2", reviews);
-      console.log("frist data", filteredByQuery);
-      const lowerCaseQuery = query ? query.toLowerCase() : "";
+  const handleTapChange = useCallback(
+    async (index) => {
+      try {
+        setLoding(true);
+        const tabName = itemStrings[index];
+        const splitTapName = tabName.split(" ")[0];
+        const lowerCaseTapName = splitTapName.toLowerCase();
+        if (lowerCaseTapName == "all") {
+          const resopanse = await getAllReviews();
+          setReviews(resopanse.data);
+          return;
+        }
+        console.log(lowerCaseTapName);
 
-      if (lowerCaseQuery) {
-        filteredByQuery = filteredOrders.filter((order) => {
-          const matchesName = order.userName
-            .toLowerCase()
-            .includes(lowerCaseQuery);
-          const matchesId = String(order.id).includes(lowerCaseQuery);
-          const matchesTag = order.tag.toLowerCase().includes(lowerCaseQuery);
-
-          return matchesName || matchesId || matchesTag;
-        });
+        const filterData = await getReviewsByType(lowerCaseTapName);
+        console.log("filter Data", filterData);
+        setReviews(filterData);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoding(false);
       }
-
-      const tabName = itemStrings[currentTab];
-      let finalFilteredOrders = filteredByQuery;
-
-      console.log("tapname", tabName, filteredByQuery, currentTab, query);
-
-      switch (tabName) {
-        case "All Reviews":
-          finalFilteredOrders = filteredOrders;
-          break;
-        case "Product Reviews":
-          setCurrentTab(1);
-          setitemRenderLimit(0);
-          finalFilteredOrders = filteredByQuery.filter(
-            (order) => order.tag === "hot" || order.tag === "pro",
-          );
-          break;
-        case "Store Reviews":
-          setCurrentTab(1);
-          setitemRenderLimit(0);
-          finalFilteredOrders = filteredByQuery.filter(
-            (order) => order.tag === "test" || order.tag === "sale",
-          );
-          break;
-        case "Spam":
-          setCurrentTab(1);
-          setitemRenderLimit(0);
-          finalFilteredOrders = filteredByQuery.filter((order) => {
-            return order.isSpamed === true;
-          });
-          if (finalFilteredOrders.length === 0) {
-            finalFilteredOrders = [];
-          }
-          break;
-        case "Archives":
-          setCurrentTab(1);
-          setitemRenderLimit(0);
-          finalFilteredOrders = filteredByQuery.filter((order) => {
-            return order.isPin === true;
-          });
-          break;
-        default:
-          finalFilteredOrders = filteredByQuery;
-      }
-
-      setFilteredOrders(finalFilteredOrders);
     },
-    [filteredOrders, itemStrings],
+    [selectedTab, setSelectedTab],
   );
 
-  const allReviewsContent = ` ${"All Reviews (" + filteredOrders.length + ")"}`;
+  const allReviewsContent = ` ${"All Reviews (" + reviews.length + ")"}`;
 
   const tabs = itemStrings.map((item, index) => ({
     content: index === 0 ? allReviewsContent : item,
@@ -205,31 +197,28 @@ function IndexFiltersDefaultExample() {
     onAction: () => {
       setSelected(index);
       setSelectedTab(index);
-      filterOrders(queryValue, index);
-
       const params = new URLSearchParams(window.location.search);
       params.set("table", item);
       const newUrl = window.location.pathname + "?" + params.toString();
       window.history.pushState({}, "", newUrl);
+      handleTapChange(index);
     },
     id: `${item}-${index}`,
     actions: [],
   }));
 
-  const onHandleCancel = () => { };
+  const onHandleCancel = () => {};
 
   const handleFiltersQueryChange = useCallback(
     (value) => {
       setQueryValue(value);
-      filterOrders(value, selectedTab);
     },
-    [filterOrders, selectedTab],
+    [selectedTab],
   );
 
   const onQueryClear = useCallback(() => {
     setQueryValue("");
-    filterOrders("", selectedTab);
-  }, [filterOrders, selectedTab]);
+  }, [selectedTab]);
 
   const handleTaggedWithRemove = useCallback(() => setTaggedWith(""), []);
 
@@ -239,14 +228,9 @@ function IndexFiltersDefaultExample() {
     onQueryClear();
   }, [onQueryClear, handleTaggedWithRemove]);
 
-  const splitedfilteredOrders = filteredOrders.slice(
+  const splitedfilteredOrders = reviews.slice(
     itemRenderLimit,
     itemRenderLimit + 10,
-  );
-
-  console.log(
-    "--------------------------- data in reviewpage",
-    splitedfilteredOrders,
   );
 
   const resourceName = {
@@ -257,12 +241,43 @@ function IndexFiltersDefaultExample() {
   const { selectedResources, allResourcesSelected, handleSelectionChange } =
     useIndexResourceState(splitedfilteredOrders);
 
-  const rowMarkup = splitedfilteredOrders?.map(
-    ({ id, userName, item, time, Rating, comment, tag }, index) => (
+  let obj = { length: 3 };
+
+  const skeletonMarkup = [...Array.from(obj)].map((_, i) => {
+    return (
       <IndexTable.Row
-        id={id}
-        key={id}
-        selected={selectedResources.includes(id)}
+        id={i}
+        key={i}
+        selected={selectedResources.includes(i)}
+        position={i}
+      >
+        <IndexTable.Cell>
+          <BlockStack>
+            <SkeletonBodyText lines={1} />
+          </BlockStack>
+        </IndexTable.Cell>
+        <IndexTable.Cell>
+          <SkeletonBodyText lines={1} />
+        </IndexTable.Cell>
+        <IndexTable.Cell>
+          <SkeletonBodyText lines={1} />
+        </IndexTable.Cell>
+        <IndexTable.Cell>
+          <SkeletonBodyText lines={1} />
+        </IndexTable.Cell>
+      </IndexTable.Row>
+    );
+  });
+
+  const rowMarkup = splitedfilteredOrders?.map(
+    (
+      { _id, userName, item, time, rating, description, email, spam },
+      index,
+    ) => (
+      <IndexTable.Row
+        id={_id}
+        key={_id}
+        selected={selectedResources.includes(_id)}
         position={index}
       >
         <IndexTable.Cell>
@@ -274,21 +289,23 @@ function IndexFiltersDefaultExample() {
             <Text>Via Web</Text>
             <InlineStack gap={200}>
               <Button
-                variant={selectedButtons.includes(id) ? "primary" : "secondary"}
+                variant={
+                  selectedButtons.includes(_id) ? "primary" : "secondary"
+                }
                 onClick={(e) => {
                   e.stopPropagation();
-                  toggleButton(id);
+                  toggleButton(_id);
                 }}
               >
                 <Icon source={HeartIcon} tone="base" />
               </Button>
               <Button
-                variant={pinButton.includes(id) ? "primary" : "secondary"}
+                variant={pinButton.includes(_id) ? "primary" : "secondary"}
                 onClick={(e) => {
                   e.stopPropagation();
-                  togglePinButton(id);
+                  togglePinButton(_id);
                   splitedfilteredOrders.filter((review) => {
-                    if (review.id === id) {
+                    if (review.id === _id) {
                       review.isPin = true;
                     }
                   });
@@ -303,88 +320,119 @@ function IndexFiltersDefaultExample() {
         <IndexTable.Cell>
           <BlockStack>
             <Box>
-              <StarRating rating={Rating} color={starColor} />
+              <StarRating rating={rating} color={starColor} />
             </Box>
-            <Text fontWeight="bold">{comment}</Text>
-            <Text fontWeight="bold">{tag}</Text>
+            <Text fontWeight="bold">{description}</Text>
+            <Text fontWeight="bold">{email}</Text>
           </BlockStack>
         </IndexTable.Cell>
 
         <IndexTable.Cell>
           <InlineStack align="end" blockAlign="center">
             <InlineStack gap="800">
-              <Popover
-                active={openPopoverId === id}
-                fullWidth={true}
-                preferredAlignment="right"
-                activator={
-                  <Button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleActive("popover1")();
-                      togglePopover(id);
-                      setOpenMenu(null);
-                      setOpenNevigation(null);
-                    }}
-                    icon={ChevronDownIcon}
-                    accessibilityLabel="Other save actions"
-                  >
-                    Published
-                  </Button>
-                }
-                autofocusTarget="first-node"
-                onClose={() => setOpenPopoverId(null)}
-              >
-                <ActionList
-                  actionRole="menuitem"
-                  items={[
-                    {
-                      content: "Spam",
-                      onAction: (e) => {
-                        if (e) {
-                          e.stopPropagation();
-                        }
-                        splitedfilteredOrders.filter((review) => {
-                          if (review.id === id) {
-                            review.isSpamed = true;
-                          }
-                        });
-                      },
-                    },
-                    {
-                      content: "Froud",
-                      onAction: (e) => {
+              {!spam ? (
+                <Popover
+                  active={openPopoverId === _id}
+                  fullWidth={true}
+                  preferredAlignment="right"
+                  activator={
+                    <Button
+                      onClick={(e) => {
                         e.stopPropagation();
+                        toggleActive(_id)();
+                        togglePopover(_id);
+                        setOpenMenu(null);
+                        setOpenNevigation(null);
+                      }}
+                      icon={ChevronDownIcon}
+                      accessibilityLabel="Other save actions"
+                    >
+                      Published
+                    </Button>
+                  }
+                  autofocusTarget="first-node"
+                  onClose={() => setOpenPopoverId(null)}
+                >
+                  <ActionList
+                    actionRole="menuitem"
+                    items={[
+                      {
+                        content: "Spam",
+                        onAction: () => {
+                          handleUpdate(_id, { spam: true });
+                        },
                       },
-                    },
-                    {
-                      content: "Delete",
-                      onAction: () => {
-                        filteredOrders.filter((review) => {
-                          if (review.id === id) {
-                            const index = filteredOrders.indexOf(review);
-                            if (index > -1) {
-                              filteredOrders.splice(index, 1);
+                      {
+                        content: "Froud",
+                        onAction: (e) => {
+                          e.stopPropagation();
+                        },
+                      },
+                      {
+                        content: "Delete",
+                        onAction: () => {
+                          reviews.filter((review) => {
+                            if (review.id === _id) {
+                              const index = reviews.indexOf(review);
+                              if (index > -1) {
+                                reviews.splice(index, 1);
+                              }
+                              setDataLength(reviews.length);
                             }
-                            setDataLength(filteredOrders.length);
-                          }
-                        });
+                          });
+                        },
                       },
-                    },
-                  ]}
-                />
-              </Popover>
+                    ]}
+                  />
+                </Popover>
+              ) : (
+                <Popover
+                  active={openPopoverId === _id}
+                  fullWidth={true}
+                  preferredAlignment="right"
+                  activator={
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleActive(_id)();
+                        togglePopover(_id);
+                        setOpenMenu(null);
+                        setOpenNevigation(null);
+                      }}
+                      icon={ChevronDownIcon}
+                      accessibilityLabel="Other save actions"
+                    >
+                      Hidden
+                    </Button>
+                  }
+                  autofocusTarget="first-node"
+                  onClose={() => setOpenPopoverId(null)}
+                >
+                  <ActionList
+                    actionRole="menuitem"
+                    items={[
+                      {
+                        content: "public review",
+                        onAction: () => {
+                          handleUpdate(_id, { spam: false });
+                        },
+                      },
+                    ]}
+                  />
+                </Popover>
+              )}
+
               <ButtonGroup>
                 <Popover
-                  active={openNevigation === id}
+                  active={openNevigation === `${_id}_${userName}`}
                   preferredAlignment="right"
                   activator={
                     <Button
                       icon={UndoIcon}
                       onClick={(e) => {
                         e.stopPropagation();
-                        toggleActive("popover1")();
-                        togglenavigation(id);
+                        toggleActive(`${_id}_${userName}`)();
+                        togglenavigation(`${_id}_${userName}`);
                         setOpenMenu(null);
                         setOpenPopoverId(null);
                       }}
@@ -415,15 +463,15 @@ function IndexFiltersDefaultExample() {
                   </Box>
                 </Popover>
                 <Popover
-                  active={openMenu === id}
+                  active={openMenu === `${_id}_${email}`}
                   preferredAlignment="left"
                   activator={
                     <Button
                       icon={MenuHorizontalIcon}
                       onClick={(e) => {
                         e.stopPropagation();
-                        toggleActive("popover1")();
-                        toggleMenu(id);
+                        toggleActive(`${_id}_${email}`)();
+                        toggleMenu(`${_id}_${email}`);
                         setOpenPopoverId(null);
                         setOpenNevigation(null);
                       }}
@@ -443,14 +491,14 @@ function IndexFiltersDefaultExample() {
                         onAction: () => {
                           shopify.modal.show("my-modal");
 
-                          handleActionClick(id);
+                          handleActionClick(_id);
                           // setFormActive(!formActive);
-                          HandleFormChanges(id, "elementId");
+                          HandleFormChanges(_id, "elementId");
                           setOpenMenu(null);
                           // e.stopPropagation();
 
                           splitedfilteredOrders.filter((review) => {
-                            if (review.id === id) {
+                            if (review.id === _id) {
                               HandleFormChanges(review.comment, "review");
                               HandleFormChanges(review.userName, "title");
                               HandleFormChanges(review.tag, "tag");
@@ -541,12 +589,12 @@ function IndexFiltersDefaultExample() {
                 { title: "status", alignment: "end" },
               ]}
             >
-              {rowMarkup}
+              {!loding ? rowMarkup : skeletonMarkup}
             </IndexTable>
           </Card>
         </InlineGrid>
 
-        {filteredOrders.length > 10 && (
+        {reviews.length > 10 && (
           <Card gap={200}>
             <InlineStack gap="800" align="space-between">
               <Button
@@ -566,7 +614,7 @@ function IndexFiltersDefaultExample() {
                   setCurrentTab((prev) => prev + 1);
                   setitemRenderLimit((pre) => pre + 10);
                 }}
-                disabled={itemRenderLimit + 10 >= filteredOrders.length}
+                disabled={itemRenderLimit + 10 >= reviews.length}
               >
                 Next
               </Button>

@@ -33,9 +33,10 @@
 }
 
 .jm-stars {
-  display: flex;
-  line-height: 1;
-  color: #388B7F;
+    display: flex;
+    line-height: 1;
+    color: #388B7F;
+    font-size: 22px;
 }
 
 .jm-average-number {
@@ -69,6 +70,7 @@
 .jm-sort-select {
   outline: none;
   border: none;
+  color: #388B7F;
 }
 
 .jm-distribution {
@@ -131,6 +133,7 @@
 }
 
 .jm-item-right {
+  width: 380px;
   flex: 1;
 }
 
@@ -269,6 +272,7 @@
 
 .jm-sort-select {
   padding: 6px 10px;
+  color: #388B7F;
 }
 
 .jm-item {

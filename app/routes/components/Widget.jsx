@@ -14,8 +14,33 @@ export default function Widget() {
   const nevigate = useNavigate();
   return (
     <AppProvider>
-      <Page title="Widget" fullWidth={true}>
-        <InlineGrid gap="400" columns={{ xs: 1, sm: 2, md: 2, lg: 2, xl: 2 }}>
+      <Page
+        title="Widget"
+        fullWidth={true}
+        actionGroups={[
+          {
+            title: "Change Theme",
+            actions: [
+              {
+                content: "Horize",
+                accessibilityLabel: "Individual action label",
+                onAction: () => alert("Share on Facebook action"),
+              },
+              {
+                content: "Savor",
+                accessibilityLabel: "Individual action label",
+                onAction: () => alert("Share on Facebook action"),
+              },
+              {
+                content: "Vessel",
+                accessibilityLabel: "Individual action label",
+                onAction: () => alert("Share on Facebook action"),
+              },
+            ],
+          },
+        ]}
+      >
+        <InlineGrid gap="400" columns={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2 }}>
           {simplifiedMediaCardData.map((card) => (
             <MediaCard
               key={card.key}

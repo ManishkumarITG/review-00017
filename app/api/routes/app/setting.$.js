@@ -27,7 +27,6 @@ export const loader = async ({ request }) => {
 
 export const action = async ({ request }) => {
   try {
-    // await mongoConnect();
     console.log(
       "-----------------------------------------------------------hit action  api",
     );

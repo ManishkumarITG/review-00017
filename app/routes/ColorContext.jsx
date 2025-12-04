@@ -21,6 +21,10 @@ const initialState = {
   "Average rating text": 4.07,
   "Button Text": "Write a review",
   "Show text and stars": true,
+  "Screen title": "How would you rate this product?",
+  Introduction:
+    "We would love it if you would share a bit about your experience.",
+  "display name": "Yellow Snowboard",
 };
 
 function reducer(state, action) {
@@ -210,6 +214,24 @@ export const ColorProvider = ({ children }) => {
                 isvalue: "hidden",
                 isChecked: state["Show text and stars"],
               },
+              {
+                type: "text",
+                settingName: "Screen title",
+                isvalue: state["Screen title"],
+                isChecked: false,
+              },
+              {
+                type: "text",
+                settingName: "Introduction",
+                isvalue: state["Introduction"],
+                isChecked: false,
+              },
+              {
+                type: "text",
+                settingName: "display name",
+                isvalue: state["display name"],
+                isChecked: false,
+              },
             ],
           },
         }),
@@ -218,7 +240,6 @@ export const ColorProvider = ({ children }) => {
       const resData = await res.json();
       console.log("hello world", resData);
       shopify.saveBar.hide(savBarId);
-      console.log("color", colors);
       setIsChnage(false);
     } catch (error) {
       console.log(error);
