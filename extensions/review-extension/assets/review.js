@@ -122,11 +122,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const shopDamian = window.location.host; // shopify Domain
     const id = productIdliquid || shopDamian;
     const idTYpe = productIdliquid ? "product" : "store";
-
+    console.log("id , type", id, idTYpe);
+    const customerId = ShopifyAnalytics.meta.page.customerId;
     try {
       // data to send to the server
       const datatoSend = {
-        name: payload.Name, // change it from author
+        name: payload.Name,
         shop: shopDamian,
         targetId: id,
         idType: idTYpe,
@@ -134,10 +135,12 @@ document.addEventListener("DOMContentLoaded", () => {
         rating: payload.Rating,
         description: payload.Discription,
         images: "null",
-        customerId: ShopifyAnalytics.meta.page.customerId, // get id for shopify
+        customerId: customerId,
       };
+      console.log(datatoSend, "😳😳😳");
+
       const baseUrl = window.location.origin;
-      // api calling 
+      // api calling
       const response = await fetch(
         `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/createproduct`,
         {
@@ -149,10 +152,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const data = await response.json();
       submitButton.innerText = "Loading...";
-      console.log(response.data);
+      console.log(data);
 
-      // check api return data or not and change button text 
-      if (!data.data.success) {
+      // check api return data or not and change button text
+      if (data.status !== 201) {
         console.error("API threw hands:", response.status);
         submitButton.innerText = "Review Is Not Add Yet";
         submitButton.style.color = "red";
@@ -179,7 +182,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // show error in invalid fild
   function ShowError(inputElement, message) {
-    // form.querySelectorAll(".error-msg").forEach((el) => (el.textContent = ""));
     const wrapper = inputElement.parentElement;
 
     let errorEl = wrapper.querySelector(".error-msg");
@@ -194,11 +196,10 @@ document.addEventListener("DOMContentLoaded", () => {
     errorElement.textContent = message;
     inputElement.after(errorElement);
   }
-// function to close form 
+  // function to close form
   function closeReviewForm() {
     const formDIV = document.getElementById("FormParentDiv");
     form.reset();
-
     form
       .querySelectorAll(".input-error")
       .forEach((el) => el.classList.remove("input-error"));

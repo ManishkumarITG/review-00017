@@ -1,20 +1,12 @@
 {{ 'starratting.css' | asset_url | stylesheet_tag }}
 
-{% assign reviews = 14 %}
-{% assign rating = 3 %}
-{% assign rounded_rating = rating | round %}
 {% assign color = '#000000' %}
 
 <div id="star-rating-template" style="display: none;">
   <div class="starRatting">
-    <span class="staraSpan" style="color:{{color}}; font-size: 20px">
-      {% render 'stars', rating: rounded_rating %}
-    </span>
+    <span class="staraSpan" style="color:{{color}}; font-size: 20px" data-star-rating> </span>
 
-    <span class="review-text-style">
-      {{ reviews }}
-      review
-    </span>
+    <span class="review-text-style" data-review-count> 0 review </span>
   </div>
 </div>
 
@@ -26,6 +18,3 @@
   "target": "body"
 }
 {% endschema %}
-
-{% comment %} "settings": [{ "type": "checkbox", "id": "show_review_text", "label": "Show review text", "default": true }] {% endcomment %}
-{% comment %} { "type": "color", "id": "colour", "label": "Star Colour", "default": "#108474" }, {% endcomment %}

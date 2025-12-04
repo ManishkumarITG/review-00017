@@ -1,69 +1,65 @@
-import ProductReview from "../models/review.model.js";
-import getReviewModel from "../models/review.model.js";
-import { createShop, getShopById } from "./shop.service.js";
-import mongoConnect from "../../db.server.js";
+import User from "../models/user.model";
+import Review from "../models/review.model";
+import mongoConnect from "../../db.server";
 export const createReview = async (shop, payload) => {
-  try {
-     await mongoConnect()
-    const {
-      targetId,
-      idType,
-      rating,
-      description,
-      images,
+  await mongoConnect()
+  const {
+    targetId,
+    idType,
+    rating,
+    description,
+    images,
+    customerId,
+    name,
+    email,
+  } = payload;
+
+  let user = await User.findOne({ customerId });
+
+  if (!user) {
+    user = await User.create({
       customerId,
-      author,
+      name: name,
       email,
-    } = payload;
-
-    const userShop = await getShopById(shop);
-
-    if (!userShop) {
-      const newShop = await createShop(shop);
-      if (!newShop) {
-        throw new Error("coude not create your shop");
-      }
-    }
-
-    const Review = getReviewModel(shop);
-
-    const newReview = await Review.create({
       shop,
-      idType,
-      targetId,
-      rating,
-      email,
-      description: description,
-      images: images,
-      customerId: customerId,
-      like: false,
-      pinned: false,
-      userName: author,
     });
-    return newReview.toObject();
-  } catch (error) {
-    console.log("error in review creation:", error);
-    return {
-      success: false,
-      message: "Review creation failed",
-      error: error.message,
-    };
   }
+
+  const review = await Review.create({
+    shop,
+    idType,
+    targetId,
+    rating,
+    email,
+    description,
+    images,
+    customerId,
+    like: false,
+    pinned: false,
+    name: name,
+  });
+
+  if (!review) {
+    throw new Error("review not create");
+  }
+
+  return review.toObject();
 };
 
 export const getAllReviewsByShop = async (data) => {
-  const { limit, page, shop } = data;
-  const Review = getReviewModel(shop);
-  if (!Review) {
-    throw new Error("shop in not found");
-  }
+  const { limit = 10, page = 1, shop } = data;
+
+  if (!shop) throw new Error("shop is required");
+
   const skip = (page - 1) * limit;
-  const shopReviews = await Review.find({})
-    .sort({ createdAt: -1 })
+
+  const allReviews = Review.find({ shop })
+    .sort({ pinned: -1 })
     .skip(skip)
     .limit(limit)
     .lean();
-  return shopReviews;
+
+  return allReviews;
 };
 
 export const getReviewsByType = async (data) => {
@@ -71,7 +67,15 @@ export const getReviewsByType = async (data) => {
    await mongoConnect()
     const { limit, page, shop, idType } = data;
 
-    const filter = {};
+    console.log(idType);
+
+    if (!shop) throw new Error("shop is required");
+
+    const skip = (page - 1) * limit;
+
+    const filter = {
+      shop: shop,
+    };
 
     if (idType == "spam" || idType == "froud") {
       filter[idType] = true;
@@ -81,18 +85,13 @@ export const getReviewsByType = async (data) => {
       filter.idType = idType;
     }
 
-    console.log(idType);
-    const Review = getReviewModel(shop);
-    if (!Review) {
-      throw new Error("shop in not found");
-    }
-    const skip = (page - 1) * limit;
-    console.log(filter);
+    console.log("--------------------------------- filter obj", filter);
     const items = await Review.find(filter)
-      .sort({ createdAt: -1 })
+      .sort({ pinned: -1 })
       .skip(skip)
       .limit(limit)
       .lean();
+
     const total = await Review.countDocuments();
 
     console.log("--------------------------- data , item", items, total);
@@ -104,18 +103,8 @@ export const getReviewsByType = async (data) => {
 
 export const deleteReviewById = async (payload) => {
   const { targetId } = payload;
-  const deletedreview = await ProductReview.findOneAndDelete(targetId);
-  if (deletedreview) {
-    return {
-      success: true,
-      message: "review delete successfully",
-      data: deletedreview,
-    };
-  }
-  return {
-    success: true,
-    message: "review not found",
-  };
+  const deletedreview = await Review.findOneAndDelete(targetId);
+  return deletedreview;
 };
 
 export const updatereviewbyId = async (shop, payload) => {
@@ -123,11 +112,6 @@ export const updatereviewbyId = async (shop, payload) => {
 
   if (!id) {
     throw new Error("id is not found");
-  }
-
-  const Review = getReviewModel(shop);
-  if (!Review) {
-    throw new Error("shop in not found");
   }
 
   const updated = await Review.findOneAndUpdate({ _id: id }, data, {
