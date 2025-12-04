@@ -2,8 +2,11 @@ import {
   createProductReview,
   deletereview,
   getReviews,
+  searchreview,
+  SpamReviews,
   updatereview,
 } from "../controller/review.controller";
+import shopify from "../../shopify.server";
 
 import { authenticateUser } from "../middlewares/auth";
 import { responseHandler } from "../utils/responseHandler";
@@ -43,6 +46,14 @@ export const loader = async ({ request }) => {
     switch (path) {
       case "reviews":
         return await getReviews({ page, limit, type, skip });
+      case "spam":
+        return SpamReviews();
+      default:
+        return responseHandler(
+          "Bad Requist",
+          "Invalid path provided, bro 💀",
+          null,
+        );
     }
   } catch (error) {
     console.log("🔥 loader error:", error);
@@ -50,27 +61,93 @@ export const loader = async ({ request }) => {
   }
 };
 
+// export const action = async ({ request }) => {
+//   try {
+//     console.log("---------------- action apis 2");
+//     const data = await request.json();
+
+//     // const { path } = await authenticateUser(request);
+
+//     const { session } = await shopify.authenticate.admin(request);
+
+//     const shopDomain = session.shop;
+
+//     console.log( session,"😂😂😂😂");
+// // console.log();
+
+//     // switch (path) {
+//     //   case "createproduct":
+//     //     return await createProductReview(data);
+//     //   case "deletereview":
+//     //     return await deletereview(data);
+//     //   case "updatereview":
+//     //     return await updatereview(data);
+//     //   case "search":
+//     //     return await searchreview(data);
+//     //   default:
+//     //     break;
+//     // }
+
+//      const url = request.url;
+//     const path = url.split("/").pop();
+
+//     switch (path) {
+//       case "createproduct":
+//         console.log("----------------------------------- path", path);
+//         return await createProductReview(shopDomain, data);
+
+//       case "deletereview":
+//         return await deletereview(data);
+
+//       case "updatereview":
+//         return await updatereview(data);
+
+//       default:
+//         return responseHandler(
+//           "Bad Requist",
+//           "Invalid path provided, bro 💀",
+//           null,
+//         );
+//     }
+//   } catch (error) {
+//     console.log("catch error in test loader :", error);
+//     return responseHandler(400, "no found", null);
+//   }
+// };
+
 export const action = async ({ request }) => {
   try {
-    console.log("---------------- action apis 2");
     const data = await request.json();
+    console.log("---------------- action api triggered");
+    // const { session } = await shopify.authenticate.admin(request);
+    // console.log("Shop session ❌❌❌❌ 👍👍👍👍:", session)
+    // const shopDomain = session.shop;
 
-    const { path } = await authenticateUser(request);
+    // console.log("Shop session 👍👍👍👍:", session);
 
-    console.log("----------------------------------- path", path);
+    // const url = request.url;
+    // const path = url.split("/").pop();
+
+    const { path, session } = await authenticateUser(request);
 
     switch (path) {
       case "createproduct":
-        return await createProductReview(data);
+        console.log("Path: ➖➖➖➖➖", path);
+        return await createProductReview(session.shop, data);
+
       case "deletereview":
-        return await deletereview(data);
+        // Assuming deletereview expects shopDomain for nested schema
+        return await deletereview(shopDomain);
+
       case "updatereview":
-        return await updatereview(data);
+        // Assuming updatereview expects shopDomain + payload
+        return await updatereview(shopDomain, data);
+
       default:
-        break;
+        return responseHandler(400, "Invalid path provided 💀", null);
     }
   } catch (error) {
-    console.log("catch error in test loader :", error);
-    return responseHandler(400, "no found", null);
+    console.log("Catch error in action:", error);
+    return responseHandler(500, "Something went wrong 😵", null);
   }
 };

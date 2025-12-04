@@ -51,7 +51,6 @@ const productReviewSchema = new Schema(
     },
     author: {
       type: String,
-      default: null,
       required: true,
     },
     email: {
@@ -59,12 +58,38 @@ const productReviewSchema = new Schema(
       required: true,
       unique: true,
     },
+    spam: {
+      type: Boolean,
+      default: false,
+    },
+
+    fraud: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true },
 );
 
+const settingSchema = new Schema({
+  shop: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+
+  review: {
+    type: [productReviewSchema],
+    required: true,
+  },
+});
+
 const ProductReview =
   mongoose.models.ProductReview ||
-  mongoose.model("ProductReview", productReviewSchema);
+  mongoose.model("ProductReview", settingSchema);
 
 export default ProductReview;

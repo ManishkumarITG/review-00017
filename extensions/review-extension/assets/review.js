@@ -116,22 +116,19 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
     console.log(ratingInput.value, "ratingInput");
-
     form.querySelectorAll(".error-msg").forEach((el) => (el.textContent = ""));
-    console.log("Review Form Data:", payload);
-    console.log("url name", window.location.origin);
 
     try {
       const datatoSend = {
         author: payload.Name,
-        shop: window.location.host,
-        productId: productIdliquid,
+        idType:
+          ShopifyAnalytics.meta.page.pageType === "home" ? "shop" : "product",
+        targetId: ShopifyAnalytics.meta.product.id,
         email: payload.Email,
         rating: payload.Rating,
         description: payload.Discription,
         images: "null",
-        orderId: "fsjgksdffdsdf",
-        customerId: "skdjghfgsdjh",
+        customerId: ShopifyAnalytics.meta.page.customerId,
       };
       const baseUrl = window.location.origin;
       // const productId = window.__productId;
@@ -178,4 +175,13 @@ document.addEventListener("DOMContentLoaded", () => {
     errorElement.textContent = message;
     inputElement.after(errorElement);
   }
+
+  const closeForm = document.getElementById("closeForm");
+  closeForm.addEventListener("click", () => {
+    const formDIV = document.getElementById("FormParentDiv");
+    form.reset();
+
+    formDIV.style.display = "none";
+  });
+
 });

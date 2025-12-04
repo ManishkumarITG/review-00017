@@ -27,7 +27,7 @@ import DeshboardCard from "./components/deshboardCard";
 import ReviewInlineCard from "./components/ReviewInlineCard";
 import DeshboardGuidense from "./components/DeshboardGuidense";
 import DeshboardimageWithText from "./components/DeshboardImageWithText";
-import { useNavigate  } from "react-router";
+import { useNavigate } from "react-router";
 import DeshboardHeader from "./components/DeshboardHeader";
 
 export default function Deshboard() {
@@ -37,6 +37,7 @@ export default function Deshboard() {
 
 
   function Loding() {
+
     return <>
       <InlineStack align="center" gap="100" type="center">
         <Spinner size="large" accessibilityLabel="Loading content" />

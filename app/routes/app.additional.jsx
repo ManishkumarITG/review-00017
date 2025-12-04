@@ -4,32 +4,6 @@ import PublishingAndModeration from "./components/PublishingAndModeration";
 
 export default function AdditionalPage() {
 
-
-  // async function tryal() {
-  //   try {
-  //     const response = await fetch('/api/routes/reviewproduct/reviews', {
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     });
-
-  //     if (!response.ok) throw new Error("API offline");
-
-  //     const data = await response.json();
-  //     console.log("CardData fetch successfully", data);
-  //     return data;
-
-  //   } catch (error) {
-  //     console.log("Error in Fetching data in Deshboard Cards", error);
-
-
-
-  //     console.log("CardData", carddata);
-  //     return carddata;
-  //   }
-  // }
-  // tryal()
   return (
     <>
       <s-page heading="Additional page">
