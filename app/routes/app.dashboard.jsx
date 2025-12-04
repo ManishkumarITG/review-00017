@@ -13,44 +13,39 @@ import {
   Box,
   Image,
   Link,
-  Spinner
+  Spinner,
 } from "@shopify/polaris";
 import { AppProvider } from "@shopify/polaris";
 import en from "@shopify/polaris/locales/en.json";
 import "@shopify/polaris/build/esm/styles.css";
-import {
-  CalendarIcon,
-
-  ChartVerticalIcon,
-} from "@shopify/polaris-icons";
+import { CalendarIcon, ChartVerticalIcon } from "@shopify/polaris-icons";
 import DeshboardCard from "./components/deshboardCard";
 import ReviewInlineCard from "./components/ReviewInlineCard";
 import DeshboardGuidense from "./components/DeshboardGuidense";
 import DeshboardimageWithText from "./components/DeshboardImageWithText";
-import { useNavigate  } from "react-router";
+import { useNavigate } from "react-router";
 import DeshboardHeader from "./components/DeshboardHeader";
 
 export default function Deshboard() {
   const navigate = useNavigate();
   const [carddata, setCardData] = useState([]);
 
-
-
   function Loding() {
-    return <>
-      <InlineStack align="center" gap="100" type="center">
-        <Spinner size="large" accessibilityLabel="Loading content" />
-      </InlineStack>
-
-    </>;
+    return (
+      <>
+        <InlineStack align="center" gap="100" type="center">
+          <Spinner size="large" accessibilityLabel="Loading content" />
+        </InlineStack>
+      </>
+    );
   }
 
   async function CardData() {
     try {
-      const response = await fetch('/app/getcardData', {
-        method: 'GET',
+      const response = await fetch("/app/getcardData", {
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
@@ -59,7 +54,6 @@ export default function Deshboard() {
       const data = await response.json();
       console.log("CardData fetch successfully", data);
       return data;
-
     } catch (error) {
       console.log("Error in Fetching data in Deshboard Cards", error);
 
@@ -107,16 +101,15 @@ export default function Deshboard() {
     }
   }
 
-
-
   useEffect(() => {
-    CardData().then((data) => {
-      setCardData(data);
-    }).catch((error) => {
-      console.error("Error fetching card data:", error);
-    });
+    CardData()
+      .then((data) => {
+        setCardData(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching card data:", error);
+      });
   }, []);
-
 
   const ranges = [
     {
@@ -216,7 +209,6 @@ export default function Deshboard() {
   const [popoverActive, setPopoverActive] = useState(false);
   const [filteredData, setFilteredData] = useState(carddata);
 
-
   function filterresult(value) {
     const newSelected = ranges.find((range) => range.alias === value[0]);
     setSelected(newSelected);
@@ -250,9 +242,6 @@ export default function Deshboard() {
 
     setPopoverActive(false);
   }
-
-
-  console.log(filteredData);
 
   return (
     <>
@@ -310,30 +299,25 @@ export default function Deshboard() {
                 </InlineGrid>
               </InlineGrid>
 
-
               {filteredData?.length <= 0 ? (
+                <InlineGrid alignItems="center" gap="200">
+                  <Loding />
+                </InlineGrid>
+              ) : (
                 <InlineGrid
-
+                  columns={{
+                    xs: "1fr",
+                    sm: "1fr 1fr",
+                    md: "1fr 1fr 1fr 1fr 1fr",
+                  }}
                   alignItems="center"
                   gap="200"
                 >
-                  <Loding />
-
+                  {filteredData.map((element, idx) => (
+                    <DeshboardCard key={idx} element={element} />
+                  ))}
                 </InlineGrid>
-              ) : (<InlineGrid
-                columns={{
-                  xs: "1fr",
-                  sm: "1fr 1fr",
-                  md: "1fr 1fr 1fr 1fr 1fr",
-                }}
-                alignItems="center"
-                gap="200"
-              >
-                {filteredData.map((element, idx) => (
-                  <DeshboardCard key={idx} element={element} />
-                ))}
-              </InlineGrid>)
-              }
+              )}
               <InlineGrid
                 columns={{
                   xs: "1fr",
@@ -408,6 +392,5 @@ export default function Deshboard() {
         </Page>
       </AppProvider>
     </>
-
   );
 }

@@ -7,11 +7,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     "Vikram|1|Terrible quality, do not buy!|2024-10-30",
   ];
 
+  const productIdliquid = window.__productId;
+  // const stroeID = window.__shop.permanent_domain;
+
   async function apidata() {
     try {
+      const type = productIdliquid ? "product" : "store";
       const baseUrl = window.location.origin;
       const response = await fetch(
-        `${baseUrl}/apps/review/api/routes/reviewproduct/reviews?limit=28`,
+        `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/reviews?idTYpe=${type}&limit=28`,
         {
           method: "GET",
           headers: {
@@ -24,9 +28,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       // realdata = data.data.data
       console.log(data);
 
-      console.log("data from api", data.data.data);
+      console.log("data from api", data.data.items);
 
-      return data.data.data;
+      return data.data.items;
     } catch (error) {
       console.error("Error fetching API data:", error);
     }
@@ -50,10 +54,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   const filterSelect = document.getElementsByClassName("jm-sort-select")[0];
   const parsedData = realdata.map((data) => {
-    const { author, rating, description, createdAt } = data;
+    const { userName, rating, description, createdAt } = data;
 
     return {
-      author: author || "Anonymous",
+      author: userName || "Anonymous",
       rating: Number(rating),
       description,
       date: createdAt ? createdAt.split("T")[0] : "",

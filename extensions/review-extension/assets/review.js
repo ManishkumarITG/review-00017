@@ -65,10 +65,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const productIdliquid = window.__productId;
 
+  console.log("------------------------- productIdliquid", productIdliquid);
+
   const form = document.getElementById("reviewForm");
   const regexExpression = /^(?!\s*$).+/;
   const emailRegexExpression = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  // const ratingInput = document.getElementById("selectedRating");
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -118,27 +120,27 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log(ratingInput.value, "ratingInput");
 
     form.querySelectorAll(".error-msg").forEach((el) => (el.textContent = ""));
-    console.log("Review Form Data:", payload);
-    console.log("url name", window.location.origin);
+    const shopDamian = window.location.host;
+    const id = productIdliquid || shopDamian;
+    const idTYpe = productIdliquid ? "prodcut" : "store";
+    console.log("id , type", id, idTYpe);
 
     try {
       const datatoSend = {
         author: payload.Name,
-        shop: window.location.host,
-        productId: productIdliquid,
+        shop: shopDamian,
+        targetId: id,
+        idType: idTYpe,
         email: payload.Email,
         rating: payload.Rating,
         description: payload.Discription,
         images: "null",
-        orderId: "fsjgksdffdsdf",
-        customerId: "skdjghfgsdjh",
       };
       const baseUrl = window.location.origin;
-      // const productId = window.__productId;
 
       console.log("hello api", window.location);
       const response = await fetch(
-        `${baseUrl}/apps/review/api/routes/reviewproduct/createproduct`,
+        `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/createproduct`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

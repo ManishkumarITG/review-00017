@@ -1,19 +1,23 @@
 import {
   createReview,
   deleteReviewById,
-  getAllReviews,
+  getReviewsByType,
   updatereviewbyId,
+  getAllReviewsByShop,
 } from "../services/review.service";
 import STATUS_CODE from "../contents/statusCode.js";
 import MESSAGE from "../contents/message.js";
 import { responseHandler } from "../utils/responseHandler";
-import mongoConnect from "/app/db.server";
 
-export const createProductReview = async (payload) => {
+export const createProductReview = async (shop, payload) => {
   try {
-    await mongoConnect();
-    const data = await createReview(payload);
-    
+    console.log(
+      "------------------------------------- palyload12",
+      shop,
+      payload,
+    );
+    const data = await createReview(shop, payload);
+
     return responseHandler(STATUS_CODE.CREATED, MESSAGE.CREATED, data);
   } catch (error) {
     console.log("error in create review controller", error);
@@ -25,20 +29,22 @@ export const createProductReview = async (payload) => {
   }
 };
 
-// export const getReviews = async () => {
-//   try {
-//     await mongoConnect();
-//     const data = await getAllReviews();
-//     return responseHandler(STATUS_CODE.OK, MESSAGE, data);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
+export const getAllReviews = async (payload) => {
+  try {
+    const data = await getAllReviewsByShop(payload);
+    return responseHandler(STATUS_CODE.OK, MESSAGE.SUCCESS, data);
+  } catch (error) {
+    responseHandler(
+      STATUS_CODE.INTERNAL_SERVER_ERROR,
+      MESSAGE.SERVER_ERROR,
+      null,
+    );
+  }
+};
 
 export const getReviews = async (filters) => {
   try {
-    await mongoConnect();
-    const data = await getAllReviews(filters);
+    const data = await getReviewsByType(filters);
     return responseHandler(STATUS_CODE.OK, MESSAGE.SUCCESS, data);
   } catch (error) {
     console.log(error);
@@ -55,9 +61,9 @@ export const deletereview = async (payload) => {
   }
 };
 
-export const updatereview = async (payload) => {
+export const updatereview = async (shop, payload) => {
   try {
-    const data = await updatereviewbyId(payload);
+    const data = await updatereviewbyId(shop, payload);
     return responseHandler(STATUS_CODE.OK, MESSAGE.UPDATED, data);
   } catch (error) {
     console.log(error);

@@ -1,21 +1,35 @@
 import mongoose, { Schema } from "mongoose";
 
-const productReviewSchema = new Schema(
+const reviewSchema = new mongoose.Schema(
   {
     shop: {
       type: String,
       required: true,
     },
-    type: {
+
+    targetId: {
       type: String,
-      enum: ["product", "store"], // restricts values
+      required: true,
+    },
+    idType: {
+      type: String,
+      enum: ["store", "product"],
       required: true,
       default: "product",
     },
-    productId: {
+
+    spam: {
+      type: Boolean,
+      default: false,
+    },
+
+    froud: {
+      type: Boolean,
+      default: false,
+    },
+
+    title: {
       type: String,
-      required: true,
-      unique: true,
     },
     like: {
       type: Boolean,
@@ -32,39 +46,34 @@ const productReviewSchema = new Schema(
       default: "",
     },
     images: {
-      type: String,
-      default: "",
+      type: [String],
+      default: [],
     },
     pinned: {
       type: Boolean,
       default: false,
     },
-
-    orderId: {
+    userName: {
       type: String,
-      default: "",
-    },
-
-    customerId: {
-      type: String,
-      default: null,
-    },
-    author: {
-      type: String,
-      default: null,
       required: true,
     },
     email: {
       type: String,
       required: true,
-      unique: true,
     },
   },
   { timestamps: true },
 );
 
-const ProductReview =
-  mongoose.models.ProductReview ||
-  mongoose.model("ProductReview", productReviewSchema);
+function getReviewModel(shop) {
+  if (!shop) throw new Error("shopId is required to create review model");
 
-export default ProductReview;
+  const safeShop = String(shop).replace(/[^a-zA-Z0-9_-]/g, "_");
+  const collectionName = `reviews_${safeShop}`;
+
+  if (mongoose.models[collectionName]) return mongoose.model(collectionName);
+
+  return mongoose.model(collectionName, reviewSchema, collectionName);
+}
+
+export default getReviewModel;
