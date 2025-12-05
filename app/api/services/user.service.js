@@ -1,8 +1,6 @@
-import mongoConnect from "../../db.server";
 import User from "../models/user.model";
 
 export const createOrGetUser = async (payload) => {
-  await mongoConnect()
   const { customerId, name, email, shop } = payload;
 
   let user = await User.findOne({ customerId });

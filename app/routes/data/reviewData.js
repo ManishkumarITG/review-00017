@@ -1,6 +1,6 @@
 export const reviews = [
   {
-    id: "1",
+    _id: "1",
     name: "Manish",
     item: "Bag",
     updatedAt: "2 days",
@@ -11,7 +11,7 @@ export const reviews = [
     spam: false,
   },
   {
-    id: "2",
+    _id: "2",
     name: "Amit",
     item: "Shoes",
     updatedAt: "1 day ago",
@@ -22,7 +22,7 @@ export const reviews = [
     spam: false,
   },
   {
-    id: "3",
+    _id: "3",
     name: "Rahul",
     item: "Watch",
     updatedAt: "3 days",
@@ -33,7 +33,7 @@ export const reviews = [
     spam: false,
   },
   {
-    id: "4",
+    _id: "4",
     name: "Suresh",
     item: "T-Shirt",
     updatedAt: "5 days",
@@ -44,7 +44,7 @@ export const reviews = [
     spam: false,
   },
   {
-    id: "5",
+    _id: "5",
     name: "Vikas",
     item: "Laptop",
     updatedAt: "12 hours",
@@ -55,7 +55,7 @@ export const reviews = [
     spam: false,
   },
   {
-    id: "6",
+    _id: "6",
     name: "Neha",
     item: "Mobile",
     updatedAt: "4 days",
@@ -66,7 +66,7 @@ export const reviews = [
     spam: false,
   },
   {
-    id: "7",
+    _id: "7",
     name: "Priya",
     item: "Headphones",
     updatedAt: "6 hours",
@@ -77,7 +77,7 @@ export const reviews = [
     spam: false,
   },
   {
-    id: "8",
+    _id: "8",
     name: "Rohit",
     item: "Bag",
     updatedAt: "7 days",
@@ -88,7 +88,7 @@ export const reviews = [
     spam: false,
   },
   {
-    id: "9",
+    _id: "9",
     name: "Aman",
     item: "Shoes",
     updatedAt: "2 hours",
@@ -99,7 +99,7 @@ export const reviews = [
     spam: false,
   },
   {
-    id: "10",
+    _id: "10",
     name: "Deepak",
     item: "Keyboard",
     updatedAt: "3 days ago",
@@ -110,7 +110,7 @@ export const reviews = [
     spam: false,
   },
   {
-    id: "11",
+    _id: "11",
     name: "Mohan",
     item: "Mouse",
     updatedAt: "9 hours",
@@ -121,7 +121,7 @@ export const reviews = [
     spam: false,
   },
   {
-    id: "12",
+    _id: "12",
     name: "Nitin",
     item: "Monitor",
     updatedAt: "1 week",
@@ -132,7 +132,7 @@ export const reviews = [
     spam: false,
   },
   {
-    id: "13",
+    _id: "13",
     name: "Kunal",
     item: "Charger",
     updatedAt: "13 hours",
@@ -143,7 +143,7 @@ export const reviews = [
     spam: false,
   },
   {
-    id: "14",
+    _id: "14",
     name: "Sneha",
     item: "Powerbank",
     updatedAt: "8 days",
@@ -154,67 +154,12 @@ export const reviews = [
     spam: false,
   },
   {
-    id: "15",
+    _id: "15",
     name: "Harshit",
     item: "Speaker",
     updatedAt: "11 hours",
     Rating: 4.1,
     description: "Good sound",
-    email: "balwan@gamil.com",
-    pinned: false,
-    spam: false,
-  },
-  {
-    id: "16",
-    name: "Ragini",
-    item: "Bag",
-    updatedAt: "4 days",
-    Rating: 4.3,
-    description: "Nice bag",
-    email: "balwan@gamil.com",
-    pinned: false,
-    spam: false,
-  },
-  {
-    id: "17",
-    name: "Varun",
-    item: "Shoes",
-    updatedAt: "1 day",
-    Rating: 4.6,
-    description: "Comfortable",
-    email: "balwan@gamil.com",
-    pinned: false,
-    spam: false,
-  },
-  {
-    id: "18",
-    name: "Jatin",
-    item: "Watch",
-    updatedAt: "5 hours",
-    Rating: 3.7,
-    description: "Decent watch",
-    email: "balwan@gamil.com",
-    pinned: false,
-    spam: false,
-  },
-  {
-    id: "19",
-    name: "Alka",
-    item: "T-Shirt",
-    updatedAt: "2 days",
-    Rating: 4.1,
-    description: "Good quality",
-    email: "balwan@gamil.com",
-    pinned: false,
-    spam: false,
-  },
-  {
-    id: "20",
-    name: "Ravi",
-    item: "Laptop",
-    updatedAt: "8 hours",
-    Rating: 4.8,
-    description: "Super fast",
     email: "balwan@gamil.com",
     pinned: false,
     spam: false,
@@ -230,6 +175,7 @@ export const rattingArray = {
     { rating: 1, pepole: 0 },
   ],
   totalReview: 15,
+  avgRating: 4.2,
 };
 
 export const tabsdata = [
@@ -237,7 +183,7 @@ export const tabsdata = [
     id: "all-customers-1",
     content: "All",
     accessibilityLabel: "All customers",
-    panelID: "all-customers-content-1",
+    panelid: "all-customers-content-1",
   },
 ];
 
@@ -265,4 +211,12 @@ export const simplifiedMediaCardData = [
     key: 3,
     path: "/app/writeReview",
   },
+];
+
+export const itemStrings = [
+  "All Reviews",
+  "Product Reviews",
+  "Store Reviews",
+  "Spam",
+  "Archives",
 ];

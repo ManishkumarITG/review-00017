@@ -3,10 +3,11 @@
   const productId = {{ product.id | json }};
 </script>
 
-{% if customer == nil %}
-  <script>window.location.replace('/account/login?return_to={{ request.path | url_encode }}');</script>
+{% if customer == null and request.design_mode == false %}
+  <script>
+    window.location.replace('/account/login?return_to={{ request.path | url_encode }}');
+  </script>
 {% endif %}
-
 
 <script>
   window.reviewSettings = {

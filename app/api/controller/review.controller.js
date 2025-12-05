@@ -5,6 +5,7 @@ import {
   updatereviewbyId,
   getAllReviewsByShop,
   getRatingSummaryService,
+  searchReviews,
 } from "../services/review.service";
 import STATUS_CODE from "../contents/statusCode.js";
 import MESSAGE from "../contents/message.js";
@@ -75,6 +76,20 @@ export const updatereview = async (shop, payload) => {
 export const getRatingSummary = async (shop) => {
   try {
     const data = await getRatingSummaryService(shop);
+    return responseHandler(STATUS_CODE.OK, MESSAGE.SUCCESS, data);
+  } catch (error) {
+    console.log("rating summary error:", error);
+    return responseHandler(
+      STATUS_CODE.INTERNAL_SERVER_ERROR,
+      error.message,
+      null,
+    );
+  }
+};
+
+export const getSearchResult = async (shop, query) => {
+  try {
+    const data = await searchReviews(shop, query);
     return responseHandler(STATUS_CODE.OK, MESSAGE.SUCCESS, data);
   } catch (error) {
     console.log("rating summary error:", error);
