@@ -3,6 +3,11 @@
   const productId = {{ product.id | json }};
 </script>
 
+{% if customer == nil %}
+  <script>window.location.replace('/account/login?return_to={{ request.path | url_encode }}');</script>
+{% endif %}
+
+
 <script>
   window.reviewSettings = {
     starColor: "{{ block.settings.star_color }}",
@@ -14,38 +19,6 @@
 
 <script src="{{ 'reviewFilter.js' | asset_url }}" defer></script>
 
-<script>
-  function handleClick() {
-    console.log('Enter in handleClick function');
-    const errorEl = document.querySelector('.NoReviewerror-msg');
-    const NoReviewSelectedRating = Number(document.getElementById('NoReviewSelectedRating')?.value || 0);
-    {% comment %} const reviewSource = window.reviewConfig.reviewSource; {% endcomment %}
-    console.log(errorEl, 'erriorEl');
-    const url = window.location.origin
-    console.log( "url" , url)
-
-    // Toggle the popup form
-    const formDIV = document.getElementById('popupForm');
-    if (!formDIV) {
-      console.warn('popupForm missing in DOM');
-      return;
-    }
-
-    formDIV.style.display = formDIV.style.display === 'block' ? 'none' : 'block';
-  }
-</script>
-
-{% comment %}
-  {% if product %}
-    <script>
-      const productId = {{ product.id | json }};
-      // Now you can use productId in your JavaScript
-      console.log("Product ID:", productId);
-      // Call your JavaScript function with the product ID
-      // myAppFunction(productId);
-    </script>
-  {% endif %}
-{% endcomment %}
 {% if product %}
   <script>
     window.__productId = {{ product.id | json }};
@@ -58,16 +31,7 @@
 <div class="jm-review-widget my-review-widget" id="jm-review-{{ section.id }}">
   {% comment %} <!-- Header --> {% endcomment %}
 
-  <div class="jm-list" id="jm-list-{{ section.id }}">
-    <div
-      style="
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 9px;
-      "
-    ></div>
-
+  <div class="jm-list" style="    padding: 0px 72px;" d="jm-list-{{ section.id }}">
     {% if block.settings.review_source == 'dummy' %}
       <div
         style="
@@ -80,11 +44,11 @@
         <h2
           class="jm-heading"
           style="
-            color: {{ block.settings.heading_color }};
-            font-size: {{ block.settings.heading_font }}px;
+            color: black;
+            font-size: 22px;
           "
         >
-          {{ block.settings.heading }}
+          Customer Reviews
         </h2>
         <div>
           <div style=" align-items:center; gap:0px; flex-direction:row;">
@@ -121,10 +85,10 @@
               {% comment %} <!-- LEFT: static stars (5 to 1) --> {% endcomment %}
               <span
                 style="
-                  color: {{ block.settings.star_color }};
-                  font-size: {{ block.settings.star_size }}px;
+                  color: #388B7F;
+                  font-size: 19px;
                   width: 40%;
-                  display:flex;
+                  display: flex
                 "
               >
                 {% render 'stars', rating: i %}
@@ -135,7 +99,7 @@
                   style="
                     height:14px;
                     width:{{ progress_percent }}%;
-                    background: {{ block.settings.star_color }};
+                    background: #388B7F;
                     border-radius:0px;
                   "
                 ></div>
@@ -152,15 +116,12 @@
         <button
           class="jm-write"
           style="
-            background: {{ block.settings.btn_bg }};
-            color: {{ block.settings.btn_color }};
-            border-radius: {{ block.settings.btn_radius }};
-            padding: {{ block.settings.btn_padding }};
-            font-size: {{ block.settings.btn_font_size }};
-            margin: {{ block.settings.btn_margin }};
-            width:100%
+            background: #388B7F;
+            color: white;
+            margin: 10px 0;
+            width: 100%;
           "
-          onclick="handleClick()"
+          {% comment %} onclick="handleClick()" {% endcomment %}
         >
           Write a review
         </button>
@@ -178,7 +139,10 @@
         </div>
       </div>
 
-      <div id="reviewsList" style="display:flex; flex-direction:column; gap:18px; margin-top:20px;"></div>
+      <div
+        id="reviewsList"
+        style="display:flex; flex-direction:column; gap:18px; margin-top:20px;     position: relative;"
+      ></div>
     {% elsif block.settings.review_source == 'real' %}
       <div
         style="
@@ -191,28 +155,35 @@
         <h2
           class="jm-heading"
           style="
-            color: {{ block.settings.heading_color }};
-            font-size: {{ block.settings.heading_font }}px;
+            color: black;
+            font-size: 22px;
           "
         >
-          {{ block.settings.heading }}
+          Customer Reviews
         </h2>
         <div>
           <div style=" align-items:center; gap:0px; flex-direction:row;">
             <span
               style="
-                color: {{block.settings.star_color}};
-                font-size: {{block.settings.star_size}}px;
+                color : #108474;
+                font-size: 19px;
                 display:flex;
                 gap:8px;
                 align-items:center;
               "
             >
               {% render 'stars', rating: actual_rating %}
-              <span style="font-weight:normal; color:black; font-size:14px;">{{ actual_rating }} out of 5</span>
+              <span style="font-weight:normal; color:black; font-size:16px;">{{ actual_rating }} out of 5</span>
             </span>
           </div>
-          <span>Based on 15 reviews</span>
+          <span
+            style="
+              font-weight: normal;
+              color: black;
+              font-size: 16px;
+            "
+            >Based on 15 reviews</span
+          >
         </div>
         <div>
           {% assign star_counts = '8,3,1,3,0' | split: ',' %}
@@ -232,10 +203,10 @@
               {% comment %} <!-- LEFT: static stars (5 to 1) --> {% endcomment %}
               <span
                 style="
-                  color: {{ block.settings.star_color }};
-                  font-size: {{ block.settings.star_size }}px;
+                  color: #388B7F;
+                  font-size: 19px;
                   width: 40%;
-                  display:flex;
+                  display: flex
                 "
               >
                 {% render 'stars', rating: i %}
@@ -246,7 +217,7 @@
                   style="
                     height:14px;
                     width:{{ progress_percent }}%;
-                    background: {{ block.settings.star_color }};
+                    background: #388B7F;
                     border-radius:0px;
                   "
                 ></div>
@@ -263,15 +234,12 @@
         <button
           class="jm-write"
           style="
-            background: {{ block.settings.btn_bg }};
-            color: {{ block.settings.btn_color }};
-            border-radius: {{ block.settings.btn_radius }};
-            padding: {{ block.settings.btn_padding }};
-            font-size: {{ block.settings.btn_font_size }};
-            margin: {{ block.settings.btn_margin }};
-            width:100%
+            background: #388B7F;
+            color: white;
+            margin: 10px 0;
+            width: 100%;
           "
-          onclick="handleClick()"
+          {% comment %} onclick="handleClick()" {% endcomment %}
         >
           Write a review
         </button>
@@ -284,7 +252,10 @@
           </select>
         </div>
       </div>
-      <div id="reviewsList" style="display:flex; flex-direction:column; gap:18px; margin-top:20px;"></div>
+      <div
+        id="reviewsList"
+        style="display:flex; flex-direction:column; gap:18px; margin-top:20px;     position: relative; "
+      ></div>
 
     {% elsif block.settings.review_source == 'noReview' %}
       <div
@@ -299,11 +270,11 @@
           <h2
             class="jm-heading"
             style="
-              color: {{ block.settings.heading_color }};
-              font-size: {{ block.settings.heading_font }}px;
+              color:black;
+              font-size: 21px;
             "
           >
-            {{ block.settings.heading }}
+            Customer Reviews
           </h2>
         </div>
         <div
@@ -341,10 +312,10 @@
             <button
               class="jm-write"
               style="
-                background: {{ block.settings.button_color }};
-                color: {{ block.settings.button_text_color }};
+                background: #388B7F;
+                color: white;
               "
-              onclick="handleClick()"
+              {% comment %} onclick="handleClick()" {% endcomment %}
             >
               Write a review
             </button>
@@ -366,182 +337,101 @@
         <button
           class="jm-write"
           style="
-            background: {{ block.settings.button_color }};
-            color: {{ block.settings.button_text_color }};
+            background: #388B7F;
+            color: white;
           "
-          onclick="handleClick()"
+          {% comment %} onclick="handleClick()" {% endcomment %}
         >
           Write a review
         </button>
       </div>
     {% endif %}
   </div>
-  <div
-    id="popupForm"
-    style="
-      display:none;
-      max-width:100%;
-      margin:20px 20px;
-      padding:24px;
-      background:#fff;
-      border-radius:16px;
-      box-shadow:0 6px 20px rgba(0,0,0,0.08);
-      font-family:Arial, sans-serif;
-      border: 1px solid {{ block.settings.form_border_color }};
-      align-items:center;
-    "
-  >
-    <form id="reviewForm" style="padding:20px">
-      {% comment %} <!-- Star Rating --> {% endcomment %}
-      <div
-        style="
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        "
-      >
-        <label
-          style="
-            font-size:{{block.settings.label_font_size}}px;
-            font-weight:{{block.settings.label_font_weight}};
-            color:{{block.settings.label_text_color}};
-             display: flex;
-            flex-direction: column;
-            gap: 10px;
-          "
-        >
-          {{ block.settings.star_label }}
-          <div id="formStars" style="display:flex; gap:4px; flex-direction:column; ">
-            <div>
+  <div id="FormParentDiv" class="modal-overlay" style="display:none">
+    <div id="popupForm" class="modal-overlay">
+      <form id="reviewForm" class="review-card">
+        <div id="closeForm" class="close-btn" onclick="closeForm()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="26"
+            height="26"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6"  y1="6" x2="18" y2="18"/>
+          </svg>
+        </div>
+
+        <!-- Rating -->
+        <label class="field-label">
+          Rate the product
+          <div id="formStars" class="star-wrapper">
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+            >
               {% for i in (1..5) %}
-                <span
-                  class="form-star"
-                  data-value="{{ i }}"
-                  style="
-                    font-size:60px;
-                    color:#ccc;
-                    cursor:pointer;
-                  "
-                  >★</span
-                >
+                <span class="form-star" data-value="{{ i }}">★</span>
               {% endfor %}
             </div>
-
             <input type="hidden" id="selectedRating" name="Rating" value="0">
             <span class="error-msg"></span>
           </div>
         </label>
-      </div>
-      {% comment %} <!-- Display Name --> {% endcomment %}
-      <label
-        style="
-                font-size:{{block.settings.label_font_size}}px;
-                font-weight:{{block.settings.label_font_weight}};
-                color:{{block.settings.label_text_color}};
-                    display: flex;
-          flex-direction: column;
-          gap: 10px;
-        "
-      >
-        {{ block.settings.display_name_label }}
 
-        <input
-          name="Name"
-          type="text"
-          placeholder="Enter Your Name"
-          value="{{ block.settings.display_name_text }}"
-          style="
-            width:100%;
-            padding:10px 12px;
-            border:1px solid {{ block.settings.border_color }};
-            border-radius: {{ block.settings.border_radius }}px;
-            margin-bottom:5px;
-            font-size:12px;
-          "
-        >
-        <span class="error-msg"></span>
-      </label>
+        <!-- Name -->
+        <label class="field-label">
+          Display Name
+          <input
+            name="Name"
+            type="text"
+            placeholder="Enter Your Name"
+            value="{{ block.settings.display_name_text }}"
+            class="input-field"
+            id="formName"
+          >
+          <span class="error-msg"></span>
+        </label>
 
-      {% comment %} <!-- Email --> {% endcomment %}
-      <label
-        style="
-          font-size:{{block.settings.label_font_size}}px;
-          font-weight:{{block.settings.label_font_weight}};
-          color:{{block.settings.label_text_color}};
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-        "
-      >
-        {{ block.settings.email_label }}
-        <input
-          name="Email"
-          type="text"
-          placeholder="Enter Your Email"
-          value="{{ block.settings.User_email }}"
-          style="
-            width:100%;
-            padding:10px 12px;
-            border:1px solid {{ block.settings.border_color }};
-            border-radius: {{ block.settings.border_radius }}px;
-            margin-bottom:16px;
-            font-size:14px;
-          "
-        >
-        <span class="error-msg"></span>
-      </label>
+        <!-- Email -->
+        <label class="field-label">
+          Email
+          <input
+            name="Email"
+            type="text"
+            placeholder="Enter Your Email"
+            value="{{ block.settings.User_email }}"
+            class="input-field"
+            id="formEmail"
+          >
+          <span class="error-msg"></span>
+        </label>
 
-      {% comment %} <!-- Description --> {% endcomment %}
-      <label
-        style="
-          font-size:{{block.settings.label_font_size}}px;
-          font-weight:{{block.settings.label_font_weight}};
-          color:{{block.settings.label_text_color}};
-          display:flex;
-          flex-direction: column;
-          gap: 10px;
-        "
-      >
-        {{ block.settings.description_label }}
-        <textarea
-          name="Discription"
-          placeholder="{{ block.settings.description_placeholder }}"
-          style="
-            width:100%;
-            min-height:100px;
-            border:1px solid {{ block.settings.border_color }};
-            padding:10px 12px;
-            font-size:14px;
-            resize:vertical;
-            border-radius: {{ block.settings.border_radius }}px;
-            margin-bottom:16px;
-          "
-        >{{ block.settings.textarea_text }}</textarea>
-        <span class="error-msg"></span>
-      </label>
+        <!-- Description -->
+        <label class="field-label">
+          Description
+          <textarea
+            name="Discription"
+            placeholder="Write your review here ... "
+            class="textarea-field"
+            id="formDesc"
+          >{{ block.settings.textarea_text }}</textarea>
+          <span class="error-msg"></span>
+        </label>
 
-      {% comment %} <!-- Submit Button --> {% endcomment %}
-      <button
-        type="submit"
-        style="
-          width:100%;
-          margin-top:16px;
-          padding:12px 0;
-          border:none;
-          border-radius:10px;
-          background: {{ block.settings.star_color }};
-          color: {{ block.settings.form_button_text_color }};
-          font-size:15px;
-          font-weight:600;
-          cursor:pointer;
-        "
-      >
-        {{ block.settings.submit_text }}
-      </button>
-    </form>
+        <button type="submit" class="submit-btn" id="submitButton">Submit</button>
+      </form>
+    </div>
   </div>
 </div>
-
 {% schema %}
 {
   "name": "ReviewWidget",
@@ -570,175 +460,17 @@
     },
 
     {
-      "type": "number",
-      "id": "star_size",
-      "label": "Star Size",
-      "default": 24
-    },
-    {
-      "type": "number",
-      "id": "actual_rating",
-      "label": "Actual Rating",
-      "default": 5
-    },
-    {
-      "type": "color",
-      "id": "star_color",
-      "label": "Star color",
-      "default": "#108474"
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Customer Reviews"
-    },
-    {
-      "type": "color",
-      "id": "heading_color",
-      "label": "Heading color",
-      "default": "#2a2a2a"
-    },
-    {
-      "type": "range",
-      "id": "heading_font",
-      "label": "Heading font size",
-      "default": 22,
-      "min": 12,
-      "max": 48
-    },
-
-    {
-      "type": "color",
-      "id": "text_color",
-      "label": "Review text color",
-      "default": "#333333"
-    },
-
-    {
-      "type": "color",
-      "id": "button_color",
-      "label": "Write button color",
-      "default": "#108474"
-    },
-    {
-      "type": "color",
-      "id": "button_text_color",
-      "label": "Write button text color",
-      "default": "#ffffff"
-    },
-    {
-      "type": "text",
-      "id": "write_review_button_width",
-      "label": "Button Width",
-      "default": "50%"
-    },
-    {
       "type": "checkbox",
       "id": "show_date",
       "label": "Show Date",
       "default": false
     },
     {
-      "type": "color",
-      "id": "btn_bg",
-      "label": "Button Background Color",
-      "default": "#108474"
-    },
-    {
-      "type": "color",
-      "id": "btn_color",
-      "label": "Button Text Color",
-      "default": "#ffffff"
-    },
-    {
-      "type": "range",
-      "id": "btn_radius",
-      "label": "Border Radius",
-      "min": 0,
-      "max": 50,
-      "default": 5,
-      "unit": "px"
-    },
-    {
-      "type": "text",
-      "id": "btn_padding",
-      "label": "Padding",
-      "default": "10px 20px"
-    },
-    {
-      "type": "range",
-      "id": "btn_font_size",
-      "label": "Font Size",
-      "min": 10,
-      "max": 40,
-      "default": 14,
-      "unit": "px"
-    },
-
-    {
-      "type": "text",
-      "id": "btn_margin",
-      "label": "Margin",
-      "default": "10px 0"
-    },
-    {
-      "type": "text",
-      "id": "label_font_size",
-      "label": "Label Font Size",
-      "default": "10px"
-    },
-    {
-      "type": "text",
-      "id": "label_font_weight",
-      "label": "Label Font Weight",
-      "default": "400"
-    },
-    {
-      "type": "color",
-      "id": "label_text_color",
-      "label": "Label Font Colour",
-      "default": "#108474"
-    },
-    {
       "type": "text",
       "id": "textarea_text",
       "label": "Textarea Placeholder"
     },
-    {
-      "type": "color",
-      "id": "form_button_text_color",
-      "label": "Button Text Color",
-      "default": "#ffffff"
-    },
-    {
-      "type": "text",
-      "id": "submit_text",
-      "label": "Submit Button Text",
-      "default": "Submit"
-    },
-    {
-      "type": "color",
-      "id": "border_color",
-      "label": "Textarea Border Color",
-      "default": "#108474"
-    },
-    {
-      "type": "range",
-      "id": "border_radius",
-      "label": "Border Radius",
-      "min": 0,
-      "max": 20,
-      "step": 1,
-      "default": 10,
-      "unit": "px"
-    },
-    {
-      "type": "text",
-      "id": "display_name_label",
-      "label": "Display name label",
-      "default": "Display Name"
-    },
+
     {
       "type": "text",
       "id": "display_name_text",
@@ -746,38 +478,8 @@
     },
     {
       "type": "text",
-      "id": "email_label",
-      "label": "Email label",
-      "default": "Email"
-    },
-    {
-      "type": "text",
       "id": "User_email",
       "label": "Email text "
-    },
-    {
-      "type": "text",
-      "id": "description_label",
-      "label": "Description label",
-      "default": "Description"
-    },
-    {
-      "type": "text",
-      "id": "description_placeholder",
-      "label": "Description placeholder",
-      "default": "Write your review here ... "
-    },
-    {
-      "type": "text",
-      "id": "star_label",
-      "label": "Star Label",
-      "default": "Rate the product"
-    },
-    {
-      "type": "color",
-      "id": "form_border_color",
-      "label": "Form Border",
-      "default": "transparent"
     }
   ]
 }

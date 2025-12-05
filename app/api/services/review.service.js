@@ -1,7 +1,8 @@
 import User from "../models/user.model";
 import Review from "../models/review.model";
-
+import mongoConnect from "../../db.server";
 export const createReview = async (shop, payload) => {
+  await mongoConnect()
   const {
     targetId,
     idType,
@@ -63,6 +64,7 @@ export const getAllReviewsByShop = async (data) => {
 
 export const getReviewsByType = async (data) => {
   try {
+   await mongoConnect()
     const { limit, page, shop, idType } = data;
 
     console.log(idType);
@@ -102,7 +104,6 @@ export const getReviewsByType = async (data) => {
 export const deleteReviewById = async (payload) => {
   const { targetId } = payload;
   const deletedreview = await Review.findOneAndDelete(targetId);
-
   return deletedreview;
 };
 

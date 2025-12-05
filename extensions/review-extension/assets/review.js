@@ -3,9 +3,18 @@ document.addEventListener("DOMContentLoaded", () => {
     { author: "Amit", rating: 5, body: "Nice!", date: "2025-01-01" },
     { author: "Simran", rating: 4, body: "Loved it.", date: "2025-01-02" },
   ];
-
+  // all importent variable is here
   const lists = document.querySelectorAll(".jm-list");
+  const productIdliquid = window.__productId;
+  const submitButton = document.getElementById("submitButton");
+  const form = document.getElementById("reviewForm");
+  const regexExpression = /^(?!\s*$).+/;
+  const emailRegexExpression = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const closeForm = document.getElementById("closeForm");
+  const stars = document.querySelectorAll("#formStars .form-star");
+  const ratingInput = document.getElementById("selectedRating");
 
+  // render all dummy reviews
   lists.forEach((list) => {
     const source = list.dataset.source;
 
@@ -39,10 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  const stars = document.querySelectorAll("#formStars .form-star");
-  const ratingInput = document.getElementById("selectedRating");
-  // const noReviewRating = document.getElementById("NoReviewSelectedRating");
-
+  // star rating according to rating number
   stars.forEach((star) => {
     star.addEventListener("click", () => {
       const selectedValue = star.getAttribute("data-value");
@@ -55,6 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // reset stars on clear form
   function resetStars() {
     ratingInput.value = ""; // remove selected rating
 
@@ -63,14 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  const productIdliquid = window.__productId;
-
-  console.log("------------------------- productIdliquid", productIdliquid);
-
-  const form = document.getElementById("reviewForm");
-  const regexExpression = /^(?!\s*$).+/;
-  const emailRegexExpression = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+  // event listner for form submition
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -81,8 +81,10 @@ document.addEventListener("DOMContentLoaded", () => {
     form
       .querySelectorAll(".input-error")
       .forEach((el) => el.classList.remove("input-error"));
+    // clear all errors
     form.querySelectorAll(".error-msg").forEach((el) => (el.textContent = ""));
 
+    // get all input filds of form
     formData.forEach((value, key) => {
       let inputEl = form.querySelector(`[name="${key}"]`);
 
@@ -110,22 +112,20 @@ document.addEventListener("DOMContentLoaded", () => {
       // If all good, add to payload
       payload[key] = value;
     });
-
-    console.log("isValid →", isValid);
-
+    // check all filds is validate or not empty
     if (!isValid) {
       console.log("Form is not submitted, validation failed ");
       return;
     }
-    console.log(ratingInput.value, "ratingInput");
 
     form.querySelectorAll(".error-msg").forEach((el) => (el.textContent = ""));
-    const shopDamian = window.location.host;
+    const shopDamian = window.location.host; // shopify Domain
     const id = productIdliquid || shopDamian;
     const idTYpe = productIdliquid ? "product" : "store";
     console.log("id , type", id, idTYpe);
-
+    const customerId = ShopifyAnalytics.meta.page.customerId;
     try {
+      // data to send to the server
       const datatoSend = {
         name: payload.Name,
         shop: shopDamian,
@@ -135,11 +135,12 @@ document.addEventListener("DOMContentLoaded", () => {
         rating: payload.Rating,
         description: payload.Discription,
         images: "null",
-        customerId: "123",
+        customerId: customerId,
       };
-      const baseUrl = window.location.origin;
+      console.log(datatoSend, "😳😳😳");
 
-      console.log("hello api", window.location);
+      const baseUrl = window.location.origin;
+      // api calling
       const response = await fetch(
         `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/createproduct`,
         {
@@ -149,24 +150,38 @@ document.addEventListener("DOMContentLoaded", () => {
         },
       );
 
-      if (!response.ok) {
+      const data = await response.json();
+      submitButton.innerText = "Loading...";
+      console.log(data);
+
+      // check api return data or not and change button text
+      if (data.status !== 201) {
         console.error("API threw hands:", response.status);
+        submitButton.innerText = "Review Is Not Add Yet";
+        submitButton.style.color = "red";
+
         return null;
       }
-
-      const data = await response.json();
+      submitButton.innerText = "review Add Success fully";
       console.log("API Success →", data);
+      // window.location.reload(true);
       form.reset();
       resetStars();
-      return data; // return so parent can use it if needed
+      // close form after submit
+      setTimeout(() => {
+        closeReviewForm();
+      }, 2000);
+      return data;
     } catch (error) {
+      submitButton.innerText = "Review Is Not Add Yet";
+      submitButton.style.color = "red";
       console.error("Submit Error →", error);
       return null;
     }
   });
 
+  // show error in invalid fild
   function ShowError(inputElement, message) {
-    // form.querySelectorAll(".error-msg").forEach((el) => (el.textContent = ""));
     const wrapper = inputElement.parentElement;
 
     let errorEl = wrapper.querySelector(".error-msg");
@@ -181,4 +196,16 @@ document.addEventListener("DOMContentLoaded", () => {
     errorElement.textContent = message;
     inputElement.after(errorElement);
   }
+  // function to close form
+  function closeReviewForm() {
+    const formDIV = document.getElementById("FormParentDiv");
+    form.reset();
+    form
+      .querySelectorAll(".input-error")
+      .forEach((el) => el.classList.remove("input-error"));
+    form.querySelectorAll(".error-msg").forEach((el) => (el.textContent = ""));
+    formDIV.style.display = "none";
+  }
+
+  closeForm.addEventListener("click", closeReviewForm);
 });

@@ -2,7 +2,7 @@ import Setting from "../models/setting.model.js";
 // Create Setting
 export const createSetting = async (shopDomain, data) => {
   const isShop = await Setting.exists({ shop: shopDomain });
-  console.log("----------------------------------- is Shop" , isShop)
+  console.log("----------------------------------- is Shop", isShop);
   if (isShop) {
     throw new Error("shop is all rady exsit");
   }
@@ -51,5 +51,3 @@ export const updateSetting = async (shopDomain, settingData) => {
 // export const deleteSetting = async (id) => {
 //   return await Setting.findByIdAndDelete(id);
 // };
-
-

@@ -6,7 +6,6 @@ const reviewSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-
     idType: {
       type: String,
       enum: ["store", "product"],
