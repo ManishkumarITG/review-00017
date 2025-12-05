@@ -1,7 +1,9 @@
 import User from "../models/user.model";
 import Review from "../models/review.model";
+import mongoConnect from "../../db.server";
 
 export const createReview = async (shop, payload) => {
+  await mongoConnect();
   const {
     targetId,
     idType,
