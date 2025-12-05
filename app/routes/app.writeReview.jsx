@@ -30,6 +30,7 @@ import DropZoneWithImageFileUpload from "./components/ImageDrop.jsx";
 import { useNavigate } from "react-router";
 import { SaveBar } from "@shopify/app-bridge-react";
 import CollapsibleBox from "./components/Collapsible";
+import Loding from "./components/Loding";
 
 const colorInitialState = {
   defaultColor: true,
@@ -211,10 +212,7 @@ export default function ReviewWidgets() {
                   {colorChangeState.customColor && (
                     <>
                       {setting == null ? (
-                        <Spinner
-                          accessibilityLabel="Spinner example"
-                          size="large"
-                        />
+                        <Loding />
                       ) : (
                         setting?.color?.map((color) => {
                           const crrColor = getHexCode(color.type);
@@ -247,10 +245,7 @@ export default function ReviewWidgets() {
                   {" "}
                   <Box gap="400">
                     {setting == null ? (
-                      <Spinner
-                        accessibilityLabel="Spinner example"
-                        size="large"
-                      />
+                      <Loding />
                     ) : (
                       setting?.text?.map((text) => {
                         const titelValue = text.settingName;

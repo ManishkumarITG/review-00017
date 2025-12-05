@@ -55,18 +55,13 @@ export default function ReviewWidgets() {
   const buttonTextColor = getHexCode("buttonTextColor");
 
   const [active, setActive] = useState(null);
-
   const [dataBtn, setdataBtn] = useState(null);
-
   const [review, setReview] = useState(reviews);
-
   const [btnText, setBtnText] = useState("Sempal Data");
-
   const [loding, setLoding] = useState(false);
-
   const [rattingSummary, setRattingSummary] = useState(rattingArray.reviews);
-
   const [totalReview, setTotalReview] = useState(rattingArray.totalReview);
+  const [avgStarRating, setAvgStarRating] = useState(rattingArray.avgRating);
 
   const summary = async () => {
     try {
@@ -74,7 +69,10 @@ export default function ReviewWidgets() {
       console.log("data", data);
       setRattingSummary(data.data.reviews);
       setTotalReview(data.data.totalReview);
-    } catch (error) {}
+      setAvgStarRating(data.data.avgRating);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const toggleDataBtn = (id) => () => {
@@ -327,9 +325,7 @@ export default function ReviewWidgets() {
                       color={starColor}
                     />
                     {review.length !== 0 && (
-                      <Text as="span">
-                        {state["Average rating text"]} out of 5
-                      </Text>
+                      <Text as="span">{avgStarRating} out of 5</Text>
                     )}
                   </InlineStack>
                 </BlockStack>
@@ -427,7 +423,7 @@ export default function ReviewWidgets() {
                     const formattedDate = v.updatedAt;
                     const tag = v.email.split("@")[0];
                     return (
-                      <Box key={v.name} padding="100">
+                      <Box key={v._id} padding="100">
                         <InlineStack gap="100">
                           <Avatar customer name="Farrah" />
 

@@ -1,6 +1,7 @@
 import User from "../models/user.model";
 import Review from "../models/review.model";
 import mongoConnect from "../../db.server";
+
 export const createReview = async (shop, payload) => {
   await mongoConnect();
   const {
@@ -54,7 +55,7 @@ export const getAllReviewsByShop = async (data) => {
   const skip = (page - 1) * limit;
 
   const allReviews = Review.find({ shop })
-    .sort({ pinned: -1 })
+    .sort({ like: -1, pinned: -1 })
     .skip(skip)
     .limit(limit)
     .lean();
@@ -87,7 +88,7 @@ export const getReviewsByType = async (data) => {
 
     console.log("--------------------------------- filter obj", filter);
     const items = await Review.find(filter)
-      .sort({ pinned: -1 })
+      .sort({ like: -1, pinned: -1 })
       .skip(skip)
       .limit(limit)
       .lean();
@@ -108,11 +109,7 @@ export const deleteReviewById = async (payload) => {
 };
 
 export const updatereviewbyId = async (shop, payload) => {
-  console.log("---------------------------- palyload" , payload)
   const { id, ...data } = payload;
-console.log(id, "sdjkfhg Id");
-
-console.log(data,  "======= data");
 
   if (!id) {
     throw new Error("id is not found");
@@ -133,16 +130,41 @@ export const getRatingSummaryService = async (shop) => {
   const reviews = await Review.find({ shop });
 
   const summary = [];
+  let totalRatingSum = 0;
 
   for (let r = 5; r >= 1; r--) {
+    const reviewsForRating = reviews.filter((x) => x.rating === r);
+    const count = reviewsForRating.length;
+
+    totalRatingSum += r * count;
+
     summary.push({
       rating: r,
-      pepole: reviews.filter((x) => x.rating === r).length,
+      pepole: count,
     });
+  }
+
+  const totalReview = reviews.length;
+  let avgRating = 0;
+
+  if (totalReview > 0) {
+    avgRating = Number((totalRatingSum / totalReview).toFixed(1));
   }
 
   return {
     reviews: summary,
-    totalReview: reviews.length,
+    totalReview: totalReview,
+    avgRating: avgRating,
   };
+};
+
+export const searchReviews = async (shop, query) => {
+  console.log("-------------------------------------- query value", query);
+  const regexQuery = new RegExp(query, "i");
+  const data = await Review.find({
+    shop,
+    $or: [{ name: { $regex: regexQuery } }, { email: { $regex: regexQuery } }],
+  });
+
+  return data;
 };

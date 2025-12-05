@@ -23,7 +23,7 @@ import {
 } from "@shopify/polaris";
 
 import { Modal, TitleBar, useAppBridge } from "@shopify/app-bridge-react";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import "@shopify/polaris/build/esm/styles.css";
 
 import {
@@ -35,16 +35,19 @@ import {
 } from "@shopify/polaris-icons";
 import StarRating from "./components/Ratting.jsx";
 import { useColorTheme } from "./ColorContext.jsx";
-import { tabsdata } from "./data/reviewData.js";
+import { tabsdata, itemStrings } from "./data/reviewData.js";
 import EditReviewForm from "./components/EditReviewForm.jsx";
 import {
   getAllReviews,
   getReviewsByType,
+  getSearchResult,
   updatedReview,
 } from "./services/api.js";
+import pkg from "lodash";
 
 function IndexFiltersDefaultExample() {
   const shopify = useAppBridge();
+  const { debounce } = pkg;
 
   const { getHexCode } = useColorTheme();
 
@@ -68,10 +71,33 @@ function IndexFiltersDefaultExample() {
   const [loding, setLoding] = useState(false);
   const { mode, setMode } = useSetIndexFiltersMode();
 
-  const handleUpdate = async (id, data) => {
+  const onQueryClear = useCallback(() => {
+    setQueryValue("");
+  }, [selectedTab]);
+
+  const fetchResults = async (value) => {
+    if (value.trim() === "") {
+      setReviews([]);
+      return;
+    }
+
+    console.log(`Searching for: ${value}`);
     try {
       setLoding(true);
-      const updateData = await updatedReview({ id, data });
+      const searchData = await getSearchResult(value);
+      setReviews(searchData);
+      console.log("Search Results:", searchData);
+    } catch (error) {
+      console.error("Search API Error:", error);
+    } finally {
+      setLoding(false);
+    }
+  };
+
+  const handleUpdate = async (data) => {
+    try {
+      setLoding(true);
+      const updateData = await updatedReview(data);
       console.log(updateData);
       const reviews = await getAllReviews();
       setReviews(reviews);
@@ -98,14 +124,6 @@ function IndexFiltersDefaultExample() {
 
     getReviews();
   }, []);
-
-  const [itemStrings, setItemStrings] = useState([
-    "All Reviews",
-    "Product Reviews",
-    "Store Reviews",
-    "Spam",
-    "Archives",
-  ]);
 
   //form changes
   const HandleFormChanges = (value, name) => {
@@ -191,24 +209,28 @@ function IndexFiltersDefaultExample() {
     actions: [],
   }));
 
-  const handleFiltersQueryChange = useCallback(
-    (value) => {
-      setQueryValue(value);
-    },
-    [selectedTab],
-  );
-
-  const onQueryClear = useCallback(() => {
-    setQueryValue("");
+  const debouncedFetchResults = useMemo(() => {
+    const debounced = debounce(fetchResults, 300);
+    return debounced;
   }, [selectedTab]);
+
+  const handleFiltersQueryChange = (value) => {
+    setQueryValue(value);
+    debouncedFetchResults(value);
+  };
+
+  useEffect(() => {
+    return () => {
+      debouncedFetchResults.cancel();
+    };
+  }, [debouncedFetchResults]);
 
   const handleTaggedWithRemove = useCallback(() => setTaggedWith(""), []);
 
   const handleFiltersClearAll = useCallback(() => {
     handleAccountStatusRemove();
     handleTaggedWithRemove();
-    onQueryClear();
-  }, [onQueryClear, handleTaggedWithRemove]);
+  }, [handleTaggedWithRemove]);
 
   const splitedfilteredOrders = reviews?.slice(
     itemRenderLimit,
@@ -253,18 +275,7 @@ function IndexFiltersDefaultExample() {
 
   const rowMarkup = reviews?.map(
     (
-      {
-        _id,
-        userName,
-        item,
-        time,
-        rating,
-        description,
-        email,
-        spam,
-        like,
-        pinned,
-      },
+      { _id, name, item, time, rating, description, email, spam, like, pinned },
       index,
     ) => (
       <IndexTable.Row
@@ -275,7 +286,7 @@ function IndexFiltersDefaultExample() {
       >
         <IndexTable.Cell>
           <BlockStack gap={100}>
-            <Text fontWeight="bold">{userName}</Text>
+            <Text fontWeight="bold">{name}</Text>
 
             <Text>{item}</Text>
 
@@ -285,7 +296,7 @@ function IndexFiltersDefaultExample() {
                 variant={like ? "primary" : "secondary"}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleUpdate(_id, { like: !like });
+                  handleUpdate({ id: _id, like: !like });
                 }}
               >
                 <Icon source={HeartIcon} tone="base" />
@@ -294,7 +305,7 @@ function IndexFiltersDefaultExample() {
                 variant={pinned ? "primary" : "secondary"}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleUpdate(_id, { pinned: !pinned });
+                  handleUpdate({ id: _id, pinned: !pinned });
                 }}
               >
                 <Icon source={PinIcon} tone="base" />
@@ -345,7 +356,7 @@ function IndexFiltersDefaultExample() {
                       {
                         content: "Spam",
                         onAction: () => {
-                          handleUpdate(_id, { spam: true });
+                          handleUpdate({ id: _id, spam: true });
                         },
                       },
                     ]}
@@ -380,7 +391,7 @@ function IndexFiltersDefaultExample() {
                       {
                         content: "public review",
                         onAction: () => {
-                          handleUpdate(_id, { spam: false });
+                          handleUpdate({ id: _id, spam: false });
                         },
                       },
                     ]}
@@ -390,15 +401,15 @@ function IndexFiltersDefaultExample() {
 
               <ButtonGroup>
                 <Popover
-                  active={openNevigation === `${_id}_${userName}`}
+                  active={openNevigation === `${_id}_${name}`}
                   preferredAlignment="right"
                   activator={
                     <Button
                       icon={UndoIcon}
                       onClick={(e) => {
                         e.stopPropagation();
-                        toggleActive(`${_id}_${userName}`)();
-                        togglenavigation(`${_id}_${userName}`);
+                        toggleActive(`${_id}_${name}`)();
+                        togglenavigation(`${_id}_${name}`);
                         setOpenMenu(null);
                         setOpenPopoverId(null);
                       }}

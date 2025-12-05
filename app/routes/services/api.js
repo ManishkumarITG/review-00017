@@ -156,3 +156,16 @@ export const ratingSummary = async () => {
     return [];
   }
 };
+
+export const getSearchResult = async (query) => {
+  try {
+    const res = await fetch(
+      `/api/routes/app/reviewproduct/queryChange?query=${query}`,
+    );
+    const resData = await res.json();
+    const data = resData;
+    return data.data;
+  } catch (error) {
+    return [];
+  }
+};

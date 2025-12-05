@@ -5,6 +5,7 @@ import {
   updatereview,
   getAllReviews,
   getRatingSummary,
+  getSearchResult,
 } from "../../controller/review.controller";
 
 import { authenticateUser } from "../../middlewares/auth";
@@ -27,6 +28,7 @@ export const loader = async ({ request }) => {
     const type = url.searchParams.get("type") || null;
     const skip = url.searchParams.get("skip");
     const skipValue = skip !== null ? Number(skip) : undefined;
+    const searchQuery = url.searchParams.get("query");
 
     console.log("--------------------------------- url , idType", idType, url);
 
@@ -53,6 +55,9 @@ export const loader = async ({ request }) => {
 
       case "ratingSummary":
         return await getRatingSummary(shop);
+
+      case "queryChange":
+        return await getSearchResult(shop, searchQuery);
 
       default:
         return responseHandler(

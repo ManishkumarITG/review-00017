@@ -13,7 +13,6 @@ import {
   Page,
   SkeletonDisplayText,
   SkeletonPage,
-  Spinner,
   Text,
 } from "@shopify/polaris";
 
@@ -36,6 +35,7 @@ import ColorPickerCircle from "./components/ColorPicker.jsx";
 import { useNavigate } from "react-router";
 import { useColorTheme } from "./ColorContext";
 import { SaveBar } from "@shopify/app-bridge-react";
+import Loding from "./components/Loding.jsx";
 
 export default function appStarRatting() {
   const nevigate = useNavigate();
@@ -125,10 +125,7 @@ export default function appStarRatting() {
                 <CollapsibleBox id="text_Badge_Ratting" boxName="Text">
                   <Box padding="400">
                     {setting == null ? (
-                      <Spinner
-                        accessibilityLabel="Spinner example"
-                        size="large"
-                      />
+                      <Loding />
                     ) : (
                       setting?.text?.map((text) => {
                         return (
@@ -150,10 +147,7 @@ export default function appStarRatting() {
 
                 <CollapsibleBox id="color-collapsible" boxName="Color">
                   {setting == null ? (
-                    <Spinner
-                      accessibilityLabel="Spinner example"
-                      size="large"
-                    />
+                    <Loding />
                   ) : (
                     setting.color.map((color) => {
                       return (
