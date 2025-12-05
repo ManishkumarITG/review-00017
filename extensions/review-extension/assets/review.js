@@ -1,3 +1,4 @@
+// import renderReviews from "./reviewFilter";
 document.addEventListener("DOMContentLoaded", () => {
   const dbReviews = [
     { author: "Amit", rating: 5, body: "Nice!", date: "2025-01-01" },
@@ -74,6 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    // Validation block same as before ---------------------
     let isValid = true;
     const formData = new FormData(form);
     const payload = {};
@@ -81,102 +83,117 @@ document.addEventListener("DOMContentLoaded", () => {
     form
       .querySelectorAll(".input-error")
       .forEach((el) => el.classList.remove("input-error"));
-    // clear all errors
     form.querySelectorAll(".error-msg").forEach((el) => (el.textContent = ""));
 
-    // get all input filds of form
     formData.forEach((value, key) => {
       let inputEl = form.querySelector(`[name="${key}"]`);
 
-      // Empty Field Check
       if (!regexExpression.test(value)) {
         ShowError(inputEl, `${key} field is required`);
         isValid = false;
         return;
       }
 
-      // Email Check
       if (key.toLowerCase() === "email" && !emailRegexExpression.test(value)) {
         ShowError(inputEl, `Email is not valid`);
         isValid = false;
         return;
       }
 
-      // Rating check
       if (key.toLowerCase() === "rating" && (value === "0" || value === "")) {
         ShowError(inputEl, `${key} is required`);
         isValid = false;
         return;
       }
 
-      // If all good, add to payload
       payload[key] = value;
     });
-    // check all filds is validate or not empty
-    if (!isValid) {
-      console.log("Form is not submitted, validation failed ");
-      return;
-    }
 
-    form.querySelectorAll(".error-msg").forEach((el) => (el.textContent = ""));
-    const shopDamian = window.location.host; // shopify Domain
+    if (!isValid) return;
+    const baseUrl = window.location.origin;
+    const shopDamian = window.location.host;
     const id = productIdliquid || shopDamian;
-    const idTYpe = productIdliquid ? "product" : "store";
-    console.log("id , type", id, idTYpe);
+    const idType = productIdliquid ? "product" : "store";
     const customerId = ShopifyAnalytics.meta.page.customerId;
-    try {
-      // data to send to the server
-      const datatoSend = {
+
+    const mode = form.dataset.mode;
+    const reviewId = form.dataset.reviewId;
+
+    console.log(mode, "mode of form ");
+    console.log(reviewId, "mode of reviewId ");
+
+    const submitButton = document.getElementById("submitButton");
+    submitButton.innerText = "Processing...";
+
+    let apiUrl = "";
+    let bodyData = {};
+
+    if (mode === "create") {
+      apiUrl = `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/createproduct`;
+
+      bodyData = {
         name: payload.Name,
         shop: shopDamian,
         targetId: id,
-        idType: idTYpe,
+        idType: idType,
         email: payload.Email,
         rating: payload.Rating,
         description: payload.Discription,
         images: "null",
         customerId: customerId,
       };
-      console.log(datatoSend, "😳😳😳");
+      console.log(bodyData);
+    }
 
-      const baseUrl = window.location.origin;
-      // api calling
-      const response = await fetch(
-        `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/createproduct`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(datatoSend),
-        },
-      );
+    if (mode === "edit") {
+      console.log(reviewId, "id=======");
+
+      apiUrl = `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/updatereview`;
+
+      bodyData = {
+        name: payload.Name,
+        idType: idType,
+        email: payload.Email,
+        rating: payload.Rating,
+        description: payload.Discription,
+        id: window.__editingReviewId,
+      };
+
+      console.log(bodyData);
+    }
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bodyData),
+      });
 
       const data = await response.json();
-      submitButton.innerText = "Loading...";
-      console.log(data);
+      console.log("API Response:", data);
 
-      // check api return data or not and change button text
-      if (data.status !== 201) {
-        console.error("API threw hands:", response.status);
-        submitButton.innerText = "Review Is Not Add Yet";
+      if (!response.ok) {
+        submitButton.innerText = "Operation failed";
         submitButton.style.color = "red";
-
-        return null;
+        return;
       }
-      submitButton.innerText = "review Add Success fully";
-      console.log("API Success →", data);
-      // window.location.reload(true);
+
+      submitButton.innerText =
+        mode === "create" ? "Review Added 🎉" : "Review Updated 🎉";
+
       form.reset();
       resetStars();
-      // close form after submit
+
       setTimeout(() => {
         closeReviewForm();
-      }, 2000);
-      return data;
-    } catch (error) {
-      submitButton.innerText = "Review Is Not Add Yet";
+        window.location.reload();
+      }, 1500);
+    } catch (err) {
+      console.error("Form submit error:", err);
+      submitButton.innerText = "Operation failed";
       submitButton.style.color = "red";
-      console.error("Submit Error →", error);
-      return null;
+    } finally {
+      renderReviews([]);
     }
   });
 

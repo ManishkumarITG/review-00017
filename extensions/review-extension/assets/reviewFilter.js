@@ -93,6 +93,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
   ];
 
+  const getColorSetting = async () => {
+    try {
+      const baseUrl = window.location.origin;
+
+      const res = await fetch(
+        `${baseUrl}/apps/review//api/routes/app/setting/getByTitle`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            title: "Review Widget Setting",
+          }),
+        },
+      );
+
+      const resData = await res.json();
+      console.log(resData.sectionSettings);
+      const data = resData;
+      return data.sectionSettings;
+    } catch (error) {
+      console.log("color setting fetch error", error);
+      return { messeage: error.messeage, data: null };
+    }
+  };
+  getColorSetting();
+
   async function submitEdit() {
     const form = document.getElementById("reviewForm");
     const id = form.dataset.editId;
@@ -117,6 +142,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // open for and check the type of more
   function handleClick(mode = "add") {
     console.log("Entered handleClick with mode:", mode);
+    const form = document.getElementById("reviewForm");
 
     const errorEl = document.querySelector(".NoReviewerror-msg");
 
@@ -124,6 +150,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log("url", url);
 
     const formDIV = document.getElementById("FormParentDiv");
+    form.dataset.mode = "create"; // 🔥 REQUIRED
+
     if (!formDIV) {
       console.warn("popupForm missing in DOM");
       return;
@@ -141,6 +169,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (mode === "edit") {
       // emailInput.value =
+      form.dataset.mode = "edit"; // 🔥 REQUIRED
       console.log("Edit mode active → disabling email field");
       emailInput.disabled = true;
     } else {
@@ -148,6 +177,56 @@ document.addEventListener("DOMContentLoaded", async () => {
       emailInput.disabled = false;
     }
   }
+
+  //   const formDIV = document.getElementById("FormParentDiv");
+  //   if (!formDIV) {
+  //     console.warn("FormParentDiv missing in DOM");
+  //     return;
+  //   }
+
+  //   // Always show form (don’t toggle on edit)
+  //   formDIV.style.display = "block";
+
+  //   const emailInput = document.getElementById("formEmail");
+  //   if (!emailInput) {
+  //     console.warn("formEmail not found");
+  //     return;
+  //   }
+
+  //   // 🔥 Set mode properly
+  //   if (mode === "edit") {
+  //     formDIV.dataset.mode = "edit";
+  //     emailInput.disabled = true;
+
+  //     console.log("Edit mode active → disabling email field");
+
+  //     // if review object provided → fill data
+  //     if (review) {
+  //       document.getElementById("formName").value = review.name;
+  //       document.getElementById("formEmail").value = review.email;
+  //       document.getElementById("formDesc").value = review.description;
+  //       document.getElementById("selectedRating").value = review.rating;
+  //       highlightStars(review.rating);
+
+  //       // store id for API
+  //       formDIV.dataset.reviewId = review._id;
+  //     }
+
+  //   } else {
+  //     formDIV.dataset.mode = "create";
+  //     emailInput.disabled = false;
+
+  //     console.log("Add mode active → enabling email field");
+
+  //     // reset for new review
+  //     formDIV.dataset.reviewId = "";
+  //     form.reset();
+  //     resetStars();
+  //   }
+
+  //   console.log("Form mode set to →", formDIV.dataset.mode);
+  // }
+
   // add Event listner ond write a review button
   writeButtons.forEach((btn) => {
     btn.addEventListener("click", () => handleClick("add"));
@@ -175,7 +254,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const type = productIdliquid ? "product" : "store";
       const baseUrl = window.location.origin;
 
-      console.log("sdlkfjfkjf⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐", type);
+      console.log("⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐", type);
       const response = await fetch(
         `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=${type}&limit=${limit}`,
         // `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/reviews`,
@@ -238,68 +317,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   //call renderReview Function to render all reviews
   renderReviews(parsedData);
 
-  // open edit form and asign devauld value
-  // function openForm(id) {
-  //   console.log(ShopifyAnalytics.meta.page.customerId, "costomer Id : 👍");
-  //   console.log();
-
-  //   const review = parsedData.find((r) => r._id == id);
-  //   if (!review) {
-  //     console.warn("Review not found:", id);
-  //     return;
-  //   }
-
-  //   // open form
-  //   const form = document.getElementById("FormParentDiv");
-  //   form.style.display = "block";
-
-  //   document.getElementById("formName").value = review.name;
-  //   document.getElementById("formEmail").value = review.email;
-  //   document.getElementById("formDesc").value = review.description;
-  //   document.getElementById("selectedRating").value = review.rating;
-  //   highlightStars(review.rating);
-  // }
   async function openForm(id, mode = "button") {
-    try {
-      console.log(ShopifyAnalytics.meta.page.customerId, "customer Id : 👍");
-
-      // 🔄 Fetch review from backend
-      const baseUrl = window.location.origin;
-
-      const response = await fetch(
-        `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/updatereview`,
-      );
-      const review = await response.json();
-
-      if (!response.ok || !review) {
-        console.warn("Review not found:", id);
-        return;
-      }
-
-      // 🟩 Open form UI
-      const form = document.getElementById("FormParentDiv");
-      form.style.display = "block";
-
-      // 📝 Prefill inputs
-      document.getElementById("formName").value = review.name || "";
-      document.getElementById("formEmail").value = review.email || "";
-      document.getElementById("formDesc").value = review.description || "";
-      document.getElementById("selectedRating").value = review.rating || "";
-
-      // ⭐ Update UI stars
-      highlightStars(review.rating);
-
-      // 🗂️ Store edit id for submitEdit()
-      form.dataset.editId = id;
-
-      // ✉️ Manage email disable state
-      const emailInput = document.getElementById("formEmail");
-      emailInput.disabled = mode === "edit";
-
-      console.log("Edit pipeline fully operational for:", id, "mode:", mode);
-    } catch (err) {
-      console.error("🚨 Error in openForm API flow:", err);
+    const review = parsedData.find((r) => r._id == id);
+    if (!review) {
+      console.warn("Review not found:", id);
+      return;
     }
+    window.__editingReviewId = id;
+
+    document.getElementById("formName").value = review.name;
+    document.getElementById("formEmail").value = review.email;
+    document.getElementById("formDesc").value = review.description;
+    document.getElementById("selectedRating").value = review.rating;
+    highlightStars(review.rating);
   }
 
   window.openForm = openForm;
@@ -386,6 +416,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       reviewsList.appendChild(MoreReviews);
     }
   }
+
+  window.renderReviews = renderReviews
   // filter data according option
   filterSelect.addEventListener("change", (e) => {
     const selectedFilter = e.target.value.trim();
@@ -406,4 +438,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     renderReviews(sortedList);
   });
+
 });
+// export default renderReviews

@@ -87,7 +87,7 @@ export const action = async ({ request }) => {
       case "deletereview":
         return await deletereview(data);
       case "updatereview":
-        return await updatereview(shop, data);
+        return await updatereview(shop,data);
       default:
         break;
     }

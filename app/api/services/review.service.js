@@ -2,7 +2,7 @@ import User from "../models/user.model";
 import Review from "../models/review.model";
 import mongoConnect from "../../db.server";
 export const createReview = async (shop, payload) => {
-  await mongoConnect()
+  await mongoConnect();
   const {
     targetId,
     idType,
@@ -64,7 +64,7 @@ export const getAllReviewsByShop = async (data) => {
 
 export const getReviewsByType = async (data) => {
   try {
-   await mongoConnect()
+    await mongoConnect();
     const { limit, page, shop, idType } = data;
 
     console.log(idType);
@@ -108,7 +108,11 @@ export const deleteReviewById = async (payload) => {
 };
 
 export const updatereviewbyId = async (shop, payload) => {
-  const { id, data } = payload;
+  console.log("---------------------------- palyload" , payload)
+  const { id, ...data } = payload;
+console.log(id, "sdjkfhg Id");
+
+console.log(data,  "======= data");
 
   if (!id) {
     throw new Error("id is not found");

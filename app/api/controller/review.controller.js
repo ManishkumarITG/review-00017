@@ -65,7 +65,7 @@ export const deletereview = async (payload) => {
 export const updatereview = async (shop, payload) => {
   try {
     const data = await updatereviewbyId(shop, payload);
-    return responseHandler(STATUS_CODE.OK, MESSAGE.UPDATED, data);
+    return responseHandler(200, "updated", data);
   } catch (error) {
     console.log(error);
     return responseHandler(STATUS_CODE.NO_CONTENT, error.message, null);
