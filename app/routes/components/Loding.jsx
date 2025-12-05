@@ -1,5 +1,4 @@
 import { InlineStack, Spinner } from "@shopify/polaris";
-import React from "react";
 
 function Loding() {
   return (

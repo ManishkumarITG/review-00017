@@ -74,7 +74,7 @@ function IndexFiltersDefaultExample() {
       const updateData = await updatedReview({ id, data });
       console.log(updateData);
       const reviews = await getAllReviews();
-      setReviews(reviews.data);
+      setReviews(reviews);
     } catch (error) {
       console.log(error);
     } finally {
@@ -87,8 +87,8 @@ function IndexFiltersDefaultExample() {
       try {
         setLoding(true);
         const resopanse = await getAllReviews();
-        console.log(resopanse.data);
-        setReviews(resopanse.data);
+        console.log(resopanse);
+        setReviews(resopanse);
       } catch (error) {
         console.log(error);
       } finally {
@@ -156,7 +156,7 @@ function IndexFiltersDefaultExample() {
         const lowerCaseTapName = splitTapName.toLowerCase();
         if (lowerCaseTapName == "all") {
           const resopanse = await getAllReviews();
-          setReviews(resopanse.data);
+          setReviews(resopanse);
           return;
         }
         console.log(lowerCaseTapName);
@@ -210,7 +210,7 @@ function IndexFiltersDefaultExample() {
     onQueryClear();
   }, [onQueryClear, handleTaggedWithRemove]);
 
-  const splitedfilteredOrders = reviews.slice(
+  const splitedfilteredOrders = reviews?.slice(
     itemRenderLimit,
     itemRenderLimit + 10,
   );
@@ -530,7 +530,7 @@ function IndexFiltersDefaultExample() {
 
             <IndexTable
               condensed={useBreakpoints().smDown}
-              itemCount={splitedfilteredOrders.length}
+              itemCount={splitedfilteredOrders?.length}
               resourceName={resourceName}
               hasSelection
               selectedItemsCount={
@@ -568,7 +568,7 @@ function IndexFiltersDefaultExample() {
                 setCurrentTab((prev) => prev + 1);
                 setitemRenderLimit((pre) => pre + 10);
               }}
-              disabled={itemRenderLimit + 10 >= reviews.length}
+              disabled={itemRenderLimit + 10 >= reviews?.length}
             >
               Next
             </Button>
