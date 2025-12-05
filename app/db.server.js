@@ -13,13 +13,12 @@
 import mongoss from "mongoose";
 import { DB_URL } from "./api/configs/env";
 
-console.log("🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢", DB_URL);
 const mongoConnect = async () => {
   try {
     await mongoss.connect(DB_URL);
-    console.log("db connect SUCCESSFULLY 🟢");
+    console.log("db connect SUCCESSFULLY");
   } catch (error) {
-    console.log("mongoose db ccnnection error 🔴", error);
+    console.log("mongoose db ccnnection error", error);
   }
 };
 
