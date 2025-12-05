@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
       submitButton.innerText = "Operation failed";
       submitButton.style.color = "red";
     } finally {
-      renderReviews([]);
+      // renderReviews([]);
     }
   });
 

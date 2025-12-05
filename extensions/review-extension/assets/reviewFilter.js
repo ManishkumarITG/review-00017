@@ -2,18 +2,24 @@ document.addEventListener("DOMContentLoaded", async () => {
   let loding = true; // loding
   let limit = 10; // limit of api response
   // get importent Elements
+
   const reviewsList = document.getElementById("reviewsList");
+  console.log(
+    // "------------------------------------------- reviewsList",
+    reviewsList,
+  );
   const filterSelect = document.getElementsByClassName("jm-sort-select")[0];
-  const writeButtons = document.querySelectorAll(".jm-write");
-  const submitButton = document.getElementById("submitButton");
-  // get variable for liquid
-  const productIdliquid = window.__productId;
+  const writeButtons = document.querySelectorAll(".jm-write"); // get variable for liquid
   const ui = window.reviewSettings;
+
   // initial stage of reviews array
-  let realdata = [];
+  // console.log(ui, " ====== review");
+
   // check type of page for type of review store of product
   let type =
     ShopifyAnalytics.meta.page.pageType == "home" ? "store" : "product";
+  // console.log(type, " type of review");
+
   // dummy data for sample option
   const dummydata = [
     {
@@ -52,6 +58,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       date: "2024-10-30",
     },
   ];
+
   // fack reviews
   const fakeReviews = [
     {
@@ -93,51 +100,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
   ];
 
-  const getColorSetting = async () => {
-    try {
-      const baseUrl = window.location.origin;
+  let realdata = [];
 
-      const res = await fetch(
-        `${baseUrl}/apps/review//api/routes/app/setting/getByTitle`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            title: "Review Widget Setting",
-          }),
-        },
-      );
+ 
 
-      const resData = await res.json();
-      console.log(resData.sectionSettings);
-      const data = resData;
-      return data.sectionSettings;
-    } catch (error) {
-      console.log("color setting fetch error", error);
-      return { messeage: error.messeage, data: null };
-    }
-  };
-  getColorSetting();
-
-  async function submitEdit() {
-    const form = document.getElementById("reviewForm");
-    const id = form.dataset.editId;
-
-    const payload = {
-      name: document.getElementById("nameInput").value,
-      email: document.getElementById("emailInput").value,
-      rating: document.getElementById("ratingInput").value,
-      description: document.getElementById("descriptionInput").value,
-    };
-
-    // hit your update endpoint
-    const res = await fetch(`/api/reviews/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    console.log("Update Status:", await res.json());
-  }
 
   // open for and check the type of more
   function handleClick(mode = "add") {
@@ -147,7 +113,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const errorEl = document.querySelector(".NoReviewerror-msg");
 
     const url = window.location.origin;
-    console.log("url", url);
+    // console.log("url", url);
 
     const formDIV = document.getElementById("FormParentDiv");
     form.dataset.mode = "create"; // 🔥 REQUIRED
@@ -178,59 +144,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  //   const formDIV = document.getElementById("FormParentDiv");
-  //   if (!formDIV) {
-  //     console.warn("FormParentDiv missing in DOM");
-  //     return;
-  //   }
-
-  //   // Always show form (don’t toggle on edit)
-  //   formDIV.style.display = "block";
-
-  //   const emailInput = document.getElementById("formEmail");
-  //   if (!emailInput) {
-  //     console.warn("formEmail not found");
-  //     return;
-  //   }
-
-  //   // 🔥 Set mode properly
-  //   if (mode === "edit") {
-  //     formDIV.dataset.mode = "edit";
-  //     emailInput.disabled = true;
-
-  //     console.log("Edit mode active → disabling email field");
-
-  //     // if review object provided → fill data
-  //     if (review) {
-  //       document.getElementById("formName").value = review.name;
-  //       document.getElementById("formEmail").value = review.email;
-  //       document.getElementById("formDesc").value = review.description;
-  //       document.getElementById("selectedRating").value = review.rating;
-  //       highlightStars(review.rating);
-
-  //       // store id for API
-  //       formDIV.dataset.reviewId = review._id;
-  //     }
-
-  //   } else {
-  //     formDIV.dataset.mode = "create";
-  //     emailInput.disabled = false;
-
-  //     console.log("Add mode active → enabling email field");
-
-  //     // reset for new review
-  //     formDIV.dataset.reviewId = "";
-  //     form.reset();
-  //     resetStars();
-  //   }
-
-  //   console.log("Form mode set to →", formDIV.dataset.mode);
-  // }
-
   // add Event listner ond write a review button
   writeButtons.forEach((btn) => {
     btn.addEventListener("click", () => handleClick("add"));
   });
+
   // add Event listner on edit  icon
 
   reviewsList.addEventListener("click", (e) => {
@@ -246,23 +164,30 @@ document.addEventListener("DOMContentLoaded", async () => {
     handleClick("edit");
     openForm(reviews);
   });
+
   // function to get data
   async function apidata() {
+    // console.log("enter in apidata function");
+    // console.log(
+    //   "---------------------------------------- my type is product ",
+    //   type,
+    // );
+
     try {
       loding = true;
       renderReviews([]);
-      const type = productIdliquid ? "product" : "store";
+      // const type = productIdliquid ? "product" : "store";
       const baseUrl = window.location.origin;
 
       console.log("⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐", type);
       const response = await fetch(
         `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=${type}&limit=${limit}`,
-        // `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/reviews`,
         { method: "GET", headers: { "Content-Type": "application/json" } },
       );
 
+      // console.log(response, " response of api Data");
       const data = await response.json();
-      console.log(data);
+      console.log(data.data, " data fro api");
 
       return data?.data?.items || [];
     } catch (error) {
@@ -273,14 +198,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+  // await apidata()
+
   // check option of data
-  if (ui.reviewSource == "dummy") {
+  if (ui.reviewSource === "dummy") {
+    // console.log("--------------------------- my data is dummy  thanks");
     realdata = dummydata;
-  } else if (ui.reviewSource == "real") {
+  } else if (ui.reviewSource === "real") {
+    // console.log("--------------------------- my data is real thanks");
     realdata = await apidata();
   } else {
+    // console.log("--------------------------- my data is emtey thanks");
     realdata = [];
   }
+  // console.log("realdata for render reviews : ", realdata);
+
   // highlite stars in form
   function highlightStars(rating) {
     console.log(rating);
@@ -314,6 +246,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       email,
     };
   });
+
   //call renderReview Function to render all reviews
   renderReviews(parsedData);
 
@@ -335,6 +268,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   window.openForm = openForm;
   // function to render review list
   function renderReviews(list) {
+    console.log(list);
+
     if (loding) {
       reviewsList.innerHTML = `
       <div class="loader"></div>
@@ -407,17 +342,18 @@ document.addEventListener("DOMContentLoaded", async () => {
       `;
         reviewsList.appendChild(reviewItem);
       });
-      const MoreReviews = document.createElement("sapn");
-      MoreReviews.innerText = "See More";
-      MoreReviews.addEventListener("click", () => {
-        limit = limit + limit;
-        console.log(limit);
-      });
-      reviewsList.appendChild(MoreReviews);
+
+      // const MoreReviews = document.createElement("sapn");
+      // MoreReviews.innerText = "See More";
+      // MoreReviews.addEventListener("click", () => {
+      //   limit = limit + limit;
+      //   console.log(limit);
+      // });
+      // reviewsList.appendChild(MoreReviews);
     }
   }
 
-  window.renderReviews = renderReviews
+  window.renderReviews = renderReviews;
   // filter data according option
   filterSelect.addEventListener("change", (e) => {
     const selectedFilter = e.target.value.trim();
@@ -438,6 +374,4 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     renderReviews(sortedList);
   });
-
 });
-// export default renderReviews
