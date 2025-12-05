@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let loding = true; // loding
   let limit = 10; // limit of api response
   // get importent Elements
-
+  const productIdliquid = window.productId;
   const reviewsList = document.getElementById("reviewsList");
   console.log(
     // "------------------------------------------- reviewsList",
@@ -102,9 +102,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let realdata = [];
 
- 
-
-
   // open for and check the type of more
   function handleClick(mode = "add") {
     console.log("Entered handleClick with mode:", mode);
@@ -181,7 +178,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       console.log("⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐", type);
       const response = await fetch(
-        `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=${type}&limit=${limit}`,
+        `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=${type}&limit=${limit}&targetId=${productIdliquid}`,
+        // `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/reviews`,
         { method: "GET", headers: { "Content-Type": "application/json" } },
       );
 

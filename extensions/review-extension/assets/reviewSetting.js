@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const stars = document.getElementsByClassName("jm-heading");
   console.log(stars, "heading of the page");
+  console.log(reviewSetting.color[0], "color");
 
   Array.from(stars).forEach((element) => {
     console.log(element, "➖➖➖➖");

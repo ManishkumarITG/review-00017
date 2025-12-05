@@ -65,8 +65,7 @@ export const getAllReviewsByShop = async (data) => {
 
 export const getReviewsByType = async (data) => {
   try {
-    await mongoConnect();
-    const { limit, page, shop, idType } = data;
+    const { limit, page, shop, idType, targetId } = data;
 
     console.log(idType);
 
@@ -77,6 +76,10 @@ export const getReviewsByType = async (data) => {
     const filter = {
       shop: shop,
     };
+
+    if (targetId) {
+      filter.targetId = targetId;
+    }
 
     if (idType == "spam" || idType == "froud") {
       filter[idType] = true;

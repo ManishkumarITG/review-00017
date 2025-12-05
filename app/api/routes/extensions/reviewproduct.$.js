@@ -27,6 +27,7 @@ export const loader = async ({ request }) => {
     const type = url.searchParams.get("type") || null;
     const skip = url.searchParams.get("skip");
     const skipValue = skip !== null ? Number(skip) : undefined;
+    const targetId = url.searchParams.get("targetId");
 
     console.log("--------------------------------- url , idType", idType, url);
 
@@ -39,6 +40,7 @@ export const loader = async ({ request }) => {
           page,
           skipValue,
           shop,
+          targetId,
         });
       case "reviews":
         return await getReviews({
@@ -49,6 +51,7 @@ export const loader = async ({ request }) => {
           skipValue,
           shop,
           idType,
+          targetId,
         });
       case "ratingSummary":
         return await getRatingSummary(shop);
