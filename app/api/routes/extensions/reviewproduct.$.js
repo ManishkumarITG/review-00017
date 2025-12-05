@@ -11,7 +11,6 @@ import { authenticateUser } from "../../middlewares/auth";
 import { responseHandler } from "../../utils/responseHandler";
 import STATUS_CODE from "../../contents/statusCode";
 import MESSAGE from "../../contents/message";
-import mongoConnect from "../../../db.server";
 
 export const loader = async ({ request }) => {
   try {
