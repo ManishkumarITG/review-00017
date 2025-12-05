@@ -70,14 +70,17 @@ function IndexFiltersDefaultExample() {
   const [sortSelected, setSortSelected] = useState(["order asc"]);
   const [loding, setLoding] = useState(false);
   const { mode, setMode } = useSetIndexFiltersMode();
+  const [refreshReviews, setRefreshReviews] = useState(false);
 
   const onQueryClear = useCallback(() => {
     setQueryValue("");
+    console.log("hello query");
   }, [selectedTab]);
 
   const fetchResults = async (value) => {
     if (value.trim() === "") {
       setReviews([]);
+      setRefreshReviews((prev) => !prev);
       return;
     }
 
@@ -121,9 +124,9 @@ function IndexFiltersDefaultExample() {
         setLoding(false);
       }
     };
-
+    console.log("hello query changes");
     getReviews();
-  }, []);
+  }, [refreshReviews]);
 
   //form changes
   const HandleFormChanges = (value, name) => {
@@ -173,8 +176,7 @@ function IndexFiltersDefaultExample() {
         const splitTapName = tabName.split(" ")[0];
         const lowerCaseTapName = splitTapName.toLowerCase();
         if (lowerCaseTapName == "all") {
-          const resopanse = await getAllReviews();
-          setReviews(resopanse);
+          setRefreshReviews((prev) => !prev);
           return;
         }
         console.log(lowerCaseTapName);
