@@ -177,7 +177,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       console.log("sdlkfjfkjf⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐", type);
       const response = await fetch(
-        `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=${type}&limit=${limit}`,
+        `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=${type}&limit=${limit}&targetId=${productIdliquid}`,
         // `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/reviews`,
         { method: "GET", headers: { "Content-Type": "application/json" } },
       );

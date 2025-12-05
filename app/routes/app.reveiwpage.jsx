@@ -28,11 +28,12 @@ import "@shopify/polaris/build/esm/styles.css";
 
 import {
   ChevronDownIcon,
-  HeartIcon,
   MenuHorizontalIcon,
   PinIcon,
   UndoIcon,
+  PinFilledIcon,
 } from "@shopify/polaris-icons";
+import { HeartUnFillIcon, HeartfillIcon } from "./icons/icon.jsx";
 import StarRating from "./components/Ratting.jsx";
 import { useColorTheme } from "./ColorContext.jsx";
 import { tabsdata, itemStrings } from "./data/reviewData.js";
@@ -295,22 +296,30 @@ function IndexFiltersDefaultExample() {
             <Text>Via Web</Text>
             <InlineStack gap={200}>
               <Button
-                variant={like ? "primary" : "secondary"}
+                variant="plain"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleUpdate({ id: _id, like: !like });
                 }}
               >
-                <Icon source={HeartIcon} tone="base" />
+                {like ? (
+                  <Icon source={HeartfillIcon} />
+                ) : (
+                  <Icon source={HeartUnFillIcon} />
+                )}
               </Button>
               <Button
-                variant={pinned ? "primary" : "secondary"}
+                variant="plain"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleUpdate({ id: _id, pinned: !pinned });
                 }}
               >
-                <Icon source={PinIcon} tone="base" />
+                {pinned ? (
+                  <Icon source={PinFilledIcon} tone="base" />
+                ) : (
+                  <Icon source={PinIcon} tone="base" />
+                )}
               </Button>
             </InlineStack>
           </BlockStack>
@@ -329,77 +338,40 @@ function IndexFiltersDefaultExample() {
         <IndexTable.Cell>
           <InlineStack align="end" blockAlign="center">
             <InlineStack gap="800">
-              {!spam ? (
-                <Popover
-                  active={openPopoverId === _id}
-                  fullWidth={true}
-                  preferredAlignment="right"
-                  activator={
-                    <Button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleActive(_id)();
-                        togglePopover(_id);
-                        setOpenMenu(null);
-                        setOpenNevigation(null);
-                      }}
-                      icon={ChevronDownIcon}
-                      accessibilityLabel="Other save actions"
-                    >
-                      Published
-                    </Button>
-                  }
-                  autofocusTarget="first-node"
-                  onClose={() => setOpenPopoverId(null)}
-                >
-                  <ActionList
-                    actionRole="menuitem"
-                    items={[
-                      {
-                        content: "Spam",
-                        onAction: () => {
-                          handleUpdate({ id: _id, spam: true });
-                        },
+              <Popover
+                active={openPopoverId === _id}
+                fullWidth={true}
+                preferredAlignment="right"
+                activator={
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleActive(_id)();
+                      togglePopover(_id);
+                      setOpenMenu(null);
+                      setOpenNevigation(null);
+                    }}
+                    icon={ChevronDownIcon}
+                    accessibilityLabel="Other save actions"
+                  >
+                    {spam ? "Hidden" : "Published"}
+                  </Button>
+                }
+                autofocusTarget="first-node"
+                onClose={() => setOpenPopoverId(null)}
+              >
+                <ActionList
+                  actionRole="menuitem"
+                  items={[
+                    {
+                      content: spam ? "public review" : "spam",
+                      onAction: () => {
+                        handleUpdate({ id: _id, spam: !spam });
                       },
-                    ]}
-                  />
-                </Popover>
-              ) : (
-                <Popover
-                  active={openPopoverId === _id}
-                  fullWidth={true}
-                  preferredAlignment="right"
-                  activator={
-                    <Button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleActive(_id)();
-                        togglePopover(_id);
-                        setOpenMenu(null);
-                        setOpenNevigation(null);
-                      }}
-                      icon={ChevronDownIcon}
-                      accessibilityLabel="Other save actions"
-                    >
-                      Hidden
-                    </Button>
-                  }
-                  autofocusTarget="first-node"
-                  onClose={() => setOpenPopoverId(null)}
-                >
-                  <ActionList
-                    actionRole="menuitem"
-                    items={[
-                      {
-                        content: "public review",
-                        onAction: () => {
-                          handleUpdate({ id: _id, spam: false });
-                        },
-                      },
-                    ]}
-                  />
-                </Popover>
-              )}
+                    },
+                  ]}
+                />
+              </Popover>
 
               <ButtonGroup>
                 <Popover
