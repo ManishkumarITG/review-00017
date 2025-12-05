@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let loding = true; // loding
   let limit = 10; // limit of api response
   // get importent Elements
-  const productIdliquid = window.productId;
+  const productIdliquid = ShopifyAnalytics.meta.page.resourceId;
   const reviewsList = document.getElementById("reviewsList");
   console.log(
     // "------------------------------------------- reviewsList",
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // check type of page for type of review store of product
   let type =
     ShopifyAnalytics.meta.page.pageType == "home" ? "store" : "product";
-  // console.log(type, " type of review");
+  console.log(ShopifyAnalytics.meta.page.resourceId, " type of review");
 
   // dummy data for sample option
   const dummydata = [
@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const errorEl = document.querySelector(".NoReviewerror-msg");
 
     const url = window.location.origin;
-    // console.log("url", url);
+    console.log("url", url);
 
     const formDIV = document.getElementById("FormParentDiv");
     form.dataset.mode = "create"; // 🔥 REQUIRED
@@ -164,16 +164,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // function to get data
   async function apidata() {
-    // console.log("enter in apidata function");
-    // console.log(
-    //   "---------------------------------------- my type is product ",
-    //   type,
-    // );
+    console.log("enter in apidata function");
+    console.log(
+      "---------------------------------------- my type is product ",
+      productIdliquid,
+    );
 
     try {
       loding = true;
       renderReviews([]);
-      // const type = productIdliquid ? "product" : "store";
       const baseUrl = window.location.origin;
 
       console.log("⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐", type);
@@ -200,16 +199,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // check option of data
   if (ui.reviewSource === "dummy") {
-    // console.log("--------------------------- my data is dummy  thanks");
+    console.log("--------------------------- my data is dummy  thanks");
     realdata = dummydata;
   } else if (ui.reviewSource === "real") {
-    // console.log("--------------------------- my data is real thanks");
+    console.log("--------------------------- my data is real thanks");
     realdata = await apidata();
   } else {
-    // console.log("--------------------------- my data is emtey thanks");
+    console.log("--------------------------- my data is emtey thanks");
     realdata = [];
   }
-  // console.log("realdata for render reviews : ", realdata);
+  console.log("realdata for render reviews : ", realdata);
 
   // highlite stars in form
   function highlightStars(rating) {
@@ -312,7 +311,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               <div style="display:flex; align-items:center; gap:10px;">
                 ${
                   ui.showDate
-                    ? `<p style="margin:0; color:#888;">${review.date}</p>`
+                    ? `<p style="margin:0; data-setting="show date" color:#888;">${review.date}</p>`
                     : ""
                 }
 

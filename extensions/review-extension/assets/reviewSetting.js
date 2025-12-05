@@ -26,14 +26,37 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   };
 
-  const reviewSetting = getColorSetting();
+  const reviewSetting = await getColorSetting();
+  console.log(reviewSetting);
 
-  const stars = document.getElementsByClassName("jm-heading");
-  console.log(stars, "heading of the page");
-  console.log(reviewSetting.color[0], "color");
+  // Apply colors
+  reviewSetting.color.forEach((item) => {
+    document.querySelectorAll(`.${item.type}`).forEach((el) => {
+      if (item.type === "button") el.style.backgroundColor = item.isvalue;
+      else el.style.color = item.isvalue;
+    });
+  });
 
-  Array.from(stars).forEach((element) => {
-    console.log(element, "➖➖➖➖");
-    element.style.color = reviewSetting.color[0];
+  reviewSetting.color.forEach((item) => {
+    document.querySelectorAll(`.${item.type}`).forEach((el) => {
+      if (item.type === "star") el.style.color = item.isvalue;
+      else el.style.color = item.isvalue;
+    });
+  });
+
+  // Apply text
+  reviewSetting.text.forEach((item) => {
+    document
+      .querySelectorAll(`[data-setting="${item.settingName}"]`)
+      .forEach((el) => (el.textContent = item.isvalue));
+  });
+
+  // Apply theme
+  reviewSetting.theme.forEach((item) => {
+    document
+      .querySelectorAll(`[data-setting="${item.settingName}"]`)
+      .forEach((el) => {
+        el.style.display = item.isChecked ? "block" : "none";
+      });
   });
 });

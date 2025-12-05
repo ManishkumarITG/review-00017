@@ -35,7 +35,7 @@
 .jm-stars {
     display: flex;
     line-height: 1;
-    color: #388B7F;
+    /* color: #388B7F; */
     font-size: 22px;
 }
 
