@@ -292,7 +292,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           border-radius:12px;
         "
         >
-          <div class="jm-avatar" style="color: #388B7F; font-size:18px;">
+          <div class="jm-avatar star" ; font-size:18px;">
             ${avatar}
           </div>
 
@@ -300,15 +300,15 @@ document.addEventListener("DOMContentLoaded", async () => {
             <div style="display:flex; justify-content:space-between; align-items:center;">
 
               <div>
-                <div style="color: #388B7F; font-size:16px;">
+                <div style="font-size:16px;" class="star">
                   ${"★".repeat(review.rating)}${"☆".repeat(5 - review.rating)}
                 </div>
-                <p style="margin:0; font-weight:600; color: #388B7F">
+                <p  class="star" style="margin:0px">
                   ${userName}
                 </p>
               </div>
 
-              <div style="display:flex; align-items:center; gap:10px;">
+              <div style="display:flex; align-items:center; gap:10px;" class="text">
                 ${
                   ui.showDate
                     ? `<p style="margin:0; data-setting="show date" color:#888;">${review.date}</p>`
@@ -319,7 +319,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     ${
       review.customerId == ShopifyAnalytics.meta.page.customerId
-        ? ` <span class="edit-btn" data-id="${review._id}" data-mode="edit">
+        ? ` <span class="edit-btn" style="color:black;" data-id="${review._id}" data-mode="edit">
                 <svg class="edit-review-btn" data-id="${review._id}"
                   style="width:18px; height:18px; cursor:pointer; opacity:0.7;"
                   xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -331,7 +331,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
               </div>
             </div>
-            <p style="margin-top:10px; color: #388B7F">
+            <p style="margin:0px;">
               ${review.description}
             </p>
           </div>
@@ -370,5 +370,78 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     renderReviews(sortedList);
+  });
+
+  const getColorSetting = async () => {
+    try {
+      const baseUrl = window.location.origin;
+
+      const res = await fetch(
+        `${baseUrl}/apps/review/api/routes/app/setting/getByTitle`,
+        {
+          method: "POST",
+          body: JSON.stringify({ title: "Review Widget Setting" }),
+        },
+      );
+
+      const resData = await res.json();
+      console.log(resData.data.sectionSettings, "setting data form api ");
+
+      return resData.data.sectionSettings;
+    } catch (error) {
+      console.log("color setting fetch error", error);
+      return { message: error.message, data: null };
+    }
+  };
+
+  const reviewSetting = await getColorSetting();
+  console.log(reviewSetting);
+  const elements = document.getElementsByClassName("text");
+
+  reviewSetting.color.forEach((item) => {
+    const els = document.querySelectorAll(`.${item.type}`);
+    const progressbars = document.querySelectorAll(".progressbar");
+    const formStars = document.querySelectorAll("star");
+
+    // ELEMENT COLOR LOGIC
+    els.forEach((el) => {
+      if (item.type === "button") {
+        el.style.backgroundColor = item.isvalue;
+      } else {
+        el.style.color = item.isvalue;
+      }
+    });
+
+    // PROGRESSBAR: only star color should apply
+    if (item.type === "star") {
+      progressbars.forEach((bar) => {
+        bar.style.backgroundColor = item.isvalue;
+      });
+      formStars.forEach((stars) => {
+        stars.style.color = item.isvalue;
+      });
+    }
+  });
+
+  /** ------------------------------
+   *  APPLY TEXT
+   * ------------------------------ **/
+
+  reviewSetting.text.forEach((item) => {
+    document
+      .querySelectorAll(`[data-setting="${item.settingName}"]`)
+      .forEach((el) => (el.textContent = item.isvalue));
+  });
+
+  /** ------------------------------
+   *  APPLY THEME VISIBILITY
+   * ------------------------------ **/
+
+  reviewSetting.theme.forEach((item) => {
+    document
+      .querySelectorAll(`[data-setting="${item.settingName}"]`)
+      .forEach((el) => {
+        el.style.display = item.isChecked ? "block" : "none";
+      });
   });
 });

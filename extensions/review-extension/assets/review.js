@@ -1,9 +1,10 @@
 // import renderReviews from "./reviewFilter";
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const dbReviews = [
     { author: "Amit", rating: 5, body: "Nice!", date: "2025-01-01" },
     { author: "Simran", rating: 4, body: "Loved it.", date: "2025-01-02" },
   ];
+
   // all importent variable is here
   const lists = document.querySelectorAll(".jm-list");
   const productIdliquid = window.__productId;
@@ -14,6 +15,44 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeForm = document.getElementById("closeForm");
   const stars = document.querySelectorAll("#formStars .form-star");
   const ratingInput = document.getElementById("selectedRating");
+
+  const getColorSetting = async () => {
+    try {
+      const baseUrl = window.location.origin;
+
+      const res = await fetch(
+        `${baseUrl}/apps/review/api/routes/app/setting/getByTitle`,
+        {
+          method: "POST",
+          body: JSON.stringify({ title: "Review Widget Setting" }),
+        },
+      );
+
+      const resData = await res.json();
+      console.log(resData.data.sectionSettings, "setting data form api ");
+
+      return resData.data.sectionSettings;
+    } catch (error) {
+      console.log("color setting fetch error", error);
+      return { message: error.message, data: null };
+    }
+  };
+
+  const reviewSetting = await getColorSetting();
+  console.log(reviewSetting);
+
+  // reviewSetting.color.forEach((item) => {
+
+  //   // PROGRESSBAR: only star color should apply
+  //   if (item.type === "star") {
+  //     progressbars.forEach((bar) => {
+  //       bar.style.backgroundColor = item.isvalue;
+  //     });
+  //     formStars.forEach((stars) => {
+  //       stars.style.color = item.isvalue;
+  //     });
+  //   }
+  // });
 
   // render all dummy reviews
   lists.forEach((list) => {
@@ -51,13 +90,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // star rating according to rating number
   stars.forEach((star) => {
-    star.addEventListener("click", () => {
-      const selectedValue = star.getAttribute("data-value");
-      ratingInput.value = selectedValue;
-      // noReviewRating.value = selectedValue;
-      stars.forEach((s) => {
-        s.style.color =
-          s.getAttribute("data-value") <= selectedValue ? "#108474" : "#ccc";
+    // star.addEventListener("click", () => {
+    //   const selectedValue = star.getAttribute("data-value");
+    //   ratingInput.value = selectedValue;
+    //   stars.forEach((s) => {
+    //     s.style.color =
+    //       s.getAttribute("data-value") <= selectedValue ? "#e01111ff" : "#ccc";
+    //   });
+    // });
+    stars.forEach((star) => {
+      star.addEventListener("click", () => {
+        const selectedValue = star.getAttribute("data-value");
+        ratingInput.value = selectedValue;
+
+        const starColor =
+          reviewSetting.color.find((c) => c.type === "star")?.isvalue ||
+          "#e0dc11ff";
+
+        stars.forEach((s) => {
+          s.style.color =
+            s.getAttribute("data-value") <= selectedValue ? starColor : "#ccc";
+        });
       });
     });
   });
@@ -65,7 +118,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // reset stars on clear form
   function resetStars() {
     ratingInput.value = ""; // remove selected rating
-
     stars.forEach((s) => {
       s.style.color = "#ccc"; // reset to default color
     });
@@ -213,10 +265,12 @@ document.addEventListener("DOMContentLoaded", () => {
     errorElement.textContent = message;
     inputElement.after(errorElement);
   }
+
   // function to close form
   function closeReviewForm() {
     const formDIV = document.getElementById("FormParentDiv");
     form.reset();
+    resetStars();
     form
       .querySelectorAll(".input-error")
       .forEach((el) => el.classList.remove("input-error"));

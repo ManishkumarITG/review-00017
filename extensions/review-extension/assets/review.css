@@ -52,10 +52,10 @@
 }
 
 .jm-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
 }
 
 .jm-write {
@@ -70,7 +70,7 @@
 .jm-sort-select {
   outline: none;
   border: none;
-  color: #388B7F;
+  /* color: #388B7F; */
 }
 
 .jm-distribution {
@@ -259,8 +259,10 @@
 }
 
 .jm-actions {
-  display: flex;
-  gap: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
 }
 
 .jm-write {
@@ -272,7 +274,7 @@
 
 .jm-sort-select {
   padding: 6px 10px;
-  color: #388B7F;
+  /* color: #388B7F; */
 }
 
 .jm-item {
@@ -405,7 +407,7 @@ div#closeForm {
   gap: 8px;
   font-size: 14px;
   font-weight: 600;
-  color: #108474;
+  /* color: #108474; */
   margin-bottom: 7px;
 }
 
@@ -437,7 +439,7 @@ div#closeForm {
 
 .form-star:hover,
 .form-star.active {
-  color: #388B7F !important;
+  color: #dff04d !important;
   transform: scale(1.15);
 }
 

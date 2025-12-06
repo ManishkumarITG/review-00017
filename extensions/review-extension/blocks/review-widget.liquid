@@ -19,7 +19,7 @@
 </script>
 
 <script src="{{ 'reviewFilter.js' | asset_url }}" defer></script>
-<script src="{{ 'reviewSetting.js' | asset_url }}" defer></script>
+{% comment %} <script src="{{ 'reviewSetting.js' | asset_url }}" defer></script> {% endcomment %}
 
 {% if product %}
   <script>
@@ -105,7 +105,7 @@
                     {% comment %} background: #388B7F; {% endcomment %}
                     border-radius:0px;
                   "
-                  class="star"
+                  class="progressbar"
 
                 ></div>
               </div>
@@ -132,11 +132,7 @@
         </button>
 
         <div class="jm-sort">
-          <select
-            class="jm-sort-select"
-            id="{{ block.settings.RatingFilter  }}"
-            style="color:{{block.settings.star_color}}"
-          >
+          <select class="jm-sort-select star">
             <option value="most_recent">Most Recent</option>
             <option value="highest">Highest Rating</option>
             <option value="lowest">Lowest Rating</option>
@@ -228,7 +224,7 @@
                     {% comment %} background: #388B7F; {% endcomment %}
                     border-radius:0px;
                   "
-                  class="star"
+                  class="progressbar"
                 ></div>
               </div>
               {% comment %} <!-- RIGHT: count --> {% endcomment %}
@@ -254,7 +250,7 @@
         </button>
 
         <div class="jm-sort">
-          <select class="jm-sort-select" style="color:{{block.settings.star_color}}">
+          <select class="jm-sort-select star">
             <option value="most_recent">Most Recent</option>
             <option value="highest">Highest Rating</option>
             <option value="lowest">Lowest Rating</option>
@@ -305,7 +301,7 @@
             <div>
               {% for i in (1..5) %}
                 <span
-                  class="form-star stars"
+                  class="form-star star"
                   style="
                     font-size:20px;
                     color:#ccc;
@@ -341,7 +337,7 @@
             color: {{block.settings.star_color}};
             font-size: {{block.settings.star_size}}px;
           "
-          class="stars"
+          class="star"
         >
           {% render 'stars', rating: 5 %}
         </span>
@@ -390,7 +386,7 @@
               "
             >
               {% for i in (1..5) %}
-                <span class="form-star" data-value="{{ i }}">★</span>
+                <span class="form-star " data-value="{{ i }}">★</span>
               {% endfor %}
             </div>
             <input type="hidden" id="selectedRating" name="Rating" value="0">
@@ -399,7 +395,7 @@
         </label>
 
         <!-- Name -->
-        <label class="field-label">
+        <label class="field-label ">
           Display Name
           <input
             name="Name"
