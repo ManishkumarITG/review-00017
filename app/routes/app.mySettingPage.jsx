@@ -1,4 +1,12 @@
-import { Page, InlineGrid, Card, Text, Box, Divider } from "@shopify/polaris";
+import {
+  Page,
+  InlineGrid,
+  Card,
+  Text,
+  Box,
+  Divider,
+  Grid,
+} from "@shopify/polaris";
 import { AppProvider } from "@shopify/polaris";
 import { PaintBrushRoundIcon, StarIcon } from "@shopify/polaris-icons";
 import { useEffect, useState } from "react";
@@ -24,13 +32,15 @@ function MySettingPage() {
   };
   return (
     <AppProvider>
-      <Page>
+      <Page fullWidth>
         <InlineGrid
           gap={{ xs: "100", sm: "200", md: "300", lg: "400", xl: "500" }}
           columns={{
             xs: 2,
+            sm: 2,
             md: ["oneThird", "twoThirds"],
             lg: ["oneThird", "twoThirds"],
+            xl: ["oneThird", "twoThirds"],
           }}
         >
           <Card>
@@ -83,7 +93,8 @@ function MySettingPage() {
                 <Divider />
               </Box>
             </Box>
-          </Card>{" "}
+          </Card>
+
           {isPage == "widgets" ? <Widget /> : <Branding />}
         </InlineGrid>
       </Page>
