@@ -76,7 +76,7 @@ function IndexFiltersDefaultExample() {
   const { mode, setMode } = useSetIndexFiltersMode();
   const [refreshReviews, setRefreshReviews] = useState(false);
   const [page, setPage] = useState(1);
-  const [total ,setTotal ] = useEffect(0);
+  const [total ,setTotal ] = useState(1);
   const limit = 10;
   const onQueryClear = useCallback(() => {
     setQueryValue("");
@@ -123,7 +123,7 @@ function IndexFiltersDefaultExample() {
         setLoding(true);
         const resopanse = await getAllReviews(page, limit);
         console.log(resopanse);
-        setReviews(resopanse);
+        setReviews(resopanse.data);
       } catch (error) {
         console.log(error);
       } finally {

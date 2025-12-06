@@ -413,11 +413,11 @@ export default function ReviewWidgets() {
                         const ratingNumber = (v.pepole / totalReview) * 100;
                         return (
                           <InlineStack
-                            blockAlign="cemter"
+                            blockAlign="center"
                             direction="row"
                             as="div"
                             align="center"
-                            gap="200"
+                            gap="100"
                             key={v.rating}
                           >
                             <Ratting rating={v.rating} color={starColor} />

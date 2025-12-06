@@ -113,7 +113,7 @@ export const getAllReviews = async (page, limit) => {
     const res = await fetch(`/api/routes/app/reviewproduct/getAllReviews?limit=${limit}&page=${page}`);
     const resData = await res.json();
     const data = resData;
-    return data.data;
+    return data;
   } catch (error) {
     console.log("========================getAllRev======", error);
     
