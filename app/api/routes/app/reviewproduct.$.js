@@ -25,7 +25,11 @@ export const loader = async ({ request }) => {
     const { idType, page, limit, type, skip, skipValue, targetId, filterType } =
       handleUrlData(request);
 
-    console.log("--------------------------------- url , idType", idType);
+    console.log(
+      "--------------------------------- url , idType",
+      idType,
+      filterType,
+    );
 
     switch (path) {
       case "getAllReviews":
