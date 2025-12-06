@@ -286,7 +286,11 @@ export const ColorProvider = ({ children }) => {
       setDateChecked(settigngObj?.theme[0]?.isChecked);
       // add text in state
       settigngObj.text?.forEach((text) => {
-        initialState[text.settingName] = text.isvalue;
+        if (text.type == "ChoiceList") {
+          initialState[text.settingName] = text.isChecked;
+        } else {
+          initialState[text.settingName] = text.isvalue;
+        }
       });
     }
     setColorData();

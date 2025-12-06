@@ -343,7 +343,7 @@ function IndexFiltersDefaultExample() {
             <InlineStack gap="800">
               <Popover
                 active={openPopoverId === _id}
-                fullWidth={spam}
+                fullWidth={spam ? false : true}
                 preferredAlignment="center"
                 activator={
                   <Button
@@ -518,7 +518,6 @@ function IndexFiltersDefaultExample() {
               canCreateNewView={false}
             />
 
-
             {loding ? (
               <IndexTable
                 itemCount={3}
@@ -533,16 +532,16 @@ function IndexFiltersDefaultExample() {
                 {skeletonMarkup}
               </IndexTable>
             ) : reviews.length === 0 ? (
-              <Card sectioned>
-                <EmptyState
-                  heading="No Reviews founded"
-                  image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
-                >
-                  <Text>
-                    your product does not have any reviews
-                  </Text>
-                </EmptyState>
-              </Card>
+              <EmptyState
+                heading="No Reviews founded"
+                action={{ content: 'All Reviews', onAction: () => handleTapChange(0) }}
+
+                image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
+              >
+                <Text>
+                  your product does not have any reviews
+                </Text>
+              </EmptyState>
             ) : (
               <IndexTable
                 itemCount={reviews.length}
@@ -563,7 +562,6 @@ function IndexFiltersDefaultExample() {
               </IndexTable>
             )}
 
-            {/* 👉 IMPORTANT FIX ENDS HERE  */}
           </Card>
 
         </InlineGrid>
@@ -571,11 +569,12 @@ function IndexFiltersDefaultExample() {
         <Card >
           <InlineStack gap="800" align="center" blockAlign="center">
             <Box
-            style={{ border: "2px solid #ccc", padding: "4px 8px 0 8px" }}
-            onClick={() => {
-              setCurrentTab((prev) => prev - 1);
-              setitemRenderLimit((pre) => pre - 10);
-            }}>
+              as="button"
+              style={{ border: "2px solid #ccc", padding: "4px 8px 0 8px" }}
+              onClick={() => {
+                setCurrentTab((prev) => prev - 1);
+                setitemRenderLimit((pre) => pre - 10);
+              }}>
               <Button
                 variant="plain"
                 disabled={currentTab === 1}
@@ -583,7 +582,7 @@ function IndexFiltersDefaultExample() {
                 icon={ChevronLeftIcon}
               />
             </Box>
-            <Box as="span"  style={{color: "#535353ff"}}>
+            <Box as="span" style={{ color: "#535353ff" }}>
               Showing {currentTab} to **Placeholder** {reviews.length}
             </Box>
             <Box

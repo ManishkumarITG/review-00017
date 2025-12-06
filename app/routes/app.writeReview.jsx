@@ -15,7 +15,6 @@ import {
   Icon,
   Form,
   FormLayout,
-  Spinner,
 } from "@shopify/polaris";
 import "@shopify/polaris/build/esm/styles.css";
 import { useColorTheme } from "./ColorContext";
