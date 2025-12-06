@@ -47,6 +47,7 @@ export const getAllReviews = async (payload) => {
 export const getReviews = async (filters) => {
   try {
     const data = await getReviewsByType(filters);
+    console.log("--------------------------- by type data ", data);
     return responseHandler(STATUS_CODE.OK, MESSAGE.SUCCESS, data);
   } catch (error) {
     console.log(error);
@@ -66,7 +67,7 @@ export const deletereview = async (payload) => {
 export const updatereview = async (shop, payload) => {
   try {
     const data = await updatereviewbyId(shop, payload);
-    return responseHandler(200, "updated", data);
+    return responseHandler(STATUS_CODE.OK, MESSAGE.UPDATED, data);
   } catch (error) {
     console.log(error);
     return responseHandler(STATUS_CODE.NO_CONTENT, error.message, null);
@@ -92,7 +93,7 @@ export const getSearchResult = async (shop, query) => {
     const data = await searchReviews(shop, query);
     return responseHandler(STATUS_CODE.OK, MESSAGE.SUCCESS, data);
   } catch (error) {
-    console.log("rating summary error:", error);
+    console.log("search result:", error);
     return responseHandler(
       STATUS_CODE.INTERNAL_SERVER_ERROR,
       error.message,

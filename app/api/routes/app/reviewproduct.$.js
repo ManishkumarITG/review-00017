@@ -12,6 +12,7 @@ import { authenticateUser } from "../../middlewares/auth";
 import { responseHandler } from "../../utils/responseHandler";
 import STATUS_CODE from "../../contents/statusCode";
 import MESSAGE from "../../contents/message";
+import { handleUrlData } from "../../middlewares/handleUrl";
 
 export const loader = async ({ request }) => {
   try {
@@ -21,17 +22,10 @@ export const loader = async ({ request }) => {
       throw new Error(message);
     }
 
-    const url = new URL(request.url);
-    const idType = url.searchParams.get("idType");
-    const page = Number(url.searchParams.get("page")) || 1;
-    const limit = Number(url.searchParams.get("limit")) || 10;
-    const type = url.searchParams.get("type") || null;
-    const skip = url.searchParams.get("skip");
-    const skipValue = skip !== null ? Number(skip) : undefined;
-    const searchQuery = url.searchParams.get("query");
-    const targetId = url.searchParams.get("targetId");
+    const { idType, page, limit, type, skip, skipValue, targetId, filterType } =
+      handleUrlData(request);
 
-    console.log("--------------------------------- url , idType", idType, url);
+    console.log("--------------------------------- url , idType", idType);
 
     switch (path) {
       case "getAllReviews":
@@ -43,6 +37,7 @@ export const loader = async ({ request }) => {
           skipValue,
           shop,
           targetId,
+          filterType,
         });
       case "reviews":
         return await getReviews({
@@ -54,6 +49,7 @@ export const loader = async ({ request }) => {
           shop,
           idType,
           targetId,
+          filterType,
         });
 
       case "ratingSummary":
@@ -95,7 +91,7 @@ export const action = async ({ request }) => {
       case "deletereview":
         return await deletereview(data);
       case "updatereview":
-        return await updatereview(shop,data);
+        return await updatereview(shop, data);
       default:
         break;
     }
