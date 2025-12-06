@@ -48,19 +48,26 @@ export const createReview = async (shop, payload) => {
 };
 
 export const getAllReviewsByShop = async (data) => {
-  const { limit = 10, page = 1, shop } = data;
-
+  const { limit, page, shop } = data;
+  console.log(
+    "------------------------------------------------ service data",
+    data,
+  );
   if (!shop) throw new Error("shop is required");
 
   const skip = (page - 1) * limit;
 
-  const allReviews = Review.find({ shop })
+  const items = await Review.find({ shop })
     .sort({ like: -1, pinned: -1 })
     .skip(skip)
     .limit(limit)
     .lean();
 
-  return allReviews;
+  const total = await Review.countDocuments({ shop });
+
+  console.log("----------------------------------- 1212121212", items);
+
+  return { items, total, limit, page };
 };
 
 export const getReviewsByType = async (data) => {

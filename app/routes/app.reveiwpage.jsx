@@ -34,7 +34,7 @@ import {
   UndoIcon,
   PinFilledIcon,
   ChevronLeftIcon,
-  ChevronRightIcon
+  ChevronRightIcon,
 } from "@shopify/polaris-icons";
 import { HeartUnFillIcon, HeartfillIcon } from "./icons/icon.jsx";
 import StarRating from "./components/Ratting.jsx";
@@ -66,8 +66,6 @@ function IndexFiltersDefaultExample() {
   const [openPopoverId, setOpenPopoverId] = useState(null);
   const [openMenu, setOpenMenu] = useState(null);
   const [openNevigation, setOpenNevigation] = useState(null);
-  const [currentTab, setCurrentTab] = useState(1);
-  const [itemRenderLimit, setitemRenderLimit] = useState(0);
   const [_selected, setSelected] = useState(0);
   const [formData, setFormData] = useState({});
   const [formActive, setFormActive] = useState(false);
@@ -76,8 +74,8 @@ function IndexFiltersDefaultExample() {
   const { mode, setMode } = useSetIndexFiltersMode();
   const [refreshReviews, setRefreshReviews] = useState(false);
   const [page, setPage] = useState(1);
-  const [total ,setTotal ] = useState(1);
-  const limit = 10;
+  const [total, setTotal] = useState(1);
+  const limit = 5;
   const onQueryClear = useCallback(() => {
     setQueryValue("");
     console.log("hello query");
@@ -94,7 +92,7 @@ function IndexFiltersDefaultExample() {
     try {
       setLoding(true);
       const searchData = await getSearchResult(value);
-      setReviews(searchData);
+      setReviews(searchData.data);
       console.log("Search Results:", searchData);
     } catch (error) {
       console.error("Search API Error:", error);
@@ -109,7 +107,11 @@ function IndexFiltersDefaultExample() {
       const updateData = await updatedReview(data);
       console.log(updateData);
       const reviews = await getAllReviews(page, limit);
-      setReviews(reviews);
+      setReviews(reviews.data.items);
+      setTotal(reviews.data.total)
+      console.log(reviews.data.total);
+
+      setRefreshReviews((prev) => !prev);
     } catch (error) {
       console.log(error);
     } finally {
@@ -123,7 +125,9 @@ function IndexFiltersDefaultExample() {
         setLoding(true);
         const resopanse = await getAllReviews(page, limit);
         console.log(resopanse);
-        setReviews(resopanse.data);
+        setTotal(resopanse.data.total)
+        setReviews(resopanse.data.items)
+        console.log(resopanse.data.total)
       } catch (error) {
         console.log(error);
       } finally {
@@ -199,10 +203,10 @@ function IndexFiltersDefaultExample() {
     [selectedTab, setSelectedTab],
   );
 
-  const allReviewsContent = ` ${"All Reviews (" + reviews?.length + ")"}`;
+
 
   const tabs = itemStrings.map((item, index) => ({
-    content: index === 0 ? allReviewsContent : item,
+    content: index == selectedTab ? loding ? `${item} ...` : `${item} ${reviews?.length}` : item,
     index,
     onAction: () => {
       setSelected(index);
@@ -240,10 +244,6 @@ function IndexFiltersDefaultExample() {
     handleTaggedWithRemove();
   }, [handleTaggedWithRemove]);
 
-  const splitedfilteredOrders = reviews?.slice(
-    itemRenderLimit,
-    itemRenderLimit + 10,
-  );
 
   const resourceName = {
     singular: "splitedfilteredOrder",
@@ -251,9 +251,9 @@ function IndexFiltersDefaultExample() {
   };
 
   const { selectedResources, allResourcesSelected, handleSelectionChange } =
-    useIndexResourceState(splitedfilteredOrders);
+    useIndexResourceState(reviews);
 
-  let obj = { length: 3 };
+  let obj = { length: 14 };
 
   const skeletonMarkup = [...Array.from(obj)].map((_, i) => {
     return (
@@ -281,7 +281,7 @@ function IndexFiltersDefaultExample() {
     );
   });
 
-  const rowMarkup = reviews?.map(
+  const rowMarkup = reviews.map(
     (
       { _id, name, item, time, rating, description, email, spam, like, pinned },
       index,
@@ -533,13 +533,13 @@ function IndexFiltersDefaultExample() {
             ) : reviews.length === 0 ? (
               <EmptyState
                 heading="No Reviews founded"
-                action={{ content: 'All Reviews', onAction: () => handleTapChange(0) }}
-
+                action={{
+                  content: "All Reviews",
+                  onAction: () => handleTapChange(0),
+                }}
                 image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
               >
-                <Text>
-                  your product does not have any reviews
-                </Text>
+                <Text>your product does not have any reviews</Text>
               </EmptyState>
             ) : (
               <IndexTable
@@ -560,13 +560,11 @@ function IndexFiltersDefaultExample() {
                 {rowMarkup}
               </IndexTable>
             )}
-
           </Card>
-
         </InlineGrid>
 
-        {limit < total &&
-          <Card >
+        { total > limit &&
+          <Card>
             <InlineStack gap="800" align="center" blockAlign="center">
               <Box
                 style={{ border: "2px solid #ccc", padding: "4px 8px 0 8px" }}
@@ -586,7 +584,7 @@ function IndexFiltersDefaultExample() {
               <Box
                 style={{ border: "2px solid #ccc", padding: "4px 8px 0 8px" }}
                 onClick={() => {
-                  page < total &&
+                  page < total/limit &&
                     setPage((prev) => prev + 1);
                 }}
               >
@@ -597,6 +595,7 @@ function IndexFiltersDefaultExample() {
               </Box>
             </InlineStack>
           </Card>
+
         }
 
         <Modal id="my-modal">

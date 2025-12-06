@@ -87,8 +87,8 @@ export default function ReviewWidgets() {
       setLoding(true);
       const resopanse = await getAllReviews();
       await summary();
-      console.log(resopanse);
-      setReview(resopanse);
+      console.log(resopanse.items);
+      setReview(resopanse.items);
     } catch (error) {
       console.log(error);
     } finally {
