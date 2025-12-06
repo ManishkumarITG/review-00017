@@ -34,7 +34,7 @@ import {
   UndoIcon,
   PinFilledIcon,
   ChevronLeftIcon,
-  ChevronRightIcon
+  ChevronRightIcon,
 } from "@shopify/polaris-icons";
 import { HeartUnFillIcon, HeartfillIcon } from "./icons/icon.jsx";
 import StarRating from "./components/Ratting.jsx";
@@ -106,8 +106,7 @@ function IndexFiltersDefaultExample() {
       setLoding(true);
       const updateData = await updatedReview(data);
       console.log(updateData);
-      const reviews = await getAllReviews();
-      setReviews(reviews);
+      setRefreshReviews((prev) => !prev);
     } catch (error) {
       console.log(error);
     } finally {
@@ -120,8 +119,8 @@ function IndexFiltersDefaultExample() {
       try {
         setLoding(true);
         const resopanse = await getAllReviews();
-        console.log(resopanse);
-        setReviews(resopanse);
+        console.log(resopanse.items);
+        setReviews(resopanse.items);
       } catch (error) {
         console.log(error);
       } finally {
@@ -494,9 +493,6 @@ function IndexFiltersDefaultExample() {
             </Badge>
           </InlineStack>
 
-
-
-
           <Card>
             <IndexFilters
               sortSelected={sortSelected}
@@ -534,13 +530,13 @@ function IndexFiltersDefaultExample() {
             ) : reviews.length === 0 ? (
               <EmptyState
                 heading="No Reviews founded"
-                action={{ content: 'All Reviews', onAction: () => handleTapChange(0) }}
-
+                action={{
+                  content: "All Reviews",
+                  onAction: () => handleTapChange(0),
+                }}
                 image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
               >
-                <Text>
-                  your product does not have any reviews
-                </Text>
+                <Text>your product does not have any reviews</Text>
               </EmptyState>
             ) : (
               <IndexTable
@@ -561,23 +557,21 @@ function IndexFiltersDefaultExample() {
                 {rowMarkup}
               </IndexTable>
             )}
-
           </Card>
-
         </InlineGrid>
 
-        <Card >
+        <Card>
           <InlineStack gap="800" align="center" blockAlign="center">
             <Box
               style={{ border: "2px solid #ccc", padding: "4px 8px 0 8px" }}
               onClick={() => {
                 setCurrentTab((prev) => prev - 1);
                 setitemRenderLimit((pre) => pre - 10);
-              }}>
+              }}
+            >
               <Button
                 variant="plain"
                 disabled={currentTab === 1}
-
                 icon={ChevronLeftIcon}
               />
             </Box>
@@ -591,7 +585,6 @@ function IndexFiltersDefaultExample() {
                 setitemRenderLimit((pre) => pre + 10);
               }}
             >
-
               <Button
                 variant="plain"
                 disabled={itemRenderLimit + 10 >= reviews?.length}
