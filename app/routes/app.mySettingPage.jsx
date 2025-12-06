@@ -3,7 +3,7 @@ import {  StarIcon } from "@shopify/polaris-icons";
 import { useEffect, useState } from "react";
 import Widget from "./components/Widget";
 import Branding from "./components/Branding";
-import { MenuIcon } from "@shopify/polaris-icons";
+import { MenuIcon ,PaintBrushRoundIcon  } from "@shopify/polaris-icons";
 
 function MySettingPage() {
   const { mdDown } = useBreakpoints();

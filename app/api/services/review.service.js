@@ -1,6 +1,7 @@
 import User from "../models/user.model";
 import Review from "../models/review.model";
 import mongoConnect from "../../db.server";
+import { getFilterType } from "../middlewares/handelFilter";
 
 export const createReview = async (shop, payload) => {
   await mongoConnect();
@@ -48,17 +49,20 @@ export const createReview = async (shop, payload) => {
 };
 
 export const getAllReviewsByShop = async (data) => {
-  const { limit, page, shop } = data;
+  const { limit, page, shop, filterType } = data;
   console.log(
     "------------------------------------------------ service data",
     data,
   );
+
   if (!shop) throw new Error("shop is required");
 
+  const sortQuery = getFilterType(filterType);
+  console.log("------------------------------- sort query ", sortQuery);
   const skip = (page - 1) * limit;
 
   const items = await Review.find({ shop })
-    .sort({ like: -1, pinned: -1 })
+    .sort(sortQuery)
     .skip(skip)
     .limit(limit)
     .lean();
@@ -72,14 +76,12 @@ export const getAllReviewsByShop = async (data) => {
 
 export const getReviewsByType = async (data) => {
   try {
-  await mongoConnect();
-
-    const { limit, page, shop, idType, targetId } = data;
+    const { limit, page, shop, idType, targetId, filterType } = data;
 
     console.log(idType);
 
     if (!shop) throw new Error("shop is required");
-
+    const sortQuery = getFilterType(filterType);
     const skip = (page - 1) * limit;
 
     const filter = {
@@ -100,7 +102,7 @@ export const getReviewsByType = async (data) => {
 
     console.log("--------------------------------- filter obj", filter);
     const items = await Review.find(filter)
-      .sort({ like: -1, pinned: -1 })
+      .sort(sortQuery)
       .skip(skip)
       .limit(limit)
       .lean();

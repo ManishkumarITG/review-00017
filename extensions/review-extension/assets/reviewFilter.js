@@ -396,22 +396,27 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const reviewSetting = await getColorSetting();
   console.log(reviewSetting);
-  const elements = document.getElementsByClassName("text");
+  // const elements = document.getElementsByClassName("text");
 
   reviewSetting.color.forEach((item) => {
     const els = document.querySelectorAll(`.${item.type}`);
     const progressbars = document.querySelectorAll(".progressbar");
     const formStars = document.querySelectorAll("star");
+    const button = document.querySelectorAll(".jm-write");
 
     // ELEMENT COLOR LOGIC
+    console.log(item.type, "type of review");
+
     els.forEach((el) => {
       if (item.type === "button") {
-        el.style.backgroundColor = item.isvalue;
+        button.forEach((bar) => {
+          bar.style.backgroundColor = item.isvalue;
+        });
       } else {
-        el.style.color = item.isvalue;
+            el.style.color = item.isvalue;
       }
     });
-
+    
     // PROGRESSBAR: only star color should apply
     if (item.type === "star") {
       progressbars.forEach((bar) => {
