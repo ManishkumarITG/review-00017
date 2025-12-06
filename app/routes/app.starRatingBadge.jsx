@@ -11,6 +11,7 @@ import {
   Layout,
   Link,
   Page,
+  Popover,
   SkeletonDisplayText,
   SkeletonPage,
   Text,
@@ -23,6 +24,7 @@ import {
   ArrowDiagonalIcon,
   PlusIcon,
   MinusIcon,
+  ChevronDownIcon,
 } from "@shopify/polaris-icons";
 
 // costom copnents
@@ -36,6 +38,7 @@ import { useNavigate } from "react-router";
 import { useColorTheme } from "./ColorContext";
 import { SaveBar } from "@shopify/app-bridge-react";
 import Loding from "./components/Loding.jsx";
+import { arrowIcon } from "./icons/icon.jsx";
 
 export default function appStarRatting() {
   const nevigate = useNavigate();
@@ -48,6 +51,10 @@ export default function appStarRatting() {
     lodaing,
     state,
     dispatch,
+    toggleActive,
+    active,
+    btnText,
+    setBtnText,
   } = useColorTheme();
 
   const starColor = getHexCode("star");
@@ -61,7 +68,7 @@ export default function appStarRatting() {
     shopify.saveBar.show("review_widgets");
   };
 
-  const handlePgeChange = () => {
+  const handlePageChange = () => {
     nevigate("/app/mySettingPage");
   };
 
@@ -75,108 +82,200 @@ export default function appStarRatting() {
         ></button>
         <button onClick={() => handleDiscard("review_widgets")}></button>
       </SaveBar>
-      <Page fullWidth>
-        <Card>
-          <InlineGrid
-            columns={{
-              xs: 1,
-              sm: 1,
-              md: ["oneThird", "twoThirds"],
+
+      <Card roundedAbove="0" padding={0} title="star ratting card" sectioned>
+        <InlineGrid
+          columns={{
+            xs: 1,
+            sm: 1,
+            md: ["oneThird", "twoThirds"],
+          }}
+        >
+          {/* settings */}
+          <Box
+            style={{
+              height: "100vh",
+              overflow: "auto",
+              padding: "25px 25px 25px 25px",
             }}
           >
-            <Box padding="400">
-              <BlockStack gap={600}>
-                <InlineStack gap={400}>
-                  <Button icon={ArrowLeftIcon} onClick={handlePgeChange} />
-                  <Text as="h2" variant="headingSm">
-                    Rating Badge
-                  </Text>
-                </InlineStack>
+            <BlockStack gap={600}>
+              <InlineStack blockAlign="center" align="start" gap="200">
                 <Box
-                  padding="500"
-                  borderWidth="025"
-                  borderRadius="100"
-                  borderColor="border-brand"
+                  style={{
+                    border: "1px solid #babfc3",
+                    padding: "7px",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                  onClick={handlePageChange}
                 >
-                  <BlockStack gap={500}>
-                    <Text as="h3" variant="headingSm">
-                      Install
-                    </Text>
-                    <Text as="p">
-                      Add the Star Rating Badge on product pages.
-                    </Text>
-                    <InlineStack gap={300}>
-                      <Button icon={ArrowDiagonalIcon}>Install</Button>
-                      <Button variant="plain" icon={ArrowDiagonalIcon}>
-                        Learn more
-                      </Button>
-                    </InlineStack>
-                    <s-divider />
-
-                    <Text>
-                      Add the Star Rating Badge on collection pages (optional):
-                    </Text>
-                    <Link monochrome url="#">
-                      See guide ↗
-                    </Link>
-                  </BlockStack>
+                  <Icon source={arrowIcon} />
                 </Box>
+                <Text as="span" variant="headingLg" fontWeight="regular">
+                  Star Rating Badge
+                </Text>
+              </InlineStack>
 
-                <CollapsibleBox id="text_Badge_Ratting" boxName="Text">
-                  <Box padding="400">
-                    {setting == null ? (
-                      <Loding />
-                    ) : (
-                      setting?.text?.map((text) => {
-                        return (
-                          text.type == "ChoiceList" && (
-                            <Box paddingInline="200" key={text._id}>
-                              <Checkbox
-                                checked={state[text.settingName]}
-                                label={text.settingName}
-                                id={text.settingName}
-                                onChange={handleChange}
-                              />
-                            </Box>
-                          )
-                        );
-                      })
-                    )}
-                  </Box>
-                </CollapsibleBox>
+              <Box
+                padding="500"
+                borderWidth="025"
+                borderRadius="100"
+                borderColor="border-brand"
+              >
+                <BlockStack gap={500}>
+                  <Text as="h3" variant="headingSm">
+                    Install
+                  </Text>
+                  <Text as="p">
+                    Add the Star Rating Badge on product pages.
+                  </Text>
+                  <InlineStack gap={300}>
+                    <Button icon={ArrowDiagonalIcon}>Install</Button>
+                    <Button variant="plain" icon={ArrowDiagonalIcon}>
+                      Learn more
+                    </Button>
+                  </InlineStack>
+                  <s-divider />
 
-                <CollapsibleBox id="color-collapsible" boxName="Color">
+                  <Text>
+                    Add the Star Rating Badge on collection pages (optional):
+                  </Text>
+                  <Link monochrome url="#">
+                    See guide ↗
+                  </Link>
+                </BlockStack>
+              </Box>
+
+              <CollapsibleBox id="text_Badge_Ratting" boxName="Text">
+                <Box padding="400">
                   {setting == null ? (
                     <Loding />
                   ) : (
-                    setting.color.map((color) => {
+                    setting?.text?.map((text) => {
                       return (
-                        color.type == "star" && (
-                          <Box key={color._id} padding="200">
-                            <InlineStack>
-                              <ColorPickerCircle
-                                hexCodeColor={color.isvalue}
-                                type={color.type}
-                                saveBarId="review_widgets"
-                              />
-                              <Box gap="400">
-                                <Text variant="headingMd" as="p">
-                                  Primary color
-                                </Text>
-                                <Text variant="headingsm" as="p">
-                                  {getHexCode(color.type)}
-                                </Text>
-                              </Box>
-                            </InlineStack>
+                        text.type == "ChoiceList" && (
+                          <Box paddingInline="200" key={text._id}>
+                            <Checkbox
+                              checked={state[text.settingName]}
+                              label={text.settingName}
+                              id={text.settingName}
+                              onChange={handleChange}
+                            />
                           </Box>
                         )
                       );
                     })
                   )}
-                </CollapsibleBox>
-              </BlockStack>
+                </Box>
+              </CollapsibleBox>
+
+              <CollapsibleBox id="color-collapsible" boxName="Color">
+                {setting == null ? (
+                  <Loding />
+                ) : (
+                  setting.color.map((color) => {
+                    return (
+                      color.type == "star" && (
+                        <Box key={color._id} padding="200">
+                          <InlineStack>
+                            <ColorPickerCircle
+                              hexCodeColor={color.isvalue}
+                              type={color.type}
+                              saveBarId="review_widgets"
+                            />
+                            <Box gap="400">
+                              <Text variant="headingMd" as="p">
+                                Primary color
+                              </Text>
+                              <Text variant="headingsm" as="p">
+                                {getHexCode(color.type)}
+                              </Text>
+                            </Box>
+                          </InlineStack>
+                        </Box>
+                      )
+                    );
+                  })
+                )}
+              </CollapsibleBox>
+            </BlockStack>
+          </Box>
+
+          {/*product Skeleton */}
+          <Box borderColor="border-brand" borderInlineStartWidth="025">
+            <Box
+              padding="200"
+              borderColor="border-brand"
+              borderBlockEndWidth="025"
+            >
+              <InlineStack blockAlign="center" align="end" gap={200}>
+                <Text>Previewing</Text>
+                <Popover
+                  active={active === "popover2"}
+                  preferredAlignment="center"
+                  activator={
+                    <Box
+                      width="132px"
+                      paddingBlockEnd={100}
+                      paddingBlockStart={100}
+                      paddingInline={200}
+                      borderWidth="025"
+                      borderRadius="0"
+                      borderColor="border-brand"
+                      onClick={toggleActive("popover2")}
+                    >
+                      {
+                        <InlineStack gap={100}>
+                          {btnText} <Icon source={ChevronDownIcon} />
+                        </InlineStack>
+                      }
+                    </Box>
+                  }
+                  autofocusTarget="first-node"
+                  onClose={toggleActive("popover2")}
+                >
+                  <Box
+                    padding="300"
+                    borderRadius="0"
+                    borderWidth="0"
+                    background="bg-fill"
+                  >
+                    <Box width="109px">
+                      <Box
+                        style={{
+                          cursor: "pointer",
+                          padding: "0 0 4px 0",
+                        }}
+                        onClick={() => {
+                          setBtnText("Sempal Data");
+                        }}
+                      >
+                        Sempal Data
+                      </Box>
+                      <Box
+                        style={{
+                          cursor: "pointer",
+                          padding: "0 0 4px 0",
+                        }}
+                        onClick={() => {
+                          setBtnText("No Review");
+                        }}
+                      >
+                        No Review
+                      </Box>
+                    </Box>
+                  </Box>
+                </Popover>
+              </InlineStack>
             </Box>
-            <Box>
+            <Box
+              style={{
+                height: "100vh",
+                overflow: "auto",
+                padding: "30px 30px 60px 30px",
+              }}
+            >
               <SkeletonPage>
                 <Layout>
                   <Layout.Section>
@@ -186,7 +285,9 @@ export default function appStarRatting() {
                         <SkeletonDisplayText maxWidth="100%" size="medium" />
                         <InlineStack>
                           {" "}
-                          <StarRating rating={5} color={starColor} />{" "}
+                          {btnText !== "No Review" && (
+                            <StarRating rating={5} color={starColor} />
+                          )}{" "}
                           <Text variant="headingMd" as="span">
                             {state["Show text and stars"] && "123 reviews"}
                           </Text>
@@ -238,8 +339,13 @@ export default function appStarRatting() {
                             <ThumbnailSkeleton width="100%" height="300px" />
                             <InlineStack align="center">
                               {" "}
-                              <StarRating rating={5} color={starColor} />{" "}
-                              <Text>123 reviews</Text>
+                              {btnText !== "No Review" && (
+                                <>
+                                  {" "}
+                                  <StarRating rating={5} color={starColor} />
+                                  <Text>123 reviews</Text>{" "}
+                                </>
+                              )}
                             </InlineStack>
                             <InlineStack align="center" gap="100">
                               <Box as="span" style={{ color: "#cfcfcfff" }}>
@@ -259,8 +365,13 @@ export default function appStarRatting() {
                             <ThumbnailSkeleton width="100%" height="300px" />
                             <InlineStack align="center">
                               {" "}
-                              <StarRating rating={5} color={starColor} />{" "}
-                              <Text>123 reviews</Text>
+                              {btnText !== "No Review" && (
+                                <>
+                                  {" "}
+                                  <StarRating rating={5} color={starColor} />
+                                  <Text>123 reviews</Text>{" "}
+                                </>
+                              )}
                             </InlineStack>
                             <InlineStack align="center" gap="100">
                               <Box as="span" style={{ color: "#cfcfcfff" }}>
@@ -280,8 +391,13 @@ export default function appStarRatting() {
                             <ThumbnailSkeleton width="100%" height="300px" />
                             <InlineStack align="center">
                               {" "}
-                              <StarRating rating={5} color={starColor} />{" "}
-                              <Text>123 reviews</Text>
+                              {btnText !== "No Review" && (
+                                <>
+                                  {" "}
+                                  <StarRating rating={5} color={starColor} />
+                                  <Text>123 reviews</Text>{" "}
+                                </>
+                              )}
                             </InlineStack>
                             <InlineStack align="center" gap="100">
                               <Box as="span" style={{ color: "#cfcfcfff" }}>
@@ -303,9 +419,9 @@ export default function appStarRatting() {
                 </Layout>
               </SkeletonPage>
             </Box>
-          </InlineGrid>
-        </Card>
-      </Page>
+          </Box>
+        </InlineGrid>
+      </Card>
     </AppProvider>
   );
 }

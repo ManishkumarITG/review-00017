@@ -42,8 +42,14 @@ export const ColorProvider = ({ children }) => {
   const [dateChecked, setDateChecked] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialState);
   const [shop, setShop] = useState("");
+  const [active, setActive] = useState(null);
+  const [btnText, setBtnText] = useState("Sempal Data");
 
   const [colors, setColors] = useState({});
+
+  const toggleActive = (id) => () => {
+    setActive((activeId) => (activeId !== id ? id : null));
+  };
 
   function hsbaToHex({ hue, saturation, brightness, alpha }) {
     const h = hue % 360;
@@ -319,6 +325,11 @@ export const ColorProvider = ({ children }) => {
     handleDiscard,
     lodaing,
     shop,
+    toggleActive,
+    active,
+    setActive,
+    btnText,
+    setBtnText,
   };
 
   return (

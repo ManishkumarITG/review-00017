@@ -6,7 +6,7 @@ export default function CustomProgressBar({ progress, color }) {
       style={{
         margin: "4px 0 0 0",
         width: "150px",
-        height: "10px",
+        height: "14px",
         background: "#E5E7EB",
         overflow: "hidden",
       }}

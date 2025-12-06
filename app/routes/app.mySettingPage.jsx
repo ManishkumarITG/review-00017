@@ -1,12 +1,24 @@
-import { Page, InlineGrid, Card, Text, Box, Divider } from "@shopify/polaris";
-import { AppProvider } from "@shopify/polaris";
+import { Page, InlineGrid, Card, Text, Box, Divider, Button, useBreakpoints, AppProvider } from "@shopify/polaris";
 import { PaintBrushRoundIcon, StarIcon } from "@shopify/polaris-icons";
 import { useEffect, useState } from "react";
 import Widget from "./components/Widget";
 import Branding from "./components/Branding";
+import {
+  MenuIcon
+} from '@shopify/polaris-icons';
+
 
 function MySettingPage() {
+  const { mdDown } = useBreakpoints();
   const [isPage, setIsPage] = useState("widgets");
+  const [showNavigation, setShowNavigation] = useState(false)
+  const [closeButton, setCloseButton] = useState(true)
+
+ 
+  useEffect(() => {
+    setShowNavigation(mdDown);
+  }, [mdDown]);
+
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -23,67 +35,85 @@ function MySettingPage() {
     setIsPage(page);
   };
   return (
-    <AppProvider>
+    <AppProvider> 
       <Page>
         <InlineGrid
           gap={{ xs: "100", sm: "200", md: "300", lg: "400", xl: "500" }}
           columns={{
-            xs: 2,
+            xs: 1,
             md: ["oneThird", "twoThirds"],
             lg: ["oneThird", "twoThirds"],
           }}
         >
-          <Card>
-            <Box minHeight="100vh">
-              <Box>
-                <Box padding="400" width="100%">
-                  <Text as="p">REVIEW DISPLAY</Text>
 
-                  <Box
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "5px",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => {
-                      handlePageChange("widgets");
-                    }}
-                  >
-                    <StarIcon width={25} />
-                    <Text variant="headingMd" as="h1" tone="base">
-                      Widgets
-                    </Text>
+          {showNavigation ?
+          <Box width="400px">
+            <Button  textAlign="center" variant="secondary" onClick={() => setShowNavigation(!showNavigation)} icon={MenuIcon}/> 
+          </Box>: (
+              <Card>
+                <Box minHeight={{
+                  xs: "300px",
+                  sm: "100vh",
+                  md: "100vh",
+                  lg: "100vh",
+                  xl: "100vh"
+                }}>
+                  <Box>
+                    <Box padding="400" width="100%">
+                      <Box style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center"
+                      }}>
+                        <Text as="p">REVIEW DISPLAY</Text>
+                        { mdDown && <Button variant="primary" onClick={()=> setShowNavigation(true)}>Close</Button>}
+                      </Box>
+
+                      <Box
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "5px",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          handlePageChange("widgets");
+                        }}
+                      >
+                        <StarIcon width={25} />
+                        <Text variant="headingMd" as="h1" tone="base">
+                          Widgets
+                        </Text>
+                      </Box>
+                    </Box>
+                    <Divider />
+                  </Box>
+
+                  <Box>
+                    <Box padding="400" width="100%">
+                      <Text as="p">GENERAL</Text>
+
+                      <Box
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "5px",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          handlePageChange("branding");
+                        }}
+                      >
+                        <PaintBrushRoundIcon width={25} />
+                        <Text variant="headingMd" as="h1" tone="base">
+                          Branding
+                        </Text>
+                      </Box>
+                    </Box>
+                    <Divider />
                   </Box>
                 </Box>
-                <Divider />
-              </Box>
-
-              <Box>
-                <Box padding="400" width="100%">
-                  <Text as="p">GENERAL</Text>
-
-                  <Box
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "5px",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => {
-                      handlePageChange("branding");
-                    }}
-                  >
-                    <PaintBrushRoundIcon width={25} />
-                    <Text variant="headingMd" as="h1" tone="base">
-                      Branding
-                    </Text>
-                  </Box>
-                </Box>
-                <Divider />
-              </Box>
-            </Box>
-          </Card>{" "}
+              </Card>)}
           {isPage == "widgets" ? <Widget /> : <Branding />}
         </InlineGrid>
       </Page>
@@ -92,3 +122,4 @@ function MySettingPage() {
 }
 
 export default MySettingPage;
+  

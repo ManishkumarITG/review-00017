@@ -42,7 +42,6 @@ const getProductReviews = async () => {
       `${shopDomain}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=product&limit=100`,
     );
     const resData = await res.json();
-    console.log("resData", resData);
     return resData.data.items || [];
   } catch (error) {
     console.error("Product reviews fetch error:", error);
@@ -79,8 +78,6 @@ window.onload = async () => {
   const settingResponse = await settingData();
   const reviews = await getProductReviews();
 
-  console.log("reviews", reviews);
-
   const colorArray = settingResponse?.data?.sectionSettings?.color;
   const textArray = settingResponse?.data?.sectionSettings?.text;
 
@@ -97,17 +94,9 @@ window.onload = async () => {
   products.forEach((productCard) => {
     const productId = productCard.getAttribute("data-product-id");
 
-    console.log("rrr1", productId);
-
-    reviews.forEach((r) => {
-      console.log("rrr", r);
-    });
-
-    const productReviewData = reviews.find(
+    const productReviews = reviews.filter(
       (r) => r.targetId && r.targetId.toString() === productId,
     );
-
-    console.log("data id", productReviewData);
 
     const ratingContainer = productCard.querySelector(
       ".extension-star-rating-wrapper",
@@ -121,21 +110,23 @@ window.onload = async () => {
         ".review-text-style[data-review-count]",
       );
 
-      let rating = 0;
-      let reviewCount = 0;
+      const totalReviews = productReviews.length;
+      let averageRating = 0;
 
-      if (productReviewData) {
-        rating = productReviewData.rating || 0;
-        reviewCount++;
+      if (totalReviews > 0) {
+        const totalRatingSum = productReviews.reduce(
+          (sum, r) => sum + (r.rating || 0),
+          0,
+        );
+        averageRating = totalRatingSum / totalReviews;
       }
 
       if (starSpan) {
-        starSpan.innerHTML = generateStarHTML(rating, starColor);
+        starSpan.innerHTML = generateStarHTML(averageRating, starColor);
       }
 
       if (reviewCountSpan) {
-        reviewCountSpan.textContent = `${reviewCount} review${reviewCount !== 1 ? "s" : ""}`;
-
+        reviewCountSpan.textContent = `${totalReviews} review${totalReviews !== 1 ? "s" : ""}`;
         reviewCountSpan.style.display = showReviewText ? "inline" : "none";
       }
     }

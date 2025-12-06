@@ -1,5 +1,4 @@
 import {
-  Page,
   Card,
   AppProvider,
   InlineGrid,
@@ -14,12 +13,14 @@ import {
   Checkbox,
   TextField,
   Spinner,
+  Icon,
+  Link,
 } from "@shopify/polaris";
 import "@shopify/polaris/build/esm/styles.css";
 import Ratting from "./components/Ratting.jsx";
 import { useColorTheme } from "./ColorContext";
-import { useCallback, useState } from "react";
-import { ArrowLeftIcon, ChevronDownIcon } from "@shopify/polaris-icons";
+import { useCallback, useEffect, useState } from "react";
+import { ArrowDiagonalIcon, ChevronDownIcon } from "@shopify/polaris-icons";
 import CustomProgressBar from "./components/CustomProgressBar.jsx";
 import { rattingArray, reviews } from "./data/reviewData.js";
 import ColorPickerCircle from "./components/ColorPicker.jsx";
@@ -28,6 +29,7 @@ import Loding from "./components/Loding.jsx";
 import { useNavigate } from "react-router";
 import { SaveBar } from "@shopify/app-bridge-react";
 import { getAllReviews, ratingSummary } from "./services/api.js";
+import { arrowIcon } from "./icons/icon.jsx";
 
 export default function ReviewWidgets() {
   // usenevigate for back to setting page
@@ -46,6 +48,10 @@ export default function ReviewWidgets() {
     handleSave,
     handleDiscard,
     lodaing,
+    toggleActive,
+    active,
+    btnText,
+    setBtnText,
   } = useColorTheme();
 
   // import all hex code
@@ -54,14 +60,15 @@ export default function ReviewWidgets() {
   const buttonColor = getHexCode("button");
   const buttonTextColor = getHexCode("buttonTextColor");
 
-  const [active, setActive] = useState(null);
-  const [dataBtn, setdataBtn] = useState(null);
   const [review, setReview] = useState(reviews);
-  const [btnText, setBtnText] = useState("Sempal Data");
   const [loding, setLoding] = useState(false);
   const [rattingSummary, setRattingSummary] = useState(rattingArray.reviews);
   const [totalReview, setTotalReview] = useState(rattingArray.totalReview);
   const [avgStarRating, setAvgStarRating] = useState(rattingArray.avgRating);
+
+  useEffect(() => {
+    setBtnText("Sempal Data");
+  }, []);
 
   const summary = async () => {
     try {
@@ -73,10 +80,6 @@ export default function ReviewWidgets() {
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const toggleDataBtn = (id) => () => {
-    setdataBtn((activeId) => (activeId !== id ? id : null));
   };
 
   const handleRealData = async () => {
@@ -108,9 +111,6 @@ export default function ReviewWidgets() {
     setIsChnage(true);
   }, []);
 
-  const toggleActive = (id) => () => {
-    setActive((activeId) => (activeId !== id ? id : null));
-  };
   // handle page change
   const handlePageChange = async () => {
     nevigate("/app/mySettingPage");
@@ -126,8 +126,9 @@ export default function ReviewWidgets() {
         ></button>
         <button onClick={() => handleDiscard("review_widgets")}></button>
       </SaveBar>
-      <Page>
-        <Card title="Credit card" sectioned>
+
+      <Box style={{ height: "100vh", overflow: "hidden" }}>
+        <Card roundedAbove="0" padding={0} title="widget card" sectioned>
           <InlineGrid
             gap="400"
             columns={{ sm: 1, md: ["oneThird", "twoThirds"] }}
@@ -135,15 +136,59 @@ export default function ReviewWidgets() {
             {/* reviews settiing */}
 
             <Box
-              padding="100"
-              borderColor="border-brand"
-              borderInlineEndWidth="025"
+              style={{
+                height: "100vh",
+                overflow: "auto",
+                padding: "25px 25px 25px 25px",
+              }}
             >
               <BlockStack gap="300">
-                <InlineStack align="start" gap="200">
-                  <Button icon={ArrowLeftIcon} onClick={handlePageChange} />
-                  <Text variant="headingLg">Review Widget</Text>
+                <InlineStack blockAlign="center" align="start" gap="200">
+                  <Box
+                    style={{
+                      border: "1px solid #babfc3",
+                      padding: "7px",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                    }}
+                    onClick={handlePageChange}
+                  >
+                    <Icon source={arrowIcon} />
+                  </Box>
+                  <Text as="span" variant="headingLg" fontWeight="regular">
+                    Review Widget
+                  </Text>
                 </InlineStack>
+
+                <Box
+                  padding="500"
+                  borderWidth="025"
+                  borderRadius="100"
+                  borderColor="border-brand"
+                >
+                  <BlockStack gap={500}>
+                    <Text as="h3" variant="headingSm">
+                      Install
+                    </Text>
+                    <Text as="p">
+                      Add the Star Rating Badge on product pages.
+                    </Text>
+                    <InlineStack gap={300}>
+                      <Button icon={ArrowDiagonalIcon}>Install</Button>
+                      <Button variant="plain" icon={ArrowDiagonalIcon}>
+                        Learn more
+                      </Button>
+                    </InlineStack>
+                    <s-divider />
+
+                    <Text>
+                      Add the Star Rating Badge on collection pages (optional):
+                    </Text>
+                    <Link monochrome url="#">
+                      See guide ↗
+                    </Link>
+                  </BlockStack>
+                </Box>
 
                 <CollapsibleBox id="color-collapsible" boxName="Color">
                   {setting == null ? (
@@ -251,213 +296,248 @@ export default function ReviewWidgets() {
 
             {/* reviews data */}
 
-            <Box
-              minHeight="100vh"
-              borderColor="border-brand"
-              borderInlineStartWidth="025"
-            >
+            <Box borderColor="border-brand" borderInlineStartWidth="025">
               <Box
                 padding="200"
                 borderColor="border-brand"
                 borderBlockEndWidth="025"
               >
+                <InlineStack blockAlign="center" align="end" gap={200}>
+                  <Text>Previewing</Text>
+                  <Popover
+                    active={active === "popover2"}
+                    preferredAlignment="center"
+                    activator={
+                      <Box
+                        width="132px"
+                        paddingBlockEnd={100}
+                        paddingBlockStart={100}
+                        paddingInline={200}
+                        borderWidth="025"
+                        borderRadius="0"
+                        borderColor="border-brand"
+                        onClick={toggleActive("popover2")}
+                      >
+                        {
+                          <InlineStack gap={100}>
+                            {btnText} <Icon source={ChevronDownIcon} />
+                          </InlineStack>
+                        }
+                      </Box>
+                    }
+                    autofocusTarget="first-node"
+                    onClose={toggleActive("popover2")}
+                  >
+                    <Box
+                      padding="300"
+                      borderRadius="0"
+                      borderWidth="0"
+                      background="bg-fill"
+                    >
+                      <Box width="109px">
+                        <Box
+                          style={{
+                            cursor: "pointer",
+                            padding: "0 0 4px 0",
+                          }}
+                          onClick={() => {
+                            setReview(reviews);
+                            setRattingSummary(rattingArray.reviews);
+                            setBtnText("Sempal Data");
+                          }}
+                        >
+                          Sempal Data
+                        </Box>
+                        <Box
+                          style={{
+                            cursor: "pointer",
+                            padding: "0 0 4px 0",
+                          }}
+                          onClick={() => {
+                            handleRealData();
+                            setBtnText("Real Data");
+                          }}
+                        >
+                          Real Data
+                        </Box>
+                        <Box
+                          style={{
+                            cursor: "pointer",
+                            padding: "0 0 4px 0",
+                          }}
+                          onClick={() => {
+                            setReview([]);
+                            setBtnText("No Review");
+                          }}
+                        >
+                          No Review
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Popover>
+                </InlineStack>
+              </Box>
+              <Box
+                style={{
+                  height: "100vh",
+                  overflow: "auto",
+                  padding: "30px 30px 60px 30px",
+                }}
+              >
+                <InlineStack align="center" gap="300">
+                  <BlockStack gap="400">
+                    <Text variant="headingLg" alignment="cetenr" as="h2">
+                      {state["Widget title"]}
+                    </Text>
+                    <InlineStack as="div" align="center">
+                      <Ratting
+                        rating={
+                          review.length == 0 ? 0 : state["Average rating text"]
+                        }
+                        color={starColor}
+                      />
+                      {review.length !== 0 && (
+                        <Text as="span">{avgStarRating} out of 5</Text>
+                      )}
+                    </InlineStack>
+                  </BlockStack>
+                </InlineStack>
+                <Text alignment="center" as="span">
+                  Based on {totalReview} reviews
+                </Text>
+
+                {rattingSummary.length !== 0 && (
+                  <Box padding="400">
+                    {!loding ? (
+                      rattingSummary.map((v) => {
+                        const ratingNumber = (v.pepole / totalReview) * 100;
+                        return (
+                          <InlineStack
+                            blockAlign="cemter"
+                            direction="row"
+                            as="div"
+                            align="center"
+                            gap="200"
+                            key={v.rating}
+                          >
+                            <Ratting rating={v.rating} color={starColor} />
+                            <CustomProgressBar
+                              progress={ratingNumber}
+                              color={starColor}
+                            />
+                            <Text>{v.pepole}</Text>
+                          </InlineStack>
+                        );
+                      })
+                    ) : (
+                      <Loding />
+                    )}
+                  </Box>
+                )}
+
+                <Box
+                  onClick={() => {
+                    nevigate("/app/writeReview");
+                  }}
+                  style={{
+                    background: buttonColor,
+                    textAlign: "center",
+                    padding: "10px",
+                    margin: "10px",
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                    color: buttonTextColor,
+                    cursor: "pointer",
+                  }}
+                >
+                  {state["Button Text"]}
+                </Box>
+
                 <Popover
-                  active={dataBtn === "popover2"}
+                  active={active === "popover1"}
                   preferredAlignment="right"
                   activator={
                     <Button
-                      onClick={toggleDataBtn("popover2")}
+                      variant="plain"
                       icon={ChevronDownIcon}
+                      onClick={toggleActive("popover1")}
                       accessibilityLabel="Other save actions"
                     >
-                      {btnText}
+                      most Recent
                     </Button>
                   }
                   autofocusTarget="first-node"
-                  onClose={toggleDataBtn("popover2")}
+                  onClose={toggleActive("popover1")}
                 >
-                  <Box
-                    padding="100"
-                    borderRadius="0"
-                    borderWidth="0"
-                    background="bg-fill"
-                  >
-                    <BlockStack gap="100">
-                      <Button
-                        onClick={() => {
-                          setReview(reviews);
-                          setRattingSummary(rattingArray.reviews);
-                          setBtnText("Sempal Data");
-                        }}
-                      >
-                        Sempal Data
-                      </Button>
-                      <Button
-                        onClick={() => {
-                          handleRealData();
-                          setBtnText("Real Data");
-                        }}
-                      >
-                        Real Data
-                      </Button>
-                      <Button
-                        onClick={() => {
-                          setReview([]);
-                          setBtnText("No Review");
-                        }}
-                      >
-                        No Review
-                      </Button>
-                    </BlockStack>
-                  </Box>
+                  <ActionList
+                    actionRole="menuitem"
+                    items={[
+                      {
+                        content: "most Recent",
+                      },
+                      {
+                        content: "Heghset Recent",
+                      },
+                      {
+                        content: "Lowest Recent",
+                      },
+                      {
+                        content: "only pictures",
+                      },
+                    ]}
+                  />
                 </Popover>
-              </Box>
-              <InlineStack align="center" gap="300">
-                <BlockStack gap="400">
-                  <Text variant="headingLg" alignment="cetenr" as="h2">
-                    {state["Widget title"]}
-                  </Text>
-                  <InlineStack as="div" align="center">
-                    <Ratting
-                      rating={
-                        review.length == 0 ? 0 : state["Average rating text"]
-                      }
-                      color={starColor}
-                    />
-                    {review.length !== 0 && (
-                      <Text as="span">{avgStarRating} out of 5</Text>
-                    )}
-                  </InlineStack>
-                </BlockStack>
-              </InlineStack>
-              <Text alignment="center" as="span">
-                Based on {totalReview} reviews
-              </Text>
 
-              {rattingSummary.length !== 0 && (
-                <Box padding="400">
+                <Box>
                   {!loding ? (
-                    rattingSummary.map((v) => {
-                      const ratingNumber = (v.pepole / totalReview) * 100;
+                    review.length !== 0 &&
+                    review.map((v) => {
+                      const formattedDate = v.updatedAt.split("T")[0];
+                      const tag = v.email.split("@")[0];
+
                       return (
-                        <InlineStack
-                          blockAlign="cemter"
-                          direction="row"
-                          as="div"
-                          align="center"
-                          gap="200"
-                          key={v.rating}
-                        >
-                          <Ratting rating={v.rating} color={starColor} />
-                          <CustomProgressBar
-                            progress={ratingNumber}
-                            color={starColor}
-                          />
-                          <Text>{v.pepole}</Text>
-                        </InlineStack>
+                        <Box key={v._id} padding="100">
+                          <InlineStack align="space-between" gap="100">
+                            <Box>
+                              <Box>
+                                <InlineStack>
+                                  <Avatar customer name="Farrah" />
+                                  <Ratting
+                                    color={starColor}
+                                    rating={v.rating}
+                                  />
+                                </InlineStack>
+
+                                <Box
+                                  as="legend"
+                                  style={{
+                                    color: starColor,
+                                  }}
+                                >
+                                  {v.name}
+                                </Box>
+                              </Box>
+                            </Box>
+                            <Box>{dateChecked && formattedDate}</Box>
+                          </InlineStack>
+
+                          <Box style={{ color: textColor }} as="legend">
+                            {tag}
+                          </Box>
+
+                          <Text as="p">{v.description}</Text>
+                        </Box>
                       );
                     })
                   ) : (
                     <Loding />
                   )}
                 </Box>
-              )}
-
-              <Box
-                onClick={() => {
-                  nevigate("/app/writeReview");
-                }}
-                style={{
-                  background: buttonColor,
-                  textAlign: "center",
-                  padding: "10px",
-                  margin: "10px",
-                  fontSize: "20px",
-                  fontWeight: "bold",
-                  color: buttonTextColor,
-                  cursor: "pointer",
-                }}
-              >
-                {state["Button Text"]}
               </Box>
-
-              <Popover
-                active={active === "popover2"}
-                preferredAlignment="right"
-                activator={
-                  <Button
-                    variant="plain"
-                    icon={ChevronDownIcon}
-                    onClick={toggleActive("popover2")}
-                    accessibilityLabel="Other save actions"
-                  >
-                    most Recent
-                  </Button>
-                }
-                autofocusTarget="first-node"
-                onClose={toggleActive("popover2")}
-              >
-                <ActionList
-                  actionRole="menuitem"
-                  items={[
-                    {
-                      content: "most Recent",
-                    },
-                    {
-                      content: "Heghset Recent",
-                    },
-                    {
-                      content: "Lowest Recent",
-                    },
-                    {
-                      content: "only pictures",
-                    },
-                  ]}
-                />
-              </Popover>
-
-              <BlockStack>
-                {!loding ? (
-                  review.length !== 0 &&
-                  review.map((v) => {
-                    const formattedDate = v.updatedAt;
-                    const tag = v.email.split("@")[0];
-                    return (
-                      <Box key={v._id} padding="100">
-                        <InlineStack gap="100">
-                          <Avatar customer name="Farrah" />
-
-                          <Box>
-                            <Ratting color={starColor} rating={v.rating} />
-                            <Box
-                              as="legend"
-                              style={{
-                                color: starColor,
-                              }}
-                            >
-                              {v.name}
-                            </Box>
-                          </Box>
-
-                          <Box>{dateChecked && formattedDate}</Box>
-                        </InlineStack>
-
-                        <Box style={{ color: textColor }} as="legend">
-                          {tag}
-                        </Box>
-
-                        <Text as="p">{v.description}</Text>
-                      </Box>
-                    );
-                  })
-                ) : (
-                  <Loding />
-                )}
-              </BlockStack>
             </Box>
           </InlineGrid>
         </Card>
-      </Page>
+      </Box>
     </AppProvider>
   );
 }

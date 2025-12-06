@@ -15,7 +15,6 @@ import {
   Icon,
   Form,
   FormLayout,
-  Spinner,
 } from "@shopify/polaris";
 import "@shopify/polaris/build/esm/styles.css";
 import { useColorTheme } from "./ColorContext";
@@ -31,6 +30,7 @@ import { useNavigate } from "react-router";
 import { SaveBar } from "@shopify/app-bridge-react";
 import CollapsibleBox from "./components/Collapsible";
 import Loding from "./components/Loding";
+import { arrowIcon } from "./icons/icon";
 
 const colorInitialState = {
   defaultColor: true,
@@ -174,25 +174,74 @@ export default function ReviewWidgets() {
         ></button>
         <button onClick={() => handleDiscard("review_widgets")}></button>
       </SaveBar>
-      <Page>
-        <Card title="Credit card" sectioned>
-          <InlineGrid
-            gap="400"
-            columns={{ sm: 1, md: ["oneThird", "twoThirds"] }}
+      <Box padding={400}>
+        <InlineStack blockAlign="center" align="start" gap="200">
+          <Box
+            style={{
+              border: "1px solid #babfc3",
+              padding: "7px",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+            onClick={handlePageChange}
           >
-            {/* reviews settiing */}
+            <Icon source={arrowIcon} />
+          </Box>
+          <Text as="span" variant="headingLg" fontWeight="regular">
+            Write a review flow
+          </Text>
+        </InlineStack>
 
-            <Box
-              padding="100"
-              borderColor="border-brand"
-              borderInlineEndWidth="025"
-            >
-              <BlockStack gap="300">
-                <InlineStack align="start" gap="200">
-                  <Button icon={ArrowLeftIcon} onClick={handlePageChange} />
-                  <Text variant="headingLg">Write a review flow</Text>
-                </InlineStack>
+        <InlineGrid
+          gap="400"
+          columns={{ sm: 1, md: ["oneThird", "twoThirds"] }}
+        >
+          {/* reviews settiing */}
 
+          <Box padding="100">
+            <BlockStack gap="300">
+              <Card>
+                <CollapsibleBox id="write_a_review_page" boxName="text">
+                  {" "}
+                  <Box gap="400">
+                    {setting == null ? (
+                      <Loding />
+                    ) : (
+                      setting?.text?.map((text) => {
+                        const titelValue = text.settingName;
+                        return (
+                          ((text.type == "text" &&
+                            text.settingName == "Screen title") ||
+                            text.settingName == "Introduction" ||
+                            text.settingName == "display name" ||
+                            text.settingName == "Button Text") && (
+                            <Box
+                              key={text._id}
+                              borderStyle="solid"
+                              borderBlockStartWidth="025"
+                              padding="200"
+                              borderColor="border-brand"
+                              gap="200"
+                              width="100%"
+                            >
+                              <TextField
+                                label={text.settingName}
+                                value={state[titelValue]}
+                                id={text.settingName}
+                                onChange={handleTextChnge}
+                                autoComplete="off"
+                                placeholder="Customer Reviews"
+                              />
+                            </Box>
+                          )
+                        );
+                      })
+                    )}
+                  </Box>
+                </CollapsibleBox>
+              </Card>
+
+              <Card>
                 <Box padding="300">
                   <BlockStack gap="100">
                     <Checkbox
@@ -240,55 +289,23 @@ export default function ReviewWidgets() {
                     </>
                   )}
                 </Box>
+              </Card>
+            </BlockStack>
+          </Box>
 
-                <CollapsibleBox id="write_a_review_page" boxName="text">
-                  {" "}
-                  <Box gap="400">
-                    {setting == null ? (
-                      <Loding />
-                    ) : (
-                      setting?.text?.map((text) => {
-                        const titelValue = text.settingName;
-                        return (
-                          ((text.type == "text" &&
-                            text.settingName == "Screen title") ||
-                            text.settingName == "Introduction" ||
-                            text.settingName == "display name" ||
-                            text.settingName == "Button Text") && (
-                            <Box
-                              key={text._id}
-                              borderStyle="solid"
-                              borderBlockStartWidth="025"
-                              padding="200"
-                              borderColor="border-brand"
-                              gap="200"
-                              width="100%"
-                            >
-                              <TextField
-                                label={text.settingName}
-                                value={state[titelValue]}
-                                id={text.settingName}
-                                onChange={handleTextChnge}
-                                autoComplete="off"
-                                placeholder="Customer Reviews"
-                              />
-                            </Box>
-                          )
-                        );
-                      })
-                    )}
-                  </Box>
-                </CollapsibleBox>
-              </BlockStack>
-            </Box>
+          {/* reviews data */}
 
-            {/* reviews data */}
-
-            <Box
-              minHeight="100vh"
-              borderColor="border-brand"
-              borderInlineStartWidth="025"
-            >
+          <Card roundedAbove="0" padding={0}>
+            <Box minHeight="100vh">
+              <Box
+                padding="200"
+                borderColor="border-brand"
+                borderBlockEndWidth="025"
+              >
+                <InlineStack blockAlign="center" align="end" gap={200}>
+                  <Text>Previewing</Text>
+                </InlineStack>
+              </Box>
               <LegacyTabs
                 tabs={tabs}
                 selected={selected}
@@ -453,9 +470,9 @@ export default function ReviewWidgets() {
                 </BlockStack>
               )}
             </Box>
-          </InlineGrid>
-        </Card>
-      </Page>
+          </Card>
+        </InlineGrid>
+      </Box>
     </AppProvider>
   );
 }
