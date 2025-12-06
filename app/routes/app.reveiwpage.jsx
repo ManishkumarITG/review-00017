@@ -20,6 +20,7 @@ import {
   ActionList,
   useBreakpoints,
   SkeletonBodyText,
+  EmptyState,
 } from "@shopify/polaris";
 
 import { Modal, TitleBar, useAppBridge } from "@shopify/app-bridge-react";
@@ -32,6 +33,8 @@ import {
   PinIcon,
   UndoIcon,
   PinFilledIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon
 } from "@shopify/polaris-icons";
 import { HeartUnFillIcon, HeartfillIcon } from "./icons/icon.jsx";
 import StarRating from "./components/Ratting.jsx";
@@ -69,7 +72,7 @@ function IndexFiltersDefaultExample() {
   const [formData, setFormData] = useState({});
   const [formActive, setFormActive] = useState(false);
   const [sortSelected, setSortSelected] = useState(["order asc"]);
-  const [loding, setLoding] = useState(false);
+  const [loding, setLoding] = useState(true);
   const { mode, setMode } = useSetIndexFiltersMode();
   const [refreshReviews, setRefreshReviews] = useState(false);
 
@@ -340,8 +343,8 @@ function IndexFiltersDefaultExample() {
             <InlineStack gap="800">
               <Popover
                 active={openPopoverId === _id}
-                fullWidth={true}
-                preferredAlignment="right"
+                fullWidth={spam}
+                preferredAlignment="center"
                 activator={
                   <Button
                     onClick={(e) => {
@@ -361,7 +364,6 @@ function IndexFiltersDefaultExample() {
                 onClose={() => setOpenPopoverId(null)}
               >
                 <ActionList
-                  actionRole="menuitem"
                   items={[
                     {
                       content: spam ? "public review" : "spam",
@@ -492,6 +494,9 @@ function IndexFiltersDefaultExample() {
             </Badge>
           </InlineStack>
 
+
+
+
           <Card>
             <IndexFilters
               sortSelected={sortSelected}
@@ -513,50 +518,88 @@ function IndexFiltersDefaultExample() {
               canCreateNewView={false}
             />
 
-            <IndexTable
-              condensed={useBreakpoints().smDown}
-              itemCount={splitedfilteredOrders?.length}
-              resourceName={resourceName}
-              hasSelection
-              selectedItemsCount={
-                allResourcesSelected ? "All" : selectedResources.length
-              }
-              onSelectionChange={handleSelectionChange}
-              headings={[
-                { title: "Customer" },
-                { title: "Created" },
-                { title: "Rating" },
-                { title: "status", alignment: "end" },
-              ]}
-            >
-              {!loding ? rowMarkup : skeletonMarkup}
-            </IndexTable>
+
+            {loding ? (
+              <IndexTable
+                itemCount={3}
+                resourceName={resourceName}
+                headings={[
+                  { title: "Customer" },
+                  { title: "Created" },
+                  { title: "Rating" },
+                  { title: "status", alignment: "end" },
+                ]}
+              >
+                {skeletonMarkup}
+              </IndexTable>
+            ) : reviews.length === 0 ? (
+              <Card sectioned>
+                <EmptyState
+                  heading="No Reviews founded"
+                  image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
+                >
+                  <Text>
+                    your product does not have any reviews
+                  </Text>
+                </EmptyState>
+              </Card>
+            ) : (
+              <IndexTable
+                itemCount={reviews.length}
+                resourceName={resourceName}
+                hasSelection
+                selectedItemsCount={
+                  allResourcesSelected ? "All" : selectedResources.length
+                }
+                onSelectionChange={handleSelectionChange}
+                headings={[
+                  { title: "Customer" },
+                  { title: "Created" },
+                  { title: "Rating" },
+                  { title: "status", alignment: "end" },
+                ]}
+              >
+                {rowMarkup}
+              </IndexTable>
+            )}
+
+            {/* 👉 IMPORTANT FIX ENDS HERE  */}
           </Card>
+
         </InlineGrid>
 
-        <Card gap={200}>
-          <InlineStack gap="800" align="space-between">
-            <Button
-              disabled={currentTab === 1}
-              variant="primary"
-              onClick={() => {
-                setCurrentTab((prev) => prev - 1);
-                setitemRenderLimit((pre) => pre - 10);
-              }}
-            >
-              Previus
-            </Button>
-            {currentTab}
-            <Button
-              variant="primary"
+        <Card >
+          <InlineStack gap="800" align="center" blockAlign="center">
+            <Box
+            style={{ border: "2px solid #ccc", padding: "4px 8px 0 8px" }}
+            onClick={() => {
+              setCurrentTab((prev) => prev - 1);
+              setitemRenderLimit((pre) => pre - 10);
+            }}>
+              <Button
+                variant="plain"
+                disabled={currentTab === 1}
+
+                icon={ChevronLeftIcon}
+              />
+            </Box>
+            <Box as="span"  style={{color: "#535353ff"}}>
+              Showing {currentTab} to **Placeholder** {reviews.length}
+            </Box>
+            <Box
+              style={{ border: "2px solid #ccc", padding: "4px 8px 0 8px" }}
               onClick={() => {
                 setCurrentTab((prev) => prev + 1);
                 setitemRenderLimit((pre) => pre + 10);
               }}
-              disabled={itemRenderLimit + 10 >= reviews?.length}
             >
-              Next
-            </Button>
+
+              <Button
+                variant="plain"
+                disabled={itemRenderLimit + 10 >= reviews?.length}
+                icon={ChevronRightIcon}
+              />
+            </Box>
           </InlineStack>
         </Card>
 

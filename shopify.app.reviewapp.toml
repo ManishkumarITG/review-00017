@@ -21,7 +21,7 @@ use_legacy_install_flow = false
 redirect_urls = [ "https://example.com/api/auth" ]
 
 [app_proxy]
-url = "https://manish-kumaritg.myshopify.com/apps/review"
+url = "https://balwan-singh-rajput-itg.myshopify.com"
 subpath = "review"
 prefix = "apps"
 
