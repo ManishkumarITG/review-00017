@@ -197,7 +197,7 @@ function IndexFiltersDefaultExample() {
     [selectedTab, setSelectedTab],
   );
 
-  const allReviewsContent = ` ${"All Reviews (" + reviews.length + ")"}`;
+  const allReviewsContent = ` ${"All Reviews (" + reviews?.length + ")"}`;
 
   const tabs = itemStrings.map((item, index) => ({
     content: index === 0 ? allReviewsContent : item,
@@ -569,7 +569,6 @@ function IndexFiltersDefaultExample() {
         <Card >
           <InlineStack gap="800" align="center" blockAlign="center">
             <Box
-              as="button"
               style={{ border: "2px solid #ccc", padding: "4px 8px 0 8px" }}
               onClick={() => {
                 setCurrentTab((prev) => prev - 1);

@@ -1,5 +1,4 @@
 import {
-  Page,
   Card,
   AppProvider,
   InlineGrid,
@@ -20,7 +19,7 @@ import {
 import "@shopify/polaris/build/esm/styles.css";
 import Ratting from "./components/Ratting.jsx";
 import { useColorTheme } from "./ColorContext";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ArrowDiagonalIcon, ChevronDownIcon } from "@shopify/polaris-icons";
 import CustomProgressBar from "./components/CustomProgressBar.jsx";
 import { rattingArray, reviews } from "./data/reviewData.js";
@@ -49,6 +48,10 @@ export default function ReviewWidgets() {
     handleSave,
     handleDiscard,
     lodaing,
+    toggleActive,
+    active,
+    btnText,
+    setBtnText,
   } = useColorTheme();
 
   // import all hex code
@@ -57,14 +60,15 @@ export default function ReviewWidgets() {
   const buttonColor = getHexCode("button");
   const buttonTextColor = getHexCode("buttonTextColor");
 
-  const [active, setActive] = useState(null);
-  const [dataBtn, setdataBtn] = useState(null);
   const [review, setReview] = useState(reviews);
-  const [btnText, setBtnText] = useState("Sempal Data");
   const [loding, setLoding] = useState(false);
   const [rattingSummary, setRattingSummary] = useState(rattingArray.reviews);
   const [totalReview, setTotalReview] = useState(rattingArray.totalReview);
   const [avgStarRating, setAvgStarRating] = useState(rattingArray.avgRating);
+
+  useEffect(() => {
+    setBtnText("Sempal Data");
+  }, []);
 
   const summary = async () => {
     try {
@@ -76,10 +80,6 @@ export default function ReviewWidgets() {
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const toggleDataBtn = (id) => () => {
-    setdataBtn((activeId) => (activeId !== id ? id : null));
   };
 
   const handleRealData = async () => {
@@ -111,9 +111,6 @@ export default function ReviewWidgets() {
     setIsChnage(true);
   }, []);
 
-  const toggleActive = (id) => () => {
-    setActive((activeId) => (activeId !== id ? id : null));
-  };
   // handle page change
   const handlePageChange = async () => {
     nevigate("/app/mySettingPage");
@@ -308,7 +305,7 @@ export default function ReviewWidgets() {
                 <InlineStack blockAlign="center" align="end" gap={200}>
                   <Text>Previewing</Text>
                   <Popover
-                    active={dataBtn === "popover2"}
+                    active={active === "popover2"}
                     preferredAlignment="center"
                     activator={
                       <Box
@@ -319,7 +316,7 @@ export default function ReviewWidgets() {
                         borderWidth="025"
                         borderRadius="0"
                         borderColor="border-brand"
-                        onClick={toggleDataBtn("popover2")}
+                        onClick={toggleActive("popover2")}
                       >
                         {
                           <InlineStack gap={100}>
@@ -329,7 +326,7 @@ export default function ReviewWidgets() {
                       </Box>
                     }
                     autofocusTarget="first-node"
-                    onClose={toggleDataBtn("popover2")}
+                    onClose={toggleActive("popover2")}
                   >
                     <Box
                       padding="300"
@@ -457,20 +454,20 @@ export default function ReviewWidgets() {
                 </Box>
 
                 <Popover
-                  active={active === "popover2"}
+                  active={active === "popover1"}
                   preferredAlignment="right"
                   activator={
                     <Button
                       variant="plain"
                       icon={ChevronDownIcon}
-                      onClick={toggleActive("popover2")}
+                      onClick={toggleActive("popover1")}
                       accessibilityLabel="Other save actions"
                     >
                       most Recent
                     </Button>
                   }
                   autofocusTarget="first-node"
-                  onClose={toggleActive("popover2")}
+                  onClose={toggleActive("popover1")}
                 >
                   <ActionList
                     actionRole="menuitem"
