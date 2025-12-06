@@ -235,18 +235,10 @@ function IndexFiltersDefaultExample() {
     handleTaggedWithRemove();
   }, [handleTaggedWithRemove]);
 
-  const splitedfilteredOrders = reviews?.slice(
-    itemRenderLimit,
-    itemRenderLimit + 10,
-  );
-
-  const resourceName = {
-    singular: "splitedfilteredOrder",
-    plural: "splitedfilteredOrders",
-  };
-
   const { selectedResources, allResourcesSelected, handleSelectionChange } =
-    useIndexResourceState(splitedfilteredOrders);
+    useIndexResourceState(reviews);
+
+  console.log("select Count", selectedResources.length);
 
   let obj = { length: 3 };
 
@@ -340,7 +332,7 @@ function IndexFiltersDefaultExample() {
             <InlineStack gap="800">
               <Popover
                 active={openPopoverId === _id}
-                fullWidth={true}
+                fullWidth={spam ? false : true}
                 preferredAlignment="right"
                 activator={
                   <Button
@@ -505,7 +497,6 @@ function IndexFiltersDefaultExample() {
                 loading: false,
               }}
               tabs={tabs}
-              filters={[]}
               onClearAll={handleFiltersClearAll}
               mode={mode}
               setMode={setMode}
@@ -514,14 +505,12 @@ function IndexFiltersDefaultExample() {
             />
 
             <IndexTable
-              condensed={useBreakpoints().smDown}
-              itemCount={splitedfilteredOrders?.length}
-              resourceName={resourceName}
-              hasSelection
+              itemCount={reviews?.length}
               selectedItemsCount={
                 allResourcesSelected ? "All" : selectedResources.length
               }
               onSelectionChange={handleSelectionChange}
+              hasMoreItems={true}
               headings={[
                 { title: "Customer" },
                 { title: "Created" },
