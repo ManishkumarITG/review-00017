@@ -72,6 +72,8 @@ export const getAllReviewsByShop = async (data) => {
 
 export const getReviewsByType = async (data) => {
   try {
+  await mongoConnect();
+
     const { limit, page, shop, idType, targetId } = data;
 
     console.log(idType);
