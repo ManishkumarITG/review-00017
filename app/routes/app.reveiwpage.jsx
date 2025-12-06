@@ -194,7 +194,7 @@ function IndexFiltersDefaultExample() {
     [selectedTab, setSelectedTab],
   );
 
-  const allReviewsContent = ` ${"All Reviews (" + reviews.length + ")"}`;
+  const allReviewsContent = ` ${"All Reviews (" + reviews?.length + ")"}`;
 
   const tabs = itemStrings.map((item, index) => ({
     content: index === 0 ? allReviewsContent : item,
@@ -238,7 +238,7 @@ function IndexFiltersDefaultExample() {
   const { selectedResources, allResourcesSelected, handleSelectionChange } =
     useIndexResourceState(reviews);
 
-  console.log("select Count", selectedResources.length);
+  console.log("select Count", selectedResources?.length);
 
   let obj = { length: 3 };
 
@@ -507,7 +507,7 @@ function IndexFiltersDefaultExample() {
             <IndexTable
               itemCount={reviews?.length}
               selectedItemsCount={
-                allResourcesSelected ? "All" : selectedResources.length
+                allResourcesSelected ? "All" : selectedResources?.length
               }
               onSelectionChange={handleSelectionChange}
               hasMoreItems={true}

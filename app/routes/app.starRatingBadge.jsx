@@ -11,6 +11,7 @@ import {
   Layout,
   Link,
   Page,
+  Popover,
   SkeletonDisplayText,
   SkeletonPage,
   Text,
@@ -23,6 +24,7 @@ import {
   ArrowDiagonalIcon,
   PlusIcon,
   MinusIcon,
+  ChevronDownIcon,
 } from "@shopify/polaris-icons";
 
 // costom copnents
@@ -49,6 +51,10 @@ export default function appStarRatting() {
     lodaing,
     state,
     dispatch,
+    toggleActive,
+    active,
+    btnText,
+    setBtnText,
   } = useColorTheme();
 
   const starColor = getHexCode("star");
@@ -85,6 +91,7 @@ export default function appStarRatting() {
             md: ["oneThird", "twoThirds"],
           }}
         >
+          {/* settings */}
           <Box
             style={{
               height: "100vh",
@@ -194,132 +201,224 @@ export default function appStarRatting() {
               </CollapsibleBox>
             </BlockStack>
           </Box>
-          <Box>
-            <SkeletonPage>
-              <Layout>
-                <Layout.Section>
-                  <Box>
-                    <BlockStack gap="500">
-                      <ThumbnailSkeleton height="400px" width="70%" />
-                      <SkeletonDisplayText maxWidth="100%" size="medium" />
-                      <InlineStack>
-                        {" "}
-                        <StarRating rating={5} color={starColor} />{" "}
-                        <Text variant="headingMd" as="span">
-                          {state["Show text and stars"] && "123 reviews"}
-                        </Text>
-                      </InlineStack>
 
-                      <InlineStack gap="100">
-                        <Box as="span" style={{ color: "#cfcfcfff" }}>
-                          100.00
-                        </Box>
-                        <Box
-                          style={{
-                            background: "#cfcfcfff",
-                            width: "40px",
-                            height: "20px",
-                          }}
-                        />
-                      </InlineStack>
-
+          {/*product Skeleton */}
+          <Box borderColor="border-brand" borderInlineStartWidth="025">
+            <Box
+              padding="200"
+              borderColor="border-brand"
+              borderBlockEndWidth="025"
+            >
+              <InlineStack blockAlign="center" align="end" gap={200}>
+                <Text>Previewing</Text>
+                <Popover
+                  active={active === "popover2"}
+                  preferredAlignment="center"
+                  activator={
+                    <Box
+                      width="132px"
+                      paddingBlockEnd={100}
+                      paddingBlockStart={100}
+                      paddingInline={200}
+                      borderWidth="025"
+                      borderRadius="0"
+                      borderColor="border-brand"
+                      onClick={toggleActive("popover2")}
+                    >
+                      {
+                        <InlineStack gap={100}>
+                          {btnText} <Icon source={ChevronDownIcon} />
+                        </InlineStack>
+                      }
+                    </Box>
+                  }
+                  autofocusTarget="first-node"
+                  onClose={toggleActive("popover2")}
+                >
+                  <Box
+                    padding="300"
+                    borderRadius="0"
+                    borderWidth="0"
+                    background="bg-fill"
+                  >
+                    <Box width="109px">
                       <Box
-                        width="100px"
-                        borderWidth="025"
-                        borderColor="border-brand"
-                        borderRadius="300"
-                        padding="100"
+                        style={{
+                          cursor: "pointer",
+                          padding: "0 0 4px 0",
+                        }}
+                        onClick={() => {
+                          setBtnText("Sempal Data");
+                        }}
                       >
-                        <InlineStack gap="500">
-                          <Box as="span" style={{ color: "#cfcfcfff" }}>
-                            <Icon source={PlusIcon} tone="base" />
-                          </Box>
+                        Sempal Data
+                      </Box>
+                      <Box
+                        style={{
+                          cursor: "pointer",
+                          padding: "0 0 4px 0",
+                        }}
+                        onClick={() => {
+                          setBtnText("No Review");
+                        }}
+                      >
+                        No Review
+                      </Box>
+                    </Box>
+                  </Box>
+                </Popover>
+              </InlineStack>
+            </Box>
+            <Box
+              style={{
+                height: "100vh",
+                overflow: "auto",
+                padding: "30px 30px 60px 30px",
+              }}
+            >
+              <SkeletonPage>
+                <Layout>
+                  <Layout.Section>
+                    <Box>
+                      <BlockStack gap="500">
+                        <ThumbnailSkeleton height="400px" width="70%" />
+                        <SkeletonDisplayText maxWidth="100%" size="medium" />
+                        <InlineStack>
+                          {" "}
+                          {btnText !== "No Review" && (
+                            <StarRating rating={5} color={starColor} />
+                          )}{" "}
+                          <Text variant="headingMd" as="span">
+                            {state["Show text and stars"] && "123 reviews"}
+                          </Text>
+                        </InlineStack>
 
+                        <InlineStack gap="100">
                           <Box as="span" style={{ color: "#cfcfcfff" }}>
-                            1
+                            100.00
                           </Box>
-
                           <Box
                             style={{
-                              color: "#cfcfcfff",
+                              background: "#cfcfcfff",
+                              width: "40px",
+                              height: "20px",
                             }}
-                          >
-                            <Icon source={MinusIcon} tone="base" />
-                          </Box>
+                          />
                         </InlineStack>
-                      </Box>
 
-                      <SkeletonDisplayText maxWidth="100%" size="small" />
-                      <SkeletonDisplayText maxWidth="100%" size="small" />
-                      <InlineGrid columns={2} gap="300">
-                        <Box>
-                          <ThumbnailSkeleton width="100%" height="300px" />
-                          <InlineStack align="center">
-                            {" "}
-                            <StarRating rating={5} color={starColor} />{" "}
-                            <Text>123 reviews</Text>
-                          </InlineStack>
-                          <InlineStack align="center" gap="100">
+                        <Box
+                          width="100px"
+                          borderWidth="025"
+                          borderColor="border-brand"
+                          borderRadius="300"
+                          padding="100"
+                        >
+                          <InlineStack gap="500">
                             <Box as="span" style={{ color: "#cfcfcfff" }}>
-                              100.00
+                              <Icon source={PlusIcon} tone="base" />
                             </Box>
+
+                            <Box as="span" style={{ color: "#cfcfcfff" }}>
+                              1
+                            </Box>
+
                             <Box
                               style={{
-                                background: "#cfcfcfff",
-                                width: "40px",
-                                height: "20px",
+                                color: "#cfcfcfff",
                               }}
-                            />
+                            >
+                              <Icon source={MinusIcon} tone="base" />
+                            </Box>
                           </InlineStack>
                         </Box>
 
-                        <Box>
-                          <ThumbnailSkeleton width="100%" height="300px" />
-                          <InlineStack align="center">
-                            {" "}
-                            <StarRating rating={5} color={starColor} />{" "}
-                            <Text>123 reviews</Text>
-                          </InlineStack>
-                          <InlineStack align="center" gap="100">
-                            <Box as="span" style={{ color: "#cfcfcfff" }}>
-                              100.00
-                            </Box>
-                            <Box
-                              style={{
-                                background: "#cfcfcfff",
-                                width: "40px",
-                                height: "20px",
-                              }}
-                            />
-                          </InlineStack>
-                        </Box>
+                        <SkeletonDisplayText maxWidth="100%" size="small" />
+                        <SkeletonDisplayText maxWidth="100%" size="small" />
+                        <InlineGrid columns={2} gap="300">
+                          <Box>
+                            <ThumbnailSkeleton width="100%" height="300px" />
+                            <InlineStack align="center">
+                              {" "}
+                              {btnText !== "No Review" && (
+                                <>
+                                  {" "}
+                                  <StarRating rating={5} color={starColor} />
+                                  <Text>123 reviews</Text>{" "}
+                                </>
+                              )}
+                            </InlineStack>
+                            <InlineStack align="center" gap="100">
+                              <Box as="span" style={{ color: "#cfcfcfff" }}>
+                                100.00
+                              </Box>
+                              <Box
+                                style={{
+                                  background: "#cfcfcfff",
+                                  width: "40px",
+                                  height: "20px",
+                                }}
+                              />
+                            </InlineStack>
+                          </Box>
 
-                        <Box>
-                          <ThumbnailSkeleton width="100%" height="300px" />
-                          <InlineStack align="center">
-                            {" "}
-                            <StarRating rating={5} color={starColor} />{" "}
-                            <Text>123 reviews</Text>
-                          </InlineStack>
-                          <InlineStack align="center" gap="100">
-                            <Box as="span" style={{ color: "#cfcfcfff" }}>
-                              100.00
-                            </Box>
-                            <Box
-                              style={{
-                                background: "#cfcfcfff",
-                                width: "40px",
-                                height: "20px",
-                              }}
-                            />
-                          </InlineStack>
-                        </Box>
-                      </InlineGrid>
-                    </BlockStack>
-                  </Box>
-                </Layout.Section>
-              </Layout>
-            </SkeletonPage>
+                          <Box>
+                            <ThumbnailSkeleton width="100%" height="300px" />
+                            <InlineStack align="center">
+                              {" "}
+                              {btnText !== "No Review" && (
+                                <>
+                                  {" "}
+                                  <StarRating rating={5} color={starColor} />
+                                  <Text>123 reviews</Text>{" "}
+                                </>
+                              )}
+                            </InlineStack>
+                            <InlineStack align="center" gap="100">
+                              <Box as="span" style={{ color: "#cfcfcfff" }}>
+                                100.00
+                              </Box>
+                              <Box
+                                style={{
+                                  background: "#cfcfcfff",
+                                  width: "40px",
+                                  height: "20px",
+                                }}
+                              />
+                            </InlineStack>
+                          </Box>
+
+                          <Box>
+                            <ThumbnailSkeleton width="100%" height="300px" />
+                            <InlineStack align="center">
+                              {" "}
+                              {btnText !== "No Review" && (
+                                <>
+                                  {" "}
+                                  <StarRating rating={5} color={starColor} />
+                                  <Text>123 reviews</Text>{" "}
+                                </>
+                              )}
+                            </InlineStack>
+                            <InlineStack align="center" gap="100">
+                              <Box as="span" style={{ color: "#cfcfcfff" }}>
+                                100.00
+                              </Box>
+                              <Box
+                                style={{
+                                  background: "#cfcfcfff",
+                                  width: "40px",
+                                  height: "20px",
+                                }}
+                              />
+                            </InlineStack>
+                          </Box>
+                        </InlineGrid>
+                      </BlockStack>
+                    </Box>
+                  </Layout.Section>
+                </Layout>
+              </SkeletonPage>
+            </Box>
           </Box>
         </InlineGrid>
       </Card>
