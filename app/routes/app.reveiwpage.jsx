@@ -75,18 +75,22 @@ function IndexFiltersDefaultExample() {
   const [refreshReviews, setRefreshReviews] = useState(false);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(1);
+
+
   const limit = 5;
   const onQueryClear = useCallback(() => {
     setQueryValue("");
     console.log("hello query");
   }, [selectedTab]);
 
+  const onHandleCancel = () => { };
+
   const fetchResults = async (value) => {
     if (value.trim() === "") {
       setReviews([]);
       setRefreshReviews((prev) => !prev);
       return;
-    }
+    };
 
     console.log(`Searching for: ${value}`);
     try {
@@ -206,7 +210,7 @@ function IndexFiltersDefaultExample() {
 
 
   const tabs = itemStrings.map((item, index) => ({
-    content: index == selectedTab ? loding ? `${item} ...` : `${item} ${reviews?.length}` : item,
+    content: index == selectedTab ? loding ? `${item} ...` : `${item} (${reviews?.length})` : item,
     index,
     onAction: () => {
       setSelected(index);
@@ -300,7 +304,8 @@ function IndexFiltersDefaultExample() {
 
             <Text>Via Web</Text>
             <InlineStack gap={200}>
-              <Button
+              <Box
+                style={{ borderRadius: 5, border: "2px solid black", padding: "4px 2px 0 6px" }}
                 variant="plain"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -312,8 +317,9 @@ function IndexFiltersDefaultExample() {
                 ) : (
                   <Icon source={HeartUnFillIcon} />
                 )}
-              </Button>
-              <Button
+              </Box>
+              <Box
+                style={{ borderRadius: 5, border: "2px solid black", padding: "2px 2px 2px 6px" }}
                 variant="plain"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -325,7 +331,7 @@ function IndexFiltersDefaultExample() {
                 ) : (
                   <Icon source={PinIcon} tone="base" />
                 )}
-              </Button>
+              </Box>
             </InlineStack>
           </BlockStack>
         </IndexTable.Cell>
@@ -505,8 +511,11 @@ function IndexFiltersDefaultExample() {
               onQueryClear={onQueryClear}
               onSort={setSortSelected}
               cancelAction={{
+                onAction: onHandleCancel,
                 disabled: false,
                 loading: false,
+                type: "cancel",
+                content: "X"
               }}
               tabs={tabs}
               filters={[]}
@@ -563,7 +572,7 @@ function IndexFiltersDefaultExample() {
           </Card>
         </InlineGrid>
 
-        { total > limit &&
+        {total > limit &&
           <Card>
             <InlineStack gap="800" align="center" blockAlign="center">
               <Box
@@ -584,7 +593,7 @@ function IndexFiltersDefaultExample() {
               <Box
                 style={{ border: "2px solid #ccc", padding: "4px 8px 0 8px" }}
                 onClick={() => {
-                  page < total/limit &&
+                  page < total / limit &&
                     setPage((prev) => prev + 1);
                 }}
               >
