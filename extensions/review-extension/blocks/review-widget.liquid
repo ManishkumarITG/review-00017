@@ -19,7 +19,7 @@
 </script>
 
 <script src="{{ 'reviewFilter.js' | asset_url }}" defer></script>
-<script src="{{ 'reviewSetting.js' | asset_url }}" defer></script>
+{% comment %} <script src="{{ 'reviewSetting.js' | asset_url }}" defer></script> {% endcomment %}
 
 {% if product %}
   <script>
@@ -49,6 +49,7 @@
             color: black;
             font-size: 22px;
           "
+          data-setting="Widget title"
         >
           Customer Reviews
         </h2>
@@ -87,7 +88,7 @@
               {% comment %} <!-- LEFT: static stars (5 to 1) --> {% endcomment %}
               <span
                 style="
-                  color: #388B7F;
+                  {% comment %} color: #388B7F; {% endcomment %}
                   font-size: 19px;
                   width: 40%;
                   display: flex
@@ -101,9 +102,11 @@
                   style="
                     height:14px;
                     width:{{ progress_percent }}%;
-                    background: #388B7F;
+                    {% comment %} background: #388B7F; {% endcomment %}
                     border-radius:0px;
                   "
+                  class="progressbar"
+
                 ></div>
               </div>
               {% comment %} <!-- RIGHT: count --> {% endcomment %}
@@ -116,7 +119,7 @@
       </div>
       <div class="jm-actions">
         <button
-          class="jm-write"
+          class="jm-write button"
           style="
             background: #388B7F;
             color: white;
@@ -129,11 +132,7 @@
         </button>
 
         <div class="jm-sort">
-          <select
-            class="jm-sort-select"
-            id="{{ block.settings.RatingFilter  }}"
-            style="color:{{block.settings.star_color}}"
-          >
+          <select class="jm-sort-select star">
             <option value="most_recent">Most Recent</option>
             <option value="highest">Highest Rating</option>
             <option value="lowest">Lowest Rating</option>
@@ -160,6 +159,7 @@
             color: black;
             font-size: 22px;
           "
+          data-setting="Widget title"
         >
           Customer Reviews
         </h2>
@@ -167,12 +167,14 @@
           <div style=" align-items:center; gap:0px; flex-direction:row;">
             <span
               style="
-                color : #108474;
+                color : star;
                 font-size: 19px;
                 display:flex;
                 gap:8px;
                 align-items:center;
               "
+              class="jm-stars star"
+            
             >
               {% render 'stars', rating: actual_rating %}
               <span style="font-weight:normal; color:black; font-size:16px;">{{ actual_rating }} out of 5</span>
@@ -205,7 +207,7 @@
               {% comment %} <!-- LEFT: static stars (5 to 1) --> {% endcomment %}
               <span
                 style="
-                  color: #388B7F;
+                  {% comment %} color: #388B7F; {% endcomment %}
                   font-size: 19px;
                   width: 40%;
                   display: flex
@@ -219,9 +221,10 @@
                   style="
                     height:14px;
                     width:{{ progress_percent }}%;
-                    background: #388B7F;
+                    {% comment %} background: #388B7F; {% endcomment %}
                     border-radius:0px;
                   "
+                  class="progressbar"
                 ></div>
               </div>
               {% comment %} <!-- RIGHT: count --> {% endcomment %}
@@ -234,7 +237,7 @@
       </div>
       <div class="jm-actions">
         <button
-          class="jm-write"
+          class="jm-write button"
           style="
             background: #388B7F;
             color: white;
@@ -247,7 +250,7 @@
         </button>
 
         <div class="jm-sort">
-          <select class="jm-sort-select" style="color:{{block.settings.star_color}}">
+          <select class="jm-sort-select star">
             <option value="most_recent">Most Recent</option>
             <option value="highest">Highest Rating</option>
             <option value="lowest">Lowest Rating</option>
@@ -275,6 +278,7 @@
               color:black;
               font-size: 21px;
             "
+            data-setting="Widget title"
           >
             Customer Reviews
           </h2>
@@ -297,7 +301,7 @@
             <div>
               {% for i in (1..5) %}
                 <span
-                  class="form-star"
+                  class="form-star star"
                   style="
                     font-size:20px;
                     color:#ccc;
@@ -312,7 +316,7 @@
 
           <div>
             <button
-              class="jm-write"
+              class="jm-write button"
               style="
                 background: #388B7F;
                 color: white;
@@ -333,11 +337,12 @@
             color: {{block.settings.star_color}};
             font-size: {{block.settings.star_size}}px;
           "
+          class="star"
         >
           {% render 'stars', rating: 5 %}
         </span>
         <button
-          class="jm-write"
+          class="jm-write button"
           style="
             background: #388B7F;
             color: white;
@@ -381,7 +386,7 @@
               "
             >
               {% for i in (1..5) %}
-                <span class="form-star" data-value="{{ i }}">★</span>
+                <span class="form-star " data-value="{{ i }}">★</span>
               {% endfor %}
             </div>
             <input type="hidden" id="selectedRating" name="Rating" value="0">
@@ -390,7 +395,7 @@
         </label>
 
         <!-- Name -->
-        <label class="field-label">
+        <label class="field-label ">
           Display Name
           <input
             name="Name"
@@ -429,7 +434,7 @@
           <span class="error-msg"></span>
         </label>
 
-        <button type="submit" class="submit-btn" id="submitButton">Submit</button>
+        <button type="submit" class="submit-btn button" id="submitButton">Submit</button>
       </form>
     </div>
   </div>
