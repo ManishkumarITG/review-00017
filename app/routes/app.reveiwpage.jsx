@@ -75,7 +75,9 @@ function IndexFiltersDefaultExample() {
   const [loding, setLoding] = useState(true);
   const { mode, setMode } = useSetIndexFiltersMode();
   const [refreshReviews, setRefreshReviews] = useState(false);
-
+  const [page, setPage] = useState(1);
+  const [total ,setTotal ] = useEffect(0);
+  const limit = 10;
   const onQueryClear = useCallback(() => {
     setQueryValue("");
     console.log("hello query");
@@ -106,7 +108,7 @@ function IndexFiltersDefaultExample() {
       setLoding(true);
       const updateData = await updatedReview(data);
       console.log(updateData);
-      const reviews = await getAllReviews();
+      const reviews = await getAllReviews(page, limit);
       setReviews(reviews);
     } catch (error) {
       console.log(error);
@@ -119,7 +121,7 @@ function IndexFiltersDefaultExample() {
     const getReviews = async () => {
       try {
         setLoding(true);
-        const resopanse = await getAllReviews();
+        const resopanse = await getAllReviews(page, limit);
         console.log(resopanse);
         setReviews(resopanse);
       } catch (error) {
@@ -130,7 +132,7 @@ function IndexFiltersDefaultExample() {
     };
     console.log("hello query changes");
     getReviews();
-  }, [refreshReviews]);
+  }, [refreshReviews, page]);
 
   //form changes
   const HandleFormChanges = (value, name) => {
@@ -494,9 +496,6 @@ function IndexFiltersDefaultExample() {
             </Badge>
           </InlineStack>
 
-
-
-
           <Card>
             <IndexFilters
               sortSelected={sortSelected}
@@ -566,40 +565,39 @@ function IndexFiltersDefaultExample() {
 
         </InlineGrid>
 
-        <Card >
-          <InlineStack gap="800" align="center" blockAlign="center">
-            <Box
-              style={{ border: "2px solid #ccc", padding: "4px 8px 0 8px" }}
-              onClick={() => {
-                setCurrentTab((prev) => prev - 1);
-                setitemRenderLimit((pre) => pre - 10);
-              }}>
-              <Button
-                variant="plain"
-                disabled={currentTab === 1}
+        {limit < total &&
+          <Card >
+            <InlineStack gap="800" align="center" blockAlign="center">
+              <Box
+                style={{ border: "2px solid #ccc", padding: "4px 8px 0 8px" }}
+                onClick={() => {
+                  page > 1 &&
+                    setPage((prev) => prev - 1);
+                }}>
+                <Button
+                  variant="plain"
 
-                icon={ChevronLeftIcon}
-              />
-            </Box>
-            <Box as="span" style={{ color: "#535353ff" }}>
-              Showing {currentTab} to **Placeholder** {reviews.length}
-            </Box>
-            <Box
-              style={{ border: "2px solid #ccc", padding: "4px 8px 0 8px" }}
-              onClick={() => {
-                setCurrentTab((prev) => prev + 1);
-                setitemRenderLimit((pre) => pre + 10);
-              }}
-            >
-
-              <Button
-                variant="plain"
-                disabled={itemRenderLimit + 10 >= reviews?.length}
-                icon={ChevronRightIcon}
-              />
-            </Box>
-          </InlineStack>
-        </Card>
+                  icon={ChevronLeftIcon}
+                />
+              </Box>
+              <Box as="span" style={{ color: "#535353ff" }}>
+                Showing page {page} to {reviews.length} out of {total}
+              </Box>
+              <Box
+                style={{ border: "2px solid #ccc", padding: "4px 8px 0 8px" }}
+                onClick={() => {
+                  page < total &&
+                    setPage((prev) => prev + 1);
+                }}
+              >
+                <Button
+                  variant="plain"
+                  icon={ChevronRightIcon}
+                />
+              </Box>
+            </InlineStack>
+          </Card>
+        }
 
         <Modal id="my-modal">
           <Box style={{ padding: "20px" }}>

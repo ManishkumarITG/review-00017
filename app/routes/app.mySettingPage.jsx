@@ -43,6 +43,7 @@ function MySettingPage() {
             xs: 1,
             md: ["oneThird", "twoThirds"],
             lg: ["oneThird", "twoThirds"],
+            xl: ["oneThird", "twoThirds"],
           }}
         >
 
@@ -122,4 +123,3 @@ function MySettingPage() {
 }
 
 export default MySettingPage;
-  
