@@ -1,4 +1,5 @@
 export const getFilterType = (filterType) => {
+  console.log("--------------------------- filterType", filterType);
   let sortQuery = { like: -1, pinned: -1 };
 
   if (filterType === "mostRecent") {

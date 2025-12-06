@@ -82,13 +82,14 @@ export default function ReviewWidgets() {
     }
   };
 
-  const handleRealData = async () => {
+  const handleRealData = async (filterType) => {
     try {
       setLoding(true);
-      const resopanse = await getAllReviews();
+      console.log("------------------------------ filtertype", filterType);
+      const resopanse = await getAllReviews("", "", filterType);
       await summary();
-      console.log(resopanse.items);
-      setReview(resopanse.items);
+      console.log(resopanse.data.items);
+      setReview(resopanse.data.items);
     } catch (error) {
       console.log(error);
     } finally {
@@ -127,7 +128,7 @@ export default function ReviewWidgets() {
         <button onClick={() => handleDiscard("review_widgets")}></button>
       </SaveBar>
 
-      <Box style={{ height: "100vh", overflow: "hidden" }}>
+      <Box style={{ height: "100vh", overflow: "auto" }}>
         <Card roundedAbove="0" padding={0} title="widget card" sectioned>
           <InlineGrid
             gap="400"
@@ -474,15 +475,21 @@ export default function ReviewWidgets() {
                     items={[
                       {
                         content: "most Recent",
+                        onAction: () => {
+                          handleRealData("mostRecent");
+                        },
                       },
                       {
                         content: "Heghset Recent",
+                        onAction: () => {
+                          handleRealData("highestRating");
+                        },
                       },
                       {
                         content: "Lowest Recent",
-                      },
-                      {
-                        content: "only pictures",
+                        onAction: () => {
+                          handleRealData("lowestRating");
+                        },
                       },
                     ]}
                   />

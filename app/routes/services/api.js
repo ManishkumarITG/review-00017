@@ -108,15 +108,18 @@ export const createSettings = async () => {
   }
 };
 
-export const getAllReviews = async (page, limit) => {
+export const getAllReviews = async (page, limit, filterType) => {
   try {
-    const res = await fetch(`/api/routes/app/reviewproduct/getAllReviews?limit=${limit}&page=${page}`);
+    console.log("-----------------------------------------------", filterType);
+    const res = await fetch(
+      `/api/routes/app/reviewproduct/getAllReviews?limit=${limit}&page=${page}&filterType=${filterType}`,
+    );
     const resData = await res.json();
     const data = resData;
     return data;
   } catch (error) {
     console.log("========================getAllRev======", error);
-    
+
     return [];
   }
 };
