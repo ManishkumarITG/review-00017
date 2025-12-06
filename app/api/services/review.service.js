@@ -98,7 +98,7 @@ export const getReviewsByType = async (data) => {
       .limit(limit)
       .lean();
 
-    const total = await Review.countDocuments();
+    const total = await Review.countDocuments(filter);
 
     console.log("--------------------------- data , item", items, total);
     return { items, total, page, limit };
