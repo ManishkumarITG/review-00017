@@ -75,5 +75,17 @@
   "overrides": {
     "p-map": "^4.0.0"
   },
-  "author": "Itgeeks"
+  "author": "Itgeeks",
+  "version": "1.0.0",
+  "description": "This is a template for building a [Shopify app](https://shopify.dev/docs/apps/getting-started) using [React Router](https://reactrouter.com/).  It was forked from the [Shopify Remix app template](https://github.com/Shopify/shopify-app-template-remix) and converted to React Router.",
+  "main": ".graphqlrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santoshmodi00/reviewapp.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/santoshmodi00/reviewapp/issues"
+  },
+  "homepage": "https://github.com/santoshmodi00/reviewapp#readme"
 }

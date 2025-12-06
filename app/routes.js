@@ -25,6 +25,10 @@ const routes = [
 
   route("/api/routes/extensions/user/*", "./api/routes/extensions/user.$.js"),
   ...(await flatRoutes()),
+
+  //Themes
+    route("/api/routes/themes/*", "./api/routes/themes.$.js")
+
 ];
 
 export default routes;
