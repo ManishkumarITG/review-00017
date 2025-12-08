@@ -3,7 +3,7 @@ export const handleUrlData = (req) => {
 
   const idType = url.searchParams.get("idType");
   const page = Number(url.searchParams.get("page")) || 1;
-  const limit = Number(url.searchParams.get("limit")) || 10;
+  const limit = Number(url.searchParams.get("limit")) || 5;
   const type = url.searchParams.get("type") || null;
   const skip = url.searchParams.get("skip");
   const skipValue = skip !== null ? Number(skip) : undefined;
