@@ -21,7 +21,6 @@ import {
   useBreakpoints,
   SkeletonBodyText,
   EmptyState,
-  SkeletonDisplayText,
 } from "@shopify/polaris";
 
 import { Modal, TitleBar, useAppBridge } from "@shopify/app-bridge-react";
@@ -77,20 +76,21 @@ function IndexFiltersDefaultExample() {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(1);
 
+
   const limit = 5;
   const onQueryClear = useCallback(() => {
     setQueryValue("");
     console.log("hello query");
   }, [selectedTab]);
 
-  const onHandleCancel = () => {};
+  const onHandleCancel = () => { };
 
   const fetchResults = async (value) => {
     if (value.trim() === "") {
       setReviews([]);
       setRefreshReviews((prev) => !prev);
       return;
-    }
+    };
 
     console.log(`Searching for: ${value}`);
     try {
@@ -112,7 +112,7 @@ function IndexFiltersDefaultExample() {
       console.log(updateData);
       const reviews = await getAllReviews(page, limit);
       setReviews(reviews.data.items);
-      setTotal(reviews.data.total);
+      setTotal(reviews.data.total)
       console.log(reviews.data.total);
 
       setRefreshReviews((prev) => !prev);
@@ -129,9 +129,9 @@ function IndexFiltersDefaultExample() {
         setLoding(true);
         const resopanse = await getAllReviews(page, limit);
         console.log(resopanse);
-        setTotal(resopanse.data.total);
-        setReviews(resopanse.data.items);
-        console.log(resopanse.data.total);
+        setTotal(resopanse.data.total)
+        setReviews(resopanse.data.items)
+        console.log(resopanse.data.total)
       } catch (error) {
         console.log(error);
       } finally {
@@ -207,13 +207,10 @@ function IndexFiltersDefaultExample() {
     [selectedTab, setSelectedTab],
   );
 
+
+
   const tabs = itemStrings.map((item, index) => ({
-    content:
-      index == selectedTab
-        ? loding
-          ? `${item} ...`
-          : `${item} (${reviews?.length})`
-        : item,
+    content: index == selectedTab ? loding ? `${item} ...` : `${item} (${reviews?.length})` : item,
     index,
     onAction: () => {
       setSelected(index);
@@ -251,15 +248,16 @@ function IndexFiltersDefaultExample() {
     handleTaggedWithRemove();
   }, [handleTaggedWithRemove]);
 
+
   const resourceName = {
-    singular: "splitedfilteredOrder",
-    plural: "splitedfilteredOrders",
+    singular: "review",
+    plural: "reviews",
   };
 
   const { selectedResources, allResourcesSelected, handleSelectionChange } =
     useIndexResourceState(reviews);
 
-  let obj = { length: 5 };
+  let obj = { length: 14 };
 
   const skeletonMarkup = [...Array.from(obj)].map((_, i) => {
     return (
@@ -271,17 +269,17 @@ function IndexFiltersDefaultExample() {
       >
         <IndexTable.Cell>
           <BlockStack>
-            <SkeletonBodyText lines={4} />
+            <SkeletonBodyText lines={1} />
           </BlockStack>
         </IndexTable.Cell>
         <IndexTable.Cell>
-          <SkeletonDisplayText size="medium" />
+          <SkeletonBodyText lines={1} />
         </IndexTable.Cell>
         <IndexTable.Cell>
-          <SkeletonBodyText lines={4} />
+          <SkeletonBodyText lines={1} />
         </IndexTable.Cell>
         <IndexTable.Cell>
-          <SkeletonDisplayText size="medium" />
+          <SkeletonBodyText lines={1} />
         </IndexTable.Cell>
       </IndexTable.Row>
     );
@@ -307,12 +305,7 @@ function IndexFiltersDefaultExample() {
             <Text>Via Web</Text>
             <InlineStack gap={200}>
               <Box
-                style={{
-                  borderRadius: 5,
-                  border: "1px solid #abb1ba",
-                  padding: "4px",
-                  textAlign: "center",
-                }}
+                style={{ borderRadius: 5, border: "2px solid black", padding: "4px 2px 0 6px" }}
                 variant="plain"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -326,12 +319,7 @@ function IndexFiltersDefaultExample() {
                 )}
               </Box>
               <Box
-                style={{
-                  borderRadius: 5,
-                  border: "1px solid #abb1ba",
-                  padding: "4px",
-                  textAlign: "center",
-                }}
+                style={{ borderRadius: 5, border: "2px solid black", padding: "2px 2px 2px 6px" }}
                 variant="plain"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -527,7 +515,7 @@ function IndexFiltersDefaultExample() {
                 disabled: false,
                 loading: false,
                 type: "cancel",
-                content: "X",
+                content: "X"
               }}
               tabs={tabs}
               filters={[]}
@@ -584,16 +572,20 @@ function IndexFiltersDefaultExample() {
           </Card>
         </InlineGrid>
 
-        {total > limit && (
+        {total > limit &&
           <Card>
             <InlineStack gap="800" align="center" blockAlign="center">
               <Box
                 style={{ border: "2px solid #ccc", padding: "4px 8px 0 8px" }}
                 onClick={() => {
-                  page > 1 && setPage((prev) => prev - 1);
-                }}
-              >
-                <Button variant="plain" icon={ChevronLeftIcon} />
+                  page > 1 &&
+                    setPage((prev) => prev - 1);
+                }}>
+                <Button
+                  variant="plain"
+
+                  icon={ChevronLeftIcon}
+                />
               </Box>
               <Box as="span" style={{ color: "#535353ff" }}>
                 Showing page {page} to {reviews.length} out of {total}
@@ -601,14 +593,19 @@ function IndexFiltersDefaultExample() {
               <Box
                 style={{ border: "2px solid #ccc", padding: "4px 8px 0 8px" }}
                 onClick={() => {
-                  page < total / limit && setPage((prev) => prev + 1);
+                  page < total / limit &&
+                    setPage((prev) => prev + 1);
                 }}
               >
-                <Button variant="plain" icon={ChevronRightIcon} />
+                <Button
+                  variant="plain"
+                  icon={ChevronRightIcon}
+                />
               </Box>
             </InlineStack>
           </Card>
-        )}
+
+        }
 
         <Modal id="my-modal">
           <Box style={{ padding: "20px" }}>
