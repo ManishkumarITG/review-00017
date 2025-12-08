@@ -109,23 +109,19 @@ export default function Widget() {
           },
         ]}
         secondaryActions={
-          <>
-            <Box>
-              {themeList.length === 0 &&
-                <Spinner
-                  accessibilityLabel="Loading form field"
-                  size="small"
-                />}
-
-            </Box>
+          themeList.length !== 0 ?
             <Select
               options={options}
               onChange={handleSelectChange}
               value={selected}
-            />
-          </>
-
+            /> : <Box>
+              <Spinner
+                accessibilityLabel="Loading form field"
+                size="small"
+              />
+            </Box>
         }
+
       >
         <InlineGrid gap="400" columns={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2 }}>
           {simplifiedMediaCardData.map((card, index) => (

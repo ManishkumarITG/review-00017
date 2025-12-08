@@ -16,6 +16,8 @@ import {
 } from "@shopify/polaris-icons";
 import '@shopify/polaris/build/esm/styles.css';
 
+import { useNavigate } from 'react-router-dom';
+
 // import widget Card component from InstallWidgetsCard
 import InstallWidgetsCard from "./InstallWidgetsCard";
 function DashboardGuidance() {
@@ -26,6 +28,7 @@ function DashboardGuidance() {
 
   const shopDomin = JSON.parse(sessionStorage.getItem('app-bridge-config')).shop.split(".")[0];
   const embedId = "03fdd7d0352cc3b1184544f7e2c783be";
+  const navigate = useNavigate()
 
   // function to toggle guidense page
   const toggle = () => {
@@ -63,7 +66,8 @@ function DashboardGuidance() {
           label: "Go to widget settings",
           variant: "primary",
           tone: "base",
-          onClick: () => console.log("Widget settings clicked"),
+          onClick: () =>console.log("widget");
+          ,
         },
       ],
     },

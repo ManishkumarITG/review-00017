@@ -15,7 +15,7 @@ function ColorPickerCircle({ type, hexCodeColor, saveBarId }) {
 
   const [hex, setHexColor] = useState(hexCodeColor);
   const currentColor = getColorObject(type, hex);
-  console.log(currentColor);
+  // console.log(currentColor);
   const currentHex = getHexCode(type);
 
   const popoverId = `popover_${type}`;

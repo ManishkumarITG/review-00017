@@ -604,7 +604,6 @@ function IndexFiltersDefaultExample() {
               </Box>
             </InlineStack>
           </Card>
-
         }
 
         <Modal id="my-modal">
