@@ -58,7 +58,7 @@ const settingData = async () => {
 const getProductReviews = async () => {
   try {
     const res = await fetch(
-      `${shopDomain}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=product`,
+      `${shopDomain}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=product&limit=0`,
     );
     const resData = await res.json();
     console.log("-------------------------------------- resData", resData);

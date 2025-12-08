@@ -13,13 +13,7 @@ import { responseHandler } from "../utils/responseHandler";
 
 export const createProductReview = async (shop, payload) => {
   try {
-    console.log(
-      "------------------------------------- palyload12",
-      shop,
-      payload,
-    );
     const data = await createReview(shop, payload);
-
     return responseHandler(STATUS_CODE.CREATED, MESSAGE.CREATED, data);
   } catch (error) {
     console.log("error in create review controller", error);
@@ -47,7 +41,6 @@ export const getAllReviews = async (payload) => {
 export const getReviews = async (filters) => {
   try {
     const data = await getReviewsByType(filters);
-    console.log("--------------------------- by type data ", data);
     return responseHandler(STATUS_CODE.OK, MESSAGE.SUCCESS, data);
   } catch (error) {
     console.log(error);
