@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const domain = window.location.origin.split("//")[1];
   const productIdliquid = ShopifyAnalytics.meta.page.resourceId || domain;
 
-  console.log(domain, "🟡🟡🟡🟡🟡🟡🟡🟡");
+  console.log("shop domain", domain);
   const reviewsList = document.getElementById("reviewsList");
   console.log(
     // "------------------------------------------- reviewsList",
@@ -14,9 +14,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const filterSelect = document.getElementsByClassName("jm-sort-select")[0];
   const writeButtons = document.querySelectorAll(".jm-write"); // get variable for liquid
   const ui = window.reviewSettings;
-
-  // initial stage of reviews array
-  // console.log(ui, " ====== review");
 
   // check type of page for type of review store of product
   let type =
@@ -62,47 +59,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
   ];
 
-  // fack reviews
-  const fakeReviews = [
-    {
-      _id: "1",
-      userName: "Rohan",
-      rating: 5,
-      description: "Bro this product is straight-up elite, zero cap.",
-      createdAt: "2025-01-05T08:20:39.703+00:00",
-      customerId: 7669279227940,
-    },
-    {
-      _id: "2",
-      userName: "Aditi",
-      rating: 4,
-      description: "Pretty solid tbh, packaging was aesthetic.",
-      createdAt: "2025-02-11T08:20:39.703+00:00",
-    },
-    {
-      _id: "3",
-      userName: "Mark",
-      rating: 3,
-      description: "Good vibes overall, but could be more premium.",
-      createdAt: "2024-12-22T08:20:39.703+00:00",
-      customerId: 7669279227940,
-    },
-    {
-      _id: "4",
-      userName: "Sana",
-      rating: 2,
-      description: "Didn’t hit the expectations benchmark for me.",
-      createdAt: "2024-12-01T08:20:39.703+00:00",
-    },
-    {
-      _id: "5",
-      userName: "Liam",
-      rating: 5,
-      description: "Absolute W, would recommend across the board.",
-      createdAt: "2025-01-18T08:20:39.703+00:00",
-    },
-  ];
-
   let realdata = [];
 
   // open for and check the type of more
@@ -110,13 +66,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log("Entered handleClick with mode:", mode);
     const form = document.getElementById("reviewForm");
 
-    const errorEl = document.querySelector(".NoReviewerror-msg");
-
     const url = window.location.origin;
     console.log("url", url);
 
     const formDIV = document.getElementById("FormParentDiv");
-    form.dataset.mode = "create"; // 🔥 REQUIRED
+    form.dataset.mode = "create";
 
     if (!formDIV) {
       console.warn("popupForm missing in DOM");
@@ -134,8 +88,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     if (mode === "edit") {
-      // emailInput.value =
-      form.dataset.mode = "edit"; // 🔥 REQUIRED
+      form.dataset.mode = "edit";
       console.log("Edit mode active → disabling email field");
       emailInput.disabled = true;
     } else {
@@ -178,14 +131,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       renderReviews([]);
       const baseUrl = window.location.origin;
 
-      console.log("⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐", productIdliquid);
+      console.log("product id ", productIdliquid);
       const response = await fetch(
         `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=${type}&limit=${limit}&targetId=${productIdliquid}`,
         { method: "GET", headers: { "Content-Type": "application/json" } },
       );
 
       const data = await response.json();
-      console.log(data.data, " 🟢 🟢 🟢 ");
+      console.log("--------------------------- res data", data.data);
 
       return data?.data?.items;
     } catch (error) {
@@ -242,7 +195,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   //call renderReview Function to render all reviews
   renderReviews(parsedData);
 
-  async function openForm(id, mode = "button") {
+  async function openForm(id = "button") {
     const review = parsedData.find((r) => r._id == id);
     if (!review) {
       console.warn("Review not found:", id);
@@ -259,7 +212,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   window.openForm = openForm;
   // function to render review list
-  console.log(ui.showDate, " ui.showDate 🔴🔴🔴🔴");
+  console.log(ui.showDate, " ui.showDate");
 
   function renderReviews(list) {
     console.log(list);
@@ -390,7 +343,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   reviewSetting.color.forEach((item) => {
     const els = document.querySelectorAll(`.${item.type}`);
     const progressbars = document.querySelectorAll(".progressbar");
-    const formStars = document.querySelectorAll("star");
+    const formStars = document.querySelectorAll(".star");
     const button = document.querySelectorAll(".jm-write");
 
     // ELEMENT COLOR LOGIC
@@ -440,56 +393,26 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   const ratingSummary = async () => {
-    console.log("🔥 Initiating rating summary fetch…");
+    console.log("Initiating rating summary fetch…");
     try {
       const baseUrl = window.location.origin;
 
       const res = await fetch(
-        `${baseUrl}/apps/review//api/routes/app/reviewproduct/ratingSummary`,
+        `${baseUrl}/apps/review/extensions/api/routes/app/reviewproduct/ratingSummary`,
       );
       const resData = await res.json();
 
-      console.log(resData.data, "🅱️🅱️🅱️🅱️🅱️");
+      console.log(resData.data, "response data");
       return resData.data.reviews || [];
     } catch (error) {
-      console.error("Fetch meltdown 💀:", error);
+      console.error("Fetch meltdown:", error);
       return [];
     }
   };
 
-  //   const reviewSummary = await ratingSummary(); // 💡 Await required
-  //   const parent = document.getElementById("reviewSummry");
-  //   const data = document.createElement("div");
-  //   reviewSummary.map((item) => {
-  //     data.innerHTML = `
-
-  //  <div class="jm-Stars-Progressbar">
-  //      <span style="
-
-  //                   font-size: 19px;
-  //                   width: 40%;
-  //                   display: flex
-  //                 ">
-
-  //                 <span>
-  //   ${highlightStars(item.rating)}
-  //                 </span>
-  //                 </span>
-  //                  <div style="background:#e5e7eb; height:14px; width:140px; border-radius:0px; overflow:hidden;">
-  //                 <div style="height: 14px; width: 53.3333%; border-radius: 0px; background-color: rgb(91, 241, 12);" class="progressbar"></div>
-  //               </div>
-
-  //               <span style="color:#888888;">
-  //                 ${item.pepole}
-  //               </span>
-  //             </div>
-  //     </div>
-  //     `;
-  //     parent.appendChild(data);
-  //   });
   const reviewSummary = await ratingSummary();
   const parent = document.getElementById("reviewSummry");
-console.log(parent, "====================== parent of progress bar");
+  console.log(parent, "====================== parent of progress bar");
 
   reviewSummary.forEach((item) => {
     const row = document.createElement("div"); // create a fresh block per item
@@ -516,7 +439,5 @@ console.log(parent, "====================== parent of progress bar");
       </span>
     </div>
   `;
-
-    // parent.appendChild(row);
   });
 });

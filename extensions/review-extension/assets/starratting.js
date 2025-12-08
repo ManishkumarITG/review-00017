@@ -2,12 +2,19 @@ const shopDomain = window.location.origin;
 
 const products = document.querySelectorAll(".product-card");
 
-const generateStarHTML = (rating, starColor) => {
+const generateStarHTML = (rating, starColor, buttonColor) => {
+  const allStars = document.querySelectorAll(".star");
+  const allButtons = document.querySelectorAll(".jm-write");
   const roundedRating = Math.round(rating);
   let stars = "";
 
   const fullStar = `<span style="color:${starColor};">★</span>`;
   const emptyStar = '<span style="color:#ccc;">★</span>';
+
+  allStars.forEach((v) => {
+    console.log("-------- star", v);
+    v.style.color = starColor;
+  });
 
   for (let i = 1; i <= 5; i++) {
     stars += i <= roundedRating ? fullStar : emptyStar;
@@ -39,7 +46,7 @@ const settingData = async () => {
 const getProductReviews = async () => {
   try {
     const res = await fetch(
-      `${shopDomain}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=product&limit=5`,
+      `${shopDomain}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=product`,
     );
     const resData = await res.json();
     console.log("-------------------------------------- resData", resData);
@@ -85,7 +92,7 @@ window.onload = async () => {
   const starColorSetting = colorArray?.find(
     (v) => v.settingName === "Star Color",
   );
-  const starColor = starColorSetting?.isvalue || "#000000";
+  const starColor = starColorSetting?.isvalue || "#01f0d0ff";
 
   const showTextSetting = textArray?.find(
     (v) => v.settingName === "Show text and stars",
