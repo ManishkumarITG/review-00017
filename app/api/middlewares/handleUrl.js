@@ -3,13 +3,14 @@ export const handleUrlData = (req) => {
 
   const idType = url.searchParams.get("idType");
   const page = Number(url.searchParams.get("page")) || 1;
-  const limit = Number(url.searchParams.get("limit")) || 5;
+  const urlLimit = Number(url.searchParams.get("limit"))
+  const limit = urlLimit == 0 ? 0 : urlLimit ? urlLimit : 5;
   const type = url.searchParams.get("type") || null;
   const skip = url.searchParams.get("skip");
   const skipValue = skip !== null ? Number(skip) : undefined;
   const targetId = url.searchParams.get("targetId");
   const filterType = url.searchParams.get("filterType");
-  console.log("--------------------- url", filterType);
+  console.log("--------------------- my limit", limit);
 
   return { idType, page, limit, type, skip, skipValue, targetId, filterType };
 };

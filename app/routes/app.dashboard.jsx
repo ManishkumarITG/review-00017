@@ -23,7 +23,6 @@ export default function Deshboard() {
   // const navigate = useNavigate();
   const [carddata, setCardData] = useState([]);
   const [allreviews, setReviews] = useState([]);
-  // getAllReviews
   // const starColor = getHexCode("star");
 
   function Loding() {
@@ -41,7 +40,9 @@ export default function Deshboard() {
       console.log("data res", res);
       setReviews(res.items);
       console.log("all review for the server", res);
-    });
+    }).catch(() => shopify.toast.show(massage, {
+      duration: duration,
+    }));
   }, []);
 
   const deshboardImages = [

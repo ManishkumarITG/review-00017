@@ -40,6 +40,7 @@ import StarRating from "./components/Ratting.jsx";
 import { useColorTheme } from "./ColorContext.jsx";
 import { itemStrings } from "./data/reviewData.js";
 import EditReviewForm from "./components/EditReviewForm.jsx";
+
 import {
   getAllReviews,
   getReviewsByType,
@@ -76,11 +77,14 @@ function IndexFiltersDefaultExample() {
   const [total, setTotal] = useState(1);
 
   const limit = 5;
+  const massage = "Something Went wrong";
+  const duration = 7000;
   const onQueryClear = useCallback(() => {
     setQueryValue("");
   }, [selectedTab]);
 
-  const onHandleCancel = () => {};
+
+  const onHandleCancel = () => { };
 
   const fetchResults = async (value) => {
     if (value.trim() === "") {
@@ -97,9 +101,13 @@ function IndexFiltersDefaultExample() {
       console.log("Search Results:", searchData);
     } catch (error) {
       console.error("Search API Error:", error);
+      shopify.toast.show(massage, {
+        duration: duration,
+      });
+
     } finally {
       setLoding(false);
-    }
+    };
   };
 
   const handleUpdate = async (data) => {
@@ -116,6 +124,9 @@ function IndexFiltersDefaultExample() {
       setRefreshReviews((prev) => !prev);
     } catch (error) {
       console.log(error);
+      shopify.toast.show('Product saved', {
+        duration: 5000,
+      });
     } finally {
       setLoding(false);
     }
@@ -134,8 +145,15 @@ function IndexFiltersDefaultExample() {
         }
       } catch (error) {
         console.log(error);
+        shopify.toast.show(massage, {
+          duration: duration,
+        });
+
       } finally {
         setLoding(false);
+        shopify.toast.show(massage, {
+          duration: duration,
+        });
       }
     };
     console.log("hello query changes");
@@ -174,13 +192,12 @@ function IndexFiltersDefaultExample() {
   const toggleActive = (id) => () => {
     setActive((activeId) => (activeId !== id ? id : null));
   };
-  console.log(page, "______________________PAGE");
 
   const handleTapChange = useCallback(
     async (index) => {
-      console.log("{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}", page);
+
       setSelectedTAbIndex(index);
-      console.log(index, " ----------------------------------------------");
+
       try {
         setLoding(true);
         const tabName = itemStrings[index];
@@ -198,6 +215,10 @@ function IndexFiltersDefaultExample() {
         setReviews(filterData.items);
       } catch (error) {
         console.log(error);
+        shopify.toast.show(massage, {
+          duration: duration,
+        });
+
       } finally {
         setLoding(false);
       }
@@ -563,7 +584,7 @@ function IndexFiltersDefaultExample() {
                   allResourcesSelected ? "All" : selectedResources.length
                 }
                 onSelectionChange={handleSelectionChange}
-                selectable={loding ? false : true}   
+                selectable={loding ? false : true}
                 headings={
                   loding
                     ? []
