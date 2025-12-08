@@ -18,7 +18,6 @@ import {
   InlineGrid,
   Popover,
   ActionList,
-  useBreakpoints,
   SkeletonBodyText,
   EmptyState,
 } from "@shopify/polaris";
@@ -80,7 +79,6 @@ function IndexFiltersDefaultExample() {
   const limit = 5;
   const onQueryClear = useCallback(() => {
     setQueryValue("");
-    console.log("hello query");
   }, [selectedTab]);
 
   const onHandleCancel = () => { };
@@ -559,12 +557,16 @@ function IndexFiltersDefaultExample() {
                   allResourcesSelected ? "All" : selectedResources.length
                 }
                 onSelectionChange={handleSelectionChange}
-                headings={[
-                  { title: "Customer" },
-                  { title: "Created" },
-                  { title: "Rating" },
-                  { title: "status", alignment: "end" },
-                ]}
+                headings={
+                  loding
+                    ? []
+                    : [
+                        { title: "Customer" },
+                        { title: "Created" },
+                        { title: "Rating" },
+                        { title: "status", alignment: "end" },
+                      ]
+                }
               >
                 {rowMarkup}
               </IndexTable>
