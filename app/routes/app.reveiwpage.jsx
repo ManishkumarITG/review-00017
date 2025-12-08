@@ -14,7 +14,6 @@ import {
   ButtonGroup,
   Page,
   Card,
-  LegacyTabs,
   InlineGrid,
   Popover,
   ActionList,
@@ -58,7 +57,6 @@ function IndexFiltersDefaultExample() {
   const starColor = getHexCode("star");
 
   const [reviews, setReviews] = useState([]);
-  const [selectedData, setSelectedData] = useState(0);
   const [selectedTAbIndex, setSelectedTAbIndex] = useState(0);
   const [_taggedWith, setTaggedWith] = useState("");
   const [queryValue, setQueryValue] = useState("");
@@ -77,20 +75,19 @@ function IndexFiltersDefaultExample() {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(1);
 
-
   const limit = 5;
   const onQueryClear = useCallback(() => {
     setQueryValue("");
   }, [selectedTab]);
 
-  const onHandleCancel = () => { };
+  const onHandleCancel = () => {};
 
   const fetchResults = async (value) => {
     if (value.trim() === "") {
       setReviews([]);
       setRefreshReviews((prev) => !prev);
       return;
-    };
+    }
 
     console.log(`Searching for: ${value}`);
     try {
@@ -113,7 +110,7 @@ function IndexFiltersDefaultExample() {
       console.log(updateData);
       const reviews = await getAllReviews(page, limit);
       setReviews(reviews.data.items);
-      setTotal(reviews.data.total)
+      setTotal(reviews.data.total);
       console.log(reviews.data.total);
 
       setRefreshReviews((prev) => !prev);
@@ -253,10 +250,9 @@ function IndexFiltersDefaultExample() {
     handleTaggedWithRemove();
   }, [handleTaggedWithRemove]);
 
-
   const resourceName = {
-    singular: "review",
-    plural: "reviews",
+    singular: "splitedfilteredOrder",
+    plural: "splitedfilteredOrders",
   };
 
   const { selectedResources, allResourcesSelected, handleSelectionChange } =
@@ -309,7 +305,12 @@ function IndexFiltersDefaultExample() {
             <Text>Via Web</Text>
             <InlineStack gap={200}>
               <Box
-                style={{ borderRadius: 5, border: "2px solid black", padding: "4px 2px 0 6px" }}
+                style={{
+                  borderRadius: 5,
+                  border: "1px solid #abb1ba",
+                  padding: "4px",
+                  textAlign: "center",
+                }}
                 variant="plain"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -323,7 +324,12 @@ function IndexFiltersDefaultExample() {
                 )}
               </Box>
               <Box
-                style={{ borderRadius: 5, border: "2px solid black", padding: "2px 2px 2px 6px" }}
+                style={{
+                  borderRadius: 5,
+                  border: "1px solid #abb1ba",
+                  padding: "4px",
+                  textAlign: "center",
+                }}
                 variant="plain"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -513,7 +519,7 @@ function IndexFiltersDefaultExample() {
                 disabled: false,
                 loading: false,
                 type: "cancel",
-                content: "X"
+                content: "X",
               }}
               tabs={tabs}
               filters={[]}
@@ -574,8 +580,8 @@ function IndexFiltersDefaultExample() {
             )}
           </Card>
         </InlineGrid>
-        {/*  */}
-        {total > limit &&
+
+        {total > limit && (
           <Card>
             <InlineStack gap="800" align="center" blockAlign="center">
               <Box
@@ -601,14 +607,11 @@ function IndexFiltersDefaultExample() {
                   }
                 }}
               >
-                <Button
-                  variant="plain"
-                  icon={ChevronRightIcon}
-                />
+                <Button variant="plain" icon={ChevronRightIcon} />
               </Box>
             </InlineStack>
           </Card>
-        }
+        )}
 
         <Modal id="my-modal">
           <Box style={{ padding: "20px" }}>

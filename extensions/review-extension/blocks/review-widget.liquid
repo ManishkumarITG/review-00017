@@ -33,7 +33,7 @@
 <div class="jm-review-widget my-review-widget" id="jm-review-{{ section.id }}">
   {% comment %} <!-- Header --> {% endcomment %}
 
-  <div class="jm-list" style="    padding: 0px 72px;" d="jm-list-{{ section.id }}">
+  <div class="jm-list" style="padding: 0px 72px;" d="jm-list-{{ section.id }}">
     {% if block.settings.review_source == 'dummy' %}
       <div
         style="
@@ -70,54 +70,7 @@
           </div>
           <span>Based on 15 reviews</span>
         </div>
-        {% comment %}
-          <div>
-            {% assign star_counts = '8,3,1,3,0' | split: ',' %}
-            {% assign total_reviews = 0 %}
-            {% for c in star_counts %}
-              {% assign total_reviews = total_reviews | plus: c %}
-            {% endfor %}
-            {% for i in (1..5) reversed %}
-              {% assign index = forloop.index0 %}
-              {% assign count = star_counts[index] | plus: 0 %}
-              {% if total_reviews > 0 %}
-                {% assign progress_percent = count | times: 100.0 | divided_by: total_reviews %}
-              {% else %}
-                {% assign progress_percent = 0 %}
-              {% endif %}
-              <div class="jm-Stars-Progressbar">
-                {% comment %} <!-- LEFT: static stars (5 to 1) --> {% endcomment %}
-                <span
-                  style="
-                    {% comment %} color: #388B7F; {% endcomment %}
-                    font-size: 19px;
-                    width: 40%;
-                    display: flex
-                  "
-                >
-                  {% render 'stars', rating: i %}
-                </span>
-                {% comment %} <!-- MIDDLE: progress bar --> {% endcomment %}
-                <div style="background:#e5e7eb; height:14px; width:140px; border-radius:0px; overflow:hidden;">
-                  <div
-                    style="
-                      height:14px;
-                      width:{{ progress_percent }}%;
-                      {% comment %} background: #388B7F; {% endcomment %}
-                      border-radius:0px;
-                    "
-                    class="progressbar"
-                  ></div>
-                </div>
-                {% comment %} <!-- RIGHT: count --> {% endcomment %}
-                <span style="color:#888888;">
-                  {{ count }}
-                </span>
-              </div>
-            {% endfor %}
-          </div>
-        {% endcomment %}
-        <div id="reviewSummry"></div>
+        <div class="reviewSummry"></div>
       </div>
       <div class="jm-actions">
         <button
@@ -166,74 +119,9 @@
           Customer Reviews
         </h2>
         <div>
-          <div style=" align-items:center; gap:0px; flex-direction:row;">
-            <span
-              style="
-                color : star;
-                font-size: 19px;
-                display:flex;
-                gap:8px;
-                align-items:center;
-              "
-              class="jm-stars star"
-            >
-              {% render 'stars', rating: actual_rating %}
-              <span style="font-weight:normal; color:black; font-size:16px;">{{ actual_rating }} out of 5</span>
-            </span>
+          <div style="align-items:center; gap:0px; flex-direction:row;">
+            <div class="costomeSummary"></div>
           </div>
-          <span
-            style="
-              font-weight: normal;
-              color: black;
-              font-size: 16px;
-            "
-            >Based on 15 reviews</span
-          >
-        </div>
-        <div>
-          {% assign star_counts = '8,3,1,3,0' | split: ',' %}
-          {% assign total_reviews = 0 %}
-          {% for c in star_counts %}
-            {% assign total_reviews = total_reviews | plus: c %}
-          {% endfor %}
-          {% for i in (1..5) reversed %}
-            {% assign index = forloop.index0 %}
-            {% assign count = star_counts[index] | plus: 0 %}
-            {% if total_reviews > 0 %}
-              {% assign progress_percent = count | times: 100.0 | divided_by: total_reviews %}
-            {% else %}
-              {% assign progress_percent = 0 %}
-            {% endif %}
-            <div class="jm-Stars-Progressbar">
-              {% comment %} <!-- LEFT: static stars (5 to 1) --> {% endcomment %}
-              <span
-                style="
-                  {% comment %} color: #388B7F; {% endcomment %}
-                  font-size: 19px;
-                  width: 40%;
-                  display: flex
-                "
-              >
-                {% render 'stars', rating: i %}
-              </span>
-              {% comment %} <!-- MIDDLE: progress bar --> {% endcomment %}
-              <div style="background:#e5e7eb; height:14px; width:140px; border-radius:0px; overflow:hidden;">
-                <div
-                  style="
-                    height:14px;
-                    width:{{ progress_percent }}%;
-                    {% comment %} background: #388B7F; {% endcomment %}
-                    border-radius:0px;
-                  "
-                  class="progressbar"
-                ></div>
-              </div>
-              {% comment %} <!-- RIGHT: count --> {% endcomment %}
-              <span style="color:#888888;">
-                {{ count }}
-              </span>
-            </div>
-          {% endfor %}
         </div>
       </div>
       <div class="jm-actions">
@@ -435,7 +323,7 @@
           <span class="error-msg"></span>
         </label>
 
-        <button type="submit" class="submit-btn button" id="submitButton">Submit</button>
+        <button type="submit" class="submit-btn button jm-write" id="submitButton">Submit</button>
       </form>
     </div>
   </div>

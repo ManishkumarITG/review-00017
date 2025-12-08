@@ -74,9 +74,9 @@ export const updatereview = async (shop, payload) => {
   }
 };
 
-export const getRatingSummary = async (shop) => {
+export const getRatingSummary = async (shop, targetId) => {
   try {
-    const data = await getRatingSummaryService(shop);
+    const data = await getRatingSummaryService(shop, targetId);
     return responseHandler(STATUS_CODE.OK, MESSAGE.SUCCESS, data);
   } catch (error) {
     console.log("rating summary error:", error);

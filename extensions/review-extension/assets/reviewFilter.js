@@ -134,7 +134,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log("product id ", productIdliquid);
       const response = await fetch(
         `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=${type}&limit=${limit}&targetId=${productIdliquid}`,
-        { method: "GET", headers: { "Content-Type": "application/json" } },
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
       );
 
       const data = await response.json();
@@ -159,20 +164,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // highlite stars in form
-  function highlightStars(rating) {
-    console.log(rating);
+  function getStarArray(rating) {
+    const totalStars = 5;
+    const stars = [];
 
-    const stars = document.querySelectorAll(".form-star");
+    for (let i = 1; i <= totalStars; i++) {
+      stars.push(i <= rating ? "★" : "☆");
+    }
 
-    stars.forEach((star) => {
-      const value = Number(star.dataset.value);
+    const str = stars.join("");
 
-      if (value <= rating) {
-        star.style.color = "#108474"; // fill color
-      } else {
-        star.style.color = "#ccc"; // empty color
-      }
-    });
+    return str;
   }
 
   // pass filterd data
@@ -253,7 +255,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <div style="font-size:16px;" class="star">
                   ${"★".repeat(review.rating)}${"☆".repeat(5 - review.rating)}
                 </div>
-                <p  class="star" style="margin:0px">
+                <p  class="tagName" style="margin:0px">
                   ${userName}
                 </p>
               </div>
@@ -314,96 +316,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderReviews(sortedList);
   });
 
-  const getColorSetting = async () => {
-    try {
-      const baseUrl = window.location.origin;
-
-      const res = await fetch(
-        `${baseUrl}/apps/review/api/routes/app/setting/getByTitle`,
-        {
-          method: "POST",
-          body: JSON.stringify({ title: "Review Widget Setting" }),
-        },
-      );
-
-      const resData = await res.json();
-      console.log(resData.data.sectionSettings, "setting data form api ");
-
-      return resData.data.sectionSettings;
-    } catch (error) {
-      console.log("color setting fetch error", error);
-      return { message: error.message, data: null };
-    }
-  };
-
-  const reviewSetting = await getColorSetting();
-  console.log(reviewSetting);
-  // const elements = document.getElementsByClassName("text");
-
-  reviewSetting.color.forEach((item) => {
-    const els = document.querySelectorAll(`.${item.type}`);
-    const progressbars = document.querySelectorAll(".progressbar");
-    const formStars = document.querySelectorAll(".star");
-    const button = document.querySelectorAll(".jm-write");
-
-    // ELEMENT COLOR LOGIC
-    console.log(item.type, "type of review");
-
-    els.forEach((el) => {
-      if (item.type === "button") {
-        button.forEach((bar) => {
-          bar.style.backgroundColor = item.isvalue;
-        });
-      } else {
-        el.style.color = item.isvalue;
-      }
-    });
-
-    // PROGRESSBAR: only star color should apply
-    if (item.type === "star") {
-      progressbars.forEach((bar) => {
-        bar.style.backgroundColor = item.isvalue;
-      });
-      formStars.forEach((stars) => {
-        stars.style.color = item.isvalue;
-      });
-    }
-  });
-
-  /** ------------------------------
-   *  APPLY TEXT
-   * ------------------------------ **/
-
-  reviewSetting.text.forEach((item) => {
-    document
-      .querySelectorAll(`[data-setting="${item.settingName}"]`)
-      .forEach((el) => (el.textContent = item.isvalue));
-  });
-
-  /** ------------------------------
-   *  APPLY THEME VISIBILITY
-   * ------------------------------ **/
-
-  reviewSetting.theme.forEach((item) => {
-    document
-      .querySelectorAll(`[data-setting="${item.settingName}"]`)
-      .forEach((el) => {
-        el.style.display = item.isChecked ? "block" : "none";
-      });
-  });
-
   const ratingSummary = async () => {
     console.log("Initiating rating summary fetch…");
     try {
       const baseUrl = window.location.origin;
+      const targetId = productIdliquid;
 
       const res = await fetch(
-        `${baseUrl}/apps/review/extensions/api/routes/app/reviewproduct/ratingSummary`,
+        `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/ratingSummary?targetId=${targetId}`,
       );
       const resData = await res.json();
 
-      console.log(resData.data, "response data");
-      return resData.data.reviews || [];
+      console.log("------------------------------- rating summary", resData);
+      return resData.data || [];
     } catch (error) {
       console.error("Fetch meltdown:", error);
       return [];
@@ -411,27 +336,31 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
   const reviewSummary = await ratingSummary();
-  const parent = document.getElementById("reviewSummry");
-  console.log(parent, "====================== parent of progress bar");
+  console.log("--------------------------------------- summary", reviewSummary);
+  const parent = document.querySelector(".costomeSummary");
 
-  reviewSummary.forEach((item) => {
-    const row = document.createElement("div"); // create a fresh block per item
+  parent.innerHTML = `
+    <div class="center">
+      <span class="star mainFontSize">${getStarArray(reviewSummary.avgRating)}</span> ${reviewSummary.avgRating} out of 5
+    </div>
+    <p class="center" style="font-weight: normal; font-size: 16px;"> Based on ${reviewSummary.totalReview} reviews</p>
+    `;
 
-    parent.innerHTML = `
+  reviewSummary?.reviews?.forEach((item) => {
+    console.log("my items --------------------- my items", item);
+    const div = document.createElement("div");
+    div.innerHTML = `
     <div class="jm-Stars-Progressbar">
-      <span style="font-size: 19px; width: 40%; display: flex;">
-        <span>
-          ${highlightStars(item.rating)}
-        </span>
+      <span class="star mainFontSize">
+          ${getStarArray(item.rating)}
       </span>
 
       <div style="background:#e5e7eb; height:14px; width:140px; border-radius:0px; overflow:hidden;">
-        <div style="
+        <div class="progressbar" style="
           height:14px;
-          width:${(item.rating / 5) * 100}%;
+          width:${(item.pepole / 5) * 100}%;
           border-radius:0px;
-          background-color: rgb(91, 241, 12);
-        " class="progressbar"></div>
+        "></div>
       </div>
 
       <span style="color:#888888;">
@@ -439,5 +368,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       </span>
     </div>
   `;
+
+    parent.appendChild(div);
   });
 });

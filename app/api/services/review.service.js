@@ -140,8 +140,14 @@ export const updatereviewbyId = async (shop, payload) => {
   return updated.toObject();
 };
 
-export const getRatingSummaryService = async (shop) => {
-  const reviews = await Review.find({ shop });
+export const getRatingSummaryService = async (shop, targetId) => {
+  const filter = {
+    shop: shop,
+  };
+  if (targetId) {
+    filter.targetId = targetId;
+  }
+  const reviews = await Review.find(filter);
 
   const summary = [];
   let totalRatingSum = 0;

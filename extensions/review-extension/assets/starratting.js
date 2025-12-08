@@ -2,19 +2,31 @@ const shopDomain = window.location.origin;
 
 const products = document.querySelectorAll(".product-card");
 
-const generateStarHTML = (rating, starColor, buttonColor) => {
-  const allStars = document.querySelectorAll(".star");
-  const allButtons = document.querySelectorAll(".jm-write");
+const addSettings = (className, value, styleName) => {
+  const ele = document.querySelectorAll(`.${className}`);
+  if (className == "progressbar") {
+    console.log("ele", ele);
+  }
+  ele.forEach((v) => {
+    v.style[styleName] = value;
+  });
+};
+
+const generateStarHTML = (rating, settings) => {
+  const starColor = settings[0];
+  const textColor = settings[1];
+  const buttonColor = settings[2];
+  const buttonTextColor = settings[3];
   const roundedRating = Math.round(rating);
   let stars = "";
-
   const fullStar = `<span style="color:${starColor};">★</span>`;
   const emptyStar = '<span style="color:#ccc;">★</span>';
 
-  allStars.forEach((v) => {
-    console.log("-------- star", v);
-    v.style.color = starColor;
-  });
+  addSettings("star", starColor, "color");
+  addSettings("jm-write", buttonColor, "background");
+  addSettings("jm-write", buttonTextColor, "color");
+  addSettings("tagName", textColor, "color");
+  addSettings("progressbar", starColor, "background");
 
   for (let i = 1; i <= 5; i++) {
     stars += i <= roundedRating ? fullStar : emptyStar;
@@ -89,10 +101,11 @@ window.onload = async () => {
   const colorArray = settingResponse?.data?.sectionSettings?.color;
   const textArray = settingResponse?.data?.sectionSettings?.text;
 
-  const starColorSetting = colorArray?.find(
-    (v) => v.settingName === "Star Color",
-  );
-  const starColor = starColorSetting?.isvalue || "#01f0d0ff";
+  const starColorSetting = colorArray?.map((v) => v.isvalue);
+
+  console.log("------------------------- colors23", starColorSetting);
+
+  const colors = starColorSetting?.isvalue || "#01f0d0ff";
 
   const showTextSetting = textArray?.find(
     (v) => v.settingName === "Show text and stars",
@@ -130,7 +143,7 @@ window.onload = async () => {
       }
 
       if (starSpan) {
-        starSpan.innerHTML = generateStarHTML(averageRating, starColor);
+        starSpan.innerHTML = generateStarHTML(averageRating, starColorSetting);
       }
 
       if (reviewCountSpan) {
