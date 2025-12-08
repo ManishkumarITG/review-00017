@@ -59,6 +59,9 @@ export default function ReviewWidgets() {
   const textColor = getHexCode("text");
   const buttonColor = getHexCode("button");
   const buttonTextColor = getHexCode("buttonTextColor");
+  const shopDomin = JSON.parse(sessionStorage.getItem('app-bridge-config')).shop.split(".")[0];
+  const embedId = "03fdd7d0352cc3b1184544f7e2c783be";
+
 
   const [review, setReview] = useState(reviews);
   const [loding, setLoding] = useState(false);
@@ -175,7 +178,7 @@ export default function ReviewWidgets() {
                       Add the Star Rating Badge on product pages.
                     </Text>
                     <InlineStack gap={300}>
-                      <Button icon={ArrowDiagonalIcon}>Install</Button>
+                      <Button icon={ArrowDiagonalIcon} onClick={ () => window.open(`https://admin.shopify.com/store/${shopDomin}/themes/current/editor?context=apps&activateAppId=${embedId}/Product_review`, "_blank")}>Install</Button>
                       <Button variant="plain" icon={ArrowDiagonalIcon}>
                         Learn more
                       </Button>

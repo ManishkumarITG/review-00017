@@ -23,12 +23,17 @@ function DashboardGuidance() {
   const [expanded, setExpanded] = useState(false);
   const [importexpanded, setImportExpanded] = useState(false);
 
+
+  const shopDomin = JSON.parse(sessionStorage.getItem('app-bridge-config')).shop.split(".")[0];
+  const embedId = "03fdd7d0352cc3b1184544f7e2c783be";
+
   // function to toggle guidense page
   const toggle = () => {
     setOpen(!open);
   }
 
   // temparery array to show guidense options
+
   const widgetCards = [
     {
       title: "Install Review Widget and Star Rating Badge",
@@ -39,11 +44,11 @@ function DashboardGuidance() {
           label: "Install Review Widget",
           variant: "primary",
           tone: "base",
-          onClick: () => console.log("Upload clicked"),
+          onClick: () => window.open(`https://admin.shopify.com/store/${shopDomin}/themes/current/editor?template=page&addAppBlockId=${embedId}/review-widget`, "_blank"),
         },
         {
           label: "Install Star Rating Badge",
-          onClick: () => console.log("Upload clicked"),
+          onClick: () => window.open(`https://admin.shopify.com/store/${shopDomin}/themes/current/editor?context=apps&activateAppId=${embedId}/Product_review`, "_blank"),
         },
       ],
     },
@@ -300,7 +305,7 @@ function DashboardGuidance() {
             )}
           </Box>
         </Box>
-)}
+      )}
     </Card>
   );
 }
