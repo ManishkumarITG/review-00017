@@ -20,6 +20,7 @@ import {
   ActionList,
   SkeletonBodyText,
   EmptyState,
+  SkeletonDisplayText,
 } from "@shopify/polaris";
 
 import { Modal, TitleBar, useAppBridge } from "@shopify/app-bridge-react";
@@ -255,11 +256,11 @@ function IndexFiltersDefaultExample() {
   const { selectedResources, allResourcesSelected, handleSelectionChange } =
     useIndexResourceState(reviews);
 
-  let obj = { length: 14 };
+  let obj = { length: 5 };
 
   const skeletonMarkup = [...Array.from(obj)].map((_, i) => {
     return (
-      <IndexTable.Row
+     <IndexTable.Row
         id={i}
         key={i}
         selected={selectedResources.includes(i)}
@@ -267,20 +268,19 @@ function IndexFiltersDefaultExample() {
       >
         <IndexTable.Cell>
           <BlockStack>
-            <SkeletonBodyText lines={1} />
+            <SkeletonBodyText lines={4} />
           </BlockStack>
         </IndexTable.Cell>
         <IndexTable.Cell>
-          <SkeletonBodyText lines={1} />
+          <SkeletonDisplayText size="medium" />
         </IndexTable.Cell>
         <IndexTable.Cell>
-          <SkeletonBodyText lines={1} />
+          <SkeletonBodyText lines={4} />
         </IndexTable.Cell>
         <IndexTable.Cell>
-          <SkeletonBodyText lines={1} />
+          <SkeletonDisplayText size="medium" />
         </IndexTable.Cell>
-      </IndexTable.Row>
-    );
+      </IndexTable.Row>    );
   });
 
   const rowMarkup = reviews.map(
