@@ -38,7 +38,8 @@ export default function Deshboard() {
 
   useEffect(() => {
     getAllReviews().then((res) => {
-      setReviews(res);
+      console.log("data res", res);
+      setReviews(res.items);
       console.log("all review for the server", res);
     });
   }, []);
@@ -74,10 +75,10 @@ export default function Deshboard() {
               <Box>sdighjwegjhsgduyags</Box>
 
               <Box>
-                {allreviews.length === 0 ? (
+                {allreviews?.length === 0 ? (
                   <>No reviews yet…</>
                 ) : (
-                  allreviews.map((review) => {
+                  allreviews?.data.map((review) => {
                     console.log("review →", review);
                     return (
                       <Box key={review.id} padding="200">
@@ -108,7 +109,7 @@ export default function Deshboard() {
         </Page>
 
         <Page>
-          {deshboardImages.map((element, index) => (
+          {deshboardImages?.map((element, index) => (
             <DeshboardimageWithText key={index} card={element} />
           ))}
         </Page>
