@@ -12,8 +12,10 @@ import { responseHandler } from "../../utils/responseHandler";
 import STATUS_CODE from "../../contents/statusCode";
 import MESSAGE from "../../contents/message";
 import { handleUrlData } from "../../middlewares/handleUrl";
+import mongoConnect from "../../../db.server";
 
 export const loader = async ({ request }) => {
+  await mongoConnect();
   try {
     const { status, shop, session, path, message, httpCode } =
       await authenticateUser(request);
@@ -51,7 +53,7 @@ export const loader = async ({ request }) => {
           filterType,
         });
       case "ratingSummary":
-        return await getRatingSummary(shop);
+        return await getRatingSummary(shop, targetId);
 
       default:
         return responseHandler(
@@ -67,6 +69,7 @@ export const loader = async ({ request }) => {
 };
 
 export const action = async ({ request }) => {
+  await mongoConnect();
   try {
     console.log("---------------- action apis 2");
     const data = await request.json();
