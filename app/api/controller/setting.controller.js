@@ -26,7 +26,6 @@ export const create = async (shopDomain, settingData) => {
 export const getAll = async () => {
   try {
     const data = await getAllSettings();
-    console.log(data);
     return responseHandler(STATUS_CODE.OK, "ok", data);
   } catch (error) {
     responseHandler(
@@ -41,7 +40,6 @@ export const getByTitle = async (shopDomain, name) => {
   try {
     const data = await getSettingByTitle(shopDomain, name);
     if (!data) {
-      console.log("not found", data);
       return responseHandler(
         STATUS_CODE.NOT_FOUND,
         "setting is not found",
@@ -60,11 +58,6 @@ export const getByTitle = async (shopDomain, name) => {
 
 export const update = async (shopDomain, settingData) => {
   try {
-    console.log(
-      "-------------------------------- data",
-      shopDomain,
-      settingData,
-    );
     const data = await updateSetting(shopDomain, settingData);
 
     return responseHandler(STATUS_CODE.OK, "update successful", data);

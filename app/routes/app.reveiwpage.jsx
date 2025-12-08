@@ -112,7 +112,6 @@ function IndexFiltersDefaultExample() {
 
   const handleUpdate = async (data) => {
     try {
-
       setLoding(true);
       const updateData = await updatedReview(data);
       console.log(updateData);
@@ -139,9 +138,9 @@ function IndexFiltersDefaultExample() {
           setLoding(true);
           const resopanse = await getAllReviews(page, limit);
           console.log(resopanse);
-          setTotal(resopanse.data.total)
-          setReviews(resopanse.data.items)
-          console.log(resopanse.data.total)
+          setTotal(resopanse.data.total);
+          setReviews(resopanse.data.items);
+          console.log(resopanse.data.total);
         }
       } catch (error) {
         console.log(error);
@@ -188,7 +187,6 @@ function IndexFiltersDefaultExample() {
     setOpenNevigation((prev) => (prev === id ? null : id));
   };
 
-
   const toggleActive = (id) => () => {
     setActive((activeId) => (activeId !== id ? id : null));
   };
@@ -209,7 +207,11 @@ function IndexFiltersDefaultExample() {
         }
         console.log(lowerCaseTapName);
 
-        const filterData = await getReviewsByType(lowerCaseTapName, limit, page);
+        const filterData = await getReviewsByType(
+          lowerCaseTapName,
+          limit,
+          page,
+        );
         console.log("filter Data", filterData);
         setTotal(filterData.total);
         setReviews(filterData.items);
@@ -223,19 +225,23 @@ function IndexFiltersDefaultExample() {
         setLoding(false);
       }
     },
-    [selectedTab, setSelectedTab, page]
+    [selectedTab, setSelectedTab, page],
   );
 
   useEffect(() => {
     handleTapChange(selectedTAbIndex);
-  }, [page])
-
+  }, [page]);
 
   const tabs = itemStrings.map((item, index) => ({
-    content: index == selectedTab ? loding ? `${item} ...` : (`${item} (${total})`) : item,
+    content:
+      index == selectedTab
+        ? loding
+          ? `${item} ...`
+          : `${item} (${total})`
+        : item,
     index,
     onAction: () => {
-      setPage(1)
+      setPage(1);
       setSelected(index);
       setSelectedTab(index);
       const params = new URLSearchParams(window.location.search);
@@ -303,7 +309,8 @@ function IndexFiltersDefaultExample() {
         <IndexTable.Cell>
           <SkeletonDisplayText size="medium" />
         </IndexTable.Cell>
-      </IndexTable.Row>);
+      </IndexTable.Row>
+    );
   });
 
   const rowMarkup = reviews.map(
@@ -511,8 +518,6 @@ function IndexFiltersDefaultExample() {
     <AppProvider>
       <Page fullWidth>
         <InlineGrid gap="400">
-
-
           <InlineStack gap="200">
             <Text variant="headingLg" as="h2">
               Reviews
@@ -589,11 +594,11 @@ function IndexFiltersDefaultExample() {
                   loding
                     ? []
                     : [
-                      { title: "Customer" },
-                      { title: "Created" },
-                      { title: "Rating" },
-                      { title: "status", alignment: "end" },
-                    ]
+                        { title: "Customer" },
+                        { title: "Created" },
+                        { title: "Rating" },
+                        { title: "status", alignment: "end" },
+                      ]
                 }
               >
                 {rowMarkup}
@@ -608,13 +613,10 @@ function IndexFiltersDefaultExample() {
               <Box
                 style={{ border: "2px solid #ccc", padding: "4px 8px 0 8px" }}
                 onClick={() => {
-                  page > 1 &&
-                    setPage((prev) => prev - 1);
-                }}>
-                <Button
-                  variant="plain"
-                  icon={ChevronLeftIcon}
-                />
+                  page > 1 && setPage((prev) => prev - 1);
+                }}
+              >
+                <Button variant="plain" icon={ChevronLeftIcon} />
               </Box>
               <Box as="span" style={{ color: "#535353ff" }}>
                 Showing page {page} to {reviews.length} out of {total}

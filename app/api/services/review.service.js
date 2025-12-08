@@ -50,15 +50,11 @@ export const createReview = async (shop, payload) => {
 
 export const getAllReviewsByShop = async (data) => {
   const { limit, page, shop, filterType } = data;
-  console.log(
-    "------------------------------------------------ service data",
-    data,
-  );
 
   if (!shop) throw new Error("shop is required");
 
   const sortQuery = getFilterType(filterType);
-  console.log("------------------------------- sort query ", sortQuery);
+
   const skip = (page - 1) * limit;
 
   const items = await Review.find({ shop })
@@ -68,8 +64,6 @@ export const getAllReviewsByShop = async (data) => {
     .lean();
 
   const total = await Review.countDocuments({ shop });
-
-  console.log("----------------------------------- 1212121212", items);
 
   return { items, total, limit, page };
 };
@@ -100,7 +94,6 @@ export const getReviewsByType = async (data) => {
       filter.idType = idType;
     }
 
-    console.log("--------------------------------- filter obj", filter);
     const items = await Review.find(filter)
       .sort(sortQuery)
       .skip(skip)
@@ -109,7 +102,6 @@ export const getReviewsByType = async (data) => {
 
     const total = await Review.countDocuments(filter);
 
-    console.log("--------------------------- data , item", items, total);
     return { items, total, page, limit };
   } catch (error) {
     console.log(error);
@@ -179,7 +171,6 @@ export const getRatingSummaryService = async (shop, targetId) => {
 };
 
 export const searchReviews = async (shop, query) => {
-  console.log("-------------------------------------- query value", query);
   const regexQuery = new RegExp(query, "i");
   const data = await Review.find({
     shop,
