@@ -25,7 +25,6 @@ import {
   StarIcon,
 } from "@shopify/polaris-icons";
 import ColorPickerCircle from "./components/ColorPicker.jsx";
-import DropZoneWithImageFileUpload from "./components/ImageDrop.jsx";
 import { useNavigate } from "react-router";
 import { SaveBar } from "@shopify/app-bridge-react";
 import CollapsibleBox from "./components/Collapsible";
@@ -505,7 +504,14 @@ export default function ReviewWidgets() {
                                 }
                               />
                             ) : (
-                              pageCount == 1 && <DropZoneWithImageFileUpload />
+                              pageCount == 1 && <s-drop-zone
+                                label="Upload"
+                                accessibilityLabel="Upload image of type jpg, png, or gif"
+                                multiple
+                                onInput={(event) => console.log('onInput', event.currentTarget?.value)}
+                                onChange={(event) => console.log('onChange', event.currentTarget?.value)}
+                                onDropRejected={(event) => console.log('onDropRejected', event.currentTarget?.value)}
+                              />
                             )}
 
                             <Box

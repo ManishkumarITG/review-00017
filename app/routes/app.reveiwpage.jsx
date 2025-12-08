@@ -39,7 +39,7 @@ import {
 import { HeartUnFillIcon, HeartfillIcon } from "./icons/icon.jsx";
 import StarRating from "./components/Ratting.jsx";
 import { useColorTheme } from "./ColorContext.jsx";
-import { tabsdata, itemStrings } from "./data/reviewData.js";
+import { itemStrings } from "./data/reviewData.js";
 import EditReviewForm from "./components/EditReviewForm.jsx";
 import {
   getAllReviews,
@@ -59,6 +59,7 @@ function IndexFiltersDefaultExample() {
 
   const [reviews, setReviews] = useState([]);
   const [selectedData, setSelectedData] = useState(0);
+  const [selectedTAbIndex, setSelectedTAbIndex] = useState(0);
   const [_taggedWith, setTaggedWith] = useState("");
   const [queryValue, setQueryValue] = useState("");
   const [selectedTab, setSelectedTab] = useState(0);
@@ -106,6 +107,7 @@ function IndexFiltersDefaultExample() {
 
   const handleUpdate = async (data) => {
     try {
+
       setLoding(true);
       const updateData = await updatedReview(data);
       console.log(updateData);
@@ -125,12 +127,14 @@ function IndexFiltersDefaultExample() {
   useEffect(() => {
     const getReviews = async () => {
       try {
-        setLoding(true);
-        const resopanse = await getAllReviews(page, limit);
-        console.log(resopanse);
-        setTotal(resopanse.data.total)
-        setReviews(resopanse.data.items)
-        console.log(resopanse.data.total)
+        if (selectedTAbIndex === 0) {
+          setLoding(true);
+          const resopanse = await getAllReviews(page, limit);
+          console.log(resopanse);
+          setTotal(resopanse.data.total)
+          setReviews(resopanse.data.items)
+          console.log(resopanse.data.total)
+        }
       } catch (error) {
         console.log(error);
       } finally {
@@ -169,20 +173,17 @@ function IndexFiltersDefaultExample() {
     setOpenNevigation((prev) => (prev === id ? null : id));
   };
 
-  const handleTabChange = useCallback((selectedTabIndex) => {
-    setSelectedData(selectedTabIndex);
-    const params = new URLSearchParams(window.location.search);
-    params.set("key", selectedTabIndex);
-    const newUrl = window.location.pathname + "?" + params.toString();
-    window.history.pushState({}, "", newUrl);
-  }, []);
 
   const toggleActive = (id) => () => {
     setActive((activeId) => (activeId !== id ? id : null));
   };
+  console.log(page, "______________________PAGE");
 
   const handleTapChange = useCallback(
     async (index) => {
+      console.log("{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}", page);
+      setSelectedTAbIndex(index);
+      console.log(index, " ----------------------------------------------");
       try {
         setLoding(true);
         const tabName = itemStrings[index];
@@ -194,24 +195,29 @@ function IndexFiltersDefaultExample() {
         }
         console.log(lowerCaseTapName);
 
-        const filterData = await getReviewsByType(lowerCaseTapName);
+        const filterData = await getReviewsByType(lowerCaseTapName, limit, page);
         console.log("filter Data", filterData);
-        setReviews(filterData);
+        setTotal(filterData.total);
+        setReviews(filterData.items);
       } catch (error) {
         console.log(error);
       } finally {
         setLoding(false);
       }
     },
-    [selectedTab, setSelectedTab],
+    [selectedTab, setSelectedTab, page]
   );
 
+  useEffect(() => {
+    handleTapChange(selectedTAbIndex);
+  }, [page])
 
 
   const tabs = itemStrings.map((item, index) => ({
-    content: index == selectedTab ? loding ? `${item} ...` : `${item} (${reviews?.length})` : item,
+    content: index == selectedTab ? loding ? `${item} ...` : (`${item} (${total})`) : item,
     index,
     onAction: () => {
+      setPage(1)
       setSelected(index);
       setSelectedTab(index);
       const params = new URLSearchParams(window.location.search);
@@ -260,7 +266,7 @@ function IndexFiltersDefaultExample() {
 
   const skeletonMarkup = [...Array.from(obj)].map((_, i) => {
     return (
-     <IndexTable.Row
+      <IndexTable.Row
         id={i}
         key={i}
         selected={selectedResources.includes(i)}
@@ -280,7 +286,7 @@ function IndexFiltersDefaultExample() {
         <IndexTable.Cell>
           <SkeletonDisplayText size="medium" />
         </IndexTable.Cell>
-      </IndexTable.Row>    );
+      </IndexTable.Row>);
   });
 
   const rowMarkup = reviews.map(
@@ -478,13 +484,7 @@ function IndexFiltersDefaultExample() {
     <AppProvider>
       <Page fullWidth>
         <InlineGrid gap="400">
-          <Card padding="025">
-            <LegacyTabs
-              tabs={tabsdata}
-              selected={selectedData}
-              onSelect={handleTabChange}
-            ></LegacyTabs>
-          </Card>
+
 
           <InlineStack gap="200">
             <Text variant="headingLg" as="h2">
@@ -557,15 +557,16 @@ function IndexFiltersDefaultExample() {
                   allResourcesSelected ? "All" : selectedResources.length
                 }
                 onSelectionChange={handleSelectionChange}
+                selectable={loding ? false : true}   
                 headings={
                   loding
                     ? []
                     : [
-                        { title: "Customer" },
-                        { title: "Created" },
-                        { title: "Rating" },
-                        { title: "status", alignment: "end" },
-                      ]
+                      { title: "Customer" },
+                      { title: "Created" },
+                      { title: "Rating" },
+                      { title: "status", alignment: "end" },
+                    ]
                 }
               >
                 {rowMarkup}
@@ -573,7 +574,7 @@ function IndexFiltersDefaultExample() {
             )}
           </Card>
         </InlineGrid>
-
+        {/*  */}
         {total > limit &&
           <Card>
             <InlineStack gap="800" align="center" blockAlign="center">
@@ -585,7 +586,6 @@ function IndexFiltersDefaultExample() {
                 }}>
                 <Button
                   variant="plain"
-
                   icon={ChevronLeftIcon}
                 />
               </Box>
@@ -595,8 +595,10 @@ function IndexFiltersDefaultExample() {
               <Box
                 style={{ border: "2px solid #ccc", padding: "4px 8px 0 8px" }}
                 onClick={() => {
-                  page < total / limit &&
+                  if (page < total / limit) {
                     setPage((prev) => prev + 1);
+                    // handleTapChange(selectedTAbIndex);
+                  }
                 }}
               >
                 <Button

@@ -75,7 +75,7 @@ export default function ReviewWidgets() {
   const [avgStarRating, setAvgStarRating] = useState(rattingArray.avgRating);
 
   useEffect(() => {
-    setBtnText("Sempal Data");
+    setBtnText("Sample Data");
   }, []);
 
   const summary = async () => {
@@ -91,7 +91,7 @@ export default function ReviewWidgets() {
   };
 
   const handleRealData = async (data) => {
-    const {limit , page , filterType} = data;
+    const { limit, page, filterType } = data;
     try {
       setLoding(true);
       console.log("------------------------------ filtertype", filterType);
@@ -99,6 +99,7 @@ export default function ReviewWidgets() {
       await summary();
       setTotal(resopanse.data.total)
       console.log(resopanse);
+      console.log("--------------------------- reviews res", resopanse.data.items)
       setReview(resopanse.data.items);
     } catch (error) {
       console.log(error);
@@ -365,7 +366,7 @@ export default function ReviewWidgets() {
                             padding: "0 0 4px 0",
                           }}
                           onClick={() => {
-                            handleRealData({limit: limit , page: page });
+                            handleRealData({ limit: limit, page: page });
                             setBtnText("Real Data");
                           }}
                         >
@@ -486,19 +487,19 @@ export default function ReviewWidgets() {
                       {
                         content: "most Recent",
                         onAction: () => {
-                          handleRealData({filterType:"mostRecent"});
+                          handleRealData({ filterType: "mostRecent" });
                         },
                       },
                       {
                         content: "Heghset Recent",
                         onAction: () => {
-                          handleRealData({filterType:"highestRating"});
+                          handleRealData({ filterType: "highestRating" });
                         },
                       },
                       {
                         content: "Lowest Recent",
                         onAction: () => {
-                          handleRealData({filterType:"lowestRating"});
+                          handleRealData({ filterType: "lowestRating" });
                         },
                       },
                     ]}
@@ -549,15 +550,17 @@ export default function ReviewWidgets() {
                   ) : (
                     <Loding />
                   )}
-                  {total > limit && btnText == "Real Data"  &&
+                  {(total > limit && btnText == "Real Data" && !loding) &&
                     <Card>
                       <InlineStack gap="800" align="center" blockAlign="center">
                         <Box
                           style={{ border: "2px solid #ccc", padding: "4px 8px 0 8px" }}
                           onClick={() => {
-                            page > 1 && 
+                            if (page > 1) {
                               setPage((prev) => prev - 1);
-                               handleRealData({limit: limit , page: page  });
+                              handleRealData({ limit: limit, page: page });
+
+                            }
                           }}>
                           <Button
                             variant="plain"
@@ -571,9 +574,10 @@ export default function ReviewWidgets() {
                         <Box
                           style={{ border: "2px solid #ccc", padding: "4px 8px 0 8px" }}
                           onClick={() => {
-                            page < total / limit &&
+                            if (page < total / limit) {
                               setPage((prev) => prev + 1);
-                              handleRealData({limit: limit , page: page  })
+                              handleRealData({ limit: limit, page: page })
+                            }
                           }}
                         >
                           <Button

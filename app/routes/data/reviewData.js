@@ -178,14 +178,7 @@ export const rattingArray = {
   avgRating: 4.2,
 };
 
-export const tabsdata = [
-  {
-    id: "all-customers-1",
-    content: "All",
-    accessibilityLabel: "All customers",
-    panelid: "all-customers-content-1",
-  },
-];
+
 
 export const simplifiedMediaCardData = [
   {

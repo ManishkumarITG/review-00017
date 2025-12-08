@@ -131,7 +131,7 @@ export const getReviewsByType = async (type, limit, page) => {
     );
     const resData = await res.json();
     const data = resData;
-    return data.data.items;
+    return data.data;
   } catch (error) {
     console.log("get reviews error", error);
     return [];
