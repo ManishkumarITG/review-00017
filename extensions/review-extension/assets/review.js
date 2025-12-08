@@ -255,10 +255,4 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   closeForm.addEventListener("click", closeReviewForm);
-
-
-
-
-
-
 });
