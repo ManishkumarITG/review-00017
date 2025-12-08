@@ -2,7 +2,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   let loding = true; // loding
   let limit = 10; // limit of api response
   // get importent Elements
-  const productIdliquid = ShopifyAnalytics.meta.page.resourceId;
+  const domain = window.location.origin.split("//")[1];
+  const productIdliquid = ShopifyAnalytics.meta.page.resourceId || domain;
+
+  console.log(domain, "🟡🟡🟡🟡🟡🟡🟡🟡");
   const reviewsList = document.getElementById("reviewsList");
   console.log(
     // "------------------------------------------- reviewsList",
@@ -175,18 +178,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       renderReviews([]);
       const baseUrl = window.location.origin;
 
-      console.log("⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐", type);
+      console.log("⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐", productIdliquid);
       const response = await fetch(
         `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=${type}&limit=${limit}&targetId=${productIdliquid}`,
-        // `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/reviews`,
         { method: "GET", headers: { "Content-Type": "application/json" } },
       );
 
-      // console.log(response, " response of api Data");
       const data = await response.json();
-      console.log(data.data, " data fro api");
+      console.log(data.data, " 🟢 🟢 🟢 ");
 
-      return data?.data?.items || [];
+      return data?.data?.items;
     } catch (error) {
       console.error("API went off the rails:", error);
       return [];
@@ -195,20 +196,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // await apidata()
-
   // check option of data
   if (ui.reviewSource === "dummy") {
-    console.log("--------------------------- my data is dummy  thanks");
     realdata = dummydata;
   } else if (ui.reviewSource === "real") {
-    console.log("--------------------------- my data is real thanks");
     realdata = await apidata();
   } else {
-    console.log("--------------------------- my data is emtey thanks");
     realdata = [];
   }
-  console.log("realdata for render reviews : ", realdata);
 
   // highlite stars in form
   function highlightStars(rating) {
@@ -264,6 +259,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   window.openForm = openForm;
   // function to render review list
+  console.log(ui.showDate, " ui.showDate 🔴🔴🔴🔴");
+
   function renderReviews(list) {
     console.log(list);
 
@@ -308,7 +305,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 </p>
               </div>
 
-              <div style="display:flex; align-items:center; gap:10px;" class="text">
+              <div style="display:flex; align-items:center; gap:10px;" class="text"     flex-direction: column;>
                 ${
                   ui.showDate
                     ? `<p style="margin:0; data-setting="show date" color:#888;">${review.date}</p>`
@@ -317,18 +314,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 <!-- Edit icon -->
 
-    ${
-      review.customerId == ShopifyAnalytics.meta.page.customerId
-        ? ` <span class="edit-btn" style="color:black;" data-id="${review._id}" data-mode="edit">
-                <svg class="edit-review-btn" data-id="${review._id}"
-                  style="width:18px; height:18px; cursor:pointer; opacity:0.7;"
-                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    d="M15.232 5.232l3.536 3.536M4 20h4l10-10-4-4L4 16v4z" />
-                </svg>
-              </span>`
-        : ""
-    }
+                    ${
+                      review.customerId == ShopifyAnalytics.meta.page.customerId
+                        ? ` <span class="edit-btn" style="color:black;" data-id="${review._id}" data-mode="edit">
+                                <svg class="edit-review-btn" data-id="${review._id}"
+                                  style="width:18px; height:18px; cursor:pointer; opacity:0.7;"
+                                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15.232 5.232l3.536 3.536M4 20h4l10-10-4-4L4 16v4z" />
+                                </svg>
+                              </span>`
+                        : ""
+                    }
               </div>
             </div>
             <p style="margin:0px;">
@@ -339,14 +336,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       `;
         reviewsList.appendChild(reviewItem);
       });
-
-      // const MoreReviews = document.createElement("sapn");
-      // MoreReviews.innerText = "See More";
-      // MoreReviews.addEventListener("click", () => {
-      //   limit = limit + limit;
-      //   console.log(limit);
-      // });
-      // reviewsList.appendChild(MoreReviews);
     }
   }
 
@@ -413,10 +402,10 @@ document.addEventListener("DOMContentLoaded", async () => {
           bar.style.backgroundColor = item.isvalue;
         });
       } else {
-            el.style.color = item.isvalue;
+        el.style.color = item.isvalue;
       }
     });
-    
+
     // PROGRESSBAR: only star color should apply
     if (item.type === "star") {
       progressbars.forEach((bar) => {
@@ -448,5 +437,86 @@ document.addEventListener("DOMContentLoaded", async () => {
       .forEach((el) => {
         el.style.display = item.isChecked ? "block" : "none";
       });
+  });
+
+  const ratingSummary = async () => {
+    console.log("🔥 Initiating rating summary fetch…");
+    try {
+      const baseUrl = window.location.origin;
+
+      const res = await fetch(
+        `${baseUrl}/apps/review//api/routes/app/reviewproduct/ratingSummary`,
+      );
+      const resData = await res.json();
+
+      console.log(resData.data, "🅱️🅱️🅱️🅱️🅱️");
+      return resData.data.reviews || [];
+    } catch (error) {
+      console.error("Fetch meltdown 💀:", error);
+      return [];
+    }
+  };
+
+  //   const reviewSummary = await ratingSummary(); // 💡 Await required
+  //   const parent = document.getElementById("reviewSummry");
+  //   const data = document.createElement("div");
+  //   reviewSummary.map((item) => {
+  //     data.innerHTML = `
+
+  //  <div class="jm-Stars-Progressbar">
+  //      <span style="
+
+  //                   font-size: 19px;
+  //                   width: 40%;
+  //                   display: flex
+  //                 ">
+
+  //                 <span>
+  //   ${highlightStars(item.rating)}
+  //                 </span>
+  //                 </span>
+  //                  <div style="background:#e5e7eb; height:14px; width:140px; border-radius:0px; overflow:hidden;">
+  //                 <div style="height: 14px; width: 53.3333%; border-radius: 0px; background-color: rgb(91, 241, 12);" class="progressbar"></div>
+  //               </div>
+
+  //               <span style="color:#888888;">
+  //                 ${item.pepole}
+  //               </span>
+  //             </div>
+  //     </div>
+  //     `;
+  //     parent.appendChild(data);
+  //   });
+  const reviewSummary = await ratingSummary();
+  const parent = document.getElementById("reviewSummry");
+console.log(parent, "====================== parent of progress bar");
+
+  reviewSummary.forEach((item) => {
+    const row = document.createElement("div"); // create a fresh block per item
+
+    parent.innerHTML = `
+    <div class="jm-Stars-Progressbar">
+      <span style="font-size: 19px; width: 40%; display: flex;">
+        <span>
+          ${highlightStars(item.rating)}
+        </span>
+      </span>
+
+      <div style="background:#e5e7eb; height:14px; width:140px; border-radius:0px; overflow:hidden;">
+        <div style="
+          height:14px;
+          width:${(item.rating / 5) * 100}%;
+          border-radius:0px;
+          background-color: rgb(91, 241, 12);
+        " class="progressbar"></div>
+      </div>
+
+      <span style="color:#888888;">
+        ${item.pepole}
+      </span>
+    </div>
+  `;
+
+    // parent.appendChild(row);
   });
 });

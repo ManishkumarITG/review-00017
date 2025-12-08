@@ -40,21 +40,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const reviewSetting = await getColorSetting();
   console.log(reviewSetting);
-
-  // reviewSetting.color.forEach((item) => {
-
-  //   // PROGRESSBAR: only star color should apply
-  //   if (item.type === "star") {
-  //     progressbars.forEach((bar) => {
-  //       bar.style.backgroundColor = item.isvalue;
-  //     });
-  //     formStars.forEach((stars) => {
-  //       stars.style.color = item.isvalue;
-  //     });
-  //   }
-  // });
-
-  // render all dummy reviews
   lists.forEach((list) => {
     const source = list.dataset.source;
 
@@ -88,16 +73,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   });
 
-  // star rating according to rating number
   stars.forEach((star) => {
-    // star.addEventListener("click", () => {
-    //   const selectedValue = star.getAttribute("data-value");
-    //   ratingInput.value = selectedValue;
-    //   stars.forEach((s) => {
-    //     s.style.color =
-    //       s.getAttribute("data-value") <= selectedValue ? "#e01111ff" : "#ccc";
-    //   });
-    // });
     stars.forEach((star) => {
       star.addEventListener("click", () => {
         const selectedValue = star.getAttribute("data-value");
@@ -279,4 +255,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   closeForm.addEventListener("click", closeReviewForm);
+
+
+
+
+
+
 });
