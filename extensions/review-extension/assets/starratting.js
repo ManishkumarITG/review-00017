@@ -39,9 +39,10 @@ const settingData = async () => {
 const getProductReviews = async () => {
   try {
     const res = await fetch(
-      `${shopDomain}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=product&limit=100`,
+      `${shopDomain}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=product&limit=5`,
     );
     const resData = await res.json();
+    console.log("-------------------------------------- resData", resData);
     return resData.data.items || [];
   } catch (error) {
     console.error("Product reviews fetch error:", error);
