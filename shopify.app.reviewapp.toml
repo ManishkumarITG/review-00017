@@ -24,7 +24,3 @@ redirect_urls = [ "https://example.com/api/auth" ]
 url = "https://balwan-singh-rajput-itg.myshopify.com"
 subpath = "review"
 prefix = "apps"
-
-
-
-

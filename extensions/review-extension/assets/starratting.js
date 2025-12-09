@@ -8,7 +8,7 @@ const addSettings = (className, value, styleName) => {
     console.log("ele", ele);
   }
   ele.forEach((v) => {
-    v.style[styleName] = value;
+    v.style[styleName] = value ;
   });
 };
 

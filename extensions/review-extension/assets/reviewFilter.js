@@ -1,61 +1,104 @@
 document.addEventListener("DOMContentLoaded", async () => {
   let loding = true; // loding
-  let limit = 10; // limit of api response
+  let limit = 2; // limit of api response
+  let filterType = "mostRecent";
+
   // get importent Elements
   const domain = window.location.origin.split("//")[1];
   const productIdliquid = ShopifyAnalytics.meta.page.resourceId || domain;
 
   console.log("shop domain", domain);
+
   const reviewsList = document.getElementById("reviewsList");
-  console.log(
-    // "------------------------------------------- reviewsList",
-    reviewsList,
-  );
+
   const filterSelect = document.getElementsByClassName("jm-sort-select")[0];
   const writeButtons = document.querySelectorAll(".jm-write"); // get variable for liquid
   const ui = window.reviewSettings;
 
+  console.log(ui, "ui from the liquid");
+  // console.log(
+  //   "------------------------------------------- reviewsList",
+  //   reviewsList,
+  // );
   // check type of page for type of review store of product
   let type =
     ShopifyAnalytics.meta.page.pageType == "home" ? "store" : "product";
-  console.log(ShopifyAnalytics.meta.page.resourceId, " type of review");
+  console.log(ShopifyAnalytics.meta, " type of review");
 
   // dummy data for sample option
   const dummydata = [
     {
       _id: "1",
-      author: "Arjun",
+      name: "Arjun",
       rating: 5,
       description: "Bro product legit fire fr fr",
-      date: "2025-01-05",
+      createdAt: "2025-01-05",
+      email: "arjun@gmail.com",
+      customerId: "123456789",
     },
+
     {
       _id: "2",
-      author: "Meera",
+
+      name: "Meera",
+
       rating: 4,
+
       description: "Pretty solid ngl, value for money",
-      date: "2025-11-26",
+
+      createdAt: "2025-11-26",
+
+      email: "meera@gmail.com",
+
+      customerId: "987654321",
     },
+
     {
       _id: "3",
-      author: "Jason",
+
+      name: "Jason",
+
       rating: 3,
+
       description: "Decent but packaging could’ve been better.",
-      date: "2024-12-22",
+
+      createdAt: "2024-12-22",
+
+      email: "jason@gmail.com",
+
+      customerId: "555666777",
     },
+
     {
       _id: "4",
-      author: "Tanya",
+
+      name: "Tanya",
+
       rating: 2,
+
       description: "Not what I expected tbh.",
-      date: "2024-11-15",
+
+      createdAt: "2024-11-15",
+
+      email: "tanya@gmail.com",
+
+      customerId: "444555666",
     },
+
     {
       _id: "5",
-      author: "Kabir",
+
+      name: "Kabir",
+
       rating: 1,
+
       description: "Terrible quality, do not buy!",
-      date: "2024-10-30",
+
+      createdAt: "2024-10-30",
+
+      email: "kabir@gmail.com",
+
+      customerId: "333444555",
     },
   ];
 
@@ -65,7 +108,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   function handleClick(mode = "add") {
     console.log("Entered handleClick with mode:", mode);
     const form = document.getElementById("reviewForm");
-
     const url = window.location.origin;
     console.log("url", url);
 
@@ -104,27 +146,26 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // add Event listner on edit  icon
 
-  reviewsList.addEventListener("click", (e) => {
-    const editBtn = e.target.closest(".edit-btn");
-    console.log(editBtn);
+  // reviewsList.addEventListener("click", (e) => {
+  //   const editBtn = e.target.closest(".edit-btn");
+  //   console.log(editBtn);
 
-    if (!editBtn) return;
+  //   if (!editBtn) return;
 
-    const reviews = editBtn.dataset.id;
+  //   const reviews = editBtn.dataset.id;
 
-    console.log(reviews, "review");
+  //   console.log(reviews, "review");
 
-    handleClick("edit");
-    openForm(reviews);
-  });
+  //   handleClick("edit");
+  //   openForm(reviews);
+  // });
 
   // function to get data
-  async function apidata() {
-    console.log("enter in apidata function");
-    console.log(
-      "---------------------------------------- my type is product ",
-      productIdliquid,
-    );
+  async function apidata(limit, filterType) {
+    console.log("limit", limit);
+    console.log("product type", productIdliquid);
+    console.log("filterType", filterType);
+    console.log("type", type);
 
     try {
       loding = true;
@@ -133,7 +174,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       console.log("product id ", productIdliquid);
       const response = await fetch(
-        `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=${type}&limit=${limit}&targetId=${productIdliquid}`,
+        `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=${type}&limit=${limit}&targetId=${productIdliquid}&filterType=${filterType}`,
         {
           method: "GET",
           headers: {
@@ -156,12 +197,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // check option of data
   if (ui.reviewSource === "dummy") {
+    // realdata = await apidata(limit, filterType);
+   
     realdata = dummydata;
+    console.log(ui.reviewSource, "in dummy ", realdata);
   } else if (ui.reviewSource === "real") {
-    realdata = await apidata();
+    realdata = await apidata(limit, filterType);
+    console.log(ui.reviewSource, " asdasds in real ", realdata);
+
+    // realdata = [];
   } else {
     realdata = [];
   }
+
+  console.log(realdata, "realdata 00000000000000");
 
   // highlite stars in form
   function getStarArray(rating) {
@@ -178,24 +227,48 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // pass filterd data
-  const parsedData = realdata.map((data) => {
-    const { name, rating, description, createdAt, _id, customerId, email } =
-      data;
+  function filterresponsedata(realdata) {
+    const parsedData = realdata.map((data) => {
+      const {
+        name,
+        rating,
+        description,
+        createdAt,
+        _id,
+        customerId,
+        email,
+        targetId,
+      } = data;
 
-    const date = createdAt.split("T")[0];
-    return {
-      name: name,
-      rating: Number(rating),
-      description,
-      date: date,
-      _id,
-      customerId,
-      email,
-    };
-  });
+      if (targetId == productIdliquid) {
+        console.log("button is disabled");
+
+        const writeReviewButtons =
+          document.getElementsByClassName("disablebutton");
+        Array.from(writeReviewButtons).forEach((button) => {
+          console.log("button is disabled");
+          button.setAttribute("disabled", true);
+        });
+      }
+
+      const date = createdAt.split("T")[0];
+      return {
+        name: name,
+        rating: Number(rating),
+        description,
+        date: date,
+        _id,
+        customerId,
+        email,
+      };
+    });
+    return parsedData;
+  }
+
+  const filterdReviews = filterresponsedata(realdata);
 
   //call renderReview Function to render all reviews
-  renderReviews(parsedData);
+  renderReviews(filterdReviews);
 
   async function openForm(id = "button") {
     const review = parsedData.find((r) => r._id == id);
@@ -220,13 +293,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log(list);
 
     if (loding) {
-      reviewsList.innerHTML = `
-      <div class="loader"></div>
-    `;
+    //   reviewsList.innerHTML = `
+    //   <div class="loader"></div>
+    // `;
 
       return;
     } else {
-      reviewsList.innerHTML = "";
+      // reviewsList.innerHTML = "";
 
       list.forEach((review) => {
         const avatar = review.name.trim().charAt(0).toUpperCase();
@@ -289,31 +362,96 @@ document.addEventListener("DOMContentLoaded", async () => {
           </div>
         </div>
       `;
+
         reviewsList.appendChild(reviewItem);
       });
+
+      if (list.length > 5) {
+        const button = document.createElement("button");
+        button.innerText = "Load More";
+
+        button.style.cssText = `
+              padding: 10px 18px;
+              margin-top: 20px;
+              border-radius: 8px;
+              border: 1px solid #d1d5db;
+              background: #f9fafb;
+              font-size: 15px;
+              font-weight: 500;
+              cursor: pointer;
+              transition: all 0.2s ease;
+              width: 150px;
+              align-self: center;
+              display: block;
+            `;
+
+        button.onmouseover = () => {
+          button.style.background = "#e5e7eb";
+        };
+
+        button.onmouseout = () => {
+          button.style.background = "#f9fafb";
+        };
+
+        button.addEventListener("click", () => pagination(limit));
+        reviewsList.appendChild(button);
+      }
     }
+  }
+
+  async function pagination(limit) {
+    console.log(limit, "befor");
+
+    limit = limit * 2;
+    console.log(limit, "afrer");
+
+    realdata = await apidata(limit, filterType);
+    const limitreview = filterresponsedata(realdata);
+
+    console.log("realdata with limit", limitreview);
+    renderReviews(limitreview);
   }
 
   window.renderReviews = renderReviews;
   // filter data according option
-  filterSelect.addEventListener("change", (e) => {
+  filterSelect.addEventListener("change", async (e) => {
     const selectedFilter = e.target.value.trim();
+    if (ui.reviewSource === "real") {
+      if (selectedFilter === "most_recent") {
+        filterType = "mostRecent";
 
-    let sortedList = [...parsedData];
+        realdata = await apidata(limit, filterType);
+        const limitreview = filterresponsedata(realdata);
+        console.log(type);
 
-    if (selectedFilter === "most_recent") {
-      sortedList.sort((a, b) => new Date(b.date) - new Date(a.date));
+        console.log("realdata with type", limitreview);
+        renderReviews(limitreview);
+      }
+
+      if (selectedFilter === "lowest") {
+        filterType = "lowestRating";
+
+        realdata = await apidata(limit, filterType);
+        const limitreview = filterresponsedata(realdata);
+        console.log(type);
+
+        console.log("realdata with type", limitreview);
+        renderReviews(limitreview);
+      }
+
+      if (selectedFilter === "highest") {
+        filterType = "highestRating";
+
+        realdata = await apidata(limit, filterType);
+        const limitreview = filterresponsedata(realdata);
+        console.log(type);
+
+        console.log("realdata with type", limitreview);
+        renderReviews(limitreview);
+      }
     }
 
-    if (selectedFilter === "lowest") {
-      sortedList.sort((a, b) => a.rating - b.rating);
-    }
-
-    if (selectedFilter === "highest") {
-      sortedList.sort((a, b) => b.rating - a.rating);
-    }
-
-    renderReviews(sortedList);
+    // renderReviews(sortedList);
   });
 
   const ratingSummary = async () => {
@@ -327,7 +465,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       );
       const resData = await res.json();
 
-      console.log("------------------------------- rating summary", resData);
+      // console.log("------------------------------- rating summary", resData);
       return resData.data || [];
     } catch (error) {
       console.error("Fetch meltdown:", error);
@@ -336,9 +474,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
   const reviewSummary = await ratingSummary();
-  console.log("--------------------------------------- summary", reviewSummary);
+  // console.log("--------------------------------------- summary", reviewSummary);
   const parent = document.querySelector(".costomeSummary");
-
+  console.log("parent ------0", parent);
+  if (reviewSummary.totalReview <= 0) {
+    const htmlFilter = document.getElementsByClassName("jm-sort-select ")[0];
+    htmlFilter.innerHTML = "";
+    parent.innerHTML = "";
+    return;
+  }
   parent.innerHTML = `
     <div class="center">
       <span class="star mainFontSize">${getStarArray(reviewSummary.avgRating)}</span> ${reviewSummary.avgRating} out of 5
@@ -347,7 +491,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
 
   reviewSummary?.reviews?.forEach((item) => {
-    console.log("my items --------------------- my items", item);
+    // console.log("my items --------------------- my items", item);
     const div = document.createElement("div");
     div.innerHTML = `
     <div class="jm-Stars-Progressbar">

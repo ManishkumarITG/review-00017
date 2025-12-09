@@ -37,22 +37,22 @@ export const sessionStorage = shopify.sessionStorage;
 
 
 
-let obj = {
-  "shop": "manish-kumaritg.myshopify.com",
-  "idType": "store",
-  "targetId": "manish-kumaritg.myshopify.com",
-  "customerId": "321",
-  "rating": 3,
-  "description": "fdgfgd",
-  "images": [
-    "image-url-example.jpg"
-  ],
-  "like": false,
-  "spam": false,
-  "froud": false,
-  "pinned": true,
-  "name": "stive rogers",
-  "email": "stive@gamil.com",
-  "createdAt": "2025-12-04T11:40:03.468Z",
-  "updatedAt": "2025-12-05T10:57:45.767Z",
-}
+// let obj = {
+//   "shop": "manish-kumaritg.myshopify.com",
+//   "idType": "store",
+//   "targetId": "manish-kumaritg.myshopify.com",
+//   "customerId": "321",
+//   "rating": 3,
+//   "description": "fdgfgd",
+//   "images": [
+//     "image-url-example.jpg"
+//   ],
+//   "like": false,
+//   "spam": false,
+//   "froud": false,
+//   "pinned": true,
+//   "name": "stive rogers",
+//   "email": "stive@gamil.com",
+//   "createdAt": "2025-12-04T11:40:03.468Z",
+//   "updatedAt": "2025-12-05T10:57:45.767Z",
+// }
