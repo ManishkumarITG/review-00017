@@ -36,13 +36,13 @@ import ColorPickerCircle from "./components/ColorPicker.jsx";
 
 import { useNavigate } from "react-router";
 import { useColorTheme } from "./ColorContext";
-import { SaveBar } from "@shopify/app-bridge-react";
+import { SaveBar, useAppBridge } from "@shopify/app-bridge-react";
 import Loding from "./components/Loding.jsx";
 import { arrowIcon } from "./icons/icon.jsx";
 
 export default function appStarRatting() {
   const nevigate = useNavigate();
-
+  const Shopify = useAppBridge() 
   const {
     getHexCode,
     setting,
@@ -59,9 +59,7 @@ export default function appStarRatting() {
   } = useColorTheme();
 
   const starColor = getHexCode("star");
-  const shopDomin = JSON.parse("".getItem("app-bridge-config")).shop.split(
-    ".",
-  )[0];
+  const shopDomin = shopify.config.shop.split(".")[0];
   const embedId = "03fdd7d0352cc3b1184544f7e2c783be";
 
   const handleChange = (newChecked, id) => {
