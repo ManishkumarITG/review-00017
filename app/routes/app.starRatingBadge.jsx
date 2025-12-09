@@ -58,7 +58,9 @@ export default function appStarRatting() {
   } = useColorTheme();
 
   const starColor = getHexCode("star");
-  const shopDomin = JSON.parse(sessionStorage.getItem('app-bridge-config')).shop.split(".")[0];
+  const shopDomin = JSON.parse("".getItem("app-bridge-config")).shop.split(
+    ".",
+  )[0];
   const embedId = "03fdd7d0352cc3b1184544f7e2c783be";
 
   const handleChange = (newChecked, id) => {
@@ -133,7 +135,17 @@ export default function appStarRatting() {
                     Add the Star Rating Badge on product pages.
                   </Text>
                   <InlineStack gap={300}>
-                    <Button icon={ArrowDiagonalIcon} onClick={() => window.open(`https://admin.shopify.com/store/${shopDomin}/themes/current/editor?context=apps&activateAppId=${embedId}/Product_review`, "_blank")}>Install</Button>
+                    <Button
+                      icon={ArrowDiagonalIcon}
+                      onClick={() =>
+                        window.open(
+                          `https://admin.shopify.com/store/${shopDomin}/themes/current/editor?context=apps&activateAppId=${embedId}/Product_review`,
+                          "_blank",
+                        )
+                      }
+                    >
+                      Install
+                    </Button>
                     <Button variant="plain" icon={ArrowDiagonalIcon}>
                       Learn more
                     </Button>
