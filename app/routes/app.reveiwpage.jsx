@@ -101,7 +101,7 @@ function IndexFiltersDefaultExample() {
       console.log("Search Results:", searchData);
     } catch (error) {
       console.error("Search API Error:", error);
-      shopify.toast.show(massage, {
+      shopify.toast.show(massage + 1, {
         duration: duration,
       });
 
@@ -144,15 +144,12 @@ function IndexFiltersDefaultExample() {
         }
       } catch (error) {
         console.log(error);
-        shopify.toast.show(massage, {
+        shopify.toast.show(massage +2, {
           duration: duration,
         });
 
       } finally {
-        setLoding(false);
-        shopify.toast.show(massage, {
-          duration: duration,
-        });
+        setLoding(false)
       }
     };
     console.log("hello query changes");
@@ -217,7 +214,7 @@ function IndexFiltersDefaultExample() {
         setReviews(filterData.items);
       } catch (error) {
         console.log(error);
-        shopify.toast.show(massage, {
+        shopify.toast.show(massage+5, {
           duration: duration,
         });
 
@@ -560,7 +557,6 @@ function IndexFiltersDefaultExample() {
               <IndexTable
                 itemCount={3}
                 resourceName={resourceName}
-                selectable={false}
                 headings={[
                   { title: "Customer" },
                   { title: "Created" },

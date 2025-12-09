@@ -56,16 +56,16 @@ export default function ReviewWidgets() {
     active,
     btnText,
     setBtnText,
+    shop
   } = useColorTheme();
-
+   console.log("-------shop----------------------" , shop);
+   
   // import all hex code
   const starColor = getHexCode("star");
   const textColor = getHexCode("text");
   const buttonColor = getHexCode("button");
   const buttonTextColor = getHexCode("buttonTextColor");
-  const shopDomin = JSON.parse(
-    sessionStorage.getItem("app-bridge-config"),
-  ).shop.split(".")[0];
+  const shopDomin = shop.split(".")[0];
   const embedId = "03fdd7d0352cc3b1184544f7e2c783be";
   const limit = 5;
   const massage = "Something Went wrong";
