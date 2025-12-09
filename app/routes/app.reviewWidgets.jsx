@@ -98,7 +98,6 @@ export default function ReviewWidgets() {
       shopify.toast.show(massage, {
         duration: duration,
       });
-
     }
   };
 

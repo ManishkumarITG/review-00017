@@ -560,6 +560,7 @@ function IndexFiltersDefaultExample() {
               <IndexTable
                 itemCount={3}
                 resourceName={resourceName}
+                selectable={false}
                 headings={[
                   { title: "Customer" },
                   { title: "Created" },
@@ -589,7 +590,6 @@ function IndexFiltersDefaultExample() {
                   allResourcesSelected ? "All" : selectedResources.length
                 }
                 onSelectionChange={handleSelectionChange}
-                selectable={loding ? false : true}
                 headings={
                   loding
                     ? []
@@ -626,7 +626,6 @@ function IndexFiltersDefaultExample() {
                 onClick={() => {
                   if (page < total / limit) {
                     setPage((prev) => prev + 1);
-                    // handleTapChange(selectedTAbIndex);
                   }
                 }}
               >
