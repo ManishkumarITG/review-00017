@@ -83,8 +83,7 @@ function IndexFiltersDefaultExample() {
     setQueryValue("");
   }, [selectedTab]);
 
-
-  const onHandleCancel = () => { };
+  const onHandleCancel = () => {};
 
   const fetchResults = async (value) => {
     if (value.trim() === "") {
@@ -104,10 +103,9 @@ function IndexFiltersDefaultExample() {
       shopify.toast.show(massage + 1, {
         duration: duration,
       });
-
     } finally {
       setLoding(false);
-    };
+    }
   };
 
   const handleUpdate = async (data) => {
@@ -123,7 +121,7 @@ function IndexFiltersDefaultExample() {
       setRefreshReviews((prev) => !prev);
     } catch (error) {
       console.log(error);
-      shopify.toast.show('Product saved', {
+      shopify.toast.show("Product saved", {
         duration: 5000,
       });
     } finally {
@@ -147,7 +145,6 @@ function IndexFiltersDefaultExample() {
         shopify.toast.show(massage +2, {
           duration: duration,
         });
-
       } finally {
         setLoding(false)
       }
@@ -190,7 +187,6 @@ function IndexFiltersDefaultExample() {
 
   const handleTapChange = useCallback(
     async (index) => {
-
       setSelectedTAbIndex(index);
 
       try {
@@ -217,7 +213,6 @@ function IndexFiltersDefaultExample() {
         shopify.toast.show(massage+5, {
           duration: duration,
         });
-
       } finally {
         setLoding(false);
       }
@@ -555,6 +550,7 @@ function IndexFiltersDefaultExample() {
 
             {loding ? (
               <IndexTable
+                selectable={false}
                 itemCount={3}
                 resourceName={resourceName}
                 headings={[

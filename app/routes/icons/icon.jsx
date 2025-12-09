@@ -68,7 +68,7 @@ const starIcon = (color) => (
     fill={color ? color : "#29ffd4"}
     stroke={color ? color : "#29ffd4"}
   >
-    <g id="SVGRepo_bgCarrier" stroke-width="0" />
+    <g id="SVGRepo_bgCarrier" strokeWidth="0" />
 
     <g
       id="SVGRepo_tracerCarrier"
