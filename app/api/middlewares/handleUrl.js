@@ -10,7 +10,7 @@ export const handleUrlData = (req) => {
   const skipValue = skip !== null ? Number(skip) : undefined;
   const targetId = url.searchParams.get("targetId");
   const filterType = url.searchParams.get("filterType");
-  console.log("--------------------- url", filterType);
+  console.log("--------------------- my limit", limit);
 
   return { idType, page, limit, type, skip, skipValue, targetId, filterType };
 };

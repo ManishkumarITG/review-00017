@@ -30,9 +30,13 @@ import { useNavigate } from "react-router";
 import { SaveBar } from "@shopify/app-bridge-react";
 import { getAllReviews, ratingSummary } from "./services/api.js";
 import { arrowIcon } from "./icons/icon.jsx";
+import { useAppBridge } from "@shopify/app-bridge-react";
+
 
 export default function ReviewWidgets() {
   // usenevigate for back to setting page
+
+  const shopify = useAppBridge();
 
   const nevigate = useNavigate();
 
@@ -64,6 +68,10 @@ export default function ReviewWidgets() {
   ).shop.split(".")[0];
   const embedId = "03fdd7d0352cc3b1184544f7e2c783be";
   const limit = 5;
+  const massage = "Something Went wrong";
+  const duration = 7000;
+
+
 
 
   const [total, setTotal] = useState(1)
@@ -87,6 +95,10 @@ export default function ReviewWidgets() {
       setAvgStarRating(data.data.avgRating);
     } catch (error) {
       console.log(error);
+      shopify.toast.show(massage, {
+        duration: duration,
+      });
+
     }
   };
 
@@ -102,6 +114,10 @@ export default function ReviewWidgets() {
       console.log("--------------------------- reviews res", resopanse.data.items)
       setReview(resopanse.data.items);
     } catch (error) {
+      shopify.toast.show(massage, {
+        duration: duration,
+      });
+
       console.log(error);
     } finally {
       setLoding(false);
