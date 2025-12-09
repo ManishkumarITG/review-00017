@@ -61,6 +61,7 @@ export default function ReviewWidgets() {
     btnText,
     setBtnText,
     isChange,
+    handleCheckeState,
   } = useColorTheme();
 
   // import all hex code
@@ -121,29 +122,10 @@ export default function ReviewWidgets() {
     }
   };
 
-  const handleCheckeState = (arr, id, newValue) => {
-    if (arr) {
-      for (const element of arr) {
-        console.log(element.settingName == id);
-        if (element.settingName == "Show text and stars") {
-          if (element.isChecked == newValue) {
-            handleDiscard("review_widgets");
-            return true;
-          }
-        } else if (element.settingName == id) {
-          if (element.isvalue == newValue) {
-            handleDiscard("review_widgets");
-            return true;
-          }
-        }
-      }
-    }
-    return false;
-  };
-
   const handleTextChnge = useCallback((newValue, id) => {
     const textSettingArray = setting?.text;
-    if (handleCheckeState(textSettingArray, id, newValue)) return;
+    if (handleCheckeState(textSettingArray, id, newValue, "review_widgets"))
+      return;
 
     console.log("hellow");
     dispatch({
@@ -154,10 +136,11 @@ export default function ReviewWidgets() {
     setIsChnage(true);
   }, []);
 
-  const handleChange = useCallback((newChecked) => {
-    const textSettingArray = setting?.text;
-    if (handleCheckeState(textSettingArray, "Show text and stars", newChecked))
+  const handleChange = useCallback((newChecked, id) => {
+    const textSettingArray = setting?.theme;
+    if (handleCheckeState(textSettingArray, id, newChecked, "review_widgets")) {
       return;
+    }
     setDateChecked(newChecked);
     shopify.saveBar.show("review_widgets");
     setIsChnage(true);
@@ -313,6 +296,7 @@ export default function ReviewWidgets() {
                                 label={theme.settingName}
                                 checked={dateChecked}
                                 onChange={handleChange}
+                                id={theme.settingName}
                               />
                             </Box>
                           </InlineStack>

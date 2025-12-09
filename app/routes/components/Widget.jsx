@@ -60,10 +60,10 @@ export default function Widget() {
       continue;
     }
     options.push(data);
-  };
+  }
   // useEffect(
   //   () => {
-    
+
   //     async function load() {
   //       const app = shopify.app;
 
@@ -73,7 +73,6 @@ export default function Widget() {
   //     load();
 
   //   }, [shopify])
-
 
   const rediectToThemeEditor = (index) => {
     const shopDomin = shopify.config.shop.split(".")[0];
@@ -132,9 +131,8 @@ export default function Widget() {
       >
         <InlineGrid gap="400" columns={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2 }}>
           {simplifiedMediaCardData.map((card, index) => (
-            <Box maxWidth="45 0px">
+            <Box maxWidth="45 0px" key={card.id}>
               <MediaCard
-                key={card.key}
                 title={
                   <Box
                     style={{
@@ -164,13 +162,13 @@ export default function Widget() {
                 }}
                 {...(index !== 2
                   ? {
-                    secondaryAction: {
-                      content: "install",
-                      onAction: () => {
-                        rediectToThemeEditor(index);
+                      secondaryAction: {
+                        content: "install",
+                        onAction: () => {
+                          rediectToThemeEditor(index);
+                        },
                       },
-                    },
-                  }
+                    }
                   : {})}
                 description={card.description}
               >

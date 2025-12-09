@@ -178,14 +178,12 @@ export const rattingArray = {
   avgRating: 4.2,
 };
 
-
-
 export const simplifiedMediaCardData = [
   {
     title: "Review Widget",
     description: "Collect and display product reviews on your product pages.",
     imageSrc: "https://pub-images.judge.me/judgeme/review-widget-2025",
-    key: 1,
+    id: 1,
     path: "/app/reviewWidgets",
   },
   {
@@ -193,7 +191,7 @@ export const simplifiedMediaCardData = [
     description:
       "Show the average rating of your products and how many reviews they've received.",
     imageSrc: "https://pub-images.judge.me/judgeme/star-rating-badge-2025",
-    key: 2,
+    id: 2,
     path: "/app/starRatingBadge",
   },
 
@@ -201,7 +199,7 @@ export const simplifiedMediaCardData = [
     title: "Write a Review",
     description: "A pre-installed widget to help your customers write reviews",
     imageSrc: "https://pub-images.judge.me/judgeme/write-review-card.webp",
-    key: 3,
+    id: 3,
     path: "/app/writeReview",
   },
 ];
