@@ -52,7 +52,7 @@ import pkg from "lodash";
 function IndexFiltersDefaultExample() {
   const shopify = useAppBridge();
   const { debounce } = pkg;
-  
+
   const { getHexCode } = useColorTheme();
 
   const starColor = getHexCode("star");
@@ -142,11 +142,11 @@ function IndexFiltersDefaultExample() {
         }
       } catch (error) {
         console.log(error);
-        shopify.toast.show(massage , {
+        shopify.toast.show(massage, {
           duration: duration,
         });
       } finally {
-        setLoding(false)
+        setLoding(false);
       }
     };
     console.log("hello query changes");
@@ -307,7 +307,19 @@ function IndexFiltersDefaultExample() {
 
   const rowMarkup = reviews.map(
     (
-      { _id, name, item, time, rating, description, email, spam, like, pinned },
+      {
+        _id,
+        name,
+        item,
+        time,
+        rating,
+        updatedAt,
+        description,
+        email,
+        spam,
+        like,
+        pinned,
+      },
       index,
     ) => (
       <IndexTable.Row
@@ -365,7 +377,7 @@ function IndexFiltersDefaultExample() {
             </InlineStack>
           </BlockStack>
         </IndexTable.Cell>
-        <IndexTable.Cell> {time}</IndexTable.Cell>
+        <IndexTable.Cell> {time || updatedAt.split("T")[0]}</IndexTable.Cell>
         <IndexTable.Cell>
           <BlockStack>
             <Box>

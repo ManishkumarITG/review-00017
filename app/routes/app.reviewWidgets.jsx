@@ -61,6 +61,7 @@ export default function ReviewWidgets() {
     btnText,
     setBtnText,
     isChange,
+    handleCheckeState,
   } = useColorTheme();
 
   // import all hex code
@@ -106,15 +107,10 @@ export default function ReviewWidgets() {
     const { limit, page, filterType } = data;
     try {
       setLoding(true);
-      console.log("------------------------------ filtertype", filterType);
       const resopanse = await getAllReviews(page, limit, filterType);
       await summary();
       setTotal(resopanse.data.total);
       console.log(resopanse);
-      console.log(
-        "--------------------------- reviews res",
-        resopanse.data.items,
-      );
       setReview(resopanse.data.items);
     } catch (error) {
       shopify.toast.show(massage, {
@@ -128,6 +124,11 @@ export default function ReviewWidgets() {
   };
 
   const handleTextChnge = useCallback((newValue, id) => {
+    const textSettingArray = setting?.text;
+    if (handleCheckeState(textSettingArray, id, newValue, "review_widgets"))
+      return;
+
+    console.log("hellow");
     dispatch({
       field: id,
       value: newValue,
@@ -136,7 +137,11 @@ export default function ReviewWidgets() {
     setIsChnage(true);
   }, []);
 
-  const handleChange = useCallback((newChecked) => {
+  const handleChange = useCallback((newChecked, id) => {
+    const textSettingArray = setting?.theme;
+    if (handleCheckeState(textSettingArray, id, newChecked, "review_widgets")) {
+      return;
+    }
     setDateChecked(newChecked);
     shopify.saveBar.show("review_widgets");
     setIsChnage(true);
@@ -284,6 +289,7 @@ export default function ReviewWidgets() {
                                 label={theme.settingName}
                                 checked={dateChecked}
                                 onChange={handleChange}
+                                id={theme.settingName}
                               />
                             </Box>
                           </InlineStack>

@@ -39,10 +39,12 @@ import { useColorTheme } from "./ColorContext";
 import { SaveBar, useAppBridge } from "@shopify/app-bridge-react";
 import Loding from "./components/Loding.jsx";
 import { arrowIcon } from "./icons/icon.jsx";
+import { useEffect, useState } from "react";
 
 export default function appStarRatting() {
   const nevigate = useNavigate();
-  const Shopify = useAppBridge() 
+  const shopify = useAppBridge();
+  const [shopDomin, setShopDomain] = useState("");
   const {
     getHexCode,
     setting,
@@ -50,24 +52,33 @@ export default function appStarRatting() {
     handleDiscard,
     lodaing,
     state,
-    dispatch,
     toggleActive,
     active,
     btnText,
     setBtnText,
     isChange,
+    handleCheckeState,
+    checkStar,
+    setCheckStar,
   } = useColorTheme();
 
   const starColor = getHexCode("star");
+
+  useEffect(() => {
+    const myShopDomin = shopify.config.shop.split(".")[0];
+    setShopDomain(myShopDomin);
+  }, []);
   const embedId = "03fdd7d0352cc3b1184544f7e2c783be";
-  const shopDomin = shopify.config.shop.split(".")[0]
 
   const handleChange = (newChecked, id) => {
-    console.log(newChecked, id);
-    dispatch({
-      field: id,
-      value: newChecked,
-    });
+    const themeSettingArray = setting?.text;
+    if (
+      handleCheckeState(themeSettingArray, id, newChecked, "review_widgets")
+    ) {
+      console.log("true ho gaya");
+      return;
+    }
+    setCheckStar(newChecked);
     shopify.saveBar.show("review_widgets");
   };
 
@@ -176,7 +187,7 @@ export default function appStarRatting() {
                         text.type == "ChoiceList" && (
                           <Box paddingInline="200" key={text._id}>
                             <Checkbox
-                              checked={state[text.settingName]}
+                              checked={checkStar}
                               label={text.settingName}
                               id={text.settingName}
                               onChange={handleChange}
@@ -308,7 +319,7 @@ export default function appStarRatting() {
                             <StarRating rating={5} color={starColor} />
                           )}{" "}
                           <Text variant="headingMd" as="span">
-                            {state["Show text and stars"] && "123 reviews"}
+                            {checkStar && "123 reviews"}
                           </Text>
                         </InlineStack>
 

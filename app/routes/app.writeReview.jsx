@@ -66,6 +66,8 @@ export default function ReviewWidgets() {
     lodaing,
     state,
     dispatch,
+    handleCheckeState,
+    setIsChnage,
   } = useColorTheme();
 
   // import all hex code
@@ -101,6 +103,9 @@ export default function ReviewWidgets() {
   };
 
   const handleTextChnge = useCallback((newValue, id) => {
+    const textSettingArray = setting?.text;
+    if (handleCheckeState(textSettingArray, id, newValue, "review_widgets"))
+      return;
     dispatch({
       field: id,
       value: newValue,
@@ -223,7 +228,6 @@ export default function ReviewWidgets() {
                                 value={state[titelValue]}
                                 id={text.settingName}
                                 onChange={handleTextChnge}
-                                autoComplete="off"
                                 placeholder="Customer Reviews"
                               />
                             </Box>
