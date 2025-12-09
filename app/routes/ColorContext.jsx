@@ -45,6 +45,7 @@ export const ColorProvider = ({ children }) => {
   const [shop, setShop] = useState("");
   const [active, setActive] = useState(null);
   const [btnText, setBtnText] = useState("Sempal Data");
+  const [getData, setGetData] = useState(false);
 
   const [colors, setColors] = useState({});
 
@@ -253,6 +254,7 @@ export const ColorProvider = ({ children }) => {
     } finally {
       setLodaing(null);
       setIsChnage(false);
+      setGetData((p) => !p);
     }
   };
 
@@ -304,7 +306,7 @@ export const ColorProvider = ({ children }) => {
       });
     }
     setColorData();
-  }, []);
+  }, [getData]);
 
   const value = {
     colors,

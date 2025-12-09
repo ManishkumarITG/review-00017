@@ -13,7 +13,10 @@ import {
 import "./style.css";
 import { simplifiedMediaCardData } from "../data/reviewData";
 import { useNavigate } from "react-router";
+import { useColorTheme } from "../ColorContext";
+
 export default function Widget() {
+  const { shop } = useColorTheme();
   const [selected, setSelected] = useState("");
   const [themeList, setThemeList] = useState([]);
   const handleSelectChange = useCallback((value) => setSelected(value), []);
@@ -59,9 +62,7 @@ export default function Widget() {
   }
 
   const rediectToThemeEditor = (index) => {
-    const shopDomin = JSON.parse(
-      sessionStorage.getItem("app-bridge-config"),
-    ).shop.split(".")[0];
+    const shopDomin = shop.split(".")[0];
     let url = "";
     const current = selected || "current";
     const embedId = "03fdd7d0352cc3b1184544f7e2c783be";
