@@ -1,5 +1,6 @@
 import React, {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useReducer,
@@ -44,6 +45,7 @@ export const ColorProvider = ({ children }) => {
   const [shop, setShop] = useState("");
   const [active, setActive] = useState(null);
   const [btnText, setBtnText] = useState("Sempal Data");
+  const [getData, setGetData] = useState(false);
 
   const [colors, setColors] = useState({});
 
@@ -161,8 +163,9 @@ export const ColorProvider = ({ children }) => {
   };
 
   const handleSave = async (islodaing, savBarId) => {
-    setLodaing(islodaing);
     try {
+      setLodaing(islodaing);
+      setIsChnage(true);
       const res = await fetch("/api/routes/app/setting/updateByTitle", {
         method: "POST",
         body: JSON.stringify({
@@ -246,11 +249,12 @@ export const ColorProvider = ({ children }) => {
       const resData = await res.json();
       console.log("hello world", resData);
       shopify.saveBar.hide(savBarId);
-      setIsChnage(false);
     } catch (error) {
       console.log(error);
     } finally {
       setLodaing(null);
+      setIsChnage(false);
+      setGetData((p) => !p);
     }
   };
 
@@ -278,6 +282,8 @@ export const ColorProvider = ({ children }) => {
 
       const colorSettingData = await getColorSetting();
 
+      console.log("new setttings", colorSettingData);
+
       const settigngObj = colorSettingData.data.sectionSettings;
       const newShop = colorSettingData.data.shop;
 
@@ -300,7 +306,7 @@ export const ColorProvider = ({ children }) => {
       });
     }
     setColorData();
-  }, []);
+  }, [getData]);
 
   const value = {
     colors,

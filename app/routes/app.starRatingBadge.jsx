@@ -55,6 +55,7 @@ export default function appStarRatting() {
     active,
     btnText,
     setBtnText,
+    isChange,
   } = useColorTheme();
 
   const starColor = getHexCode("star");
@@ -72,8 +73,14 @@ export default function appStarRatting() {
     shopify.saveBar.show("review_widgets");
   };
 
-  const handlePageChange = () => {
-    nevigate("/app/mySettingPage");
+  const handlePageChange = async () => {
+    if (isChange) {
+      console.log("is page changes", isChange);
+      shopify.saveBar.leaveConfirmation();
+    } else {
+      console.log("page changes");
+      nevigate("/app/mySettingPage");
+    }
   };
 
   return (
