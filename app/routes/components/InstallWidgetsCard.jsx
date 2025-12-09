@@ -21,7 +21,7 @@ function InstallWidgetsCard({
   const handleChange = useCallback((value) => {
     setSelected(value)
     setOpen(prev => !prev);
-  },[]);
+  }, []);
 
   return (
     <Box>
@@ -42,29 +42,28 @@ function InstallWidgetsCard({
           <BlockStack gap="300">
             <Text>{description}</Text>
 
-           <InlineStack gap="300">
-  {buttons.map((btn, index) => (
-    btn.tone === "plain" ? (
-      <Link key={index} onClick={btn.onClick}>
-        {btn.label}
-      </Link>
-    ) : (
-      <Button
-        key={index}
-        variant={btn.variant}
-        tone={btn.tone}
-        onClick={btn.onClick || (() => {})}
-      >
-        {btn.label}
-      </Button>
-    )
-  ))}
-</InlineStack>
-
-        </BlockStack>
+            <InlineStack gap="300">
+              {buttons.map((btn, index) => (
+                btn.tone === "plain" ? (
+                  <Link key={index} onClick={btn.onClick}>
+                    {btn.label}
+                  </Link>
+                ) : (
+                  <Button
+                    key={index}
+                    variant={btn.variant}
+                    tone={btn.tone}
+                    onClick={btn.onClick || (() => { })}
+                  >
+                    {btn.label}
+                  </Button>
+                )
+              ))}
+            </InlineStack>
+          </BlockStack>
         </Box>
-  )
-}
+      )
+      }
     </Box >
   );
 }
