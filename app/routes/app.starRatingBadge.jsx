@@ -59,8 +59,8 @@ export default function appStarRatting() {
   } = useColorTheme();
 
   const starColor = getHexCode("star");
-  const shopDomin = shopify.config.shop.split(".")[0];
   const embedId = "03fdd7d0352cc3b1184544f7e2c783be";
+  const shopDomin = shopify.config.shop.split(".")[0]
 
   const handleChange = (newChecked, id) => {
     console.log(newChecked, id);

@@ -1,21 +1,10 @@
-// {
-//   "ratings": {
-//     "stars": {
-//       "label": "Ratings"
-//     },
-//     "home": {
-//       "recommendationText": "Recommended Product!"
-//     }
-//   }
-// }
+
 
 {
-  "ratings": {
-    "stars": {
-      "label": "Ratings"
-    },
-    "home": {
-      "recommendationText": "Recommended Product!"
-    }
+  "Dashboard": {
+    "Task_progress": "3 of 6 tasks complete",
+    "setUp": "Setup guide",
+    "setUp_description": "We'll guide you through importing your reviews and show you how to transfer them to your preferred review app.",
+    "products": "Top products"
   }
 }
