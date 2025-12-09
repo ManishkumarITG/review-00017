@@ -10,4 +10,4 @@ function DeshboardHeader() {
         </Page>)
 }
 
-export default DeshboardHeader
+export default DeshboardHeader;
