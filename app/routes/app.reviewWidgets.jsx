@@ -69,7 +69,6 @@ export default function ReviewWidgets() {
   const textColor = getHexCode("text");
   const buttonColor = getHexCode("button");
   const buttonTextColor = getHexCode("buttonTextColor");
-  const shopDomin = shopify.config.shop.split(".")[0];
   const embedId = "03fdd7d0352cc3b1184544f7e2c783be";
   const limit = 5;
   const massage = "Something Went wrong";
@@ -82,9 +81,11 @@ export default function ReviewWidgets() {
   const [rattingSummary, setRattingSummary] = useState(rattingArray.reviews);
   const [totalReview, setTotalReview] = useState(rattingArray.totalReview);
   const [avgStarRating, setAvgStarRating] = useState(rattingArray.avgRating);
-
+ const [shopDomin, setShopDomain] = useState("")
   useEffect(() => {
     setBtnText("Sample Data");
+    const shopDomin = shopify.config.shop.split(".")[0];
+    setShopDomain(shopDomin);
   }, []);
 
   const summary = async () => {
@@ -230,14 +231,6 @@ export default function ReviewWidgets() {
                         Learn more
                       </Button>
                     </InlineStack>
-                    <s-divider />
-
-                    <Text>
-                      Add the Star Rating Badge on collection pages (optional):
-                    </Text>
-                    <Link monochrome url="#">
-                      See guide ↗
-                    </Link>
                   </BlockStack>
                 </Box>
 

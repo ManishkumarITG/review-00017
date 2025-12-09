@@ -77,7 +77,7 @@ export const action = async ({ request }) => {
 
     const { path, shop } = await authenticateUser(request);
 
-    console.log(
+    console.log( 
       "----------------------------------- path , data , shop",
       path,
       data,
