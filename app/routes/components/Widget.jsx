@@ -25,13 +25,13 @@ const {shop} = useColorTheme()
   const [themeList, setThemeList] = useState([])
   const handleSelectChange = useCallback((value) => setSelected(value), []);
 
-  const app = useAppBridge();
+  const shopify = useAppBridge();
   const nevigate = useNavigate();
 
 
   useEffect(() => {
     async function getThemes() {
-      const url = window.location.origin
+      const url = window.location.origin;
       console.log(url);
 
       try {
@@ -69,9 +69,15 @@ const {shop} = useColorTheme()
     }
     options.push(data);
   };
+  useEffect(
+    ()=>{
+      console.log("shopify---------------------------------------------------" , shopify.app.extensions());
+    },[]
+  )
+  
 
   const rediectToThemeEditor = (index) => {
-    const shopDomin = shop.split(".")[0];
+    const shopDomin = shopify.config.shop.split(".")[0];
     let url = "";
     const current = selected || "current";
     const embedId = "03fdd7d0352cc3b1184544f7e2c783be";
