@@ -134,16 +134,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log("product id ", productIdliquid);
       const response = await fetch(
         `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=${type}&limit=${limit}&targetId=${productIdliquid}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
       );
 
       const data = await response.json();
-      console.log("--------------------------- res data", data.data);
+      console.log("--------------------------- res my filters data", data.data);
 
       return data?.data?.items;
     } catch (error) {
@@ -154,14 +148,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // check option of data
-  if (ui.reviewSource === "dummy") {
-    realdata = dummydata;
-  } else if (ui.reviewSource === "real") {
-    realdata = await apidata();
-  } else {
-    realdata = [];
-  }
+  realdata = await apidata();
 
   // highlite stars in form
   function getStarArray(rating) {
@@ -182,7 +169,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const { name, rating, description, createdAt, _id, customerId, email } =
       data;
 
-    const date = createdAt.split("T")[0];
+    const date = createdAt;
     return {
       name: name,
       rating: Number(rating),

@@ -54,38 +54,39 @@
           Customer Reviews
         </h2>
         <div>
-          <div style=" align-items:center; gap:0px; flex-direction:row;">
-            <span
+          {% if request.design_mode == true %}
+            <div style=" align-items:center; gap:0px; flex-direction:row;">
+              <span
+                style="
+                  color: {{block.settings.star_color}};
+                  {% comment %} font-size: {{block.settings.star_size}}px; {% endcomment %}
+                  display:flex;
+                  gap:8px;
+                  align-items:center;
+                "
+              >
+                {% render 'stars', rating: actual_rating %}
+                <span style="font-weight:normal; color:black; font-size:14px;">{{ actual_rating }} out of 5</span>
+              </span>
+            </div>
+            <span>Based on 15 reviews</span>
+            <button
+              class="jm-write button"
               style="
-                color: {{block.settings.star_color}};
-                {% comment %} font-size: {{block.settings.star_size}}px; {% endcomment %}
-                display:flex;
-                gap:8px;
-                align-items:center;
+                background: #388B7F;
+                color: white;
+                margin: 10px 0;
+                width: 100%;
               "
+              {% comment %} onclick="handleClick()" {% endcomment %}
             >
-              {% render 'stars', rating: actual_rating %}
-              <span style="font-weight:normal; color:black; font-size:14px;">{{ actual_rating }} out of 5</span>
-            </span>
-          </div>
-          <span>Based on 15 reviews</span>
+              Write a review
+            </button>
+          {% endif %}
         </div>
-        <div class="reviewSummry"></div>
       </div>
       <div class="jm-actions">
-        <button
-          class="jm-write button"
-          style="
-            background: #388B7F;
-            color: white;
-            margin: 10px 0;
-            width: 100%;
-          "
-          {% comment %} onclick="handleClick()" {% endcomment %}
-        >
-          Write a review
-        </button>
-
+        <div class="costomeSummary"></div>
         <div class="jm-sort">
           <select class="jm-sort-select star">
             <option value="most_recent">Most Recent</option>
@@ -93,11 +94,15 @@
             <option value="lowest">Lowest Rating</option>
           </select>
         </div>
+        <div
+          id="reviewsList"
+          style="display:flex; flex-direction:column; gap:18px; margin-top:20px; position: relative;"
+        ></div>
       </div>
 
       <div
         id="reviewsList"
-        style="display:flex; flex-direction:column; gap:18px; margin-top:20px;     position: relative;"
+        style="display:flex; flex-direction:column; gap:18px; margin-top:20px; position: relative;"
       ></div>
     {% elsif block.settings.review_source == 'real' %}
       <div
