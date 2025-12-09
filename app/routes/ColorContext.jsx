@@ -299,9 +299,16 @@ export const ColorProvider = ({ children }) => {
       // add text in state
       settigngObj.text?.forEach((text) => {
         if (text.type == "ChoiceList") {
-          initialState[text.settingName] = text.isChecked;
+          console.log("data checkde");
+          dispatch({
+            field: text.settingName,
+            value: text.isChecked,
+          });
         } else {
-          initialState[text.settingName] = text.isvalue;
+          dispatch({
+            field: text.settingName,
+            value: text.isvalue,
+          });
         }
       });
     }
