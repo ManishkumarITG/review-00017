@@ -52,7 +52,6 @@ export default function appStarRatting() {
     handleDiscard,
     lodaing,
     state,
-    dispatch,
     toggleActive,
     active,
     btnText,
@@ -320,7 +319,7 @@ export default function appStarRatting() {
                             <StarRating rating={5} color={starColor} />
                           )}{" "}
                           <Text variant="headingMd" as="span">
-                            {state["Show text and stars"] && "123 reviews"}
+                            {checkStar && "123 reviews"}
                           </Text>
                         </InlineStack>
 
