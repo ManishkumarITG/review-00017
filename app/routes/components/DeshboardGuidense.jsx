@@ -7,13 +7,13 @@ import {
   Popover,
   ActionList,
   Button,
+  Divider,
   Box,
 } from "@shopify/polaris";
 // import icon from @shopify/polarise-icons
 import {
   MenuHorizontalIcon,
 } from "@shopify/polaris-icons";
-import { useTranslation } from "react-i18next";
 import '@shopify/polaris/build/esm/styles.css';
 
 import { useNavigate } from "react-router";
@@ -28,7 +28,6 @@ function DashboardGuidance() {
   const [shopDomin, setShopDomain] = useState("")
   const shopify = useAppBridge()
 
-  const {t} = useTranslation()
   const embedId = "03fdd7d0352cc3b1184544f7e2c783be";
   const navigate = useNavigate();
 
@@ -79,13 +78,15 @@ function DashboardGuidance() {
     },
   ];
 
+  
+
   return (
     <Card roundedAbove="sm">
       <BlockStack gap="200">
         {/* Top row: progress + menu */}
         <InlineGrid columns="1fr auto" padding="@container(inline-size >500px) large-400,small">
           <Text as="span" variant="bodySm">
-            {t("Dashboard.Task_progress")}
+            3 of 6 tasks complete
           </Text>
 
           <InlineGrid columns="auto auto" gap="100">
