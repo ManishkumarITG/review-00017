@@ -1,6 +1,6 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 import { ColorProvider } from "./routes/ColorContext";
-import "./i18n"
+// import "./i18n"
 
 export default function App() {
   return (
