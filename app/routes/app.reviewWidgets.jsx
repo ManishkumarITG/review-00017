@@ -63,7 +63,6 @@ export default function ReviewWidgets() {
     isChange,
     shop,
   } = useColorTheme();
-  console.log("-------shop----------------------", shop);
 
   // import all hex code
   const starColor = getHexCode("star");
@@ -107,15 +106,10 @@ export default function ReviewWidgets() {
     const { limit, page, filterType } = data;
     try {
       setLoding(true);
-      console.log("------------------------------ filtertype", filterType);
       const resopanse = await getAllReviews(page, limit, filterType);
       await summary();
       setTotal(resopanse.data.total);
       console.log(resopanse);
-      console.log(
-        "--------------------------- reviews res",
-        resopanse.data.items,
-      );
       setReview(resopanse.data.items);
     } catch (error) {
       shopify.toast.show(massage, {
@@ -128,7 +122,31 @@ export default function ReviewWidgets() {
     }
   };
 
+  const handleCheckeState = (arr, id, newValue) => {
+    if (arr) {
+      for (const element of arr) {
+        console.log(element.settingName == id);
+        if (element.settingName == "Show text and stars") {
+          if (element.isChecked == newValue) {
+            handleDiscard("review_widgets");
+            return true;
+          }
+        } else if (element.settingName == id) {
+          if (element.isvalue == newValue) {
+            handleDiscard("review_widgets");
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  };
+
   const handleTextChnge = useCallback((newValue, id) => {
+    const textSettingArray = setting?.text;
+    if (handleCheckeState(textSettingArray, id, newValue)) return;
+
+    console.log("hellow");
     dispatch({
       field: id,
       value: newValue,
@@ -138,6 +156,9 @@ export default function ReviewWidgets() {
   }, []);
 
   const handleChange = useCallback((newChecked) => {
+    const textSettingArray = setting?.text;
+    if (handleCheckeState(textSettingArray, "Show text and stars", newChecked))
+      return;
     setDateChecked(newChecked);
     shopify.saveBar.show("review_widgets");
     setIsChnage(true);

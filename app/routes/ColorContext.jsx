@@ -343,6 +343,7 @@ export const ColorProvider = ({ children }) => {
     setActive,
     btnText,
     setBtnText,
+    initialState,
   };
 
   return (
