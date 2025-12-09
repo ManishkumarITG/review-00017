@@ -238,9 +238,9 @@ export default function Deshboard() {
                                           rating={review.rating}
                                           color={starColor}
                                         />
-                                        <Text tone="subdued">
+                                        {/* <Text tone="subdued">
                                           {review.createdAt.split("T")[0]}
-                                        </Text>
+                                        </Text> */}
                                       </InlineStack>
 
                                       <Box>

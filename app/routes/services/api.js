@@ -110,7 +110,6 @@ export const createSettings = async () => {
 
 export const getAllReviews = async (page = 1, limit = 5, filterType) => {
   try {
-    console.log("-----------------------------------------------", filterType);
     const res = await fetch(
       `/api/routes/app/reviewproduct/getAllReviews?limit=${limit}&page=${page}&filterType=${filterType}`,
     );

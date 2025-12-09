@@ -20,7 +20,12 @@ import "@shopify/polaris/build/esm/styles.css";
 import Ratting from "./components/Ratting.jsx";
 import { useColorTheme } from "./ColorContext";
 import { useCallback, useEffect, useState } from "react";
-import { ArrowDiagonalIcon, ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "@shopify/polaris-icons";
+import {
+  ArrowDiagonalIcon,
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "@shopify/polaris-icons";
 import CustomProgressBar from "./components/CustomProgressBar.jsx";
 import { rattingArray, reviews } from "./data/reviewData.js";
 import ColorPickerCircle from "./components/ColorPicker.jsx";
@@ -31,7 +36,6 @@ import { SaveBar } from "@shopify/app-bridge-react";
 import { getAllReviews, ratingSummary } from "./services/api.js";
 import { arrowIcon } from "./icons/icon.jsx";
 import { useAppBridge } from "@shopify/app-bridge-react";
-
 
 export default function ReviewWidgets() {
   // usenevigate for back to setting page
@@ -56,6 +60,8 @@ export default function ReviewWidgets() {
     active,
     btnText,
     setBtnText,
+    isChange,
+    handleCheckeState,
   } = useColorTheme();
 
   // import all hex code
@@ -63,19 +69,14 @@ export default function ReviewWidgets() {
   const textColor = getHexCode("text");
   const buttonColor = getHexCode("button");
   const buttonTextColor = getHexCode("buttonTextColor");
-  const shopDomin = JSON.parse(
-    sessionStorage.getItem("app-bridge-config"),
-  ).shop.split(".")[0];
+  const shopDomin = shopify.config.shop.split(".")[0];
   const embedId = "03fdd7d0352cc3b1184544f7e2c783be";
   const limit = 5;
   const massage = "Something Went wrong";
   const duration = 7000;
 
-
-
-
-  const [total, setTotal] = useState(1)
-  const [page, setPage] = useState(1)
+  const [total, setTotal] = useState(1);
+  const [page, setPage] = useState(1);
   const [review, setReview] = useState(reviews);
   const [loding, setLoding] = useState(false);
   const [rattingSummary, setRattingSummary] = useState(rattingArray.reviews);
@@ -98,7 +99,6 @@ export default function ReviewWidgets() {
       shopify.toast.show(massage, {
         duration: duration,
       });
-
     }
   };
 
@@ -106,12 +106,10 @@ export default function ReviewWidgets() {
     const { limit, page, filterType } = data;
     try {
       setLoding(true);
-      console.log("------------------------------ filtertype", filterType);
       const resopanse = await getAllReviews(page, limit, filterType);
       await summary();
-      setTotal(resopanse.data.total)
+      setTotal(resopanse.data.total);
       console.log(resopanse);
-      console.log("--------------------------- reviews res", resopanse.data.items)
       setReview(resopanse.data.items);
     } catch (error) {
       shopify.toast.show(massage, {
@@ -125,6 +123,11 @@ export default function ReviewWidgets() {
   };
 
   const handleTextChnge = useCallback((newValue, id) => {
+    const textSettingArray = setting?.text;
+    if (handleCheckeState(textSettingArray, id, newValue, "review_widgets"))
+      return;
+
+    console.log("hellow");
     dispatch({
       field: id,
       value: newValue,
@@ -133,7 +136,11 @@ export default function ReviewWidgets() {
     setIsChnage(true);
   }, []);
 
-  const handleChange = useCallback((newChecked) => {
+  const handleChange = useCallback((newChecked, id) => {
+    const textSettingArray = setting?.theme;
+    if (handleCheckeState(textSettingArray, id, newChecked, "review_widgets")) {
+      return;
+    }
     setDateChecked(newChecked);
     shopify.saveBar.show("review_widgets");
     setIsChnage(true);
@@ -141,7 +148,13 @@ export default function ReviewWidgets() {
 
   // handle page change
   const handlePageChange = async () => {
-    nevigate("/app/mySettingPage");
+    if (isChange) {
+      console.log("is page changes", isChange);
+      shopify.saveBar.leaveConfirmation();
+    } else {
+      console.log("page changes");
+      nevigate("/app/mySettingPage");
+    }
   };
 
   return (
@@ -202,7 +215,17 @@ export default function ReviewWidgets() {
                       Add the Star Rating Badge on product pages.
                     </Text>
                     <InlineStack gap={300}>
-                      <Button icon={ArrowDiagonalIcon} onClick={() => window.open(`https://admin.shopify.com/store/${shopDomin}/themes/current/editor?context=apps&activateAppId=${embedId}/Product_review`, "_blank")}>Install</Button>
+                      <Button
+                        icon={ArrowDiagonalIcon}
+                        onClick={() =>
+                          window.open(
+                            `https://admin.shopify.com/store/${shopDomin}/themes/current/editor?context=apps&activateAppId=${embedId}/Product_review`,
+                            "_blank",
+                          )
+                        }
+                      >
+                        Install
+                      </Button>
                       <Button variant="plain" icon={ArrowDiagonalIcon}>
                         Learn more
                       </Button>
@@ -273,6 +296,7 @@ export default function ReviewWidgets() {
                                 label={theme.settingName}
                                 checked={dateChecked}
                                 onChange={handleChange}
+                                id={theme.settingName}
                               />
                             </Box>
                           </InlineStack>
@@ -566,44 +590,43 @@ export default function ReviewWidgets() {
                   ) : (
                     <Loding />
                   )}
-                  {(total > limit && btnText == "Real Data" && !loding) &&
+                  {total > limit && btnText == "Real Data" && !loding && (
                     <Card>
                       <InlineStack gap="800" align="center" blockAlign="center">
                         <Box
-                          style={{ border: "2px solid #ccc", padding: "4px 8px 0 8px" }}
+                          style={{
+                            border: "2px solid #ccc",
+                            padding: "4px 8px 0 8px",
+                          }}
                           onClick={() => {
                             if (page > 1) {
                               setPage((prev) => prev - 1);
                               handleRealData({ limit: limit, page: page });
-
                             }
-                          }}>
-                          <Button
-                            variant="plain"
-
-                            icon={ChevronLeftIcon}
-                          />
+                          }}
+                        >
+                          <Button variant="plain" icon={ChevronLeftIcon} />
                         </Box>
                         <Box as="span" style={{ color: "#535353ff" }}>
                           Showing page {page} to {review.length} out of {total}
                         </Box>
                         <Box
-                          style={{ border: "2px solid #ccc", padding: "4px 8px 0 8px" }}
+                          style={{
+                            border: "2px solid #ccc",
+                            padding: "4px 8px 0 8px",
+                          }}
                           onClick={() => {
                             if (page < total / limit) {
                               setPage((prev) => prev + 1);
-                              handleRealData({ limit: limit, page: page })
+                              handleRealData({ limit: limit, page: page });
                             }
                           }}
                         >
-                          <Button
-                            variant="plain"
-                            icon={ChevronRightIcon}
-                          />
+                          <Button variant="plain" icon={ChevronRightIcon} />
                         </Box>
                       </InlineStack>
                     </Card>
-                  }
+                  )}
                 </Box>
               </Box>
             </Box>

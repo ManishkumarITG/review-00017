@@ -147,9 +147,6 @@ function IndexFiltersDefaultExample() {
         });
       } finally {
         setLoding(false);
-        shopify.toast.show(massage, {
-          duration: duration,
-        });
       }
     };
     console.log("hello query changes");
@@ -310,7 +307,19 @@ function IndexFiltersDefaultExample() {
 
   const rowMarkup = reviews.map(
     (
-      { _id, name, item, time, rating, description, email, spam, like, pinned },
+      {
+        _id,
+        name,
+        item,
+        time,
+        rating,
+        updatedAt,
+        description,
+        email,
+        spam,
+        like,
+        pinned,
+      },
       index,
     ) => (
       <IndexTable.Row
@@ -368,7 +377,7 @@ function IndexFiltersDefaultExample() {
             </InlineStack>
           </BlockStack>
         </IndexTable.Cell>
-        <IndexTable.Cell> {time}</IndexTable.Cell>
+        <IndexTable.Cell> {time || updatedAt.split("T")[0]}</IndexTable.Cell>
         <IndexTable.Cell>
           <BlockStack>
             <Box>
@@ -585,7 +594,6 @@ function IndexFiltersDefaultExample() {
                   allResourcesSelected ? "All" : selectedResources.length
                 }
                 onSelectionChange={handleSelectionChange}
-                selectable={loding ? false : true}
                 headings={
                   loding
                     ? []
@@ -622,7 +630,6 @@ function IndexFiltersDefaultExample() {
                 onClick={() => {
                   if (page < total / limit) {
                     setPage((prev) => prev + 1);
-                    // handleTapChange(selectedTAbIndex);
                   }
                 }}
               >

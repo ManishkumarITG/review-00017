@@ -1,11 +1,23 @@
-import { Page, InlineGrid, Card, Text, Box, Divider, Button, useBreakpoints, AppProvider } from "@shopify/polaris";
-import {  StarIcon } from "@shopify/polaris-icons";
+import {
+  Page,
+  InlineGrid,
+  Card,
+  Text,
+  Box,
+  Divider,
+  Button,
+  useBreakpoints,
+  AppProvider,
+} from "@shopify/polaris";
+import { StarIcon } from "@shopify/polaris-icons";
 import { useEffect, useState } from "react";
 import Widget from "./components/Widget";
 import Branding from "./components/Branding";
-import { MenuIcon ,PaintBrushRoundIcon  } from "@shopify/polaris-icons";
+import { MenuIcon, PaintBrushRoundIcon } from "@shopify/polaris-icons";
+import { useColorTheme } from "./ColorContext";
 
 function MySettingPage() {
+  const { isChange } = useColorTheme();
   const { mdDown } = useBreakpoints();
   const [isPage, setIsPage] = useState("widgets");
   const [showNavigation, setShowNavigation] = useState(false);
@@ -22,11 +34,16 @@ function MySettingPage() {
   }, []);
 
   const handlePageChange = (page) => {
-    const params = new URLSearchParams(window.location.search);
-    params.set("key", page);
-    const newUrl = window.location.pathname + "?" + params.toString();
-    window.history.pushState({}, "", newUrl);
-    setIsPage(page);
+    if (isChange) {
+      console.log("is page changes", isChange);
+      shopify.saveBar.leaveConfirmation();
+    } else {
+      const params = new URLSearchParams(window.location.search);
+      params.set("key", page);
+      const newUrl = window.location.pathname + "?" + params.toString();
+      window.history.pushState({}, "", newUrl);
+      setIsPage(page);
+    }
   };
   return (
     <AppProvider>

@@ -1,5 +1,6 @@
 import React, {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useReducer,
@@ -20,7 +21,6 @@ const initialState = {
   "Widget title": "Costomer review",
   "Average rating text": 4.07,
   "Button Text": "Write a review",
-  "Show text and stars": true,
   "Screen title": "How would you rate this product?",
   Introduction:
     "We would love it if you would share a bit about your experience.",
@@ -44,6 +44,8 @@ export const ColorProvider = ({ children }) => {
   const [shop, setShop] = useState("");
   const [active, setActive] = useState(null);
   const [btnText, setBtnText] = useState("Sempal Data");
+  const [getData, setGetData] = useState(false);
+  const [checkStar, setCheckStar] = useState(true);
 
   const [colors, setColors] = useState({});
 
@@ -161,8 +163,9 @@ export const ColorProvider = ({ children }) => {
   };
 
   const handleSave = async (islodaing, savBarId) => {
-    setLodaing(islodaing);
     try {
+      setLodaing(islodaing);
+      setIsChnage(true);
       const res = await fetch("/api/routes/app/setting/updateByTitle", {
         method: "POST",
         body: JSON.stringify({
@@ -218,7 +221,7 @@ export const ColorProvider = ({ children }) => {
                 type: "ChoiceList",
                 settingName: "Show text and stars",
                 isvalue: "hidden",
-                isChecked: state["Show text and stars"],
+                isChecked: checkStar,
               },
               {
                 type: "text",
@@ -246,21 +249,26 @@ export const ColorProvider = ({ children }) => {
       const resData = await res.json();
       console.log("hello world", resData);
       shopify.saveBar.hide(savBarId);
-      setIsChnage(false);
     } catch (error) {
       console.log(error);
     } finally {
       setLodaing(null);
+      setIsChnage(false);
+      setGetData((p) => !p);
     }
   };
 
   const handleDiscard = (saveBarId) => {
     setDateChecked(setting.theme[0].isChecked);
     setting.text.forEach((text) => {
-      dispatch({
-        field: text.settingName,
-        value: text.isvalue,
-      });
+      if (text.settingName == "Show text and stars") {
+        setCheckStar(text.isChecked);
+      } else {
+        dispatch({
+          field: text.settingName,
+          value: text.isvalue,
+        });
+      }
     });
     setting.color.forEach((color) => {
       updateColor(color.type, color.isvalue, null);
@@ -278,6 +286,8 @@ export const ColorProvider = ({ children }) => {
 
       const colorSettingData = await getColorSetting();
 
+      console.log("new setttings", colorSettingData);
+
       const settigngObj = colorSettingData.data.sectionSettings;
       const newShop = colorSettingData.data.shop;
 
@@ -293,14 +303,40 @@ export const ColorProvider = ({ children }) => {
       // add text in state
       settigngObj.text?.forEach((text) => {
         if (text.type == "ChoiceList") {
-          initialState[text.settingName] = text.isChecked;
+          setCheckStar(text.isChecked);
         } else {
-          initialState[text.settingName] = text.isvalue;
+          dispatch({
+            field: text.settingName,
+            value: text.isvalue,
+          });
         }
       });
     }
     setColorData();
-  }, []);
+  }, [getData]);
+
+  const handleCheckeState = (arr, id, newValue, saveBarId) => {
+    if (arr) {
+      for (const element of arr) {
+        console.log(element.settingName == id);
+        if (
+          element.settingName == "Show text and stars" ||
+          element.settingName == "show date"
+        ) {
+          if (element.isChecked == newValue) {
+            handleDiscard(saveBarId);
+            return true;
+          }
+        } else if (element.settingName == id) {
+          if (element.isvalue == newValue) {
+            handleDiscard(saveBarId);
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  };
 
   const value = {
     colors,
@@ -330,6 +366,10 @@ export const ColorProvider = ({ children }) => {
     setActive,
     btnText,
     setBtnText,
+    initialState,
+    handleCheckeState,
+    checkStar,
+    setCheckStar,
   };
 
   return (

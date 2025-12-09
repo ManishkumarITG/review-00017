@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   BlockStack,
@@ -20,23 +20,28 @@ import { useNavigate } from "react-router";
 
 // import widget Card component from InstallWidgetsCard
 import InstallWidgetsCard from "./InstallWidgetsCard";
+import { useAppBridge } from "@shopify/app-bridge-react";
 function DashboardGuidance() {
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [importexpanded, setImportExpanded] = useState(false);
+  const [shopDomin , setShopDomain] = useState("")
+ const shopify = useAppBridge()
 
-
-  const shopDomin = JSON.parse(sessionStorage.getItem('app-bridge-config')).shop.split(".")[0];
-  const embedId = "03fdd7d0352cc3b1184544f7e2c783be";
-  const navigate = useNavigate();
-
-  // function to toggle guidense page
-  const toggle = () => {
-    setOpen(!open);
+ const embedId = "03fdd7d0352cc3b1184544f7e2c783be";
+ const navigate = useNavigate();
+ 
+ // function to toggle guidense page
+ const toggle = () => {
+   setOpen(!open);
   }
-
+  
+  useEffect(()=>{
+    const shopDomin = shopify.config.shop.split(".")[0];
+    setShopDomain(shopDomin);
+  },[]);
+  
   // temparery array to show guidense options
-
   const widgetCards = [
     {
       title: "Install Review Widget and Star Rating Badge",
