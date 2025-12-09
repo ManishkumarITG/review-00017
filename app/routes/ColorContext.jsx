@@ -1,5 +1,6 @@
 import React, {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useReducer,
@@ -161,8 +162,9 @@ export const ColorProvider = ({ children }) => {
   };
 
   const handleSave = async (islodaing, savBarId) => {
-    setLodaing(islodaing);
     try {
+      setLodaing(islodaing);
+      setIsChnage(true);
       const res = await fetch("/api/routes/app/setting/updateByTitle", {
         method: "POST",
         body: JSON.stringify({
@@ -246,11 +248,11 @@ export const ColorProvider = ({ children }) => {
       const resData = await res.json();
       console.log("hello world", resData);
       shopify.saveBar.hide(savBarId);
-      setIsChnage(false);
     } catch (error) {
       console.log(error);
     } finally {
       setLodaing(null);
+      setIsChnage(false);
     }
   };
 
@@ -277,6 +279,8 @@ export const ColorProvider = ({ children }) => {
       console.log(createSetting);
 
       const colorSettingData = await getColorSetting();
+
+      console.log("new setttings", colorSettingData);
 
       const settigngObj = colorSettingData.data.sectionSettings;
       const newShop = colorSettingData.data.shop;
