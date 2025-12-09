@@ -61,7 +61,6 @@ export default function ReviewWidgets() {
     btnText,
     setBtnText,
     isChange,
-    shop,
   } = useColorTheme();
 
   // import all hex code
@@ -69,7 +68,7 @@ export default function ReviewWidgets() {
   const textColor = getHexCode("text");
   const buttonColor = getHexCode("button");
   const buttonTextColor = getHexCode("buttonTextColor");
-  const shopDomin = shop.split(".")[0];
+  const shopDomin = shopify.config.shop.split(".")[0];
   const embedId = "03fdd7d0352cc3b1184544f7e2c783be";
   const limit = 5;
   const massage = "Something Went wrong";

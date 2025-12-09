@@ -13,13 +13,14 @@ import {
 import "./style.css";
 import { simplifiedMediaCardData } from "../data/reviewData";
 import { useNavigate } from "react-router";
-import { useColorTheme } from "../ColorContext";
+import { useAppBridge } from "@shopify/app-bridge-react";
 
 export default function Widget() {
-  const { shop } = useColorTheme();
   const [selected, setSelected] = useState("");
   const [themeList, setThemeList] = useState([]);
   const handleSelectChange = useCallback((value) => setSelected(value), []);
+
+  const shopify = useAppBridge();
   const nevigate = useNavigate();
 
   useEffect(() => {
@@ -59,10 +60,23 @@ export default function Widget() {
       continue;
     }
     options.push(data);
-  }
+  };
+  // useEffect(
+  //   () => {
+    
+  //     async function load() {
+  //       const app = shopify.app;
+
+  //       const extensions = await app.extensions();
+  //       console.log("My app extensions===================: ", extensions);
+  //     }
+  //     load();
+
+  //   }, [shopify])
+
 
   const rediectToThemeEditor = (index) => {
-    const shopDomin = shop.split(".")[0];
+    const shopDomin = shopify.config.shop.split(".")[0];
     let url = "";
     const current = selected || "current";
     const embedId = "03fdd7d0352cc3b1184544f7e2c783be";
@@ -150,13 +164,13 @@ export default function Widget() {
                 }}
                 {...(index !== 2
                   ? {
-                      secondaryAction: {
-                        content: "install",
-                        onAction: () => {
-                          rediectToThemeEditor(index);
-                        },
+                    secondaryAction: {
+                      content: "install",
+                      onAction: () => {
+                        rediectToThemeEditor(index);
                       },
-                    }
+                    },
+                  }
                   : {})}
                 description={card.description}
               >

@@ -52,7 +52,7 @@ import pkg from "lodash";
 function IndexFiltersDefaultExample() {
   const shopify = useAppBridge();
   const { debounce } = pkg;
-
+  
   const { getHexCode } = useColorTheme();
 
   const starColor = getHexCode("star");
@@ -100,7 +100,7 @@ function IndexFiltersDefaultExample() {
       console.log("Search Results:", searchData);
     } catch (error) {
       console.error("Search API Error:", error);
-      shopify.toast.show(massage + 1, {
+      shopify.toast.show(massage, {
         duration: duration,
       });
     } finally {
@@ -142,7 +142,7 @@ function IndexFiltersDefaultExample() {
         }
       } catch (error) {
         console.log(error);
-        shopify.toast.show(massage +2, {
+        shopify.toast.show(massage , {
           duration: duration,
         });
       } finally {
@@ -210,7 +210,7 @@ function IndexFiltersDefaultExample() {
         setReviews(filterData.items);
       } catch (error) {
         console.log(error);
-        shopify.toast.show(massage+5, {
+        shopify.toast.show(massage, {
           duration: duration,
         });
       } finally {
