@@ -169,6 +169,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+  const addSettings = (className, value, styleName) => {
+    const ele = document.querySelectorAll(`.${className}`);
+    if (className == "progressbar") {
+      console.log("ele", ele);
+    }
+    ele.forEach((v) => {
+      v.style[styleName] = value;
+    });
+  };
+
   function generateStarHTML(settings) {
     const starColor = settings[0];
     const textColor = settings[1];
@@ -481,10 +491,40 @@ document.addEventListener("DOMContentLoaded", async () => {
   console.log("--------------------------------------- summary", reviewSummary);
   const parent = document.querySelector(".costomeSummary");
 
-  if (reviewSummary.totalReview <= 0) {
-    const htmlFilter = document.getElementsByClassName("jm-sort-select ")[0];
-    htmlFilter.innerHTML = "";
+  if (reviewSummary.totalReview === 0) {
+    // Flip action bar layout
+    document.querySelectorAll(".jm-actions").forEach((el) => {
+      el.style.flexDirection = "row-reverse";
+    });
+    const writeReviewButtons = document.getElementsByClassName("disablebutton");
+
+    Array.from(writeReviewButtons).forEach((button) => {
+      console.log("button enabled now, let's gooo 🚀");
+      button.removeAttribute("disabled"); // fully enables the button
+    });
+
+    // Patch the filter block with first-review CTA
+    const htmlFilter = document.getElementsByClassName("jm-sort")[0];
+    htmlFilter.innerHTML = `
+    <div style="
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 4px;
+    ">
+      <div>
+      <span class="star" style="display: flex;">
+${getStarArray(0)}
+</span>
+      </div>
+      <span>Be the first to write a review</span>
+    </div>
+  `;
+
+    // Clear parent widget
     parent.innerHTML = "";
+    generateStarHTML(starColorSetting);
+
     return;
   }
 
