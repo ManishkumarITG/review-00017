@@ -208,6 +208,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       submitButton.innerText =
         mode === "create" ? "Review Added 🎉" : "Review Updated 🎉";
+      // window.location.reload();
 
       form.reset();
       resetStars();
@@ -255,4 +256,5 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   closeForm.addEventListener("click", closeReviewForm);
+  //sdfhdjfhsgghsdfjs setting for othe radata
 });

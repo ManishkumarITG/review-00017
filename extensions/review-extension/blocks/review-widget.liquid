@@ -5,7 +5,6 @@
 
 {% if customer == null and request.design_mode == false %}
   <script>
-    console.log(request.design_mode);
     window.location.replace('/account/login?return_to={{ request.path | url_encode }}');
   </script>
 {% endif %}
@@ -20,7 +19,7 @@
 </script>
 
 <script src="{{ 'reviewFilter.js' | asset_url }}" defer></script>
-<script src="{{ 'starratting.js' | asset_url }}" defer></script>
+{% comment %} <script src="{{ 'reviewSetting.js' | asset_url }}" defer></script> {% endcomment %}
 
 {% if product %}
   <script>
@@ -29,86 +28,281 @@
   </script>
 {% endif %}
 
-{% comment %} {% assign actual_rating = block.settings.actual_rating %} {% endcomment %}
+{% assign actual_rating = block.settings.actual_rating %}
 
 <div class="jm-review-widget my-review-widget" id="jm-review-{{ section.id }}">
   {% comment %} <!-- Header --> {% endcomment %}
 
   <div class="jm-list" style="padding: 0px 72px;" d="jm-list-{{ section.id }}">
-    {% if  request.design_mode == true%}
     {% if block.settings.review_source == 'dummy' %}
-     
- <div
+      <div
         style="
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 33px;
+          gap: 9px;
         "
       >
-        <div>
-          <h2
-            class="jm-heading"
-            style="
-              color:black;
-              font-size: 21px;
-            "
-            data-setting="Widget title"
-          >
-            Customer Reviews
-          </h2>
-        </div>
-        <div
+        <h2
+          class="jm-heading"
           style="
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 50px;
-            align-items: center;
+            color: black;
+            font-size: 22px;
+          "
+          data-setting="Widget title"
+        >
+          {% comment %} Customer Reviews {% endcomment %}
+        </h2>
+        <div>
+          {% if request.design_mode == true %}
+            <div style=" align-items:center; gap:0px; flex-direction:row;">
+              <span
+                style="
+                  color: {{block.settings.star_color}};
+                  {% comment %} font-size: {{block.settings.star_size}}px; {% endcomment %}
+                  display:flex;
+                  gap:8px;
+                  align-items:center;
+                "
+              >
+                {% render 'stars', rating: actual_rating %}
+                <span style="font-weight:normal; color:black; font-size:14px;">{{ actual_rating }} out of 5</span>
+              </span>
+            </div>
+            <span>Based on 15 reviews</span>
+            
+              <button
+                class="jm-write button buttonText disablebutton 1"
+                style="
+                  background: #388B7F;
+                  color: white;
+                  margin: 10px 0;
+                  width: 100%;
+                "
+                {% comment %} onclick="handleClick()" {% endcomment %}
+              >
+                {% comment %} Write a review {% endcomment %}
+              </button>
+
+              <div id="reviewsContainer"></div>
+
+            <script>
+              // -----------------------------
+              // Dummy data (as requested)
+              // -----------------------------
+              const dummydata = [
+                {
+                  _id: '1',
+                  author: 'Arjun',
+                  rating: 5,
+                  description: 'Bro product legit fire fr fr',
+                  date: '2025-01-05',
+                },
+                {
+                  _id: '2',
+                  author: 'Meera',
+                  rating: 4,
+                  description: 'Pretty solid ngl, value for money',
+                  date: '2025-11-26',
+                },
+                {
+                  _id: '3',
+                  author: 'Jason',
+                  rating: 3,
+                  description: 'Decent but packaging could’ve been better.',
+                  date: '2024-12-22',
+                },
+                {
+                  _id: '4',
+                  author: 'Tanya',
+                  rating: 2,
+                  description: 'Not what I expected tbh.',
+                  date: '2024-11-15',
+                },
+                {
+                  _id: '5',
+                  author: 'Kabir',
+                  rating: 1,
+                  description: 'Terrible quality, do not buy!',
+                  date: '2024-10-30',
+                },
+              ];
+
+              // -------------------------------------
+              // Helper: Generate star HTML text
+              // -------------------------------------
+              function getStarArray(rating) {
+                const totalStars = 5;
+                let stars = [];
+
+                for (let i = 1; i <= totalStars; i++) {
+                  stars.push(i <= rating ? '★' : '☆');
+                }
+
+                return stars.join('');
+              }
+
+              // -------------------------------------
+              // Avatar generator (first letter)
+              // -------------------------------------
+              function getAvatar(name) {
+                const letter = name?.charAt(0)?.toUpperCase() || '?';
+                return `<div style="
+                                    width:40px; height:40px;
+                                    display:flex; align-items:center; justify-content:center;
+                                    border-radius:50%; background:#eee;
+                                    font-weight:600;
+                                    ">${letter}</div>`;
+              }
+
+              // -------------------------------------
+              // Render dummy reviews inside container
+              // -------------------------------------
+              function renderDummyReviews() {
+                const container = document.getElementById('reviewsContainer');
+                container.innerHTML = ''; // reset
+
+                dummydata.forEach((review) => {
+                  const reviewItem = document.createElement('div');
+
+                  const avatar = getAvatar(review.author);
+                  const userName = review.author;
+
+                  reviewItem.innerHTML = `
+                              <div style="
+                                display:flex; gap:14px; padding:16px;
+                                box-shadow:0 2px 8px rgba(0,0,0,0.04);
+                                border-radius:12px;
+                                margin-bottom:16px;
+                              ">
+                                <div class="jm-avatar star" style="font-size:18px;">
+                                  ${avatar}
+                                </div>
+
+                                <div style="flex:1; width:380px;">
+                                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <div>
+                                      <div style="font-size:16px;" class="star">
+                                        <span class="mainFontSize" style="justify-content:start">
+                                          ${getStarArray(review.rating)}
+                                        </span>
+                                      </div>
+                                      <p class="tagName" style="margin:0px;">
+                                        ${userName}
+                                      </p>
+                                    </div>
+
+                                    <div style="display:flex; align-items:center; gap:10px;" class="text">
+                                      <p style="margin:0; color:#888;">
+                                        ${review.date}
+                                      </p>
+
+                                      <!-- Edit icon (dummy always off) -->
+                                    </div>
+                                  </div>
+
+                                  <p style="margin:0px;">
+                                    ${review.description}
+                                  </p>
+                                </div>
+                              </div>
+                            `;
+
+                  container.appendChild(reviewItem);
+                });
+              }
+
+              // Fire render
+              renderDummyReviews();
+            </script>
+          {% endif %}
+        </div>
+      </div>
+      <div class="jm-actions">
+        <div class="costomeSummary"></div>
+        <button
+          class="jm-write button buttonText disablebutton 2"
+          style="
+            background: #388B7F;
+            color: white;
+            margin: 10px 0;
+            width: 100%;
           "
         >
-          <div
-            style="
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              flex-direction: column;
-            "
-          >
-            <div>
-              {% for i in (1..5) %}
-                <span
-                  class="form-star star"
-                  style="
-                    font-size:20px;
-                    color:#ccc;
-                    cursor:pointer;
-                    text-align:center
-                  "
-                  >★</span
-                >
-              {% endfor %}
-            </div>
-            <span>Based on 3 reviews</span>
-          </div>
+          {% comment %} Write a review {% endcomment %}
+        </button>
 
-          <div>
-            <button
-              class="jm-write button"
-              style="
-                background: #388B7F;
-                color: white;
-              "
-            >
-              Write a review
-            </button>
+        <div class="jm-sort">
+          <select class="jm-sort-select star">
+            <option value="most_recent">Most Recent</option>
+            <option value="highest">Highest Rating</option>
+            <option value="lowest">Lowest Rating</option>
+          </select>
+        </div>
+        <div
+          id="reviewsList"
+          style="display:flex; flex-direction:column; gap:18px; margin-top:20px; position: relative;"
+        ></div>
+      </div>
+
+      <div
+        id="reviewsList"
+        style="display:flex; flex-direction:column; gap:18px; margin-top:20px; position: relative;"
+      ></div>
+    {% elsif block.settings.review_source == 'real' %}
+      <div
+        style="
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 9px;
+        "
+      >
+        <h2
+          class="jm-heading"
+          style="
+            color: black;
+            font-size: 22px;
+          "
+          data-setting="Widget title"
+        >
+          {% comment %} Customer Reviews {% endcomment %}
+        </h2>
+        <div>
+          <div style="align-items:center; gap:0px; flex-direction:row;">
+            <div class="costomeSummary"></div>
           </div>
         </div>
       </div>
+      <div class="jm-actions">
+        <button
+          class="jm-write button buttonText disablebutton 3"
+          style="
+            background: #388B7F;
+            color: white;
+            margin: 10px 0;
+            width: 100%;
+          "
+          {% comment %} onclick="handleClick()" {% endcomment %}
+        >
+          {% comment %} Write a review {% endcomment %}
+        </button>
 
+        <div class="jm-sort">
+          <select class="jm-sort-select star">
+            <option value="most_recent">Most Recent</option>
+            <option value="highest">Highest Rating</option>
+            <option value="lowest">Lowest Rating</option>
+          </select>
+        </div>
+      </div>
+      <div
+        id="reviewsList"
+        style="display:flex; flex-direction:column; gap:18px; margin-top:20px;     position: relative; "
+      ></div>
 
-    {% elsif block.settings.review_source == 'real' %}
-       <div
+    {% elsif block.settings.review_source == 'noReview' %}
+      <div
         style="
                     display: flex;
           flex-direction: column;
@@ -125,7 +319,7 @@
             "
             data-setting="Widget title"
           >
-            Customer Reviews
+            {% comment %} Customer Reviews {% endcomment %}
           </h2>
         </div>
         <div
@@ -161,21 +355,21 @@
 
           <div>
             <button
-              class="jm-write button"
+              class="jm-write button buttonText disablebutton 4"
               style="
                 background: #388B7F;
                 color: white;
               "
               {% comment %} onclick="handleClick()" {% endcomment %}
             >
-              Write a review
+              {% comment %} Write a review {% endcomment %}
             </button>
           </div>
         </div>
       </div>
 
-
-    {% elsif block.settings.review_source == 'noReview' %}
+    {% else %}
+      {% comment %} <!-- Fallback (only if some wild unknown value appears) --> {% endcomment %}
       <div class="jm-db-placeholder">
         <span
           style="
@@ -187,86 +381,17 @@
           {% render 'stars', rating: 5 %}
         </span>
         <button
-          class="jm-write button disablebutton"
+          class="jm-write button buttonText disablebutton 5"
           style="
             background: #388B7F;
             color: white;
           "
           {% comment %} onclick="handleClick()" {% endcomment %}
         >
-          Write a review
+          {% comment %} Write a review {% endcomment %}
         </button>
       </div>
-
-     <div
-        style="
-                    display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 33px;
-        "
-      >
-        <div>
-          <h2
-            class="jm-heading"
-            style="
-              color:black;
-              font-size: 21px;
-            "
-            data-setting="Widget title"
-          >
-            Customer Reviews
-          </h2>
-        </div>
-        <div
-          style="
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-            align-items: center;
-          "
-        >
-          <div
-            style="
-                     display: flex;
-              align-items: self-start;
-              flex-direction: column;
-            "
-          >
-            <div>
-              {% for i in (1..5) %}
-                <span
-                  class="form-star star"
-                  style="
-                    font-size:20px;
-                    color:#ccc;
-                    cursor:pointer;
-                  "
-                  >★</span
-                >
-              {% endfor %}
-            </div>
-            <span>Be the first to write a review</span>
-          </div>
-
-          <div>
-            <button
-              class="jm-write button"
-              style="
-                background: #388B7F;
-                color: white;
-              "
-              {% comment %} onclick="handleClick()" {% endcomment %}
-            >
-              Write a review
-            </button>
-          </div>
-        </div>
-      </div>
-
     {% endif %}
-    {% endif %}
-    <div class="costomeSummary"></div>
   </div>
   <div id="FormParentDiv" class="modal-overlay" style="display:none">
     <div id="popupForm" class="modal-overlay">
@@ -293,14 +418,16 @@
           Rate the product
           <div id="formStars" class="star-wrapper">
             <div
+              class="ReviewFormRating"
               style="
                 display: flex;
                 align-items: center;
                 justify-content: center;
               "
+              id="ratingStars"
             >
               {% for i in (1..5) %}
-                <span class="form-star " data-value="{{ i }}">★</span>
+                <span class="form-star" data-value="{{ i }}">★</span>
               {% endfor %}
             </div>
             <input type="hidden" id="selectedRating" name="Rating" value="0">
@@ -405,61 +532,3 @@
   ]
 }
 {% endschema %}
-
-
-
-
-
-{% comment %} <div
-        style="
-                    display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 33px;
-        "
-      >
-        <div>
-          <h2
-            class="jm-heading"
-            style="
-              color:black;
-              font-size: 21px;
-            "
-            data-setting="Widget title"
-          >
-            Customer Reviews
-          </h2>
-        </div>
-        <div
-          style="
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-            align-items: center;
-          "
-        >
-          <div
-            style="
-                     display: flex;
-              align-items: self-start;
-              flex-direction: column;
-            "
-          >
-            <div class="costomeSummary"></div>
-            <span>Be the first to write a review</span>
-          </div>
-
-          <div>
-            <button
-              class="jm-write button disablebutton"
-              style="
-                background: #388B7F;
-                color: white;
-              "
-              {% comment %} onclick="handleClick()" {% endcomment %}
-            >
-              Write a review
-            </button>
-          </div>
-        </div>
-      </div> {% endcomment %}

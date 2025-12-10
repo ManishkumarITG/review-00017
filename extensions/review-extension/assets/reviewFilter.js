@@ -1,113 +1,70 @@
 document.addEventListener("DOMContentLoaded", async () => {
   let loding = true; // loding
-  let limit = 2; // limit of api response
+  let limit = 10; // limit of api response
   let filterType = "mostRecent";
 
-  // get importent Elements
   const domain = window.location.origin.split("//")[1];
   const productIdliquid = ShopifyAnalytics.meta.page.resourceId || domain;
 
   console.log("shop domain", domain);
-
   const reviewsList = document.getElementById("reviewsList");
 
   const filterSelect = document.getElementsByClassName("jm-sort-select")[0];
-  const writeButtons = document.querySelectorAll(".jm-write"); // get variable for liquid
+  const writeButtons = document.querySelectorAll(".buttonText"); // get variable for liquid
   const ui = window.reviewSettings;
 
-  console.log(ui, "ui from the liquid");
-  // console.log(
-  //   "------------------------------------------- reviewsList",
-  //   reviewsList,
-  // );
   // check type of page for type of review store of product
   let type =
     ShopifyAnalytics.meta.page.pageType == "home" ? "store" : "product";
-  console.log(ShopifyAnalytics.meta, " type of review");
+  console.log(ShopifyAnalytics.meta.page.resourceId, " type of review");
 
   // dummy data for sample option
   const dummydata = [
     {
       _id: "1",
-      name: "Arjun",
+      author: "Arjun",
       rating: 5,
       description: "Bro product legit fire fr fr",
-      createdAt: "2025-01-05",
-      email: "arjun@gmail.com",
-      customerId: "123456789",
+      date: "2025-01-05",
     },
-
     {
       _id: "2",
-
-      name: "Meera",
-
+      author: "Meera",
       rating: 4,
-
       description: "Pretty solid ngl, value for money",
-
-      createdAt: "2025-11-26",
-
-      email: "meera@gmail.com",
-
-      customerId: "987654321",
+      date: "2025-11-26",
     },
-
     {
       _id: "3",
-
-      name: "Jason",
-
+      author: "Jason",
       rating: 3,
-
       description: "Decent but packaging could’ve been better.",
-
-      createdAt: "2024-12-22",
-
-      email: "jason@gmail.com",
-
-      customerId: "555666777",
+      date: "2024-12-22",
     },
-
     {
       _id: "4",
-
-      name: "Tanya",
-
+      author: "Tanya",
       rating: 2,
-
       description: "Not what I expected tbh.",
-
-      createdAt: "2024-11-15",
-
-      email: "tanya@gmail.com",
-
-      customerId: "444555666",
+      date: "2024-11-15",
     },
-
     {
       _id: "5",
-
-      name: "Kabir",
-
+      author: "Kabir",
       rating: 1,
-
       description: "Terrible quality, do not buy!",
-
-      createdAt: "2024-10-30",
-
-      email: "kabir@gmail.com",
-
-      customerId: "333444555",
+      date: "2024-10-30",
     },
   ];
 
   let realdata = [];
 
   // open for and check the type of more
-  function handleClick(mode = "add") {
+  function handleClick(mode) {
     console.log("Entered handleClick with mode:", mode);
     const form = document.getElementById("reviewForm");
+    console.log(form, "review form");
+
     const url = window.location.origin;
     console.log("url", url);
 
@@ -146,26 +103,27 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // add Event listner on edit  icon
 
-  // reviewsList.addEventListener("click", (e) => {
-  //   const editBtn = e.target.closest(".edit-btn");
-  //   console.log(editBtn);
+  reviewsList.addEventListener("click", (e) => {
+    const editBtn = e.target.closest(".edit-btn");
+    console.log(editBtn);
 
-  //   if (!editBtn) return;
+    if (!editBtn) return;
 
-  //   const reviews = editBtn.dataset.id;
+    const reviews = editBtn.dataset.id;
 
-  //   console.log(reviews, "review");
+    console.log(reviews, "review");
 
-  //   handleClick("edit");
-  //   openForm(reviews);
-  // });
+    handleClick("edit");
+    openForm(reviews);
+  });
 
   // function to get data
   async function apidata(limit, filterType) {
-    console.log("limit", limit);
-    console.log("product type", productIdliquid);
-    console.log("filterType", filterType);
-    console.log("type", type);
+    console.log("enter in apidata function");
+    console.log(
+      "---------------------------------------- my type is product ",
+      productIdliquid,
+    );
 
     try {
       loding = true;
@@ -175,16 +133,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log("product id ", productIdliquid);
       const response = await fetch(
         `${baseUrl}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=${type}&limit=${limit}&targetId=${productIdliquid}&filterType=${filterType}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
       );
 
       const data = await response.json();
-      console.log("--------------------------- res data", data.data);
+      console.log("--------------------------- res my filters data", data.data);
 
       return data?.data?.items;
     } catch (error) {
@@ -194,31 +146,70 @@ document.addEventListener("DOMContentLoaded", async () => {
       loding = false;
     }
   }
+  realdata = await apidata(limit, filterType);
 
-  // check option of data
-  if (ui.reviewSource === "dummy") {
-    // realdata = await apidata(limit, filterType);
-   
-    realdata = dummydata;
-    console.log(ui.reviewSource, "in dummy ", realdata);
-  } else if (ui.reviewSource === "real") {
-    realdata = await apidata(limit, filterType);
-    console.log(ui.reviewSource, " asdasds in real ", realdata);
+  async function settingData() {
+    try {
+      const res = await fetch(
+        `${shopDomain}/apps/review/api/routes/extensions/setting/getByTitle`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: "Review Widget Setting",
+          }),
+        },
+      );
 
-    // realdata = [];
-  } else {
-    realdata = [];
+      const resData = await res.json();
+      return resData;
+    } catch (error) {
+      console.error("Color setting fetch error:", error);
+      return null;
+    }
   }
 
-  console.log(realdata, "realdata 00000000000000");
+  function generateStarHTML(settings) {
+    const starColor = settings[0];
+    const textColor = settings[1];
+    const buttonColor = settings[2];
+    const buttonTextColor = settings[3];
+
+    console.log(starColor, "star color ");
+
+    addSettings("star", starColor, "color");
+
+    addSettings("jm-write", buttonColor, "background");
+    addSettings("jm-write", buttonTextColor, "color");
+    addSettings("tagName", textColor, "color");
+    addSettings("progressbar", starColor, "background");
+  }
+
+  const settingResponse = await settingData();
+  const colorArray = settingResponse?.data?.sectionSettings?.color;
+  const starColorSetting = colorArray?.map((v) => v.isvalue);
+  generateStarHTML(starColorSetting);
 
   // highlite stars in form
   function getStarArray(rating) {
     const totalStars = 5;
     const stars = [];
-
+    const defaultFilled = `
+    <span>
+      <svg class="star" width="18" height="18" viewBox="0 0 24 24">
+        <path class ="star" d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="currentColor"></path>
+      </svg>
+    </span>
+  `;
+    const defaultEmpty = `
+ <span>
+      <svg class="star" width="18" height="18" viewBox="0 0 24 24" ">
+        <path d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+      </svg>
+    </span>
+  `;
     for (let i = 1; i <= totalStars; i++) {
-      stars.push(i <= rating ? "★" : "☆");
+      stars.push(i <= rating ? defaultFilled : defaultEmpty);
     }
 
     const str = stars.join("");
@@ -226,7 +217,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     return str;
   }
 
-  // pass filterd data
   function filterresponsedata(realdata) {
     const parsedData = realdata.map((data) => {
       const {
@@ -265,24 +255,43 @@ document.addEventListener("DOMContentLoaded", async () => {
     return parsedData;
   }
 
+  //call renderReview Function to render all reviews
   const filterdReviews = filterresponsedata(realdata);
 
   //call renderReview Function to render all reviews
   renderReviews(filterdReviews);
 
   async function openForm(id = "button") {
-    const review = parsedData.find((r) => r._id == id);
+    const review = filterdReviews.find((r) => r._id == id);
     if (!review) {
       console.warn("Review not found:", id);
       return;
     }
+    console.log(review);
     window.__editingReviewId = id;
 
+    // const ReviewFormRating = document.getElementById("selectedRating");
     document.getElementById("formName").value = review.name;
     document.getElementById("formEmail").value = review.email;
     document.getElementById("formDesc").value = review.description;
     document.getElementById("selectedRating").value = review.rating;
-    highlightStars(review.rating);
+    const ReviewFormRating = document.getElementById("selectedRating");
+    ReviewFormRating.value = review.rating;
+
+    // Select stars from their container
+    const stars = document.querySelectorAll("#ratingStars .form-star");
+    console.log(stars, "stars");
+    const ratingValue = review.rating;
+    console.log(ratingValue, "ratingValue");
+
+    stars.forEach((star, index) => {
+      if (index < ratingValue) {
+        star.classList.add("star"); // active star
+      } else {
+        star.classList.remove("star"); // inactive star
+      }
+    });
+    generateStarHTML(starColorSetting);
   }
 
   window.openForm = openForm;
@@ -293,18 +302,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log(list);
 
     if (loding) {
-    //   reviewsList.innerHTML = `
-    //   <div class="loader"></div>
-    // `;
+      reviewsList.innerHTML = `
+      <div class="loader"></div>
+    `;
 
       return;
     } else {
-      // reviewsList.innerHTML = "";
+      reviewsList.innerHTML = "";
 
       list.forEach((review) => {
         const avatar = review.name.trim().charAt(0).toUpperCase();
         const userName = review.name.trim().split("@")[0];
-
+        // const data =review.
         console.log(userName);
 
         const reviewItem = document.createElement("div");
@@ -325,8 +334,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             <div style="display:flex; justify-content:space-between; align-items:center;">
 
               <div>
-                <div style="font-size:16px;" class="star">
-                  ${"★".repeat(review.rating)}${"☆".repeat(5 - review.rating)}
+                <div style="font-size:16px;     ;" class="star">
+                  <span class="mainFontSize" style="justify-content: start">${getStarArray(review.rating)}</span>
                 </div>
                 <p  class="tagName" style="margin:0px">
                   ${userName}
@@ -362,41 +371,40 @@ document.addEventListener("DOMContentLoaded", async () => {
           </div>
         </div>
       `;
-
         reviewsList.appendChild(reviewItem);
       });
-
-      if (list.length > 5) {
-        const button = document.createElement("button");
-        button.innerText = "Load More";
-
-        button.style.cssText = `
-              padding: 10px 18px;
-              margin-top: 20px;
-              border-radius: 8px;
-              border: 1px solid #d1d5db;
-              background: #f9fafb;
-              font-size: 15px;
-              font-weight: 500;
-              cursor: pointer;
-              transition: all 0.2s ease;
-              width: 150px;
-              align-self: center;
-              display: block;
-            `;
-
-        button.onmouseover = () => {
-          button.style.background = "#e5e7eb";
-        };
-
-        button.onmouseout = () => {
-          button.style.background = "#f9fafb";
-        };
-
-        button.addEventListener("click", () => pagination(limit));
-        reviewsList.appendChild(button);
-      }
     }
+    if (list.length > 5) {
+      const button = document.createElement("button");
+      button.innerText = "Load More Reviews";
+
+      button.style.cssText = `
+        padding: 10px 18px;
+        margin-top: 20px;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        background: #f9fafb;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        width: 150px;
+        align-self: center;
+        display: block;
+      `;
+
+      button.onmouseover = () => {
+        button.style.background = "#e5e7eb";
+      };
+
+      button.onmouseout = () => {
+        button.style.background = "#f9fafb";
+      };
+
+      button.addEventListener("click", () => pagination(limit));
+      reviewsList.appendChild(button);
+    }
+    generateStarHTML(starColorSetting);
   }
 
   async function pagination(limit) {
@@ -416,39 +424,36 @@ document.addEventListener("DOMContentLoaded", async () => {
   // filter data according option
   filterSelect.addEventListener("change", async (e) => {
     const selectedFilter = e.target.value.trim();
-    if (ui.reviewSource === "real") {
-      if (selectedFilter === "most_recent") {
-        filterType = "mostRecent";
 
-        realdata = await apidata(limit, filterType);
-        const limitreview = filterresponsedata(realdata);
-        console.log(type);
+    let sortedList = [...filterdReviews];
 
-        console.log("realdata with type", limitreview);
-        renderReviews(limitreview);
-      }
+    if (selectedFilter === "most_recent") {
+      // sortedList.sort((a, b) => new Date(b.date) - new Date(a.date));
+      filterType = "mostRecent";
+      realdata = await apidata(limit, filterType);
+      const limitreview = filterresponsedata(realdata);
 
-      if (selectedFilter === "lowest") {
-        filterType = "lowestRating";
+      console.log("realdata with limit", limitreview);
+      renderReviews(limitreview);
+    }
 
-        realdata = await apidata(limit, filterType);
-        const limitreview = filterresponsedata(realdata);
-        console.log(type);
+    if (selectedFilter === "lowest") {
+      // sortedList.sort((a, b) => a.rating - b.rating);/
+      filterType = "lowestRating";
+      realdata = await apidata(limit, filterType);
+      const limitreview = filterresponsedata(realdata);
 
-        console.log("realdata with type", limitreview);
-        renderReviews(limitreview);
-      }
+      console.log("realdata with limit", limitreview);
+      renderReviews(limitreview);
+    }
 
-      if (selectedFilter === "highest") {
-        filterType = "highestRating";
+    if (selectedFilter === "highest") {
+      // sortedList.sort((a, b) => b.rating - a.rating);
+      filterType = "highestRating";
+      realdata = await apidata(limit, filterType);
+      const limitreview = filterresponsedata(realdata);
 
-        realdata = await apidata(limit, filterType);
-        const limitreview = filterresponsedata(realdata);
-        console.log(type);
-
-        console.log("realdata with type", limitreview);
-        renderReviews(limitreview);
-      }
+      renderReviews(limitreview);
     }
 
     // renderReviews(sortedList);
@@ -465,7 +470,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       );
       const resData = await res.json();
 
-      // console.log("------------------------------- rating summary", resData);
       return resData.data || [];
     } catch (error) {
       console.error("Fetch meltdown:", error);
@@ -474,15 +478,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
   const reviewSummary = await ratingSummary();
-  // console.log("--------------------------------------- summary", reviewSummary);
+  console.log("--------------------------------------- summary", reviewSummary);
   const parent = document.querySelector(".costomeSummary");
-  console.log("parent ------0", parent);
+
   if (reviewSummary.totalReview <= 0) {
     const htmlFilter = document.getElementsByClassName("jm-sort-select ")[0];
     htmlFilter.innerHTML = "";
     parent.innerHTML = "";
     return;
   }
+
   parent.innerHTML = `
     <div class="center">
       <span class="star mainFontSize">${getStarArray(reviewSummary.avgRating)}</span> ${reviewSummary.avgRating} out of 5
@@ -491,7 +496,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
 
   reviewSummary?.reviews?.forEach((item) => {
-    // console.log("my items --------------------- my items", item);
+    console.log("my items --------------------- my items", item);
     const div = document.createElement("div");
     div.innerHTML = `
     <div class="jm-Stars-Progressbar">
@@ -515,4 +520,5 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     parent.appendChild(div);
   });
+  generateStarHTML(starColorSetting);
 });
