@@ -1,0 +1,248 @@
+{
+    "MachinLanguage":"en",
+    "Dashboard": {
+        "TopProducts": "Top products",
+        "TopProductsEmptyMessage": "A list of top reviewed products will show here.",
+        "TopProductsButton": "View all reviews",
+        "ReviewActivity": "Review Activity",
+        "ReviewActivityEmptyMessage": "You can view your recent reviews here.",
+        "ReviewActivityButton": "Request reviews",
+        "LastReviews": "Last reviews",
+        "ViewAllReviewsDashboard": "View all in Reviews Dashboard",
+        "PromoCard": {
+            "Title": "Build trust. Grow sales. Try Awesome FREE.",
+            "Button": "Explore features",
+            "Description": "Get more reviews, build trust and grow store visits. Increase retention & referrals. FREE for 15 days and then just $15/month. Cancel anytime."
+        },
+        "Loading": "Loading...",
+        "NoData": "No data available",
+        "Table": {
+            "Product": "Product",
+            "Reviews": "Reviews",
+            "Rating": "Rating"
+        }
+    },
+    "DashboardGuidance": {
+        "TaskProgress": "{{completed}} of {{total}} tasks complete",
+        "SetupGuideTitle": "Setup guide",
+        "SetupGuideDescription": "We'll guide you through importing your reviews and show you how to transfer them to your preferred review app.",
+        "WidgetCards": {
+            "InstallReviewWidget": {
+                "Title": "Install Review Widget and Star Rating Badge",
+                "Description": "Display reviews and star ratings on the product page by enabling the Judge.me widgets in your Shopify theme.",
+                "Buttons": {
+                    "ReviewWidget": "Install Review Widget",
+                    "StarRatingBadge": "Install Star Rating Badge"
+                }
+            },
+            "CustomizeWidget": {
+                "Title": "Customize the review widget",
+                "Description": "Change the look and feel of your review display to match your brand.",
+                "Buttons": {
+                    "GoToSettings": "Go to widget settings"
+                }
+            }
+        },
+        "DismissGuide": "Dismiss setup Guide"
+    },
+    "ReviewData": {
+        "MediaCards": {
+            "ReviewWidget": {
+                "Title": "Review Widget",
+                "Description": "Collect and display product reviews on your product pages."
+            },
+            "StarRatingBadge": {
+                "Title": "Star Rating Badge",
+                "Description": "Show the average rating of your products and how many reviews they've received."
+            },
+            "WriteReview": {
+                "Title": "Write a Review",
+                "Description": "A pre-installed widget to help your customers write reviews"
+            }
+        },
+        "ReviewTabs": {
+            "AllReviews": "All Reviews",
+            "ProductReviews": "Product Reviews",
+            "StoreReviews": "Store Reviews",
+            "Spam": "Spam",
+            "Archives": "Archives"
+        }
+    },
+    "Reviews": {
+        "Title": "Reviews",
+        "Batch": "Auto Publish"
+    },
+    "SettingsPage": {
+        "Navigation": {
+            "ReviewDisplay": "REVIEW DISPLAY",
+            "Widgets": "Widgets",
+            "Branding": "Branding",
+            "General": "GENERAL",
+            "Close": "Close"
+        }
+    },
+    "WidgetPage": {
+        "Title": "Widget",
+        "Actions": {
+            "ChangeTheme": "Change Theme",
+            "Customize": "Customize",
+            "Install": "Install",
+            "InstallStatus": "Status: Published. Your online store is visible."
+        },
+        "MediaCards": [
+            {
+                "id": 1,
+                "title": "Review Widget",
+                "description": "Collect and display product reviews on your product pages."
+            },
+            {
+                "id": 2,
+                "title": "Star Rating Badge",
+                "description": "Show the average rating of your products and how many reviews they've received."
+            },
+            {
+                "id": 3,
+                "title": "Write a Review",
+                "description": "A pre-installed widget to help your customers write reviews"
+            }
+        ],
+        "SelectThemeLoading": "Loading themes..."
+    },
+    "BrandingPage": {
+        "Title": "Branding",
+        "SaveBar": {
+            "Save": "Save",
+            "Discard": "Discard"
+        },
+        "ColorCard": {
+            "Title": "Color",
+            "ResetButton": "Reset To Default",
+            "Description": "Used for the star color, buttons, links and link buttons on all widgets and emails.",
+            "PrimaryColorLabel": "Primary color",
+            "PrimaryColorValueLabel": "Hex Code"
+        },
+        "BrandingCard": {
+            "Title": "Branding",
+            "RatingIcon": "Rating icon",
+            "RatingBadge": "Awesome",
+            "RatingDescription": "This will be used in widgets."
+        }
+    },
+    "reviewWidgets": {
+        "PageTitle": "Review Widget",
+        "Sections": {
+            "Install": {
+                "Title": "Install",
+                "Description": "Add the Star Rating Badge on product pages.",
+                "InstallButton": "Install",
+                "LearnMore": "Learn more"
+            },
+            "Color": "Color",
+            "Theme": "Theme",
+            "Text": "Text"
+        },
+        "Preview": "Previewing",
+        "SampleData": "Sample Data",
+        "RealData": "Real Data",
+        "NoReview": "No Review",
+        "ShowingPage": "Showing page {{page}} to {{count}} out of {{total}}",
+        "BasedOnReviews": "Based on {{total}} reviews",
+        "ButtonText": "Write a Review",
+        "WidgetTitle": "Widget title",
+        "AverageRatingText": "Average rating text",
+        "Popover": {
+            "MostRecent": "Most Recent",
+            "HighestRating": "Highest Rating",
+            "LowestRating": "Lowest Rating"
+        },
+        "Collapsible": {
+            "Color": "Color",
+            "Theme": "Theme",
+            "Text": "Text"
+        },
+        "Placeholder": {
+            "TextField": "Customer Reviews"
+        },
+        "NoReviewsMessage": "No reviews to display",
+        "ErrorMessage": "Something went wrong",
+        "InstallDescription": "Add the Star Rating Badge on product pages.",
+        "Buttons": {
+            "Install": "Install",
+            "LearnMore": "Learn more"
+        }
+    },
+    "StarRatingBadge": {
+        "PageTitle": "Star Rating Badge",
+        "BackButton": "Back",
+        "Previewing": "Previewing",
+        "SampleData": "Sample Data",
+        "NoReview": "No Review",
+        "Install": {
+            "Title": "Install",
+            "Description": "Add the Star Rating Badge on product pages."
+        },
+        "TextSection": {
+            "Title": "Text",
+            "EnableText": "Enable review count text"
+        },
+        "ColorSection": {
+            "Title": "Color",
+            "PrimaryColorLabel": "Primary color"
+        },
+        "Preview": {
+            "RatingText": "{{count}} reviews"
+        },
+        "Skeleton": {
+            "Loading": "Loading..."
+        }
+    },
+    "WriteReview": {
+        "Page": {
+            "Title": "Write a review flow",
+            "BackButton": "Back"
+        },
+        "Tabs": {
+            "InStore": "In-store form",
+            "External": "External form"
+        },
+        "Collapsible": {
+            "TextSettings": "Text settings",
+            "ColorSettings": "Color settings"
+        },
+        "TextFields": {
+            "ScreenTitle": "Screen title",
+            "Introduction": "Introduction",
+            "DisplayName": "Display name",
+            "ButtonText": "Button Text",
+            "Placeholder": "Customer Reviews"
+        },
+        "Color": {
+            "DefaultColor": "Default colors (from your brand settings)",
+            "CustomColor": "Custom colors",
+            "PrimaryColor": "Primary color",
+            "HexCode": "Hex Code"
+        },
+        "Preview": {
+            "Title": "Previewing"
+        },
+        "Sample": {
+            "Banner": "This is a sample preview. Reviews submitted won't be saved."
+        },
+        "ThanksPage": {
+            "Title": "Thanks for your review!",
+            "Processing": "We are processing it and it will appear on the store soon. You can edit review by logging into your Judge.me profile.",
+            "Experience": "Would you like to share your experience of shopping with us?",
+            "Value": "We value your feedback and use it to improve. Please share any thoughts or suggestions you have."
+        },
+        "Review": {
+            "SharePicture": "Share a picture",
+            "UploadPhoto": "Upload a photo to support your review.",
+            "ReviewContent": "Review content",
+            "HelpText": "We’ll only contact you about your review if necessary. By submitting your review, you agree to our terms and conditions and privacy policy."
+        },
+        "Buttons": {
+            "Next": "Next",
+            "GoToStore": "Go to store"
+        }
+    }
+}

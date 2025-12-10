@@ -1,0 +1,248 @@
+{
+    "MachinLanguage":"hi",
+    "Dashboard": {
+        "TopProducts": "शीर्ष उत्पाद",
+        "TopProductsEmptyMessage": "शीर्ष समीक्षित उत्पाद यहाँ दिखेंगे।",
+        "TopProductsButton": "सभी समीक्षाएँ देखें",
+        "ReviewActivity": "समीक्षा गतिविधि",
+        "ReviewActivityEmptyMessage": "आप यहाँ अपनी हाल की समीक्षाएँ देख सकते हैं।",
+        "ReviewActivityButton": "समीक्षाएँ अनुरोध करें",
+        "LastReviews": "हाल की समीक्षाएँ",
+        "ViewAllReviewsDashboard": "समीक्षा डैशबोर्ड में सभी देखें",
+        "PromoCard": {
+            "Title": "विश्वास बढ़ाएँ। बिक्री बढ़ाएँ। Awesome मुफ्त आज़माएँ।",
+            "Button": "फ़ीचर्स देखें",
+            "Description": "अधिक समीक्षाएँ प्राप्त करें, विश्वास बनाएँ और स्टोर विज़िट बढ़ाएँ। प्रतिधारण और रेफ़रल बढ़ाएँ। 15 दिन के लिए मुफ्त और फिर सिर्फ $15/माह। कभी भी रद्द करें।"
+        },
+        "Loading": "लोड हो रहा है...",
+        "NoData": "कोई डेटा उपलब्ध नहीं",
+        "Table": {
+            "Product": "उत्पाद",
+            "Reviews": "समीक्षाएँ",
+            "Rating": "रेटिंग"
+        }
+    },
+    "DashboardGuidance": {
+        "TaskProgress": "{{completed}} में से {{total}} कार्य पूर्ण",
+        "SetupGuideTitle": "सेटअप गाइड",
+        "SetupGuideDescription": "हम आपको आपकी समीक्षाएँ इम्पोर्ट करने में मार्गदर्शन करेंगे और दिखाएँगे कि आप उन्हें अपनी पसंदीदा समीक्षा ऐप में कैसे स्थानांतरित कर सकते हैं।",
+        "WidgetCards": {
+            "InstallReviewWidget": {
+                "Title": "रिव्यू विजेट और स्टार रेटिंग बैज इंस्टॉल करें",
+                "Description": "उत्पाद पृष्ठ पर समीक्षाएँ और स्टार रेटिंग दिखाएँ, Shopify थीम में Judge.me विजेट सक्षम करके।",
+                "Buttons": {
+                    "ReviewWidget": "रिव्यू विजेट इंस्टॉल करें",
+                    "StarRatingBadge": "स्टार रेटिंग बैज इंस्टॉल करें"
+                }
+            },
+            "CustomizeWidget": {
+                "Title": "रिव्यू विजेट को कस्टमाइज़ करें",
+                "Description": "अपनी ब्रांडिंग के अनुसार समीक्षा डिस्प्ले का लुक और फील बदलें।",
+                "Buttons": {
+                    "GoToSettings": "विजेट सेटिंग्स पर जाएँ"
+                }
+            }
+        },
+        "DismissGuide": "सेटअप गाइड बंद करें"
+    },
+    "ReviewData": {
+        "MediaCards": {
+            "ReviewWidget": {
+                "Title": "रिव्यू विजेट",
+                "Description": "अपने उत्पाद पृष्ठों पर समीक्षाएँ एकत्रित और प्रदर्शित करें।"
+            },
+            "StarRatingBadge": {
+                "Title": "स्टार रेटिंग बैज",
+                "Description": "अपने उत्पादों की औसत रेटिंग और उन्हें प्राप्त समीक्षाओं की संख्या दिखाएँ।"
+            },
+            "WriteReview": {
+                "Title": "समीक्षा लिखें",
+                "Description": "ग्राहकों को समीक्षा लिखने में मदद करने वाला प्री-इंस्टॉल्ड विजेट"
+            }
+        },
+        "ReviewTabs": {
+            "AllReviews": "सभी समीक्षाएँ",
+            "ProductReviews": "उत्पाद समीक्षाएँ",
+            "StoreReviews": "स्टोर समीक्षाएँ",
+            "Spam": "स्पैम",
+            "Archives": "आर्काइव"
+        }
+    },
+    "Reviews": {
+        "Title": "समीक्षाएँ",
+        "Batch": "ऑटो पब्लिश"
+    },
+    "SettingsPage": {
+        "Navigation": {
+            "ReviewDisplay": "रिव्यू डिस्प्ले",
+            "Widgets": "विजेट्स",
+            "Branding": "ब्रांडिंग",
+            "General": "सामान्य",
+            "Close": "बंद करें"
+        }
+    },
+    "WidgetPage": {
+        "Title": "विजेट",
+        "Actions": {
+            "ChangeTheme": "थीम बदलें",
+            "Customize": "कस्टमाइज़ करें",
+            "Install": "इंस्टॉल करें",
+            "InstallStatus": "स्टेटस: प्रकाशित। आपकी ऑनलाइन स्टोर दिखाई दे रही है।"
+        },
+        "MediaCards": [
+            {
+                "id": 1,
+                "title": "रिव्यू विजेट",
+                "description": "अपने उत्पाद पृष्ठों पर समीक्षाएँ एकत्रित और प्रदर्शित करें।"
+            },
+            {
+                "id": 2,
+                "title": "स्टार रेटिंग बैज",
+                "description": "उत्पादों की औसत रेटिंग और समीक्षाओं की संख्या दिखाएँ।"
+            },
+            {
+                "id": 3,
+                "title": "समीक्षा लिखें",
+                "description": "ग्राहकों को समीक्षा लिखने में मदद करने वाला प्री-इंस्टॉल्ड विजेट"
+            }
+        ],
+        "SelectThemeLoading": "थीम लोड हो रही हैं..."
+    },
+    "BrandingPage": {
+        "Title": "ब्रांडिंग",
+        "SaveBar": {
+            "Save": "सेव करें",
+            "Discard": "रद्द करें"
+        },
+        "ColorCard": {
+            "Title": "रंग",
+            "ResetButton": "डिफॉल्ट पर रीसेट करें",
+            "Description": "स्टार रंग, बटन, लिंक और ईमेल में उपयोग किया जाता है।",
+            "PrimaryColorLabel": "प्राथमिक रंग",
+            "PrimaryColorValueLabel": "Hex कोड"
+        },
+        "BrandingCard": {
+            "Title": "ब्रांडिंग",
+            "RatingIcon": "रेटिंग आइकन",
+            "RatingBadge": "Awesome",
+            "RatingDescription": "यह विजेट्स में उपयोग होगा।"
+        }
+    },
+    "reviewWidgets": {
+        "PageTitle": "रिव्यू विजेट",
+        "Sections": {
+            "Install": {
+                "Title": "इंस्टॉल",
+                "Description": "उत्पाद पृष्ठों पर स्टार रेटिंग बैज जोड़ें।",
+                "InstallButton": "इंस्टॉल",
+                "LearnMore": "और जानें"
+            },
+            "Color": "रंग",
+            "Theme": "थीम",
+            "Text": "टेक्स्ट"
+        },
+        "Preview": "पूर्वावलोकन",
+        "SampleData": "नमूना डेटा",
+        "RealData": "वास्तविक डेटा",
+        "NoReview": "कोई समीक्षा नहीं",
+        "ShowingPage": "{{page}} से {{count}} पेज दिखा रहे हैं, कुल {{total}} में से",
+        "BasedOnReviews": "{{total}} समीक्षाओं पर आधारित",
+        "ButtonText": "समीक्षा लिखें",
+        "WidgetTitle": "विजेट शीर्षक",
+        "AverageRatingText": "औसत रेटिंग टेक्स्ट",
+        "Popover": {
+            "MostRecent": "नवीनतम",
+            "HighestRating": "उच्चतम रेटिंग",
+            "LowestRating": "न्यूनतम रेटिंग"
+        },
+        "Collapsible": {
+            "Color": "रंग",
+            "Theme": "थीम",
+            "Text": "टेक्स्ट"
+        },
+        "Placeholder": {
+            "TextField": "ग्राहक समीक्षाएँ"
+        },
+        "NoReviewsMessage": "दिखाने के लिए कोई समीक्षा नहीं",
+        "ErrorMessage": "कुछ गलत हो गया",
+        "InstallDescription": "उत्पाद पृष्ठों पर स्टार रेटिंग बैज जोड़ें।",
+        "Buttons": {
+            "Install": "इंस्टॉल",
+            "LearnMore": "और जानें"
+        }
+    },
+    "StarRatingBadge": {
+        "PageTitle": "स्टार रेटिंग बैज",
+        "BackButton": "वापस",
+        "Previewing": "पूर्वावलोकन",
+        "SampleData": "नमूना डेटा",
+        "NoReview": "कोई समीक्षा नहीं",
+        "Install": {
+            "Title": "इंस्टॉल",
+            "Description": "उत्पाद पृष्ठों पर स्टार रेटिंग बैज जोड़ें।"
+        },
+        "TextSection": {
+            "Title": "टेक्स्ट",
+            "EnableText": "समीक्षा काउंट टेक्स्ट सक्षम करें"
+        },
+        "ColorSection": {
+            "Title": "रंग",
+            "PrimaryColorLabel": "प्राथमिक रंग"
+        },
+        "Preview": {
+            "RatingText": "{{count}} समीक्षाएँ"
+        },
+        "Skeleton": {
+            "Loading": "लोड हो रहा है..."
+        }
+    },
+    "WriteReview": {
+        "Page": {
+            "Title": "समीक्षा लिखने का फ़्लो",
+            "BackButton": "वापस"
+        },
+        "Tabs": {
+            "InStore": "इन-स्टोर फ़ॉर्म",
+            "External": "बाहरी फ़ॉर्म"
+        },
+        "Collapsible": {
+            "TextSettings": "टेक्स्ट सेटिंग्स",
+            "ColorSettings": "रंग सेटिंग्स"
+        },
+        "TextFields": {
+            "ScreenTitle": "स्क्रीन शीर्षक",
+            "Introduction": "परिचय",
+            "DisplayName": "नाम प्रदर्शित करें",
+            "ButtonText": "बटन टेक्स्ट",
+            "Placeholder": "ग्राहक समीक्षाएँ"
+        },
+        "Color": {
+            "DefaultColor": "डिफॉल्ट रंग (ब्रांड सेटिंग्स से)",
+            "CustomColor": "कस्टम रंग",
+            "PrimaryColor": "प्राथमिक रंग",
+            "HexCode": "Hex कोड"
+        },
+        "Preview": {
+            "Title": "पूर्वावलोकन"
+        },
+        "Sample": {
+            "Banner": "यह एक नमूना पूर्वावलोकन है। सबमिट की गई समीक्षाएँ सहेजी नहीं जाएँगी।"
+        },
+        "ThanksPage": {
+            "Title": "आपकी समीक्षा के लिए धन्यवाद!",
+            "Processing": "हम इसे प्रोसेस कर रहे हैं और यह जल्द ही स्टोर पर दिखाई देगी। आप अपनी Judge.me प्रोफ़ाइल से समीक्षा संपादित कर सकते हैं।",
+            "Experience": "क्या आप हमारे साथ खरीदारी के अनुभव को साझा करना चाहेंगे?",
+            "Value": "हम आपकी प्रतिक्रिया को महत्व देते हैं और सुधार के लिए इसका उपयोग करते हैं। कृपया अपने विचार बताएं।"
+        },
+        "Review": {
+            "SharePicture": "तस्वीर साझा करें",
+            "UploadPhoto": "अपनी समीक्षा को सपोर्ट करने के लिए फोटो अपलोड करें।",
+            "ReviewContent": "समीक्षा सामग्री",
+            "HelpText": "हम केवल आवश्यकता होने पर आपसे आपकी समीक्षा के बारे में संपर्क करेंगे। समीक्षा सबमिट करके, आप हमारी शर्तों और गोपनीयता नीति से सहमत होते हैं।"
+        },
+        "Buttons": {
+            "Next": "अगला",
+            "GoToStore": "स्टोर पर जाएँ"
+        }
+    }
+}

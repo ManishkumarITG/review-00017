@@ -36,6 +36,7 @@ import { SaveBar } from "@shopify/app-bridge-react";
 import { getAllReviews, ratingSummary } from "./services/api.js";
 import { arrowIcon } from "./icons/icon.jsx";
 import { useAppBridge } from "@shopify/app-bridge-react";
+import { useTranslation } from "react-i18next";
 
 export default function ReviewWidgets() {
   // usenevigate for back to setting page
@@ -43,6 +44,9 @@ export default function ReviewWidgets() {
   const shopify = useAppBridge();
 
   const nevigate = useNavigate();
+
+  //translator
+  const { t } = useTranslation();
 
   // import color context
   const {
@@ -81,7 +85,8 @@ export default function ReviewWidgets() {
   const [rattingSummary, setRattingSummary] = useState(rattingArray.reviews);
   const [totalReview, setTotalReview] = useState(rattingArray.totalReview);
   const [avgStarRating, setAvgStarRating] = useState(rattingArray.avgRating);
- const [shopDomin, setShopDomain] = useState("")
+  const [shopDomin, setShopDomain] = useState("")
+
   useEffect(() => {
     setBtnText("Sample Data");
     const shopDomin = shopify.config.shop.split(".")[0];
@@ -198,7 +203,7 @@ export default function ReviewWidgets() {
                     <Icon source={arrowIcon} />
                   </Box>
                   <Text as="span" variant="headingLg" fontWeight="regular">
-                    Review Widget
+                    {t("reviewWidgets.PageTitle")}
                   </Text>
                 </InlineStack>
 
@@ -210,10 +215,10 @@ export default function ReviewWidgets() {
                 >
                   <BlockStack gap={500}>
                     <Text as="h3" variant="headingSm">
-                      Install
+                      {t("reviewWidgets.Sections.Install.Title")}
                     </Text>
                     <Text as="p">
-                      Add the Star Rating Badge on product pages.
+                      {t("reviewWidgets.Sections.Install.Description")}
                     </Text>
                     <InlineStack gap={300}>
                       <Button
@@ -225,16 +230,16 @@ export default function ReviewWidgets() {
                           )
                         }
                       >
-                        Install
+                        {t("reviewWidgets.Sections.Install.InstallButton")}
                       </Button>
                       <Button variant="plain" icon={ArrowDiagonalIcon}>
-                        Learn more
+                        {t("reviewWidgets.Sections.Install.LearnMore")}
                       </Button>
                     </InlineStack>
                   </BlockStack>
                 </Box>
 
-                <CollapsibleBox id="color-collapsible" boxName="Color">
+                <CollapsibleBox id="color-collapsible" boxName={t("reviewWidgets.Collapsible.Color")}>
                   {setting == null ? (
                     <Spinner
                       accessibilityLabel="Spinner example"
@@ -266,7 +271,7 @@ export default function ReviewWidgets() {
                   )}
                 </CollapsibleBox>
 
-                <CollapsibleBox id="theme-collapsible" boxName="Theme">
+                <CollapsibleBox id="theme-collapsible" boxName={t("reviewWidgets.Collapsible.Theme")}>
                   {setting == null ? (
                     <Spinner
                       accessibilityLabel="Spinner example"
@@ -299,7 +304,7 @@ export default function ReviewWidgets() {
                   )}
                 </CollapsibleBox>
 
-                <CollapsibleBox id="text-collapsible" boxName="Text">
+                <CollapsibleBox id="text-collapsible" boxName={t("reviewWidgets.Collapsible.Text")}>
                   {" "}
                   <Box gap="400">
                     {setting == null ? (
@@ -327,7 +332,7 @@ export default function ReviewWidgets() {
                                 id={text.settingName}
                                 onChange={handleTextChnge}
                                 autoComplete="off"
-                                placeholder="Customer Reviews"
+                                placeholder={t("reviewWidgets.Placeholder.TextField")}
                               />
                             </Box>
                           )
@@ -348,7 +353,7 @@ export default function ReviewWidgets() {
                 borderBlockEndWidth="025"
               >
                 <InlineStack blockAlign="center" align="end" gap={200}>
-                  <Text>Previewing</Text>
+                  <Text>{t("reviewWidgets.Preview")}</Text>
                   <Popover
                     active={active === "popover2"}
                     preferredAlignment="center"
@@ -391,7 +396,7 @@ export default function ReviewWidgets() {
                             setBtnText("Sempal Data");
                           }}
                         >
-                          Sample Data
+                          {t("reviewWidgets.SampleData")}
                         </Box>
                         <Box
                           style={{
@@ -403,7 +408,7 @@ export default function ReviewWidgets() {
                             setBtnText("Real Data");
                           }}
                         >
-                          Real Data
+                          {t("reviewWidgets.RealData")}
                         </Box>
                         <Box
                           style={{
@@ -415,7 +420,7 @@ export default function ReviewWidgets() {
                             setBtnText("No Review");
                           }}
                         >
-                          No Review
+                          {t("reviewWidgets.NoReview")}
                         </Box>
                       </Box>
                     </Box>
@@ -448,7 +453,7 @@ export default function ReviewWidgets() {
                   </BlockStack>
                 </InlineStack>
                 <Text alignment="center" as="span">
-                  Based on {totalReview} reviews
+                  {t("reviewWidgets.BasedOnReviews")}
                 </Text>
 
                 {rattingSummary.length !== 0 && (
@@ -508,7 +513,7 @@ export default function ReviewWidgets() {
                       onClick={toggleActive("popover1")}
                       accessibilityLabel="Other save actions"
                     >
-                      most Recent
+                      {t("reviewWidgets.Popover.MostRecent")}
                     </Button>
                   }
                   autofocusTarget="first-node"
@@ -518,19 +523,19 @@ export default function ReviewWidgets() {
                     actionRole="menuitem"
                     items={[
                       {
-                        content: "most Recent",
+                        content: t("reviewWidgets.Popover.MostRecent"),
                         onAction: () => {
                           handleRealData({ filterType: "mostRecent" });
                         },
                       },
                       {
-                        content: "Heghset Recent",
+                        content: t("reviewWidgets.Popover.HighestRating"),
                         onAction: () => {
                           handleRealData({ filterType: "highestRating" });
                         },
                       },
                       {
-                        content: "Lowest Recent",
+                        content: t("reviewWidgets.Popover.LowestRating"),
                         onAction: () => {
                           handleRealData({ filterType: "lowestRating" });
                         },
@@ -601,7 +606,7 @@ export default function ReviewWidgets() {
                           <Button variant="plain" icon={ChevronLeftIcon} />
                         </Box>
                         <Box as="span" style={{ color: "#535353ff" }}>
-                          Showing page {page} to {review.length} out of {total}
+                           Showing page {page} to {review.length} out of {total}
                         </Box>
                         <Box
                           style={{

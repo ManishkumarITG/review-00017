@@ -15,12 +15,15 @@ import Widget from "./components/Widget";
 import Branding from "./components/Branding";
 import { MenuIcon, PaintBrushRoundIcon } from "@shopify/polaris-icons";
 import { useColorTheme } from "./ColorContext";
+import { useTranslation } from "react-i18next";
+
 
 function MySettingPage() {
   const { isChange } = useColorTheme();
   const { mdDown } = useBreakpoints();
   const [isPage, setIsPage] = useState("widgets");
   const [showNavigation, setShowNavigation] = useState(false);
+  const { t } = useTranslation(); 
 
   useEffect(() => {
     setShowNavigation(mdDown);
@@ -82,13 +85,13 @@ function MySettingPage() {
                         alignItems: "center",
                       }}
                     >
-                      <Text as="p">REVIEW DISPLAY</Text>
+                      <Text as="p">  {t("SettingsPage.Navigation.ReviewDisplay")}</Text>
                       {mdDown && (
                         <Button
                           variant="primary"
                           onClick={() => setShowNavigation(true)}
                         >
-                          Close
+                          {t("SettingsPage.Navigation.Close")}
                         </Button>
                       )}
                     </Box>
@@ -106,7 +109,7 @@ function MySettingPage() {
                     >
                       <StarIcon width={25} />
                       <Text variant="headingMd" as="h1" tone="base">
-                        Widgets
+                       {t("SettingsPage.Navigation.Widgets")}
                       </Text>
                     </Box>
                   </Box>
@@ -115,7 +118,7 @@ function MySettingPage() {
 
                 <Box>
                   <Box padding="400" width="100%">
-                    <Text as="p">GENERAL</Text>
+                    <Text as="p">{t("SettingsPage.Navigation.General")}</Text>
 
                     <Box
                       style={{
@@ -130,7 +133,7 @@ function MySettingPage() {
                     >
                       <PaintBrushRoundIcon width={25} />
                       <Text variant="headingMd" as="h1" tone="base">
-                        Branding
+                         {t("SettingsPage.Navigation.Branding")}
                       </Text>
                     </Box>
                   </Box>

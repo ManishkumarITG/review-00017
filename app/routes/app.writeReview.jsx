@@ -23,6 +23,8 @@ import { SaveBar } from "@shopify/app-bridge-react";
 import CollapsibleBox from "./components/Collapsible";
 import Loding from "./components/Loding";
 import { arrowIcon } from "./icons/icon";
+import { useTranslation } from "react-i18next";
+
 
 const colorInitialState = {
   defaultColor: true,
@@ -72,6 +74,7 @@ export default function ReviewWidgets() {
 
   // import all hex code
   const starColor = getHexCode("star");
+  const { t } = useTranslation()
 
   const buttonColor = getHexCode("button");
   const buttonTextColor = getHexCode("buttonTextColor");
@@ -153,12 +156,12 @@ export default function ReviewWidgets() {
   const tabs = [
     {
       id: "from-1",
-      content: "In-store from",
+      content: t("WriteReview.Tabs.InStore"),
       panelID: "all-customers-content-1",
     },
     {
       id: "from-2",
-      content: "External from",
+      content: t("WriteReview.Tabs.External"),
       panelID: "accepts-marketing-content-1",
     },
   ];
@@ -187,7 +190,7 @@ export default function ReviewWidgets() {
             <Icon source={arrowIcon} />
           </Box>
           <Text as="span" variant="headingLg" fontWeight="regular">
-            Write a review flow
+            {t("WriteReview.Page.Title")}
           </Text>
         </InlineStack>
 
@@ -228,7 +231,7 @@ export default function ReviewWidgets() {
                                 value={state[titelValue]}
                                 id={text.settingName}
                                 onChange={handleTextChnge}
-                                placeholder="Customer Reviews"
+                                placeholder={t("WriteReview.TextFields.Placeholder")}
                               />
                             </Box>
                           )
@@ -243,13 +246,12 @@ export default function ReviewWidgets() {
                 <Box padding="300">
                   <BlockStack gap="100">
                     <Checkbox
-                      label="Default colors (from your brand settings)"
-                      checked={colorChangeState.defaultColor}
+                      label={t("WriteReview.Color.DefaultColor")} checked={colorChangeState.defaultColor}
                       id="defaultColor"
                       onChange={handleOpen}
                     />
                     <Checkbox
-                      label="Custom colors"
+                      label={t("WriteReview.Color.CustomColor")}
                       checked={colorChangeState.customColor}
                       id="customColor"
                       onChange={handleOpen}
@@ -301,7 +303,9 @@ export default function ReviewWidgets() {
                 borderBlockEndWidth="025"
               >
                 <InlineStack blockAlign="center" align="end" gap={200}>
-                  <Text>Previewing</Text>
+                  <Text>
+                    {t("WriteReview.Preview.Title")}
+                  </Text>
                 </InlineStack>
               </Box>
               <LegacyTabs
@@ -333,7 +337,7 @@ export default function ReviewWidgets() {
                 ) : (
                   <BlockStack gap="400">
                     <Box paddingBlockStart="400" paddingInline="200">
-                      <Banner title="This is a sample preview. Reviews submitted won't be saved." />
+                      <Banner title={t("WriteReview.Sample.Banner")} />
                     </Box>
 
                     {pageCount == 0 || pageCount == 2 ? (
@@ -342,20 +346,17 @@ export default function ReviewWidgets() {
                         {pageCount == 2 ? (
                           <>
                             <Text alignment="center" variant="heading2xl">
-                              Thanks for your review!
+                              {t("WriteReview.ThanksPage.Title")}
                             </Text>
                             <Text
                               alignment="center"
                               variant="headingMd"
                               tone="base"
                             >
-                              We are processing it and it will appear on the
-                              store soon. You can edit review by logging into
-                              your Judge.me profile.
+                               {t("WriteReview.ThanksPage.Processing")}
                             </Text>
                             <Text alignment="center" variant="headingLg">
-                              Would you like to share your experience of
-                              shopping with us?
+                              {t("WriteReview.ThanksPage.Experience")}
                             </Text>
 
                             <Text
@@ -363,8 +364,7 @@ export default function ReviewWidgets() {
                               variant="headingMd"
                               tone="base"
                             >
-                              We value your feedback and use it to improve.
-                              Please share any thoughts or suggestions you have.
+                                {t("WriteReview.ThanksPage.Value")}
                             </Text>
                           </>
                         ) : (
@@ -468,10 +468,10 @@ export default function ReviewWidgets() {
                             variant="headingLg"
                             tone="base"
                           >
-                            Share a picture
+                           {t("WriteReview.Review.SharePicture")}
                           </Text>
                           <Text alignment="center" variant="headingsm">
-                            Upload a photo to support your review.
+                             {t("WriteReview.Review.UploadPhoto")}
                           </Text>
                         </BlockStack>
                       )
@@ -485,17 +485,14 @@ export default function ReviewWidgets() {
                               <TextField
                                 value={userReview}
                                 onChange={handleReviewChange}
-                                label="Review content"
+                                label={t("WriteReview.Review.ReviewContent")}
                                 type="text"
                                 multiline={4}
                                 error={reqData && "data is requird"}
                                 autoComplete="email"
                                 helpText={
                                   <Text alignment="center" as="span">
-                                    We’ll only contact you about your review if
-                                    necessary. By submitting your review, you
-                                    agree to our terms and conditions and
-                                    privacy policy.
+                                    {t("WriteReview.Review.HelpText")}
                                   </Text>
                                 }
                               />

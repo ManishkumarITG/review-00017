@@ -16,5 +16,8 @@
             "folderPath": "reviewapp\\extensions\\",
             "color": "foldercolorizer.color_99ffcc"
         }
+    ],
+    "i18n-ally.localesPaths": [
+        "extensions/review-extension/locales"
     ]
 }

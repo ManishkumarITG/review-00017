@@ -21,6 +21,7 @@ import {
   EmptyState,
   SkeletonDisplayText,
 } from "@shopify/polaris";
+import { useTranslation } from "react-i18next";
 
 import { Modal, TitleBar, useAppBridge } from "@shopify/app-bridge-react";
 import { useState, useCallback, useEffect, useMemo } from "react";
@@ -52,6 +53,8 @@ import pkg from "lodash";
 function IndexFiltersDefaultExample() {
   const shopify = useAppBridge();
   const { debounce } = pkg;
+
+  const { t } = useTranslation()
 
   const { getHexCode } = useColorTheme();
 
@@ -524,15 +527,16 @@ function IndexFiltersDefaultExample() {
         <InlineGrid gap="400">
           <InlineStack gap="200">
             <Text variant="headingLg" as="h2">
-              Reviews
+             {t("Reviews.Title")}
             </Text>
             <Badge
               tone="success"
               variant="outline"
               spacing="tight"
               progress="complete"
-            >
-              Auto Publish
+              >
+              {t("Reviews.Batch")}
+              
             </Badge>
           </InlineStack>
 

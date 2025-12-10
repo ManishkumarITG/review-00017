@@ -14,6 +14,7 @@ import "./style.css";
 import { simplifiedMediaCardData } from "../data/reviewData";
 import { useNavigate } from "react-router";
 import { useAppBridge } from "@shopify/app-bridge-react";
+import { useTranslation } from "react-i18next";
 
 export default function Widget() {
   const [selected, setSelected] = useState("");
@@ -22,6 +23,7 @@ export default function Widget() {
 
   const shopify = useAppBridge();
   const nevigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     async function getThemes() {
@@ -81,6 +83,7 @@ export default function Widget() {
     const embedId = "03fdd7d0352cc3b1184544f7e2c783be";
     if (index === 0) {
       url = `https://admin.shopify.com/store/${shopDomin}/themes/${current}/editor?template=page&addAppBlockId=${embedId}/review-widget`;
+      // url = `https://admin.shopify.com/store/${shopDomin}/themes/${current}/editor`  
     } else if (index === 1) {
       url = `https://admin.shopify.com/store/${shopDomin}/themes/${current}/editor?context=apps&activateAppId=${embedId}/Product_review`;
     }
@@ -91,7 +94,7 @@ export default function Widget() {
   return (
     <AppProvider>
       <Page
-        title="Widget"
+        title={t("WidgetPage.Title")}
         fullWidth={true}
         actionGroups={[
           {
@@ -99,7 +102,7 @@ export default function Widget() {
             actions: [
               {
                 content: "Horize",
-                accessibilityLabel: "Individual action label",
+                accessibilityLabel: t("WidgetPage.SelectThemeLoading"),
                 onAction: () => alert("Share on Facebook action"),
               },
               {
@@ -143,34 +146,34 @@ export default function Widget() {
                       gap: "5px",
                     }}
                   >
-                    {card.title}
+                    {t(`WidgetPage.MediaCards.${index}.title`)}
                     <Badge
                       tone="success"
                       progress="complete"
                       toneAndProgressLabelOverride="Status: Published. Your online store is visible."
                     >
-                      install
+                      {t("WidgetPage.Actions.Install")}
                     </Badge>
                   </Box>
                 }
                 portrait={true}
                 primaryAction={{
-                  content: "Customize",
+                  content:t("WidgetPage.Actions.Customize"),
                   onAction: () => {
                     nevigate(card.path);
                   },
                 }}
                 {...(index !== 2
                   ? {
-                      secondaryAction: {
-                        content: "install",
-                        onAction: () => {
-                          rediectToThemeEditor(index);
-                        },
+                    secondaryAction: {
+                      content:t("WidgetPage.Actions.Install"),
+                      onAction: () => {
+                        rediectToThemeEditor(index);
                       },
-                    }
+                    },
+                  }
                   : {})}
-                description={card.description}
+                description={t(`WidgetPage.MediaCards.${index}.description`)}
               >
                 <img
                   alt=""

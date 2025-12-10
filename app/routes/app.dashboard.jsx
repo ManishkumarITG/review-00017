@@ -25,8 +25,10 @@ import { getReviewsByType } from "./services/api";
 import StarRating from "./components/Ratting.jsx";
 import { useNavigate } from "react-router";
 import Loding from "./components/Loding";
-
 import { useColorTheme } from "./ColorContext.jsx";
+import { useTranslation } from "react-i18next";
+
+
 
 export default function Deshboard() {
   const [topProduct, setTopProduct] = useState([]);
@@ -36,6 +38,8 @@ export default function Deshboard() {
   const nevigate = useNavigate();
 
   const { getHexCode } = useColorTheme();
+
+  const { t } = useTranslation()
 
   const starColor = getHexCode("star");
 
@@ -65,11 +69,11 @@ export default function Deshboard() {
 
   const deshboardImages = [
     {
-      title: "Build trust. Grow sales. Try Awesome FREE.",
+      title: t("Dashboard.PromoCard.Title"),
       imageurl: "https://assets.judge.me/core/cover/awesome-2025.webp",
-      buttontext: "Explore features",
+      buttontext: t("Dashboard.PromoCard.Button"),
       textcontent:
-        "Get more reviews, build trust and grow store visits. Increase retention & referrals. FREE for 15 days and then just $15/month. Cancel anytime.",
+        t("Dashboard.PromoCard.Description"),
     },
   ];
 
@@ -93,7 +97,7 @@ export default function Deshboard() {
                 <Box minHeight="400px">
                   <Box paddingBlockEnd="400">
                     <Text variant="headingLg" as="h2" paddingBlockEnd="400">
-                      Top products
+                      {t("Dashboard.TopProducts")}
                     </Text>
                   </Box>
                   <Card padding={0}>
@@ -111,14 +115,13 @@ export default function Deshboard() {
                               <Box align="center" padding="200">
                                 <Image
                                   src="https://pub-images.judge.me/judgeme/empty-product"
-                                  alt="No data available"
+                                  alt={t("Dashboard.NoData")}
                                   width="30%"
                                 />
                               </Box>
                               <Box align="center" padding="200">
                                 <Text>
-                                  A list of top reviewed products will show
-                                  here.
+                                  {t("Dashboard.TopProductsEmptyMessage")}
                                 </Text>
                               </Box>
                               <Box align="center" padding="200">
@@ -129,7 +132,7 @@ export default function Deshboard() {
                                     );
                                   }}
                                 >
-                                  View all reviews
+                                  {t("Dashboard.TopProductsButton")}
                                 </Button>
                               </Box>
                             </InlineGrid>
@@ -137,9 +140,9 @@ export default function Deshboard() {
                             <>
                               <DataTable
                                 columnContentTypes={[
-                                  "text",
-                                  "numeric",
-                                  "numeric",
+                                  t("Dashboard.Table.Product"),
+                                  t("Dashboard.Table.Reviews"),
+                                  t("Dashboard.Table.Rating"),
                                 ]}
                                 headings={["Product", "Reviews", "Rating"]}
                                 rows={topProductRows}
@@ -165,7 +168,7 @@ export default function Deshboard() {
                 <Box>
                   <Box paddingBlockEnd="400">
                     <Text variant="headingLg" as="h2">
-                      Review Activity
+                      {t("Dashboard.ReviewActivity")}
                     </Text>
                   </Box>
                   <Card padding={0}>
@@ -191,13 +194,13 @@ export default function Deshboard() {
                               <Box align="center" padding="200">
                                 <Image
                                   src="https://pub-images.judge.me/judgeme/empty-review"
-                                  alt="No data available"
+                                  alt={t("Dashboard.NoData")}
                                   width="30%"
                                 />
                               </Box>
                               <Box align="center" padding="200">
                                 <Text>
-                                  You can view your recent reviews here.
+                                 {t("Dashboard.ReviewActivityEmptyMessage")}
                                 </Text>
                               </Box>
                               <Box align="center" padding="200">
@@ -208,7 +211,7 @@ export default function Deshboard() {
                                     );
                                   }}
                                 >
-                                  Request reviews
+                                 {t("Dashboard.ReviewActivityButton")}
                                 </Button>
                               </Box>
                             </InlineGrid>
@@ -219,7 +222,7 @@ export default function Deshboard() {
                                   tabs={[
                                     {
                                       id: "last_reviews",
-                                      content: "Last reviews",
+                                      content:  t("Dashboard.LastReviews"),
                                     },
                                   ]}
                                   selected={0}
@@ -260,7 +263,7 @@ export default function Deshboard() {
                                   paddingBlockEnd="300"
                                   onClick={() => nevigate("/app/reveiwpage")}
                                 >
-                                  <Link>View all in Reviews Dashboard</Link>
+                                  <Link>{t("Dashboard.ViewAllReviewsDashboard")}</Link>
                                 </Box>
                               </Box>
                             </>
