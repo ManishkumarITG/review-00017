@@ -62,8 +62,7 @@ function InstallWidgetsCard({
             </InlineStack>
           </BlockStack>
         </Box>
-      )
-      }
+      )}
     </Box >
   );
 }
