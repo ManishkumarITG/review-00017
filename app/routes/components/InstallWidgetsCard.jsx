@@ -41,7 +41,7 @@ function InstallWidgetsCard({
         <Box paddingBlockStart="300">
           <BlockStack gap="300">
             <Text>{description}</Text>
-
+            
             <InlineStack gap="300">
               {buttons.map((btn, index) => (
                 btn.tone === "plain" ? (
