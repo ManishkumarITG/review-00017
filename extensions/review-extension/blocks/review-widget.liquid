@@ -19,7 +19,6 @@
 </script>
 
 <script src="{{ 'reviewFilter.js' | asset_url }}" defer></script>
-{% comment %} <script src="{{ 'reviewSetting.js' | asset_url }}" defer></script> {% endcomment %}
 
 {% if product %}
   <script>
@@ -28,7 +27,6 @@
   </script>
 {% endif %}
 
-{% comment %} {% assign actual_rating = block.settings.actual_rating %} {% endcomment %}
 
 <div class="jm-review-widget my-review-widget" id="jm-review-{{ section.id }}">
   {% comment %} <!-- Header --> {% endcomment %}
@@ -350,16 +348,10 @@
 
           <script>
             // -----------------------------
-            // Dummy data (as requested)
+            // Dummy Data
             // -----------------------------
             const dummydata = [
-              {
-                _id: '1',
-                author: 'Arjun',
-                rating: 5,
-                description: 'Bro product legit fire fr fr',
-                date: '2025-01-05',
-              },
+              { _id: '1', author: 'Arjun', rating: 5, description: 'Bro product legit fire fr fr', date: '2025-01-05' },
               {
                 _id: '2',
                 author: 'Meera',
@@ -374,13 +366,7 @@
                 description: 'Decent but packaging could’ve been better.',
                 date: '2024-12-22',
               },
-              {
-                _id: '4',
-                author: 'Tanya',
-                rating: 2,
-                description: 'Not what I expected tbh.',
-                date: '2024-11-15',
-              },
+              { _id: '4', author: 'Tanya', rating: 2, description: 'Not what I expected tbh.', date: '2024-11-15' },
               {
                 _id: '5',
                 author: 'Kabir',
@@ -390,92 +376,97 @@
               },
             ];
 
-            // -------------------------------------
-            // Helper: Generate star HTML text
-            // -------------------------------------
+            // Star Generator
             function getStarArray(rating) {
-              const totalStars = 5;
-              let stars = [];
-
-              for (let i = 1; i <= totalStars; i++) {
-                stars.push(i <= rating ? '★' : '☆');
-              }
-
-              return stars.join('');
+              return Array.from({ length: 5 }, (_, i) => (i < rating ? '★' : '☆')).join('');
             }
 
-            // -------------------------------------
-            // Avatar generator (first letter)
-            // -------------------------------------
+            // Avatar (Initial letter)
             function getAvatar(name) {
-              const letter = name?.charAt(0)?.toUpperCase() || '?';
-              return `<div style="
-                                    width:40px; height:40px;
-                                    display:flex; align-items:center; justify-content:center;
-                                    border-radius:50%; background:#eee;
-                                    font-weight:600;
-                                    ">${letter}</div>`;
+              const avatar = name?.charAt(0)?.toUpperCase() || '?';
+              return `
+      <div style="
+        width:40px; height:40px;
+        display:flex; align-items:center; justify-content:center;
+      
+        font-weight:600;
+      ">
+        ${avatar}
+      </div>`;
             }
 
-            // -------------------------------------
-            // Render dummy reviews inside container
-            // -------------------------------------
-            function renderDummyReviews() {
+            // RENDER FUNCTION (FIXED)
+            function renderDummyReviews(list = dummydata) {
               const container = document.getElementById('reviewsContainer');
-              container.innerHTML = ''; // reset
+              container.innerHTML = '';
 
-              dummydata.forEach((review) => {
+              list.forEach((review) => {
                 const reviewItem = document.createElement('div');
 
-                const avatar = getAvatar(review.author);
-                const userName = review.author;
-
                 reviewItem.innerHTML = `
-                              <div style="
-                                display:flex; gap:14px; padding:16px;
-                                box-shadow:0 2px 8px rgba(0,0,0,0.04);
-                                border-radius:12px;
-                                margin-bottom:16px;
-                              ">
-                                <div class="jm-avatar star" style="font-size:18px;">
-                                  ${avatar}
-                                </div>
+        <div style="
+          display:flex; gap:14px; padding:16px;
+          box-shadow:0 2px 8px rgba(0,0,0,0.04);
+          border-radius:12px;
+          margin-bottom:16px;
+        ">
+          <div class="jm-avatar star" style="font-size:18px;">
+            ${getAvatar(review.author)}
+          </div>
 
-                                <div style="flex:1; width:380px;">
-                                  <div style="display:flex; justify-content:space-between; align-items:center;">
-                                    <div>
-                                      <div style="font-size:16px;" class="star">
-                                        <span class="mainFontSize" style="justify-content:start">
-                                          ${getStarArray(review.rating)}
-                                        </span>
-                                      </div>
-                                      <p class="tagName" style="margin:0px;">
-                                        ${userName}
-                                      </p>
-                                    </div>
+          <div style="flex:1;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-size:16px;" class="star">
+                  <span class="mainFontSize" style="justify-content:start;">
+                    ${getStarArray(review.rating)}
+                  </span>
+                </div>
+                <p class="tagName" style="margin:0;">${review.author}</p>
+              </div>
 
-                                    <div style="display:flex; align-items:center; gap:10px;" class="text">
-                                      <p style="margin:0; color:#888;">
-                                        ${review.date}
-                                      </p>
+              ${
+                reviewSettings.showDate
+                  ? `<div style="display:flex; align-items:center; gap:10px;" class="text">
+                      <p style="margin:0; color:#888;">${review.date}</p>
+                    </div>`
+                  : ''
+              }
+            </div>
 
-                                      <!-- Edit icon (dummy always off) -->
-                                    </div>
-                                  </div>
-
-                                  <p style="margin:0px;">
-                                    ${review.description}
-                                  </p>
-                                </div>
-                              </div>
-                            `;
+            <p style="margin:0;">${review.description}</p>
+          </div>
+        </div>
+      `;
 
                 container.appendChild(reviewItem);
               });
             }
 
-            // Fire render
+            // Initial render
             renderDummyReviews();
+
+            // SORTING LOGIC (USING FIXED RENDER)
+            const sortSelect = document.querySelector('.jm-sort-select');
+
+            sortSelect.addEventListener('change', (e) => {
+              let value = e.target.value;
+              let sorted = [...dummydata];
+
+              if (value === 'most_recent') {
+                sorted.sort((a, b) => new Date(b.date) - new Date(a.date));
+              }
+
+              if (value === 'highest') {
+                sorted.sort((a, b) => b.rating - a.rating);
+              }
+
+              if (value === 'lowest') {
+                sorted.sort((a, b) => a.rating - b.rating);
+              }
+
+              renderDummyReviews(sorted);
+            });
           </script>
         {% endif %}
       </div>
@@ -684,7 +675,7 @@
             color: white;
           "
         >
-          Write a review 
+          Write a review
         </button>
       </div>
     {% endif %}
