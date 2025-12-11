@@ -86,7 +86,7 @@ function IndexFiltersDefaultExample() {
     setQueryValue("");
   }, [selectedTab]);
 
-  const onHandleCancel = () => {};
+  const onHandleCancel = () => { };
 
   const fetchResults = async (value) => {
     if (value.trim() === "") {
@@ -99,7 +99,7 @@ function IndexFiltersDefaultExample() {
     try {
       setLoding(true);
       const searchData = await getSearchResult(value);
-      console.log("search values" , searchData)
+      console.log("search values", searchData)
       setReviews(searchData);
       console.log("Search Results:", searchData);
     } catch (error) {
@@ -279,7 +279,9 @@ function IndexFiltersDefaultExample() {
   };
 
   const { selectedResources, allResourcesSelected, handleSelectionChange } =
-    useIndexResourceState(reviews);
+    useIndexResourceState(reviews, {
+      resourceIDResolver: (review) => review._id
+    });
 
   let obj = { length: 5 };
 
@@ -528,20 +530,20 @@ function IndexFiltersDefaultExample() {
         <InlineGrid gap="400">
           <InlineStack gap="200">
             <Text variant="headingLg" as="h2">
-             {t("Reviews.Title")}
+              {t("Reviews.Title")}
             </Text>
             <Badge
               tone="success"
               variant="outline"
               spacing="tight"
               progress="complete"
-              >
+            >
               {t("Reviews.Batch")}
-              
+
             </Badge>
           </InlineStack>
 
-          <Card>
+          <Card padding={0}>
             <IndexFilters
               sortSelected={sortSelected}
               queryValue={queryValue}
@@ -549,6 +551,13 @@ function IndexFiltersDefaultExample() {
               onQueryChange={handleFiltersQueryChange}
               onQueryClear={onQueryClear}
               onSort={setSortSelected}
+              primaryAction={{
+                type: "cancel",
+                content: "Cancel",
+                onAction: onHandleCancel,
+                disabled: false,
+                loading: false,
+              }}
               cancelAction={{
                 onAction: onHandleCancel,
                 disabled: false,
@@ -556,6 +565,7 @@ function IndexFiltersDefaultExample() {
                 type: "cancel",
                 content: "X",
               }}
+
               tabs={tabs}
               filters={[]}
               onClearAll={handleFiltersClearAll}
@@ -603,11 +613,11 @@ function IndexFiltersDefaultExample() {
                   loding
                     ? []
                     : [
-                        { title: "Customer" },
-                        { title: "Created" },
-                        { title: "Rating" },
-                        { title: "status", alignment: "end" },
-                      ]
+                      { title: "Customer" },
+                      { title: "Created" },
+                      { title: "Rating" },
+                      { title: "status", alignment: "end" },
+                    ]
                 }
               >
                 {rowMarkup}

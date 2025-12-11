@@ -232,9 +232,7 @@ export default function ReviewWidgets() {
                       >
                         {t("reviewWidgets.Sections.Install.InstallButton")}
                       </Button>
-                      <Button variant="plain" icon={ArrowDiagonalIcon}>
-                        {t("reviewWidgets.Sections.Install.LearnMore")}
-                      </Button>
+                      
                     </InlineStack>
                   </BlockStack>
                 </Box>
@@ -453,7 +451,7 @@ export default function ReviewWidgets() {
                   </BlockStack>
                 </InlineStack>
                 <Text alignment="center" as="span">
-                  {t("reviewWidgets.BasedOnReviews")}
+                   Based on {totalReview} reviews
                 </Text>
 
                 {rattingSummary.length !== 0 && (
@@ -501,7 +499,7 @@ export default function ReviewWidgets() {
                   }}
                 >
                   {state["Button Text"]}
-                </Box>
+                </Box>  
 
                 <Popover
                   active={active === "popover1"}
@@ -544,7 +542,7 @@ export default function ReviewWidgets() {
                   />
                 </Popover>
 
-                <Box>
+                <Box minHeight="400px">
                   {!loding ? (
                     review.length !== 0 &&
                     review.map((v) => {
@@ -552,7 +550,7 @@ export default function ReviewWidgets() {
                       const tag = v.email.split("@")[0];
 
                       return (
-                        <Box key={v._id} padding="100">
+                        <Box key={v._id} padding="100" >
                           <InlineStack align="space-between" gap="100">
                             <Box>
                               <Box>
