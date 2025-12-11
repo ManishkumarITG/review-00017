@@ -20,8 +20,10 @@ import { useColorTheme } from "../ColorContext";
 import ColorPickerCircle from "./ColorPicker";
 import { SaveBar } from "@shopify/app-bridge-react";
 import StarRating from "./Ratting";
+import { useTranslation } from "react-i18next";
 
 function Branding() {
+  const { t } = useTranslation();
   const { getHexCode, setting, handleSave, handleDiscard, lodaing } =
     useColorTheme();
 
@@ -44,16 +46,16 @@ function Branding() {
             <Box width="100%" padding="400" gap="400">
               <InlineGrid columns={2}>
                 <Text as="p" variant="headingLg">
-                  Color
+                  {t("BrandingPage.ColorCard.Title")}
                 </Text>
 
                 <Button
                   textAlign="end"
                   variant="plain"
-                  onClick={() => {}}
+                  onClick={() => { }}
                   accessibilityLabel="Preview"
                 >
-                  Reset To Default
+                  {t("BrandingPage.ColorCard.ResetButton")}
                 </Button>
               </InlineGrid>
             </Box>
@@ -88,7 +90,7 @@ function Branding() {
                               />
                               <Box gap="400">
                                 <Text variant="headingMd" as="p">
-                                  Primary color
+                                  {t("BrandingPage.ColorCard.PrimaryColorLabel")}
                                 </Text>
                                 <Text variant="headingsm" as="p">
                                   {getHexCode(color.type)}
@@ -102,8 +104,8 @@ function Branding() {
                   )}
                 </BlockStack>
                 <Text>
-                  Used for the star color, buttons, links and link buttons on
-                  all widgets and emails.
+                  {t("BrandingPage.ColorCard.Description")}
+
                 </Text>
               </InlineGrid>
             </Box>
@@ -112,7 +114,7 @@ function Branding() {
           <Card padding="0">
             <BlockStack style={{ padding: "20px" }} gap="400">
               <Text as="p" variant="headingLg">
-                Branding
+                {t("BrandingPage.BrandingCard.Title")}
               </Text>
             </BlockStack>
 
@@ -128,7 +130,7 @@ function Branding() {
                     <Box style={{ display: "flex", gap: "5px" }}>
                       <Text tone="base">Rating icon</Text>
                       <Badge icon={ThumbsUpIcon} tone="info">
-                        Awesome
+                         {t("BrandingPage.BrandingCard.RatingIcon")}
                       </Badge>
                     </Box>
                   }
@@ -136,7 +138,7 @@ function Branding() {
                   disabled
                   placeholder="star (Default)"
                 />
-                <Text>This will be used in widgets.</Text>
+                <Text> {t("BrandingPage.BrandingCard.RatingDescription")}</Text>
 
                 <StarRating rating={5} color={starColor || "#108474"} />
               </InlineGrid>

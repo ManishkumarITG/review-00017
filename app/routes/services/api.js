@@ -168,6 +168,7 @@ export const getSearchResult = async (query) => {
     );
     const resData = await res.json();
     const data = resData;
+    console.log("my search data" , data.data)
     return data.data;
   } catch (error) {
     return [];

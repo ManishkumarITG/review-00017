@@ -6,6 +6,7 @@ import {
   ChoiceList,
   BlockStack,
   Link,
+  Checkbox,
 } from "@shopify/polaris";
 import "@shopify/polaris/build/esm/styles.css";
 import React, { useCallback, useState } from "react";
@@ -15,17 +16,19 @@ function InstallWidgetsCard({
   description,
   buttons = [],
   pannelId,
-}) {
+  sendData
+  }) {
   const [selected, setSelected] = useState([]);
   const [open, setOpen] = useState(false);
   const handleChange = useCallback((value) => {
-    setSelected(value)
+    setSelected(value);
+    sendData(title);
     setOpen(prev => !prev);
   }, []);
 
   return (
     <Box>
-      <ChoiceList
+      {/* <ChoiceList
         allowMultiple
         choices={[
           {
@@ -34,6 +37,12 @@ function InstallWidgetsCard({
           },
         ]}
         selected={selected}
+        onChange={handleChange}
+      /> */}
+
+      <Checkbox
+        label={title}
+        checked={open}
         onChange={handleChange}
       />
 

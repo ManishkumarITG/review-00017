@@ -40,6 +40,7 @@ import { SaveBar, useAppBridge } from "@shopify/app-bridge-react";
 import Loding from "./components/Loding.jsx";
 import { arrowIcon } from "./icons/icon.jsx";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function appStarRatting() {
   const nevigate = useNavigate();
@@ -63,6 +64,7 @@ export default function appStarRatting() {
   } = useColorTheme();
 
   const starColor = getHexCode("star");
+  const { t } = useTranslation()
 
   useEffect(() => {
     const myShopDomin = shopify.config.shop.split(".")[0];
@@ -126,14 +128,14 @@ export default function appStarRatting() {
                     border: "1px solid #babfc3",
                     padding: "7px",
                     borderRadius: "5px",
-                    cursor: "pointer",
+                    cursor: "pointer"
                   }}
                   onClick={handlePageChange}
                 >
                   <Icon source={arrowIcon} />
                 </Box>
                 <Text as="span" variant="headingLg" fontWeight="regular">
-                  Star Rating Badge
+                  {t("StarRatingBadge.PageTitle")}
                 </Text>
               </InlineStack>
 
@@ -145,10 +147,10 @@ export default function appStarRatting() {
               >
                 <BlockStack gap={500}>
                   <Text as="h3" variant="headingSm">
-                    Install
+                    {t("StarRatingBadge.Install.Title")}
                   </Text>
                   <Text as="p">
-                    Add the Star Rating Badge on product pages.
+                    {t("StarRatingBadge.Install.Description")}
                   </Text>
                   <InlineStack gap={300}>
                     <Button
@@ -160,20 +162,10 @@ export default function appStarRatting() {
                         )
                       }
                     >
-                      Install
+                      {t("StarRatingBadge.Install.Title")}
                     </Button>
-                    <Button variant="plain" icon={ArrowDiagonalIcon}>
-                      Learn more
-                    </Button>
-                  </InlineStack>
-                  <s-divider />
 
-                  <Text>
-                    Add the Star Rating Badge on collection pages (optional):
-                  </Text>
-                  <Link monochrome url="#">
-                    See guide ↗
-                  </Link>
+                  </InlineStack>
                 </BlockStack>
               </Box>
 
@@ -216,7 +208,8 @@ export default function appStarRatting() {
                             />
                             <Box gap="400">
                               <Text variant="headingMd" as="p">
-                                Primary color
+                                {t("StarRatingBadge.ColorSection.PrimaryColorLabel")}
+
                               </Text>
                               <Text variant="headingsm" as="p">
                                 {getHexCode(color.type)}
@@ -240,7 +233,9 @@ export default function appStarRatting() {
               borderBlockEndWidth="025"
             >
               <InlineStack blockAlign="center" align="end" gap={200}>
-                <Text>Previewing</Text>
+                <Text>
+                  {t("StarRatingBadge.Previewing")}
+                </Text>
                 <Popover
                   active={active === "popover2"}
                   preferredAlignment="center"
@@ -281,7 +276,8 @@ export default function appStarRatting() {
                           setBtnText("Sempal Data");
                         }}
                       >
-                        Sempal Data
+                        {t("reviewWidgets.SampleData")}
+
                       </Box>
                       <Box
                         style={{
@@ -291,8 +287,8 @@ export default function appStarRatting() {
                         onClick={() => {
                           setBtnText("No Review");
                         }}
-                      >
-                        No Review
+                        >
+                        {t("reviewWidgets.NoReview")}
                       </Box>
                     </Box>
                   </Box>

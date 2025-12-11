@@ -1,14 +1,47 @@
-import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
-import en from "../extensions/review-extension/locales/en.default.json";
-// import hi from "../extensions/review-extension/locales/hi.json";
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import en from "./locales/en.default.json";
+import hi from "./locales/hi.json";
 
-i18n.use(initReactI18next).init({
-  resources: {
-    en: { translation: en },
-    hi: { translation: hi },
-  },
-  interpolation: { escapeValue: false }
-});
+const resources = {
+  en: { translation: en },
+  hi: { translation: hi },
+};
 
+i18n
+  .use(initReactI18next)
+  .init({
+    resources,
+
+    // ✅ Always fall back to English when unsupported (e.g., 'tr')
+    fallbackLng: 'en',
+    lng: "en",
+
+    cleanCode: true,
+    lowerCaseLng: true,
+
+    // Make sure only these can be picked
+    supportedLngs: ['en', 'hi'],
+
+    // If you get codes like 'tr-TR' or 'en-US', load just 'tr'/'en'
+    load: 'languageOnly',
+    nonExplicitSupportedLngs: true,
+
+    // Keep language codes clean
+    cleanCode: true,
+    lowerCaseLng: true,
+
+    interpolation: { escapeValue: false },
+    react: {
+      useSuspense: false,
+      bindI18n: false,
+      bindI18nStore: false,
+    }
+
+  });
+
+
+export const changeLanguage = (lang) => {
+  i18n.changeLanguage(lang);
+}
 export default i18n;

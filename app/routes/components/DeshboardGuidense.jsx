@@ -15,6 +15,8 @@ import {
   MenuHorizontalIcon,
 } from "@shopify/polaris-icons";
 import '@shopify/polaris/build/esm/styles.css';
+import { useTranslation } from "react-i18next";
+
 
 import { useNavigate } from "react-router";
 
@@ -25,7 +27,11 @@ function DashboardGuidance() {
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [shopDomin, setShopDomain] = useState("")
+  const [taskCompleted, settaskCompleted] = useState([])
   const shopify = useAppBridge()
+
+  const { t } = useTranslation()
+
   const embedId = "03fdd7d0352cc3b1184544f7e2c783be";
   const navigate = useNavigate();
 
@@ -42,18 +48,21 @@ function DashboardGuidance() {
   // temparery array to show guidense options
   const widgetCards = [
     {
-      title: "Install Review Widget and Star Rating Badge",
+      pannelId: "Star Rating Badge",
+      title: t("DashboardGuidance.WidgetCards.InstallReviewWidget.Title"),
       description:
-        "Display reviews and star ratings on the product page by enabling the Judge.me widgets in your Shopify theme.",
+        t("DashboardGuidance.WidgetCards.InstallReviewWidget.Description"),
       buttons: [
         {
-          label: "Install Review Widget",
+          label: t("DashboardGuidance.WidgetCards.InstallReviewWidget.Buttons.ReviewWidget"),
           variant: "primary",
           tone: "base",
           onClick: () => window.open(`https://admin.shopify.com/store/${shopDomin}/themes/current/editor?template=page&addAppBlockId=${embedId}/review-widget`, "_blank"),
         },
         {
-          label: "Install Star Rating Badge",
+          label: t(
+            "DashboardGuidance.WidgetCards.InstallReviewWidget.Buttons.StarRatingBadge"
+          ),
           onClick: () => window.open(`https://admin.shopify.com/store/${shopDomin}/themes/current/editor?context=apps&activateAppId=${embedId}/Product_review`, "_blank"),
         },
       ],
@@ -61,12 +70,13 @@ function DashboardGuidance() {
 
     {
       pannelId: "customize_widget",
-      title: "Customize the review widget",
-      description:
-        "Change the look and feel of your review display to match your brand.",
+      title: t("DashboardGuidance.WidgetCards.CustomizeWidget.Title"),
+      description: t(
+        "DashboardGuidance.WidgetCards.CustomizeWidget.Description"
+      ),
       buttons: [
         {
-          label: "Go to widget settings",
+          label: t("DashboardGuidance.TaskProgress", { completed: 1, total: 6 }),
           variant: "primary",
           tone: "base",
           onClick: () => navigate("/app/reviewWidgets")
@@ -76,7 +86,21 @@ function DashboardGuidance() {
     },
   ];
 
-  
+
+  const SaveCheckBoxData = (data) => {
+    settaskCompleted((prev) => {
+      if (prev.includes(data)) {
+        return prev.filter((item) => item !== data);
+      };
+        return [...prev, data];
+    });
+  }
+
+  const CheckboxCountFromInstallPage = (data) => {
+    SaveCheckBoxData(data)
+  };
+
+
 
   return (
     <Card roundedAbove="sm">
@@ -84,7 +108,7 @@ function DashboardGuidance() {
         {/* Top row: progress + menu */}
         <InlineGrid columns="1fr auto" padding="@container(inline-size >500px) large-400,small">
           <Text as="span" variant="bodySm">
-            3 of 6 tasks complete
+            {taskCompleted.length} of 2 tasks complete
           </Text>
 
           <InlineGrid columns="auto auto" gap="100">
@@ -99,7 +123,7 @@ function DashboardGuidance() {
               }
               onClose={toggle}
             >
-              <ActionList items={[{ content: "Dismiss setup Guide" }]} />
+              <ActionList items={[{ content: t("DashboardGuidance.DismissGuide") }]} />
             </Popover>
 
             <Popover
@@ -118,13 +142,12 @@ function DashboardGuidance() {
 
         {/* Title */}
         <Text as="h2" variant="headingSm">
-          Setup guide
+          {t("DashboardGuidance.SetupGuideTitle")}
         </Text>
 
         {/* Description */}
         <Text as="p" variant="bodyMd" tone="subdued">
-          We'll guide you through importing your reviews and show you how to
-          transfer them to your preferred review app.
+          {t("DashboardGuidance.SetupGuideDescription")}
         </Text>
       </BlockStack>
       {expanded && (
@@ -132,7 +155,7 @@ function DashboardGuidance() {
 
           <Box paddingBlock="200">
             {widgetCards.map((card, index) => (
-              <InstallWidgetsCard key={index} {...card} />
+              <InstallWidgetsCard key={index} {...card} sendData={CheckboxCountFromInstallPage} />
             ))}
           </Box>
         </Box>
