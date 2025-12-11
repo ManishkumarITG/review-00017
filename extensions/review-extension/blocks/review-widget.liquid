@@ -324,7 +324,7 @@
             background: #388B7F;
             color: white;
             margin: 10px 0;
-            width: 100%;
+    width: 53%;
           "
         >
           Write a review
@@ -404,40 +404,40 @@
                 const reviewItem = document.createElement('div');
 
                 reviewItem.innerHTML = `
-        <div style="
-          display:flex; gap:14px; padding:16px;
-          box-shadow:0 2px 8px rgba(0,0,0,0.04);
-          border-radius:12px;
-          margin-bottom:16px;
-        ">
-          <div class="jm-avatar star" style="font-size:18px;">
-            ${getAvatar(review.author)}
-          </div>
+                                    <div style="
+                                      display:flex; gap:14px; padding:16px;
+                                      box-shadow:0 2px 8px rgba(0,0,0,0.04);
+                                      border-radius:12px;
+                                      margin-bottom:16px;
+                                    ">
+                                      <div class="jm-avatar star" style="font-size:18px;">
+                                        ${getAvatar(review.author)}
+                                      </div>
 
-          <div style="flex:1;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <div>
-                <div style="font-size:16px;" class="star">
-                  <span class="mainFontSize" style="justify-content:start;">
-                    ${getStarArray(review.rating)}
-                  </span>
-                </div>
-                <p class="tagName" style="margin:0;">${review.author}</p>
-              </div>
+                                      <div style="flex:1;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                          <div>
+                                            <div style="font-size:16px;" class="star">
+                                              <span class="mainFontSize" style="justify-content:start;">
+                                                ${getStarArray(review.rating)}
+                                              </span>
+                                            </div>
+                                            <p class="tagName" style="margin:0;">${review.author}</p>
+                                          </div>
 
-              ${
-                reviewSettings.showDate
-                  ? `<div style="display:flex; align-items:center; gap:10px;" class="text">
-                      <p style="margin:0; color:#888;">${review.date}</p>
-                    </div>`
-                  : ''
-              }
-            </div>
+                                          ${
+                                            reviewSettings.showDate
+                                              ? `<div style="display:flex; align-items:center; gap:10px;" class="text">
+                                                  <p style="margin:0; color:#888;">${review.date}</p>
+                                                </div>`
+                                              : ''
+                                          }
+                                        </div>
 
-            <p style="margin:0;">${review.description}</p>
-          </div>
-        </div>
-      `;
+                                        <p style="margin:0;">${review.description}</p>
+                                      </div>
+                                    </div>
+                                  `;
 
                 container.appendChild(reviewItem);
               });
@@ -504,7 +504,7 @@
               background: #388B7F;
               color: white;
               margin: 10px 0;
-              width: 100%;
+    width: 53%;
             "
           >
             Write a review
@@ -649,6 +649,8 @@
               style="
                 background: #388B7F;
                 color: white;
+                    
+
               "
             >
               Write a review
@@ -673,6 +675,8 @@
           style="
             background: #388B7F;
             color: white;
+                width: 53%;
+
           "
         >
           Write a review

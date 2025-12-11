@@ -595,12 +595,14 @@ export default function ReviewWidgets() {
                             padding: "4px 8px 0 8px",
                           }}
                           onClick={() => {
+                            console.log("page-------------------------" , page);
                             if (page > 1) {
+                              
                               setPage((prev) => prev - 1);
-                              handleRealData({ limit: limit, page: page });
+                              handleRealData({ limit: limit, page: page-1 });
                             }
                           }}
-                        >
+                          >
                           <Button variant="plain" icon={ChevronLeftIcon} />
                         </Box>
                         <Box as="span" style={{ color: "#535353ff" }}>
@@ -612,9 +614,10 @@ export default function ReviewWidgets() {
                             padding: "4px 8px 0 8px",
                           }}
                           onClick={() => {
+                            console.log("page-------------------------" , page);
                             if (page < total / limit) {
                               setPage((prev) => prev + 1);
-                              handleRealData({ limit: limit, page: page });
+                              handleRealData({ limit: limit, page: page+1 });
                             }
                           }}
                         >

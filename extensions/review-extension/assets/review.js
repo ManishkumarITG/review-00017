@@ -256,5 +256,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   closeForm.addEventListener("click", closeReviewForm);
-  //sdfhdjfhsgghsdfjs setting for othe radata
+
+// const productCard = document.querySelector(".card-wrapper")
+
+//   const productLink = productCard.querySelector("a[href*='/products/']");
+//   if (!productLink) {
+//     console.log("No product link found inside the card");
+//     return;
+//   }
+
+//   const url = new URL(productLink.href, window.location.origin);
+//   const handle = url.pathname.split("/products/")[1].replace("/", "");
+
+//   const response = await fetch(`/products/${handle}.js`);
+//   const product = await response.json();
+//   console.log(product, "prooduct from review.js 🟢")
 });
