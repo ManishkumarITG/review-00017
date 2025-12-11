@@ -8,14 +8,11 @@ const addSettings = (className, value, styleName) => {
     console.log("ele", ele);
   }
   ele.forEach((v) => {
-
     v.style[styleName] = value;
   });
 };
 
 const addtext = (className, value) => {
-
-
   const ele = document.querySelectorAll(`.${className}`);
   ele;
   if (className == "progressbar") {
@@ -123,8 +120,6 @@ window.onload = async () => {
   addtext("buttonText", buttonText);
 
   const starColorSetting = colorArray?.map((v) => v.isvalue);
-
-
 
   console.log("------------------------- colors23", starColorSetting);
 

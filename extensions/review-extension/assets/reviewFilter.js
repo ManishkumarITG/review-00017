@@ -2,13 +2,44 @@ document.addEventListener("DOMContentLoaded", async () => {
   let loding = true; // loding
   let limit = 10; // limit of api response
   let filterType = "mostRecent";
-
   const domain = window.location.origin.split("//")[1];
-  const productIdliquid = ShopifyAnalytics.meta.page.resourceId || domain;
+  const shopDomain = window.location.origin;
+  const settingResponse = await settingData();
+  const colorArray = settingResponse?.data?.sectionSettings?.color;
+  const starColorSetting = colorArray?.map((v) => v.isvalue);
+  generateStarHTML(starColorSetting);
 
+  // const productCard = document.querySelector(".card-wrapper");
+
+  // const productLink = productCard.querySelector("a[href*='/products/']");
+  // if (!productLink) {
+  //   console.log("No product link found inside the card");
+  //   return;
+  // }
+
+  // const url = new URL(productLink.href, window.location.origin);
+  // const handle = url.pathname.split("/products/")[1].replace("/", "");
+
+  // const response = await fetch(`/products/${handle}.js`);
+  // const product = await response.json();
+  // console.log(response, "response of dawn theme");
+
+  // console.log(product, "product from review.js 🟢");
+
+  // // Render stars inside any element you want
+  // const starContainer = productCard.querySelector(".card-information");
+
+  // if (starContainer) {
+  //   const avgRating = product?.metafields?.reviews?.rating || 0; // or your logic
+  //   starContainer.innerHTML = getStarArray(avgRating);
+  // }
+
+
+  // getStarArray(0)
+
+  const productIdliquid = ShopifyAnalytics.meta.page.resourceId || domain;
   console.log("shop domain", domain);
   const reviewsList = document.getElementById("reviewsList");
-
   const filterSelect = document.getElementsByClassName("jm-sort-select")[0];
   const writeButtons = document.querySelectorAll(".buttonText"); // get variable for liquid
   const ui = window.reviewSettings;
@@ -17,45 +48,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   let type =
     ShopifyAnalytics.meta.page.pageType == "home" ? "store" : "product";
   console.log(ShopifyAnalytics.meta.page.resourceId, " type of review");
-
-  // dummy data for sample option
-  const dummydata = [
-    {
-      _id: "1",
-      author: "Arjun",
-      rating: 5,
-      description: "Bro product legit fire fr fr",
-      date: "2025-01-05",
-    },
-    {
-      _id: "2",
-      author: "Meera",
-      rating: 4,
-      description: "Pretty solid ngl, value for money",
-      date: "2025-11-26",
-    },
-    {
-      _id: "3",
-      author: "Jason",
-      rating: 3,
-      description: "Decent but packaging could’ve been better.",
-      date: "2024-12-22",
-    },
-    {
-      _id: "4",
-      author: "Tanya",
-      rating: 2,
-      description: "Not what I expected tbh.",
-      date: "2024-11-15",
-    },
-    {
-      _id: "5",
-      author: "Kabir",
-      rating: 1,
-      description: "Terrible quality, do not buy!",
-      date: "2024-10-30",
-    },
-  ];
 
   let realdata = [];
 
@@ -169,7 +161,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  const addSettings = (className, value, styleName) => {
+  function addSettings(className, value, styleName) {
     const ele = document.querySelectorAll(`.${className}`);
     if (className == "progressbar") {
       console.log("ele", ele);
@@ -177,7 +169,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     ele.forEach((v) => {
       v.style[styleName] = value;
     });
-  };
+  }
 
   function generateStarHTML(settings) {
     const starColor = settings[0];
@@ -195,9 +187,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     addSettings("progressbar", starColor, "background");
   }
 
-  const settingResponse = await settingData();
-  const colorArray = settingResponse?.data?.sectionSettings?.color;
-  const starColorSetting = colorArray?.map((v) => v.isvalue);
+  // const settingResponse = await settingData();
+  // const colorArray = settingResponse?.data?.sectionSettings?.color;
+  // const starColorSetting = colorArray?.map((v) => v.isvalue);
   generateStarHTML(starColorSetting);
 
   // highlite stars in form
@@ -323,6 +315,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       list.forEach((review) => {
         const avatar = review.name.trim().charAt(0).toUpperCase();
         const userName = review.name.trim().split("@")[0];
+        const finalName = userName[0].toUpperCase() + userName.slice(1);
         // const data =review.
         console.log(userName);
 
@@ -348,7 +341,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                   <span class="mainFontSize" style="justify-content: start">${getStarArray(review.rating)}</span>
                 </div>
                 <p  class="tagName" style="margin:0px">
-                  ${userName}
+                  ${finalName}
                 </p>
               </div>
 
