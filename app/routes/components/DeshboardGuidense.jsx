@@ -26,8 +26,8 @@ import { useAppBridge } from "@shopify/app-bridge-react";
 function DashboardGuidance() {
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
-  const [importexpanded, setImportExpanded] = useState(false);
   const [shopDomin, setShopDomain] = useState("")
+  const [taskCompleted, settaskCompleted] = useState([])
   const shopify = useAppBridge()
 
   const { t } = useTranslation()
@@ -48,6 +48,7 @@ function DashboardGuidance() {
   // temparery array to show guidense options
   const widgetCards = [
     {
+      pannelId: "Star Rating Badge",
       title: t("DashboardGuidance.WidgetCards.InstallReviewWidget.Title"),
       description:
         t("DashboardGuidance.WidgetCards.InstallReviewWidget.Description"),
@@ -75,7 +76,7 @@ function DashboardGuidance() {
       ),
       buttons: [
         {
-          label: t("DashboardGuidance.TaskProgress", { completed: 3, total: 6 }),
+          label: t("DashboardGuidance.TaskProgress", { completed: 1, total: 6 }),
           variant: "primary",
           tone: "base",
           onClick: () => navigate("/app/reviewWidgets")
@@ -86,6 +87,20 @@ function DashboardGuidance() {
   ];
 
 
+  const SaveCheckBoxData = (data) => {
+    settaskCompleted((prev) => {
+      if (prev.includes(data)) {
+        return prev.filter((item) => item !== data);
+      };
+        return [...prev, data];
+    });
+  }
+
+  const CheckboxCountFromInstallPage = (data) => {
+    SaveCheckBoxData(data)
+  };
+
+
 
   return (
     <Card roundedAbove="sm">
@@ -93,7 +108,7 @@ function DashboardGuidance() {
         {/* Top row: progress + menu */}
         <InlineGrid columns="1fr auto" padding="@container(inline-size >500px) large-400,small">
           <Text as="span" variant="bodySm">
-            3 of 6 tasks complete
+            {taskCompleted.length} of 2 tasks complete
           </Text>
 
           <InlineGrid columns="auto auto" gap="100">
@@ -140,7 +155,7 @@ function DashboardGuidance() {
 
           <Box paddingBlock="200">
             {widgetCards.map((card, index) => (
-              <InstallWidgetsCard key={index} {...card} />
+              <InstallWidgetsCard key={index} {...card} sendData={CheckboxCountFromInstallPage} />
             ))}
           </Box>
         </Box>

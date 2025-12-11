@@ -8,7 +8,20 @@ const addSettings = (className, value, styleName) => {
     console.log("ele", ele);
   }
   ele.forEach((v) => {
+
     v.style[styleName] = value;
+  });
+};
+
+const addtext = (className, value) => {
+
+
+  const ele = document.querySelectorAll(`.${className}`);
+  ele;
+  if (className == "progressbar") {
+  }
+  ele.forEach((v) => {
+    v.innerText = value;
   });
 };
 
@@ -100,16 +113,28 @@ window.onload = async () => {
 
   const colorArray = settingResponse?.data?.sectionSettings?.color;
   const textArray = settingResponse?.data?.sectionSettings?.text;
+  // console.log(textArray, "000000000000000000000 text setting");
+
+  const heading = textArray[0].isvalue || "Costomer review";
+  console.log(heading, "heading  0000000011111111111");
+  const buttonText = textArray[2].isvalue || "Write a review";
+
+  addtext("jm-heading", heading);
+  addtext("buttonText", buttonText);
 
   const starColorSetting = colorArray?.map((v) => v.isvalue);
+
+
 
   console.log("------------------------- colors23", starColorSetting);
 
   const colors = starColorSetting?.isvalue || "#01f0d0ff";
+  // const text =
 
   const showTextSetting = textArray?.find(
     (v) => v.settingName === "Show text and stars",
   );
+
   const showReviewText = showTextSetting?.isChecked;
 
   products.forEach((productCard) => {

@@ -15,7 +15,7 @@ import { simplifiedMediaCardData } from "../data/reviewData";
 import { useNavigate } from "react-router";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { useTranslation } from "react-i18next";
-
+import WidgetSkelleton from "./widgetSkelleton"
 export default function Widget() {
   const [selected, setSelected] = useState("");
   const [themeList, setThemeList] = useState([]);
@@ -63,18 +63,7 @@ export default function Widget() {
     }
     options.push(data);
   }
-  // useEffect(
-  //   () => {
 
-  //     async function load() {
-  //       const app = shopify.app;
-
-  //       const extensions = await app.extensions();
-  //       console.log("My app extensions===================: ", extensions);
-  //     }
-  //     load();
-
-  //   }, [shopify])
 
   const rediectToThemeEditor = (index) => {
     const shopDomin = shopify.config.shop.split(".")[0];
@@ -93,7 +82,8 @@ export default function Widget() {
 
   return (
     <AppProvider>
-      <Page
+
+      {themeList.length !== 0 ? <Page
         title={t("WidgetPage.Title")}
         fullWidth={true}
         actionGroups={[
@@ -119,16 +109,12 @@ export default function Widget() {
           },
         ]}
         secondaryActions={
-          themeList.length !== 0 ? (
+          (
             <Select
               options={options}
               onChange={handleSelectChange}
               value={selected}
             />
-          ) : (
-            <Box>
-              <Spinner accessibilityLabel="Loading form field" size="small" />
-            </Box>
           )
         }
       >
@@ -158,7 +144,7 @@ export default function Widget() {
                 }
                 portrait={true}
                 primaryAction={{
-                  content:t("WidgetPage.Actions.Customize"),
+                  content: t("WidgetPage.Actions.Customize"),
                   onAction: () => {
                     nevigate(card.path);
                   },
@@ -166,7 +152,7 @@ export default function Widget() {
                 {...(index !== 2
                   ? {
                     secondaryAction: {
-                      content:t("WidgetPage.Actions.Install"),
+                      content: t("WidgetPage.Actions.Install"),
                       onAction: () => {
                         rediectToThemeEditor(index);
                       },
@@ -189,7 +175,11 @@ export default function Widget() {
             </Box>
           ))}
         </InlineGrid>
-      </Page>
-    </AppProvider>
+      </Page> : (
+        <Box>
+          <WidgetSkelleton />
+        </Box>
+      )}
+      </AppProvider>
   );
 }

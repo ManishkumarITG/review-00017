@@ -99,7 +99,8 @@ function IndexFiltersDefaultExample() {
     try {
       setLoding(true);
       const searchData = await getSearchResult(value);
-      setReviews(searchData.data);
+      console.log("search values" , searchData)
+      setReviews(searchData);
       console.log("Search Results:", searchData);
     } catch (error) {
       console.error("Search API Error:", error);

@@ -28,7 +28,7 @@
   </script>
 {% endif %}
 
-{% assign actual_rating = block.settings.actual_rating %}
+{% comment %} {% assign actual_rating = block.settings.actual_rating %} {% endcomment %}
 
 <div class="jm-review-widget my-review-widget" id="jm-review-{{ section.id }}">
   {% comment %} <!-- Header --> {% endcomment %}
@@ -54,39 +54,284 @@
           Customer Reviews
         </h2>
         <div>
-          {% if request.design_mode == true %}
-            <div style=" align-items:center; gap:0px; flex-direction:row;">
-              <span
-                style="
-                  color: {{block.settings.star_color}};
-                  {% comment %} font-size: {{block.settings.star_size}}px; {% endcomment %}
-                  display:flex;
-                  gap:8px;
-                  align-items:center;
-                "
-              >
-                {% render 'stars', rating: actual_rating %}
-                <span style="font-weight:normal; color:black; font-size:14px;">{{ actual_rating }} out of 5</span>
-              </span>
-            </div>
-            <span>Based on 15 reviews</span>
-            <button
-              class="jm-write button"
-              style="
-                background: #388B7F;
-                color: white;
-                margin: 10px 0;
-                width: 100%;
-              "
-              {% comment %} onclick="handleClick()" {% endcomment %}
-            >
-              Write a review
-            </button>
-          {% endif %}
+          <div style="align-items:center; gap:0px; flex-direction:row;">
+            <div class="costomeSummary"></div>
+
+            {% if request.design_mode == true %}
+              <div class="costomeSummary">
+                <div class="center">
+                  <span class="star mainFontSize" style="color: rgb(241, 12, 12);">
+                    <span>
+                      <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                        <path class="star" d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="currentColor" style="color: rgb(241, 12, 12);"></path>
+                      </svg>
+                    </span>
+
+                    <span>
+                      <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                        <path class="star" d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="currentColor" style="color: rgb(241, 12, 12);"></path>
+                      </svg>
+                    </span>
+
+                    <span>
+                      <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                        <path class="star" d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="currentColor" style="color: rgb(241, 12, 12);"></path>
+                      </svg>
+                    </span>
+
+                    <span>
+                      <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                        <path d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+                      </svg>
+                    </span>
+
+                    <span>
+                      <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                        <path d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+                      </svg>
+                    </span>
+                  </span>
+                  3 out of 5
+                </div>
+                <p class="center" style="font-weight: normal; font-size: 16px;">Based on 1 reviews</p>
+                <div>
+                  <div class="jm-Stars-Progressbar">
+                    <span class="star mainFontSize" style="color: rgb(241, 12, 12);">
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path class="star" d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="currentColor" style="color: rgb(241, 12, 12);"></path>
+                        </svg>
+                      </span>
+
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path class="star" d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="currentColor" style="color: rgb(241, 12, 12);"></path>
+                        </svg>
+                      </span>
+
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path class="star" d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="currentColor" style="color: rgb(241, 12, 12);"></path>
+                        </svg>
+                      </span>
+
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path class="star" d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="currentColor" style="color: rgb(241, 12, 12);"></path>
+                        </svg>
+                      </span>
+
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path class="star" d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="currentColor" style="color: rgb(241, 12, 12);"></path>
+                        </svg>
+                      </span>
+                    </span>
+
+                    <div style="background:#e5e7eb; height:14px; width:140px; border-radius:0px; overflow:hidden;">
+                      <div
+                        class="progressbar"
+                        style="height: 14px; width: 0%; border-radius: 0px; background: rgb(241, 12, 12);"
+                      ></div>
+                    </div>
+
+                    <span style="color:#888888;"> 0 </span>
+                  </div>
+                </div>
+                <div>
+                  <div class="jm-Stars-Progressbar">
+                    <span class="star mainFontSize" style="color: rgb(241, 12, 12);">
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path class="star" d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="currentColor" style="color: rgb(241, 12, 12);"></path>
+                        </svg>
+                      </span>
+
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path class="star" d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="currentColor" style="color: rgb(241, 12, 12);"></path>
+                        </svg>
+                      </span>
+
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path class="star" d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="currentColor" style="color: rgb(241, 12, 12);"></path>
+                        </svg>
+                      </span>
+
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path class="star" d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="currentColor" style="color: rgb(241, 12, 12);"></path>
+                        </svg>
+                      </span>
+
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+                        </svg>
+                      </span>
+                    </span>
+
+                    <div style="background:#e5e7eb; height:14px; width:140px; border-radius:0px; overflow:hidden;">
+                      <div
+                        class="progressbar"
+                        style="height: 14px; width: 0%; border-radius: 0px; background: rgb(241, 12, 12);"
+                      ></div>
+                    </div>
+
+                    <span style="color:#888888;"> 0 </span>
+                  </div>
+                </div>
+                <div>
+                  <div class="jm-Stars-Progressbar">
+                    <span class="star mainFontSize" style="color: rgb(241, 12, 12);">
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path class="star" d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="currentColor" style="color: rgb(241, 12, 12);"></path>
+                        </svg>
+                      </span>
+
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path class="star" d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="currentColor" style="color: rgb(241, 12, 12);"></path>
+                        </svg>
+                      </span>
+
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path class="star" d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="currentColor" style="color: rgb(241, 12, 12);"></path>
+                        </svg>
+                      </span>
+
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+                        </svg>
+                      </span>
+
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+                        </svg>
+                      </span>
+                    </span>
+
+                    <div style="background:#e5e7eb; height:14px; width:140px; border-radius:0px; overflow:hidden;">
+                      <div
+                        class="progressbar"
+                        style="height: 14px; width: 20%; border-radius: 0px; background: rgb(241, 12, 12);"
+                      ></div>
+                    </div>
+
+                    <span style="color:#888888;"> 1 </span>
+                  </div>
+                </div>
+                <div>
+                  <div class="jm-Stars-Progressbar">
+                    <span class="star mainFontSize" style="color: rgb(241, 12, 12);">
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path class="star" d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="currentColor" style="color: rgb(241, 12, 12);"></path>
+                        </svg>
+                      </span>
+
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path class="star" d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="currentColor" style="color: rgb(241, 12, 12);"></path>
+                        </svg>
+                      </span>
+
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+                        </svg>
+                      </span>
+
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+                        </svg>
+                      </span>
+
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+                        </svg>
+                      </span>
+                    </span>
+
+                    <div style="background:#e5e7eb; height:14px; width:140px; border-radius:0px; overflow:hidden;">
+                      <div
+                        class="progressbar"
+                        style="height: 14px; width: 0%; border-radius: 0px; background: rgb(241, 12, 12);"
+                      ></div>
+                    </div>
+
+                    <span style="color:#888888;"> 0 </span>
+                  </div>
+                </div>
+                <div>
+                  <div class="jm-Stars-Progressbar">
+                    <span class="star mainFontSize" style="color: rgb(241, 12, 12);">
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path class="star" d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="currentColor" style="color: rgb(241, 12, 12);"></path>
+                        </svg>
+                      </span>
+
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+                        </svg>
+                      </span>
+
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+                        </svg>
+                      </span>
+
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+                        </svg>
+                      </span>
+
+                      <span>
+                        <svg class="star" width="18" height="18" viewBox="0 0 24 24" style="color: rgb(241, 12, 12);">
+                          <path d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+                        </svg>
+                      </span>
+                    </span>
+
+                    <div style="background:#e5e7eb; height:14px; width:140px; border-radius:0px; overflow:hidden;">
+                      <div
+                        class="progressbar"
+                        style="height: 14px; width: 0%; border-radius: 0px; background: rgb(241, 12, 12);"
+                      ></div>
+                    </div>
+
+                    <span style="color:#888888;"> 0 </span>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          </div>
         </div>
       </div>
       <div class="jm-actions">
-        <div class="costomeSummary"></div>
+        <button
+          class="jm-write button buttonText disablebutton 2"
+          style="
+            background: #388B7F;
+            color: white;
+            margin: 10px 0;
+            width: 100%;
+          "
+        >
+          Write a review
+        </button>
+
         <div class="jm-sort">
           <select class="jm-sort-select star">
             <option value="most_recent">Most Recent</option>
@@ -99,62 +344,261 @@
           style="display:flex; flex-direction:column; gap:18px; margin-top:20px; position: relative;"
         ></div>
       </div>
+      <div>
+        {% if request.design_mode == true %}
+          <div id="reviewsContainer"></div>
 
-      <div
-        id="reviewsList"
-        style="display:flex; flex-direction:column; gap:18px; margin-top:20px; position: relative;"
-      ></div>
+          <script>
+            // -----------------------------
+            // Dummy data (as requested)
+            // -----------------------------
+            const dummydata = [
+              {
+                _id: '1',
+                author: 'Arjun',
+                rating: 5,
+                description: 'Bro product legit fire fr fr',
+                date: '2025-01-05',
+              },
+              {
+                _id: '2',
+                author: 'Meera',
+                rating: 4,
+                description: 'Pretty solid ngl, value for money',
+                date: '2025-11-26',
+              },
+              {
+                _id: '3',
+                author: 'Jason',
+                rating: 3,
+                description: 'Decent but packaging could’ve been better.',
+                date: '2024-12-22',
+              },
+              {
+                _id: '4',
+                author: 'Tanya',
+                rating: 2,
+                description: 'Not what I expected tbh.',
+                date: '2024-11-15',
+              },
+              {
+                _id: '5',
+                author: 'Kabir',
+                rating: 1,
+                description: 'Terrible quality, do not buy!',
+                date: '2024-10-30',
+              },
+            ];
+
+            // -------------------------------------
+            // Helper: Generate star HTML text
+            // -------------------------------------
+            function getStarArray(rating) {
+              const totalStars = 5;
+              let stars = [];
+
+              for (let i = 1; i <= totalStars; i++) {
+                stars.push(i <= rating ? '★' : '☆');
+              }
+
+              return stars.join('');
+            }
+
+            // -------------------------------------
+            // Avatar generator (first letter)
+            // -------------------------------------
+            function getAvatar(name) {
+              const letter = name?.charAt(0)?.toUpperCase() || '?';
+              return `<div style="
+                                    width:40px; height:40px;
+                                    display:flex; align-items:center; justify-content:center;
+                                    border-radius:50%; background:#eee;
+                                    font-weight:600;
+                                    ">${letter}</div>`;
+            }
+
+            // -------------------------------------
+            // Render dummy reviews inside container
+            // -------------------------------------
+            function renderDummyReviews() {
+              const container = document.getElementById('reviewsContainer');
+              container.innerHTML = ''; // reset
+
+              dummydata.forEach((review) => {
+                const reviewItem = document.createElement('div');
+
+                const avatar = getAvatar(review.author);
+                const userName = review.author;
+
+                reviewItem.innerHTML = `
+                              <div style="
+                                display:flex; gap:14px; padding:16px;
+                                box-shadow:0 2px 8px rgba(0,0,0,0.04);
+                                border-radius:12px;
+                                margin-bottom:16px;
+                              ">
+                                <div class="jm-avatar star" style="font-size:18px;">
+                                  ${avatar}
+                                </div>
+
+                                <div style="flex:1; width:380px;">
+                                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <div>
+                                      <div style="font-size:16px;" class="star">
+                                        <span class="mainFontSize" style="justify-content:start">
+                                          ${getStarArray(review.rating)}
+                                        </span>
+                                      </div>
+                                      <p class="tagName" style="margin:0px;">
+                                        ${userName}
+                                      </p>
+                                    </div>
+
+                                    <div style="display:flex; align-items:center; gap:10px;" class="text">
+                                      <p style="margin:0; color:#888;">
+                                        ${review.date}
+                                      </p>
+
+                                      <!-- Edit icon (dummy always off) -->
+                                    </div>
+                                  </div>
+
+                                  <p style="margin:0px;">
+                                    ${review.description}
+                                  </p>
+                                </div>
+                              </div>
+                            `;
+
+                container.appendChild(reviewItem);
+              });
+            }
+
+            // Fire render
+            renderDummyReviews();
+          </script>
+        {% endif %}
+      </div>
+
     {% elsif block.settings.review_source == 'real' %}
-      <div
-        style="
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 9px;
-        "
-      >
-        <h2
-          class="jm-heading"
+      {% if request.design_mode == false %}
+        <div
           style="
-            color: black;
-            font-size: 22px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 9px;
           "
-          data-setting="Widget title"
         >
-          Customer Reviews
-        </h2>
-        <div>
-          <div style="align-items:center; gap:0px; flex-direction:row;">
-            <div class="costomeSummary"></div>
+          <h2
+            class="jm-heading"
+            style="
+              color: black;
+              font-size: 22px;
+            "
+            data-setting="Widget title"
+          >
+            Customer Reviews
+          </h2>
+          <div>
+            <div style="align-items:center; gap:0px; flex-direction:row;">
+              <div class="costomeSummary"></div>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="jm-actions">
-        <button
-          class="jm-write button"
-          style="
-            background: #388B7F;
-            color: white;
-            margin: 10px 0;
-            width: 100%;
-          "
-          {% comment %} onclick="handleClick()" {% endcomment %}
-        >
-          Write a review
-        </button>
+        <div class="jm-actions">
+          <button
+            class="jm-write button buttonText disablebutton 3"
+            style="
+              background: #388B7F;
+              color: white;
+              margin: 10px 0;
+              width: 100%;
+            "
+          >
+            Write a review
+          </button>
 
-        <div class="jm-sort">
-          <select class="jm-sort-select star">
-            <option value="most_recent">Most Recent</option>
-            <option value="highest">Highest Rating</option>
-            <option value="lowest">Lowest Rating</option>
-          </select>
+          <div class="jm-sort">
+            <select class="jm-sort-select star">
+              <option value="most_recent">Most Recent</option>
+              <option value="highest">Highest Rating</option>
+              <option value="lowest">Lowest Rating</option>
+            </select>
+          </div>
         </div>
-      </div>
-      <div
-        id="reviewsList"
-        style="display:flex; flex-direction:column; gap:18px; margin-top:20px;     position: relative; "
-      ></div>
+        <div
+          id="reviewsList"
+          style="display:flex; flex-direction:column; gap:18px; margin-top:20px;     position: relative; "
+        ></div>
+      {% endif %}
+
+      {% if request.design_mode == true %}
+        <div
+          style="
+                      display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 33px;
+          "
+        >
+          <div>
+            <h2
+              class="jm-heading"
+              style="
+                color:black;
+                font-size: 21px;
+              "
+              data-setting="Widget title"
+            >
+              Customer Reviews
+            </h2>
+          </div>
+          <div
+            style="
+              display: flex;
+              justify-content: center;
+              gap: 50px;
+              align-items: center;
+            "
+          >
+            <div
+              style="
+                       display: flex;
+                align-items: self-start;
+                flex-direction: column;
+              "
+            >
+              <div>
+                {% for i in (1..5) %}
+                  <span
+                    class="form-star star"
+                    style="
+                      font-size:20px;
+                      color:#ccc;
+                      cursor:pointer;
+                    "
+                    >★</span
+                  >
+                {% endfor %}
+              </div>
+              <span>Be the first to write a review</span>
+            </div>
+
+            <div>
+              <button
+                class="jm-write button buttonText disablebutton 4"
+                style="
+                  background: #388B7F;
+                  color: white;
+                "
+              >
+                Write a review
+              </button>
+            </div>
+          </div>
+        </div>
+      {% endif %}
 
     {% elsif block.settings.review_source == 'noReview' %}
       <div
@@ -210,12 +654,11 @@
 
           <div>
             <button
-              class="jm-write button"
+              class="jm-write button buttonText disablebutton 4"
               style="
                 background: #388B7F;
                 color: white;
               "
-              {% comment %} onclick="handleClick()" {% endcomment %}
             >
               Write a review
             </button>
@@ -224,7 +667,6 @@
       </div>
 
     {% else %}
-      {% comment %} <!-- Fallback (only if some wild unknown value appears) --> {% endcomment %}
       <div class="jm-db-placeholder">
         <span
           style="
@@ -236,14 +678,13 @@
           {% render 'stars', rating: 5 %}
         </span>
         <button
-          class="jm-write button"
+          class="jm-write button buttonText disablebutton 5"
           style="
             background: #388B7F;
             color: white;
           "
-          {% comment %} onclick="handleClick()" {% endcomment %}
         >
-          Write a review
+          Write a review 
         </button>
       </div>
     {% endif %}
@@ -273,14 +714,16 @@
           Rate the product
           <div id="formStars" class="star-wrapper">
             <div
+              class="ReviewFormRating"
               style="
                 display: flex;
                 align-items: center;
                 justify-content: center;
               "
+              id="ratingStars"
             >
               {% for i in (1..5) %}
-                <span class="form-star " data-value="{{ i }}">★</span>
+                <span class="form-star" data-value="{{ i }}">★</span>
               {% endfor %}
             </div>
             <input type="hidden" id="selectedRating" name="Rating" value="0">

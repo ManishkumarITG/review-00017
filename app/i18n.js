@@ -14,8 +14,8 @@ i18n
     resources,
 
     // ✅ Always fall back to English when unsupported (e.g., 'tr')
-    fallbackLng: 'hi',
-    lng: "hi",
+    fallbackLng: 'en',
+    lng: "en",
 
     cleanCode: true,
     lowerCaseLng: true,

@@ -22,7 +22,7 @@ export const loader = async ({ request }) => {
       throw new Error(message);
     }
 
-    const { idType, page, limit, type, skip, skipValue, targetId, filterType } =
+    const { idType, page, limit, type, skip, skipValue, targetId, filterType , searchQuery} =
       handleUrlData(request);
 
     console.log(

@@ -101,8 +101,11 @@ export default function Deshboard() {
                     </Text>
                   </Box>
                   <Card padding={0}>
+
                     {isLoading ? (
-                      <Loding />
+                      <Box style={{ minHeight: "400px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <Loding />
+                      </Box>
                     ) : (
                       <>
                         <Box padding="400" minHeight="400px">
@@ -172,105 +175,109 @@ export default function Deshboard() {
                     </Text>
                   </Box>
                   <Card padding={0}>
-                    {isLoading ? (
-                      <Loding />
-                    ) : (
-                      <>
-                        <Box
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            height: "400px",
-                            justifyContent: "space-between",
-                            padding: "0px 10px",
-                          }}
-                        >
-                          {allreviews.length === 0 ? (
-                            <InlineGrid
-                              gap="600"
-                              width="100%"
-                              borderBottom="solid"
-                            >
-                              <Box align="center" padding="200">
-                                <Image
-                                  src="https://pub-images.judge.me/judgeme/empty-review"
-                                  alt={t("Dashboard.NoData")}
-                                  width="30%"
-                                />
-                              </Box>
-                              <Box align="center" padding="200">
-                                <Text>
-                                 {t("Dashboard.ReviewActivityEmptyMessage")}
-                                </Text>
-                              </Box>
-                              <Box align="center" padding="200">
-                                <Button
-                                  onClick={() => {
-                                    nevigate(
-                                      "/app/reveiwpage?table=All+Reviews",
-                                    );
-                                  }}
-                                >
-                                 {t("Dashboard.ReviewActivityButton")}
-                                </Button>
-                              </Box>
-                            </InlineGrid>
-                          ) : (
-                            <>
-                              <Box>
-                                <Tabs
-                                  tabs={[
-                                    {
-                                      id: "last_reviews",
-                                      content:  t("Dashboard.LastReviews"),
-                                    },
-                                  ]}
-                                  selected={0}
-                                />
-                                <Divider />
-                                {allreviews.map((review) => (
-                                  <Box key={review.id} paddingBlockEnd="300">
-                                    <InlineGrid
-                                      alignItems="start"
-                                      justifyItems="start"
-                                      gap="300"
-                                      columns={"1fr"}
-                                    >
-                                      <InlineStack align="start" gap="200">
-                                        <StarRating
-                                          rating={review.rating}
-                                          color={starColor}
-                                        />
-                                        {/* <Text tone="subdued">
-                                          {review.createdAt.split("T")[0]}
-                                        </Text> */}
-                                      </InlineStack>
+                    <Box minHeight="400px">
 
-                                      <Box>
-                                        <Text as="p" variant="bodyMd">
-                                          {review.description}
-                                        </Text>
-                                      </Box>
-                                    </InlineGrid>
 
-                                    <Divider />
-                                  </Box>
-                                ))}
-                              </Box>
-                              <Box>
-                                <Divider />
-                                <Box
-                                  paddingBlockEnd="300"
-                                  onClick={() => nevigate("/app/reveiwpage")}
-                                >
-                                  <Link>{t("Dashboard.ViewAllReviewsDashboard")}</Link>
-                                </Box>
-                              </Box>
-                            </>
-                          )}
+                      {isLoading ? (
+                        <Box style={{ minHeight: "400px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <Loding />
                         </Box>
-                      </>
-                    )}
+                      ) : (
+                        <>
+                          <Box
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              height: "400px",
+                              justifyContent: "space-between",
+                              padding: "0px 10px",
+                            }}
+                          >
+                            {allreviews.length === 0 ? (
+                              <InlineGrid
+                                gap="600"
+                                width="100%"
+                                borderBottom="solid"
+                              >
+                                <Box align="center" padding="200">
+                                  <Image
+                                    src="https://pub-images.judge.me/judgeme/empty-review"
+                                    alt={t("Dashboard.NoData")}
+                                    width="30%"
+                                  />
+                                </Box>
+                                <Box align="center" padding="200">
+                                  <Text>
+                                    {t("Dashboard.ReviewActivityEmptyMessage")}
+                                  </Text>
+                                </Box>
+                                <Box align="center" padding="200">
+                                  <Button
+                                    onClick={() => {
+                                      nevigate(
+                                        "/app/reveiwpage?table=All+Reviews",
+                                      );
+                                    }}
+                                  >
+                                    {t("Dashboard.ReviewActivityButton")}
+                                  </Button>
+                                </Box>
+                              </InlineGrid>
+                            ) : (
+                              <>
+                                <Box>
+                                  <Tabs
+                                    tabs={[
+                                      {
+                                        id: "last_reviews",
+                                        content: t("Dashboard.LastReviews"),
+                                      },
+                                    ]}
+                                    selected={0}
+                                  />
+                                  <Divider />
+                                  {allreviews.map((review) => (
+                                    <Box key={review.id} paddingBlockEnd="300">
+                                      <InlineGrid
+                                        alignItems="start"
+                                        justifyItems="start"
+                                        gap="300"
+                                        columns={"1fr"}
+                                      >
+                                        <InlineStack align="start" gap="200">
+                                          <StarRating
+                                            rating={review.rating}
+                                            color={starColor}
+                                          />
+                                          
+                                        </InlineStack>
+
+                                        <Box>
+                                          <Text as="p" variant="bodyMd">
+                                            {review.description}
+                                          </Text>
+                                        </Box>
+                                      </InlineGrid>
+
+                                      <Divider />
+                                    </Box>
+                                  ))}
+                                </Box>
+                                <Box>
+                                  <Divider />
+                                  <Box
+                                    paddingBlockEnd="300"
+                                    onClick={() => nevigate("/app/reveiwpage")}
+                                  >
+                                    <Link>{t("Dashboard.ViewAllReviewsDashboard")}</Link>
+                                  </Box>
+                                </Box>
+                              </>
+                            )}
+                          </Box>
+                        </>
+                      )}
+                    </Box>
                   </Card>
                 </Box>
               </InlineGrid>
@@ -282,7 +289,7 @@ export default function Deshboard() {
             ))}
           </Box>
         </Page>
-      </AppProvider>
+      </AppProvider >
     </>
   );
 }
