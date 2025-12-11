@@ -44,9 +44,9 @@ export default function WidgetSkelleton() {
 
                 {/* Image Skeleton */}
                 <Box style={{
-                  width: "400px",
+                  width: "270px",
                   height: "180px",
-                  background: "#c2b8b8ff",
+                  background: "#15cc8fe7",
                   borderRadius: "200"
                 }}
                 >
@@ -70,9 +70,9 @@ export default function WidgetSkelleton() {
 
                 {/* Image Skeleton */}
                 <Box style={{
-                  width: "400px",
+                  width: "270px",
                   height: "180px",
-                  background: "#c2b8b8ff",
+                  background: "#15cc8fe7",
                   borderRadius: "200"
                 }}
                 >
@@ -96,9 +96,9 @@ export default function WidgetSkelleton() {
 
                 {/* Image Skeleton */}
                 <Box style={{
-                  width: "400px",
+                  width: "270px",
                   height: "180px",
-                  background: "#c2b8b8ff",
+                  background: "#15cc8fe7",
                   borderRadius: "200"
                 }}
                 >
