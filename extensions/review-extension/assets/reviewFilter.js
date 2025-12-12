@@ -1,7 +1,7 @@
   const shopDomain = window.location.origin;
 
 
-async function settingData() {
+async function getSettingData() {
   try {
     const res = await fetch(
       `${shopDomain}/apps/review/api/routes/extensions/setting/getByTitle`,
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const domain = window.location.origin.split("//")[1];
 
-  const settingResponse = await settingData();
+  const settingResponse = await getSettingData();
   const colorArray = settingResponse?.data?.sectionSettings?.color;
   const starColorSetting = colorArray?.map((v) => v.isvalue);
   generateStarHTML(starColorSetting);
