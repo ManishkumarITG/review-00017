@@ -11,8 +11,6 @@
 
 <script>
   window.reviewSettings = {
-    starColor: "{{ block.settings.star_color }}",
-    textColor: "{{ block.settings.text_color }}",
     showDate: {{ block.settings.show_date }},
     reviewSource: "{{ block.settings.review_source }}"
   };
@@ -26,7 +24,6 @@
     console.log("Product ID from Liquid:", window.__productId);
   </script>
 {% endif %}
-
 
 <div class="jm-review-widget my-review-widget" id="jm-review-{{ section.id }}">
   {% comment %} <!-- Header --> {% endcomment %}
@@ -324,7 +321,7 @@
             background: #388B7F;
             color: white;
             margin: 10px 0;
-    width: 53%;
+            width: 53%;
           "
         >
           Write a review
@@ -384,16 +381,16 @@
             // Avatar (Initial letter)
             function getAvatar(name) {
               const avatar = name?.charAt(0)?.toUpperCase() || '?';
-              return `
-      <div style="
-        width:40px; height:40px;
-        display:flex; align-items:center; justify-content:center;
-      
-        font-weight:600;
-      ">
-        ${avatar}
-      </div>`;
-            }
+                                return `
+                        <div style="
+                          width:40px; height:40px;
+                          display:flex; align-items:center; justify-content:center;
+                        
+                          font-weight:600;
+                        ">
+                          ${avatar}
+                        </div>`;
+                        }
 
             // RENDER FUNCTION (FIXED)
             function renderDummyReviews(list = dummydata) {
@@ -422,7 +419,7 @@
                                                 ${getStarArray(review.rating)}
                                               </span>
                                             </div>
-                                            <p class="tagName" style="margin:0;">${review.author}</p>
+                                            <p class="tagName" style="margin:0; ">${review.author}</p>
                                           </div>
 
                                           ${
@@ -446,27 +443,6 @@
             // Initial render
             renderDummyReviews();
 
-            // SORTING LOGIC (USING FIXED RENDER)
-            const sortSelect = document.querySelector('.jm-sort-select');
-
-            sortSelect.addEventListener('change', (e) => {
-              let value = e.target.value;
-              let sorted = [...dummydata];
-
-              if (value === 'most_recent') {
-                sorted.sort((a, b) => new Date(b.date) - new Date(a.date));
-              }
-
-              if (value === 'highest') {
-                sorted.sort((a, b) => b.rating - a.rating);
-              }
-
-              if (value === 'lowest') {
-                sorted.sort((a, b) => a.rating - b.rating);
-              }
-
-              renderDummyReviews(sorted);
-            });
           </script>
         {% endif %}
       </div>
@@ -501,10 +477,10 @@
           <button
             class="jm-write button buttonText disablebutton 3"
             style="
-              background: #388B7F;
-              color: white;
-              margin: 10px 0;
-    width: 53%;
+                        background: #388B7F;
+                        color: white;
+                        margin: 10px 0;
+              width: 53%;
             "
           >
             Write a review
@@ -649,8 +625,6 @@
               style="
                 background: #388B7F;
                 color: white;
-                    
-
               "
             >
               Write a review
@@ -662,10 +636,7 @@
     {% else %}
       <div class="jm-db-placeholder">
         <span
-          style="
-            color: {{block.settings.star_color}};
-            font-size: {{block.settings.star_size}}px;
-          "
+      
           class="star"
         >
           {% render 'stars', rating: 5 %}
@@ -676,7 +647,6 @@
             background: #388B7F;
             color: white;
                 width: 53%;
-
           "
         >
           Write a review
@@ -733,7 +703,6 @@
             name="Name"
             type="text"
             placeholder="Enter Your Name"
-            value="{{ block.settings.display_name_text }}"
             class="input-field"
             id="formName"
           >
@@ -747,7 +716,6 @@
             name="Email"
             type="text"
             placeholder="Enter Your Email"
-            value="{{ block.settings.User_email }}"
             class="input-field"
             id="formEmail"
           >
@@ -762,7 +730,7 @@
             placeholder="Write your review here ... "
             class="textarea-field"
             id="formDesc"
-          >{{ block.settings.textarea_text }}</textarea>
+          ></textarea>
           <span class="error-msg"></span>
         </label>
 
@@ -804,22 +772,7 @@
       "label": "Show Date",
       "default": false
     },
-    {
-      "type": "text",
-      "id": "textarea_text",
-      "label": "Textarea Placeholder"
-    },
 
-    {
-      "type": "text",
-      "id": "display_name_text",
-      "label": "Display name placeholder"
-    },
-    {
-      "type": "text",
-      "id": "User_email",
-      "label": "Email text "
-    }
   ]
 }
 {% endschema %}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Card,
   BlockStack,
@@ -92,13 +92,14 @@ function DashboardGuidance() {
       if (prev.includes(data)) {
         return prev.filter((item) => item !== data);
       };
-        return [...prev, data];
+      return [...prev, data];
     });
   }
 
   const CheckboxCountFromInstallPage = (data) => {
     SaveCheckBoxData(data)
   };
+
 
 
 
@@ -123,7 +124,9 @@ function DashboardGuidance() {
               }
               onClose={toggle}
             >
-              <ActionList items={[{ content: t("DashboardGuidance.DismissGuide") }]} />
+              <ActionList items={[{
+                content: t("DashboardGuidance.DismissGuide"),
+              }]} />
             </Popover>
 
             <Popover
