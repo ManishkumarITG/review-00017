@@ -393,6 +393,7 @@ export default function ReviewWidgets() {
                             setReview(reviews);
                             setRattingSummary(rattingArray.reviews);
                             setTotalReview(rattingArray.totalReview)
+                            setAvgStarRating(rattingArray.avgRating)
                             setBtnText("Sempal Data");
                           }}
                         >
