@@ -524,6 +524,8 @@ function IndexFiltersDefaultExample() {
     ),
   );
 
+  console.log(page , "-------------------page");
+  
   return (
     <AppProvider>
       <Page fullWidth>
@@ -543,7 +545,9 @@ function IndexFiltersDefaultExample() {
             </Badge>
           </InlineStack>
 
-          <Card padding={0}>
+          <Card padding={0} >
+            <Box minHeight="500px">
+
             <IndexFilters
               sortSelected={sortSelected}
               queryValue={queryValue}
@@ -623,6 +627,7 @@ function IndexFiltersDefaultExample() {
                 {rowMarkup}
               </IndexTable>
             )}
+                  </Box>
           </Card>
         </InlineGrid>
 

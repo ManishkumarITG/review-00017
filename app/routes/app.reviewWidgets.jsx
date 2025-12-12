@@ -127,8 +127,9 @@ export default function ReviewWidgets() {
       setLoding(false);
     }
   };
+  
 
-  const handleTextChnge = useCallback((newValue, id) => {
+ const handleTextChnge = useCallback((newValue, id) => {
     const textSettingArray = setting?.text;
     if (handleCheckeState(textSettingArray, id, newValue, "review_widgets"))
       return;
