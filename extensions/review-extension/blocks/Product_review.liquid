@@ -2,6 +2,11 @@
 
 {% assign color = '#000000' %}
 
+{% comment %} <script type="application/json" class="product-card-json">
+  {{ product | json }}
+</script>
+<script defer src="{{ 'theme.js' | asset_url }}"></script> {% endcomment %}
+
 <div id="star-rating-template" style="display: none;">
   <div class="starRatting">
     <span class="staraSpan" style="color:{{color}}; font-size: 20px" data-star-rating> </span>

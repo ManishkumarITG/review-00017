@@ -49,7 +49,7 @@ export default function Deshboard() {
       const allReviewData = await getAllReviews();
       setReviews(allReviewData.data.items);
       const productReviews = await getReviewsByType("product");
-      setTopProduct(productReviews.data.items);
+      setTopProduct(productReviews.items);
     } catch (error) {
       console.log(error);
     } finally {
@@ -60,6 +60,7 @@ export default function Deshboard() {
   useEffect(() => {
     getAllReviewsData();
   }, []);
+
 
   const topProductRows = topProduct.map((item) => [
     item.idType || item.idType,
@@ -89,8 +90,8 @@ export default function Deshboard() {
           <Box paddingBlockStart="300">
             <Box minHeight="400px">
               <InlineGrid
-                columns={{ xs: "1fr", md: "1fr 1fr" }}
-                gap="600"
+                columns={{ xs: "1fr", sm: "1fr", md: "1fr 1fr" }}
+                gap={{ xs: "200", md: "600" }}
                 align="start"
               >
                 {/* --- Top Products Card --- */}
@@ -111,15 +112,17 @@ export default function Deshboard() {
                         <Box padding="400" minHeight="400px">
                           {topProduct.length === 0 ? (
                             <InlineGrid
+                              columns={{ xs: "1fr", sm: "1fr", md: "1fr" }}
                               gap="600"
                               width="100%"
                               borderBottom="solid"
                             >
+
                               <Box align="center" padding="200">
                                 <Image
                                   src="https://pub-images.judge.me/judgeme/empty-product"
                                   alt={t("Dashboard.NoData")}
-                                  width="30%"
+                                  style={{ maxWidth: "160px", width: "100%" }}
                                 />
                               </Box>
                               <Box align="center" padding="200">
@@ -141,24 +144,17 @@ export default function Deshboard() {
                             </InlineGrid>
                           ) : (
                             <>
-                              <DataTable
-                                columnContentTypes={[
-                                  t("Dashboard.Table.Product"),
-                                  t("Dashboard.Table.Reviews"),
-                                  t("Dashboard.Table.Rating"),
-                                ]}
-                                headings={["Product", "Reviews", "Rating"]}
-                                rows={topProductRows}
-                              />
-                              <Box paddingBlockStart="400">
-                                <InlineGrid
-                                  columns="1fr auto auto"
-                                  gap="200"
-                                  align="center"
-                                  padding="200"
-                                ></InlineGrid>
+                              <Box style={{ overflowX: "auto" }}>
 
-                                <Divider />
+                                <DataTable
+                                  columnContentTypes={[
+                                    t("Dashboard.Table.Product"),
+                                    t("Dashboard.Table.Reviews"),
+                                    t("Dashboard.Table.Rating"),
+                                  ]}
+                                  headings={["Product", "Reviews", "Rating"]}
+                                  rows={topProductRows}
+                                />
                               </Box>
                             </>
                           )}
@@ -188,17 +184,21 @@ export default function Deshboard() {
                             style={{
                               display: "flex",
                               flexDirection: "column",
-                              height: "400px",
-                              justifyContent: "space-between",
+                              minHeight: "400px",
                               padding: "0px 10px",
+                              gap: "16px",
+                              justifyContent: "space-between",
                             }}
+
                           >
                             {allreviews.length === 0 ? (
                               <InlineGrid
+                                columns={{ xs: "1fr" }}
                                 gap="600"
                                 width="100%"
                                 borderBottom="solid"
                               >
+
                                 <Box align="center" padding="200">
                                   <Image
                                     src="https://pub-images.judge.me/judgeme/empty-review"
@@ -237,19 +237,18 @@ export default function Deshboard() {
                                   />
                                   <Divider />
                                   {allreviews.map((review) => (
-                                    <Box key={review.id} paddingBlockEnd="300">
+                                    <Box key={review._id} paddingBlockEnd="300">
                                       <InlineGrid
                                         alignItems="start"
-                                        justifyItems="start"
-                                        gap="300"
-                                        columns={"1fr"}
+                                        gap={{ xs: "200", md: "300" }}
+                                        columns={{ xs: "1fr", sm: "1fr", md: "auto 1fr" }}
                                       >
                                         <InlineStack align="start" gap="200">
                                           <StarRating
                                             rating={review.rating}
                                             color={starColor}
                                           />
-                                          
+
                                         </InlineStack>
 
                                         <Box>

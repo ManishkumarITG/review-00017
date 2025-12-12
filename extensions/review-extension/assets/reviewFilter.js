@@ -1,44 +1,42 @@
+  const shopDomain = window.location.origin;
+
+
+async function settingData() {
+  try {
+    const res = await fetch(
+      `${shopDomain}/apps/review/api/routes/extensions/setting/getByTitle`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: "Review Widget Setting",
+        }),
+      },
+    );
+
+    const resData = await res.json();
+    return resData;
+  } catch (error) {
+    console.error("Color setting fetch error:", error);
+    return null;
+  }
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   let loding = true; // loding
   let limit = 10; // limit of api response
   let filterType = "mostRecent";
+
   const domain = window.location.origin.split("//")[1];
-  const shopDomain = window.location.origin;
+
   const settingResponse = await settingData();
   const colorArray = settingResponse?.data?.sectionSettings?.color;
   const starColorSetting = colorArray?.map((v) => v.isvalue);
   generateStarHTML(starColorSetting);
 
-  // const productCard = document.querySelector(".card-wrapper");
-
-  // const productLink = productCard.querySelector("a[href*='/products/']");
-  // if (!productLink) {
-  //   console.log("No product link found inside the card");
-  //   return;
-  // }
-
-  // const url = new URL(productLink.href, window.location.origin);
-  // const handle = url.pathname.split("/products/")[1].replace("/", "");
-
-  // const response = await fetch(`/products/${handle}.js`);
-  // const product = await response.json();
-  // console.log(response, "response of dawn theme");
-
-  // console.log(product, "product from review.js 🟢");
-
-  // // Render stars inside any element you want
-  // const starContainer = productCard.querySelector(".card-information");
-
-  // if (starContainer) {
-  //   const avgRating = product?.metafields?.reviews?.rating || 0; // or your logic
-  //   starContainer.innerHTML = getStarArray(avgRating);
-  // }
-
-
-  // getStarArray(0)
-
   const productIdliquid = ShopifyAnalytics.meta.page.resourceId || domain;
   console.log("shop domain", domain);
+
   const reviewsList = document.getElementById("reviewsList");
   const filterSelect = document.getElementsByClassName("jm-sort-select")[0];
   const writeButtons = document.querySelectorAll(".buttonText"); // get variable for liquid
@@ -97,7 +95,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   reviewsList.addEventListener("click", (e) => {
     const editBtn = e.target.closest(".edit-btn");
-    console.log(editBtn);
 
     if (!editBtn) return;
 
@@ -140,27 +137,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   realdata = await apidata(limit, filterType);
 
-  async function settingData() {
-    try {
-      const res = await fetch(
-        `${shopDomain}/apps/review/api/routes/extensions/setting/getByTitle`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            title: "Review Widget Setting",
-          }),
-        },
-      );
-
-      const resData = await res.json();
-      return resData;
-    } catch (error) {
-      console.error("Color setting fetch error:", error);
-      return null;
-    }
-  }
-
   function addSettings(className, value, styleName) {
     const ele = document.querySelectorAll(`.${className}`);
     if (className == "progressbar") {
@@ -187,9 +163,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     addSettings("progressbar", starColor, "background");
   }
 
-  // const settingResponse = await settingData();
-  // const colorArray = settingResponse?.data?.sectionSettings?.color;
-  // const starColorSetting = colorArray?.map((v) => v.isvalue);
   generateStarHTML(starColorSetting);
 
   // highlite stars in form
