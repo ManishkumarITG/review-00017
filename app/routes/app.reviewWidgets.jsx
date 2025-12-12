@@ -417,6 +417,7 @@ export default function ReviewWidgets() {
                           onClick={() => {
                             setReview([]);
                             setBtnText("No Review");
+                            setRattingSummary([]);
                           }}
                         >
                           {t("reviewWidgets.NoReview")}
