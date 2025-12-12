@@ -1,4 +1,6 @@
-const shopDomain = window.location.origin;
+// const shopDomain = window.location.origin;
+
+// console.log("shopDomain" , shopDomain)
 
 const products = document.querySelectorAll(".product-card");
 
@@ -138,6 +140,8 @@ window.onload = async () => {
     const productReviews = reviews.filter(
       (r) => r.targetId && r.targetId.toString() === productId,
     );
+
+    console.log("my reviews" , productReviews)
 
     const ratingContainer = productCard.querySelector(
       ".extension-star-rating-wrapper",
