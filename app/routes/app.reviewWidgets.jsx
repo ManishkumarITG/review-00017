@@ -392,6 +392,7 @@ export default function ReviewWidgets() {
                           onClick={() => {
                             setReview(reviews);
                             setRattingSummary(rattingArray.reviews);
+                            setTotalReview(rattingArray.totalReview)
                             setBtnText("Sempal Data");
                           }}
                         >
@@ -417,6 +418,7 @@ export default function ReviewWidgets() {
                           onClick={() => {
                             setReview([]);
                             setBtnText("No Review");
+                            setTotalReview(0)
                             setRattingSummary([]);
                           }}
                         >
