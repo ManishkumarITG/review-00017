@@ -1,0 +1,91 @@
+<script src="{{ 'reviewFilter.js' | asset_url }}" defer></script>
+
+<script>
+  window.__productId = {{ product.id | json }};
+  const ShopifyShopDomain = window.location.origin;
+
+  const createStars = (rating) => {
+    const roundedRating = Math.round(rating);
+    let stars = "";
+
+    const fullStar = `
+      <span class="star">
+        <svg class="star" width="25" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 17.3L18.2 21l-1.6-7L22 9.2l-7.2-.6L12 2 9.2 8.6 2 9.2l5.4 4.8L5.8 21z"/>
+        </svg>
+      </span>
+    `;
+
+    const emptyStar = `
+      <span class="star">
+        <svg class="star star--empty" width="25" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 17.3L18.2 21l-1.6-7L22 9.2l-7.2-.6L12 2 9.2 8.6 2 9.2l5.4 4.8L5.8 21z"/>
+        </svg>
+      </span>
+    `;
+
+    for (let i = 1; i <= 5; i++) {
+      stars += i <= roundedRating ? fullStar : emptyStar;
+    }
+    return stars;
+  };
+
+  async function getProductReviews() {
+    try {
+      const res = await fetch(
+        `${ShopifyShopDomain}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=product&limit=1&targetId=${window.__productId}`
+      );
+
+      if (!res.ok) throw new Error("API failed");
+
+      const data = await res.json();
+      return data?.data?.items || [];
+    } catch (err) {
+      console.error("Review fetch error:", err);
+      return [];
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    const starsWrapper = document.querySelector(".ProductDetailStars");
+    const ratingNumber = document.querySelector(".ProductDetailRating");
+
+    if (!starsWrapper) return;
+
+    const reviews = await getProductReviews();
+
+    if (!reviews.length) {
+      starsWrapper.innerHTML = createStars(0);
+      ratingNumber.innerText = "0";
+      return;
+    }
+
+    const rating = Number(reviews[0].rating || 0);
+    starsWrapper.innerHTML = createStars(rating);
+    ratingNumber.innerText = rating;
+  });
+</script>
+
+<div class="product-rating star" style="display:flex; align-items:center; gap:6px;">
+  <div class="ProductDetailStars star" style="display:flex;"></div>
+
+  <span class="ProductDetailRating " style="font-size:14px; opacity:0.8; color:black;"> </span>
+</div>
+
+{% schema %}
+{
+  "name": "Product Rating",
+  "target": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "star_size",
+      "label": "Star Size",
+      "min": 14,
+      "max": 40,
+      "step": 1,
+      "default": 22
+    }
+  ]
+}
+{% endschema %}

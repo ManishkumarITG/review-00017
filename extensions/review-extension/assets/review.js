@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   };
 
+
   const reviewSetting = await getColorSetting();
   console.log(reviewSetting);
   lists.forEach((list) => {
@@ -143,6 +144,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const id = productIdliquid || shopDamian;
     const idType = productIdliquid ? "product" : "store";
     const customerId = ShopifyAnalytics.meta.page.customerId;
+    // console.log(ShopifyAnalytics.meta.page, "????????????????????????????????");
 
     const mode = form.dataset.mode;
     const reviewId = form.dataset.reviewId;
@@ -256,19 +258,4 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   closeForm.addEventListener("click", closeReviewForm);
-
-// const productCard = document.querySelector(".card-wrapper")
-
-//   const productLink = productCard.querySelector("a[href*='/products/']");
-//   if (!productLink) {
-//     console.log("No product link found inside the card");
-//     return;
-//   }
-
-//   const url = new URL(productLink.href, window.location.origin);
-//   const handle = url.pathname.split("/products/")[1].replace("/", "");
-
-//   const response = await fetch(`/products/${handle}.js`);
-//   const product = await response.json();
-//   console.log(product, "prooduct from review.js 🟢")
 });

@@ -322,9 +322,10 @@
 
 .jm-Stars-Progressbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   gap: 18px;
+  /* background: burlywood; */
 }
 
 div#closeForm {
@@ -472,11 +473,12 @@ div#closeForm {
 }
 
 .jm-sort {
-    display: flex;
-    justify-content: start;
-    align-items: self-start;
-    width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: self-start;
+  width: 100%;
 }
+
 .center {
   text-align: center;
 }
@@ -491,4 +493,25 @@ div#closeForm {
   to {
     transform: rotate(1turn);
   }
+}
+
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+}
+
+.ProductDetailStars {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ProductDetailRating {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  line-height: 1;
+  opacity: 0.85;
 }

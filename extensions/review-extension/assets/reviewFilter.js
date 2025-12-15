@@ -1,5 +1,4 @@
-  const shopDomain = window.location.origin;
-
+const shopDomain = window.location.origin;
 
 async function getSettingData() {
   try {
@@ -161,6 +160,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     addSettings("jm-write", buttonTextColor, "color");
     addSettings("tagName", textColor, "color");
     addSettings("progressbar", starColor, "background");
+    addSettings("loader", starColor, "background");
   }
 
   generateStarHTML(starColorSetting);
@@ -496,9 +496,14 @@ ${getStarArray(0)}
 
   parent.innerHTML = `
     <div class="center">
-      <span class="star mainFontSize">${getStarArray(reviewSummary.avgRating)}</span> ${reviewSummary.avgRating} out of 5
+    <span
+    style="display: flex;
+    justify-content: center;
+    gap: 7px;">
+    <span class="star mainFontSize">${getStarArray(reviewSummary.avgRating)}</span> ${reviewSummary.avgRating} out of 5
+    </span>
     </div>
-    <p class="center" style="font-weight: normal; font-size: 16px;"> Based on ${reviewSummary.totalReview} reviews</p>
+    <p class="center" style="font-weight: normal; margin:0px; font-size: 16px;"> Based on ${reviewSummary.totalReview} reviews</p>
     `;
 
   reviewSummary?.reviews?.forEach((item) => {

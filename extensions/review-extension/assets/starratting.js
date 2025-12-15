@@ -1,6 +1,6 @@
-// const shopDomain = window.location.origin;
+const shopDomainstar = window.location.origin;
 
-// console.log("shopDomain" , shopDomain)
+// console.log("shopDomainstar" , shopDomainstar)
 
 const products = document.querySelectorAll(".product-card");
 
@@ -39,6 +39,7 @@ const generateStarHTML = (rating, settings) => {
   addSettings("jm-write", buttonTextColor, "color");
   addSettings("tagName", textColor, "color");
   addSettings("progressbar", starColor, "background");
+  addSettings("loader", starColor, "background");
 
   for (let i = 1; i <= 5; i++) {
     stars += i <= roundedRating ? fullStar : emptyStar;
@@ -49,7 +50,7 @@ const generateStarHTML = (rating, settings) => {
 const settingData = async () => {
   try {
     const res = await fetch(
-      `${shopDomain}/apps/review/api/routes/extensions/setting/getByTitle`,
+      `${shopDomainstar}/apps/review/api/routes/extensions/setting/getByTitle`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -70,7 +71,7 @@ const settingData = async () => {
 const getProductReviews = async () => {
   try {
     const res = await fetch(
-      `${shopDomain}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=product&limit=0`,
+      `${shopDomainstar}/apps/review/api/routes/extensions/reviewproduct/reviews?idType=product&limit=0`,
     );
     const resData = await res.json();
     console.log("-------------------------------------- resData", resData);
@@ -110,6 +111,8 @@ window.onload = async () => {
   const settingResponse = await settingData();
   const reviews = await getProductReviews();
 
+  console.log(reviews, "reviews for the rating to all product");
+
   const colorArray = settingResponse?.data?.sectionSettings?.color;
   const textArray = settingResponse?.data?.sectionSettings?.text;
   // console.log(textArray, "000000000000000000000 text setting");
@@ -136,12 +139,12 @@ window.onload = async () => {
 
   products.forEach((productCard) => {
     const productId = productCard.getAttribute("data-product-id");
-
+    console.log(productId, "vvvvvvvvvvvvvvvvvvvvvvv");
     const productReviews = reviews.filter(
       (r) => r.targetId && r.targetId.toString() === productId,
     );
 
-    console.log("my reviews" , productReviews)
+    console.log("my reviews", productReviews);
 
     const ratingContainer = productCard.querySelector(
       ".extension-star-rating-wrapper",
@@ -174,6 +177,53 @@ window.onload = async () => {
         reviewCountSpan.textContent = `${totalReviews} review${totalReviews !== 1 ? "s" : ""}`;
         reviewCountSpan.style.display = showReviewText ? "inline" : "none";
       }
+    }
+  });
+// render stars on Diffrent themes 
+  const productCards = document.querySelectorAll(".card-wrapper");
+
+  if (!productCards.length) {
+    console.log("Zero product cards in the DOM, fam");
+  }
+
+  productCards.forEach(async (card) => {
+    const productLink = card.querySelector("a[href*='/products/']");
+    const CardInformation = card.querySelector(".card-information");
+    console.log(CardInformation, "CardInformation Information ");
+    if (!productLink) {
+      console.log("No product link found in this card 🚫");
+      return;
+    }
+    const url = new URL(productLink.href, window.location.origin);
+    const handle = url.pathname.split("/products/")[1]?.replace("/", "");
+
+    if (!handle) {
+      console.log("Could not extract handle, low-key tragic 😭");
+      return;
+    }
+
+    try {
+      const response = await fetch(`/products/${handle}.js`);
+      const product = await response.json();
+      console.log("Product fetched:", product.id);
+      const getProductReviewFromServer = reviews.find(
+        (v) => v.targetId == product.id,
+      );
+
+      if (CardInformation) {
+        CardInformation.innerHTML += generateStarHTML(
+          getProductReviewFromServer.rating,
+          starColorSetting,
+        );
+        const productTitle = card.querySelector(".product__title");
+
+        productTitle.innerHTML += generateStarHTML(
+          getProductReviewFromServer,
+          starColorSetting,
+        );
+      }
+    } catch (error) {
+      console.error("API threw a tantrum:", error);
     }
   });
 };
