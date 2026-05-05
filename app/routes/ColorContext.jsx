@@ -355,7 +355,6 @@ export const ColorProvider = ({ children }) => {
     handleSave,
     dateChecked,
     setDateChecked,
-    initialState,
     state,
     dispatch,
     handleDiscard,
