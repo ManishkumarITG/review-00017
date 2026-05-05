@@ -2,7 +2,6 @@ import {
   createSetting,
   getAllSettings,
   updateSetting,
-  updateSetting,
   getSettingByTitle,
 } from "../services/setting.service.js";
 import { responseHandler } from "../utils/responseHandler.js";
