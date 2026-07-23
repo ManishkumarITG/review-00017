@@ -1,13 +1,20 @@
 import { Box } from "@shopify/polaris";
 
-export default function CustomProgressBar({ progress, color }) {
+export default function CustomProgressBar({
+  progress,
+  color,
+  height = 14,
+  radius = 0,
+  trackColor = "#E5E7EB",
+}) {
   return (
     <Box
       style={{
         margin: "4px 0 0 0",
         width: "150px",
-        height: "14px",
-        background: "#E5E7EB",
+        height: `${height}px`,
+        background: trackColor,
+        borderRadius: `${radius}px`,
         overflow: "hidden",
       }}
     >

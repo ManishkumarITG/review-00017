@@ -21,26 +21,47 @@ document.addEventListener("DOMContentLoaded", async () => {
       const baseUrl = window.location.origin;
 
       const res = await fetch(
-        `${baseUrl}/apps/review/api/routes/app/setting/getByTitle`,
+        `${baseUrl}/apps/review/api/routes/extensions/setting/getByTitle`,
         {
           method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ title: "Review Widget Setting" }),
         },
       );
 
       const resData = await res.json();
-      console.log(resData.data.sectionSettings, "setting data form api ");
-
-      return resData.data.sectionSettings;
+      return resData?.data?.sectionSettings || null;
     } catch (error) {
       console.log("color setting fetch error", error);
-      return { message: error.message, data: null };
+      return null;
     }
   };
 
 
   const reviewSetting = await getColorSetting();
-  console.log(reviewSetting);
+
+  const findColor = (type, fallback) =>
+    reviewSetting?.color?.find((c) => c.type === type)?.isvalue || fallback;
+  const findText = (name, fallback) =>
+    reviewSetting?.text?.find((t) => t.settingName === name)?.isvalue ||
+    fallback;
+
+  const starActiveColor = findColor("star", "#108474");
+  const starEmptyColor = findColor("emptyStar", "#ccc");
+
+  // Form texts come from the app settings (Screen title / Introduction).
+  document.querySelectorAll(".jm-form-title").forEach((el) => {
+    el.textContent = findText(
+      "Screen title",
+      "How would you rate this product?",
+    );
+  });
+  document.querySelectorAll(".jm-form-intro").forEach((el) => {
+    el.textContent = findText(
+      "Introduction",
+      "We would love it if you would share a bit about your experience.",
+    );
+  });
   lists.forEach((list) => {
     const source = list.dataset.source;
 
@@ -75,19 +96,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   stars.forEach((star) => {
-    stars.forEach((star) => {
-      star.addEventListener("click", () => {
-        const selectedValue = star.getAttribute("data-value");
-        ratingInput.value = selectedValue;
+    star.addEventListener("click", () => {
+      const selectedValue = star.getAttribute("data-value");
+      ratingInput.value = selectedValue;
 
-        const starColor =
-          reviewSetting.color.find((c) => c.type === "star")?.isvalue ||
-          "#e0dc11ff";
-
-        stars.forEach((s) => {
-          s.style.color =
-            s.getAttribute("data-value") <= selectedValue ? starColor : "#ccc";
-        });
+      stars.forEach((s) => {
+        s.style.color =
+          s.getAttribute("data-value") <= selectedValue
+            ? starActiveColor
+            : starEmptyColor;
       });
     });
   });
@@ -96,7 +113,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   function resetStars() {
     ratingInput.value = ""; // remove selected rating
     stars.forEach((s) => {
-      s.style.color = "#ccc"; // reset to default color
+      s.style.color = starEmptyColor;
     });
   }
 

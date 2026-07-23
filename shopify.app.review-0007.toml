@@ -1,6 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "6086a7869f7c519037bb58c0e14deeac"
+client_id = "ff7b5ec85562aff095eff32e34449a59"
+name = "review-0007"
 name = "reviewapp"
 application_url = "https://example.com"
 embedded = true
@@ -14,11 +15,13 @@ api_version = "2026-01"
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 scopes = "read_themes,write_app_proxy,write_products,write_themes"
+use_legacy_install_flow = false
 
 [auth]
 redirect_urls = [ "https://example.com/api/auth" ]
 
 [app_proxy]
-url = "https://manish-kumaritg.myshopify.com"
+url = "https://balwan-singh-rajput-itg.myshopify.com"
+subpath = "review"
 prefix = "apps"
-subpath = "review-3"
+

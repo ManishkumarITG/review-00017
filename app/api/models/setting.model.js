@@ -33,6 +33,10 @@ const sectionSettingsSchema = new Schema(
       type: [innerSettingSchema],
       default: [],
     },
+    layout: {
+      type: [innerSettingSchema],
+      default: [],
+    },
   },
   { _id: false },
 );

@@ -1,12 +1,17 @@
-import React, {
+import {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useReducer,
   useState,
 } from "react";
 import { createSettings, getColorSetting } from "./services/api.js";
+import {
+  DEFAULT_SECTION_SETTINGS,
+  SETTINGS_TITLE,
+  mergeSectionSettings,
+  settingsToMap,
+} from "./data/widgetDefaults.js";
 
 const ThemeContext = createContext();
 
@@ -17,15 +22,10 @@ const DEFAULT_HSBA = {
   alpha: 1,
 };
 
-const initialState = {
-  "Widget title": "Costomer review",
-  "Average rating text": 4.07,
-  "Button Text": "Write a review",
-  "Screen title": "How would you rate this product?",
-  Introduction:
-    "We would love it if you would share a bit about your experience.",
-  "display name": "Yellow Snowboard",
-};
+const defaultMap = settingsToMap(DEFAULT_SECTION_SETTINGS);
+
+// Text fields state (keyed by settingName) seeded from the defaults module.
+const initialState = { ...defaultMap.texts };
 
 function reducer(state, action) {
   return {
@@ -39,7 +39,9 @@ export const ColorProvider = ({ children }) => {
   const [isChange, setIsChnage] = useState(false);
   const [setting, setSetting] = useState(null);
   const [lodaing, setLodaing] = useState(null);
-  const [dateChecked, setDateChecked] = useState(false);
+  const [dateChecked, setDateChecked] = useState(
+    defaultMap.toggles["show date"],
+  );
   const [state, dispatch] = useReducer(reducer, initialState);
   const [shop, setShop] = useState("");
   const [active, setActive] = useState(null);
@@ -47,7 +49,12 @@ export const ColorProvider = ({ children }) => {
   const [getData, setGetData] = useState(false);
   const [checkStar, setCheckStar] = useState(true);
 
-  const [colors, setColors] = useState({});
+  // Colors keyed by type (star, text, button, ...), values are hex strings.
+  const [colors, setColors] = useState({ ...defaultMap.colors });
+  // Visibility toggles keyed by settingName ("show date", "show avatar", ...).
+  const [toggles, setToggles] = useState({ ...defaultMap.toggles });
+  // Layout values keyed by type (widgetWidth, alignment, starSize, ...).
+  const [layout, setLayout] = useState({ ...defaultMap.layout });
 
   const toggleActive = (id) => () => {
     setActive((activeId) => (activeId !== id ? id : null));
@@ -138,20 +145,47 @@ export const ColorProvider = ({ children }) => {
     };
   }
 
+  // The save bar for the page currently editing settings. The dirty-check
+  // effect below owns showing/hiding it by comparing state against `setting`.
+  const [activeSaveBarId, setActiveSaveBarId] = useState(null);
+
+  const markDirty = (saveBarId) => {
+    if (saveBarId) setActiveSaveBarId(saveBarId);
+  };
+
   const updateColor = (type, newColor, saveBarId) => {
     setColors((prev) => ({
       ...prev,
       [type]: newColor,
     }));
-    if (saveBarId) {
-      shopify.saveBar.show(saveBarId);
-      setIsChnage(true);
-    }
+    markDirty(saveBarId);
+  };
+
+  const updateToggle = (settingName, checked, saveBarId) => {
+    setToggles((prev) => ({
+      ...prev,
+      [settingName]: checked,
+    }));
+    if (settingName === "show date") setDateChecked(checked);
+    markDirty(saveBarId);
+  };
+
+  const updateLayout = (type, value, saveBarId) => {
+    setLayout((prev) => ({
+      ...prev,
+      [type]: String(value),
+    }));
+    markDirty(saveBarId);
+  };
+
+  const updateText = (field, value, saveBarId) => {
+    dispatch({ field, value });
+    markDirty(saveBarId);
   };
 
   const getHexCode = (type) => {
     if (!colors[type]) {
-      return hsbaToHex(DEFAULT_HSBA);
+      return defaultMap.colors[type] || hsbaToHex(DEFAULT_HSBA);
     }
     return colors[type];
   };
@@ -162,6 +196,38 @@ export const ColorProvider = ({ children }) => {
     return DEFAULT_HSBA;
   };
 
+  // Build the full sectionSettings payload from the defaults skeleton and
+  // the current UI state, so every section is always saved complete.
+  const buildSectionSettings = () => ({
+    color: DEFAULT_SECTION_SETTINGS.color.map((d) => ({
+      ...d,
+      isvalue: colors[d.type] || d.isvalue,
+    })),
+    theme: DEFAULT_SECTION_SETTINGS.theme.map((d) => ({
+      ...d,
+      isChecked:
+        typeof toggles[d.settingName] === "boolean"
+          ? toggles[d.settingName]
+          : d.isChecked,
+    })),
+    text: DEFAULT_SECTION_SETTINGS.text.map((d) => {
+      if (d.settingName === "Show text and stars") {
+        return { ...d, isChecked: checkStar };
+      }
+      return {
+        ...d,
+        isvalue:
+          state[d.settingName] !== undefined && state[d.settingName] !== null
+            ? String(state[d.settingName])
+            : d.isvalue,
+      };
+    }),
+    layout: DEFAULT_SECTION_SETTINGS.layout.map((d) => ({
+      ...d,
+      isvalue: layout[d.type] !== undefined ? String(layout[d.type]) : d.isvalue,
+    })),
+  });
+
   const handleSave = async (islodaing, savBarId) => {
     try {
       setLodaing(islodaing);
@@ -169,85 +235,13 @@ export const ColorProvider = ({ children }) => {
       const res = await fetch("/api/routes/app/setting/updateByTitle", {
         method: "POST",
         body: JSON.stringify({
-          title: "Review Widget Setting",
-          sectionSettings: {
-            color: [
-              {
-                type: "star",
-                settingName: "Star Color",
-                isvalue: colors.star,
-              },
-              {
-                type: "text",
-                settingName: "Text Color",
-                isvalue: colors.text,
-              },
-              {
-                type: "button",
-                settingName: "Button Color",
-                isvalue: colors.button,
-              },
-              {
-                type: "buttonTextColor",
-                settingName: " Button Text Color",
-                isvalue: colors.buttonTextColor,
-              },
-            ],
-            theme: [
-              {
-                type: "checkbox",
-                settingName: "show date",
-                isChecked: dateChecked,
-                isvalue: "",
-              },
-            ],
-            text: [
-              {
-                type: "text",
-                settingName: "Widget title",
-                isvalue: state["Widget title"],
-              },
-              {
-                type: "text",
-                settingName: "Average rating text",
-                isvalue: state["Average rating text"],
-              },
-              {
-                type: "text",
-                settingName: "Button Text",
-                isvalue: state["Button Text"],
-              },
-              {
-                type: "ChoiceList",
-                settingName: "Show text and stars",
-                isvalue: "hidden",
-                isChecked: checkStar,
-              },
-              {
-                type: "text",
-                settingName: "Screen title",
-                isvalue: state["Screen title"],
-                isChecked: false,
-              },
-              {
-                type: "text",
-                settingName: "Introduction",
-                isvalue: state["Introduction"],
-                isChecked: false,
-              },
-              {
-                type: "text",
-                settingName: "display name",
-                isvalue: state["display name"],
-                isChecked: false,
-              },
-            ],
-          },
+          title: SETTINGS_TITLE,
+          sectionSettings: buildSectionSettings(),
         }),
       });
 
       const resData = await res.json();
-      console.log("hello world", resData);
+      console.log("setting saved", resData);
       shopify.saveBar.hide(savBarId);
     } catch (error) {
       console.log(error);
@@ -258,11 +252,22 @@ export const ColorProvider = ({ children }) => {
     }
   };
 
-  const handleDiscard = (saveBarId) => {
-    setDateChecked(setting.theme[0].isChecked);
-    setting.text.forEach((text) => {
-      if (text.settingName == "Show text and stars") {
-        setCheckStar(text.isChecked);
+  // Push a merged sectionSettings object into every piece of UI state.
+  const applySettingsToState = (merged) => {
+    const map = settingsToMap(merged);
+
+    setColors({ ...defaultMap.colors, ...map.colors });
+    setToggles({ ...defaultMap.toggles, ...map.toggles });
+    setLayout({ ...defaultMap.layout, ...map.layout });
+    setDateChecked(
+      typeof map.toggles["show date"] === "boolean"
+        ? map.toggles["show date"]
+        : defaultMap.toggles["show date"],
+    );
+
+    merged.text?.forEach((text) => {
+      if (text.settingName === "Show text and stars") {
+        setCheckStar(!!text.isChecked);
       } else {
         dispatch({
           field: text.settingName,
@@ -270,13 +275,41 @@ export const ColorProvider = ({ children }) => {
         });
       }
     });
-    setting.color.forEach((color) => {
-      updateColor(color.type, color.isvalue, null);
-    });
+  };
 
+  const handleDiscard = (saveBarId) => {
+    if (setting) applySettingsToState(setting);
     shopify.saveBar.hide(saveBarId);
     setIsChnage(false);
   };
+
+  // Show the save bar only while the current state actually differs from the
+  // saved settings; hide it again (without resetting anything) when every
+  // value is back to its saved state.
+  useEffect(() => {
+    if (!setting || !activeSaveBarId) return;
+
+    const current = settingsToMap(buildSectionSettings());
+    const saved = settingsToMap(setting);
+
+    const mapsEqual = (a, b) =>
+      Object.keys(a).every((k) => String(a[k]) === String(b[k]));
+
+    const isDirty = !(
+      mapsEqual(current.colors, saved.colors) &&
+      mapsEqual(current.toggles, saved.toggles) &&
+      mapsEqual(current.texts, saved.texts) &&
+      mapsEqual(current.layout, saved.layout)
+    );
+
+    if (isDirty) {
+      shopify.saveBar.show(activeSaveBarId);
+      setIsChnage(true);
+    } else {
+      shopify.saveBar.hide(activeSaveBarId);
+      setIsChnage(false);
+    }
+  }, [colors, toggles, layout, state, checkStar, setting, activeSaveBarId]);
 
   useEffect(() => {
     async function setColorData() {
@@ -288,52 +321,35 @@ export const ColorProvider = ({ children }) => {
 
       console.log("new setttings", colorSettingData);
 
-      const settigngObj = colorSettingData.data.sectionSettings;
+      if (!colorSettingData?.data) return;
+
+      const merged = mergeSectionSettings(
+        colorSettingData.data.sectionSettings,
+      );
       const newShop = colorSettingData.data.shop;
 
       setShop(newShop);
-      setSetting(settigngObj);
-
-      // add color
-      settigngObj.color.forEach((color) => {
-        updateColor(color.type, color.isvalue, null);
-      });
-
-      setDateChecked(settigngObj?.theme[0]?.isChecked);
-      // add text in state
-      settigngObj.text?.forEach((text) => {
-        if (text.type == "ChoiceList") {
-          setCheckStar(text.isChecked);
-        } else {
-          dispatch({
-            field: text.settingName,
-            value: text.isvalue,
-          });
-        }
-      });
+      setSetting(merged);
+      applySettingsToState(merged);
     }
     setColorData();
   }, [getData]);
 
+  // If the user manually reverts a control back to its saved value, treat it
+  // as a discard so the save bar hides again.
   const handleCheckeState = (arr, id, newValue, saveBarId) => {
-    if (arr) {
-      for (const element of arr) {
-        console.log(element.settingName == id);
-        if (
-          element.settingName == "Show text and stars" ||
-          element.settingName == "show date"
-        ) {
-          if (element.isChecked == newValue) {
-            handleDiscard(saveBarId);
-            return true;
-          }
-        } else if (element.settingName == id) {
-          if (element.isvalue == newValue) {
-            handleDiscard(saveBarId);
-            return true;
-          }
-        }
-      }
+    if (!arr) return false;
+    const element = arr.find((e) => e.settingName == id);
+    if (!element) return false;
+
+    const savedValue =
+      element.type === "checkbox" || element.type === "ChoiceList"
+        ? element.isChecked
+        : element.isvalue;
+
+    if (savedValue == newValue) {
+      handleDiscard(saveBarId);
+      return true;
     }
     return false;
   };
@@ -355,6 +371,11 @@ export const ColorProvider = ({ children }) => {
     handleSave,
     dateChecked,
     setDateChecked,
+    toggles,
+    updateToggle,
+    layout,
+    updateLayout,
+    updateText,
     state,
     dispatch,
     handleDiscard,

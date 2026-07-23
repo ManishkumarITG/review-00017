@@ -69,7 +69,7 @@ export default function Widget() {
     const shopDomin = shopify.config.shop.split(".")[0];
     let url = "";
     const current = selected || "current";
-    const embedId = "03fdd7d0352cc3b1184544f7e2c783be";
+    const embedId = shopify.config.apiKey;
     if (index === 0) {
       url = `https://admin.shopify.com/store/${shopDomin}/themes/${current}/editor?template=page&addAppBlockId=${embedId}/review-widget`;
       // url = `https://admin.shopify.com/store/${shopDomin}/themes/${current}/editor`  
