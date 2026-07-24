@@ -98,7 +98,6 @@ export default function ReviewWidgets() {
   const justifyMap = { left: "start", center: "center", right: "end" };
   const flexAlign = { left: "flex-start", center: "center", right: "flex-end" };
 
-  const embedId = shopify.config.apiKey;
   const limit = 5;
   const massage = "Something Went wrong";
   const duration = 7000;
@@ -111,11 +110,15 @@ export default function ReviewWidgets() {
   const [totalReview, setTotalReview] = useState(rattingArray.totalReview);
   const [avgStarRating, setAvgStarRating] = useState(rattingArray.avgRating);
   const [shopDomin, setShopDomain] = useState("");
+  // shopify.config is only available in the browser — reading it during
+  // server-side rendering (direct URL loads) throws.
+  const [embedId, setEmbedId] = useState("");
 
   useEffect(() => {
     setBtnText("Sample Data");
     const shopDomin = shopify.config.shop.split(".")[0];
     setShopDomain(shopDomin);
+    setEmbedId(shopify.config.apiKey);
   }, []);
 
   const summary = async () => {

@@ -13,7 +13,83 @@ api_version = "2026-01"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "read_themes,write_app_proxy,write_products,write_themes"
+scopes = "read_themes,write_app_proxy,write_products,write_themes,read_metaobjects,write_metaobjects"
+
+# ----- Custom data definitions (installed automatically on `shopify app deploy`) -----
+
+# Each review is one metaobject entry of type $app:review.
+# Handle format enforces one review per customer per target:
+#   review-<idType>-<targetId>-<customerId>
+[metaobjects.app.review]
+name = "Review"
+display_name_field = "customer_name"
+
+[metaobjects.app.review.fields.customer_name]
+name = "Customer Name"
+type = "single_line_text_field"
+required = true
+
+[metaobjects.app.review.fields.customer_email]
+name = "Customer Email"
+type = "single_line_text_field"
+
+[metaobjects.app.review.fields.customer_id]
+name = "Customer ID"
+type = "single_line_text_field"
+required = true
+
+[metaobjects.app.review.fields.id_type]
+name = "Target Type"
+type = "single_line_text_field"
+required = true
+
+[metaobjects.app.review.fields.target_id]
+name = "Target ID"
+type = "single_line_text_field"
+required = true
+
+[metaobjects.app.review.fields.rating]
+name = "Rating"
+type = "number_integer"
+required = true
+
+[metaobjects.app.review.fields.description]
+name = "Description"
+type = "multi_line_text_field"
+
+[metaobjects.app.review.fields.images]
+name = "Images"
+type = "list.url"
+
+[metaobjects.app.review.fields.like]
+name = "Liked"
+type = "boolean"
+
+[metaobjects.app.review.fields.spam]
+name = "Spam"
+type = "boolean"
+
+# Intentional existing spelling ("froud") kept to match the rest of the codebase.
+[metaobjects.app.review.fields.froud]
+name = "Fraud"
+type = "boolean"
+
+[metaobjects.app.review.fields.pinned]
+name = "Pinned"
+type = "boolean"
+
+[metaobjects.app.review.fields.created_at]
+name = "Created At"
+type = "date_time"
+
+# Aggregate rating stored on the product itself so themes can read it natively.
+[product.metafields.app.rating]
+name = "Average Rating"
+type = "number_decimal"
+
+[product.metafields.app.rating_count]
+name = "Rating Count"
+type = "number_integer"
 
 [auth]
 redirect_urls = [ "https://example.com/api/auth" ]

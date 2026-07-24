@@ -372,6 +372,21 @@ div#closeForm {
   transition: 0.2s;
 }
 
+/* Form stars are SVGs sized off the span's font-size. */
+.form-star svg {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Static star snippets (e.g. ReviewsText block) size off font-size too. */
+.jm-star svg {
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+
 .form-star:hover,
 .form-star.active {
   transform: scale(1.15);

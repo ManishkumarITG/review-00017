@@ -30,6 +30,9 @@ export const getSettingByTitle = async (shopDomain, name) => {
 export const updateSetting = async (shopDomain, settingData) => {
   const { title } = settingData;
   settingData.shop = shopDomain;
+  // An explicit save from the customizer counts as completing the
+  // "customize widget" setup step.
+  settingData.isCustomized = true;
   console.log(settingData);
   console.log("---------------------- hello", title, settingData);
   const updated = await Setting.findOneAndUpdate(

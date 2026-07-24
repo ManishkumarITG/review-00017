@@ -24,6 +24,10 @@ const addtext = (className, value) => {
   });
 };
 
+// Set from the shop's saved settings in window.onload below.
+let jmStarStyle = "rounded";
+let jmEmptyStarColor = "#ccc";
+
 const generateStarHTML = (rating, settings) => {
   const starColor = settings[0];
   const textColor = settings[1];
@@ -31,8 +35,13 @@ const generateStarHTML = (rating, settings) => {
   const buttonTextColor = settings[3];
   const roundedRating = Math.round(rating);
   let stars = "";
-  const fullStar = `<span style="color:${starColor};">★</span>`;
-  const emptyStar = '<span style="color:#ccc;">★</span>';
+  // Same star design as the app/preview (see starDesigns.js).
+  const fullStar = window.jmStarSVG
+    ? `<span style="color:${starColor};">${window.jmStarSVG(jmStarStyle, { filled: true, size: "1em", color: "currentColor" })}</span>`
+    : `<span style="color:${starColor};">★</span>`;
+  const emptyStar = window.jmStarSVG
+    ? `<span style="color:${jmEmptyStarColor};">${window.jmStarSVG(jmStarStyle, { filled: false, size: "1em", color: "currentColor" })}</span>`
+    : `<span style="color:${jmEmptyStarColor};">★</span>`;
 
   addSettings("star", starColor, "color");
   addSettings("jm-write", buttonColor, "background");
@@ -115,6 +124,12 @@ window.onload = async () => {
 
   const colorArray = settingResponse?.data?.sectionSettings?.color;
   const textArray = settingResponse?.data?.sectionSettings?.text;
+  const layoutArray = settingResponse?.data?.sectionSettings?.layout;
+
+  jmStarStyle =
+    layoutArray?.find((l) => l.type === "starStyle")?.isvalue || "rounded";
+  jmEmptyStarColor =
+    colorArray?.find((c) => c.type === "emptyStar")?.isvalue || "#ccc";
   // console.log(textArray, "000000000000000000000 text setting");
 
   const heading = textArray[0].isvalue || "Costomer review";

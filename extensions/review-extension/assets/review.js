@@ -49,6 +49,26 @@ document.addEventListener("DOMContentLoaded", async () => {
   const starActiveColor = findColor("star", "#108474");
   const starEmptyColor = findColor("emptyStar", "#ccc");
 
+  const findLayout = (type, fallback) =>
+    reviewSetting?.layout?.find((l) => l.type === type)?.isvalue || fallback;
+  const starStyleKey = findLayout("starStyle", "rounded");
+
+  // Same star design as the app/preview (see starDesigns.js).
+  const starsInline = (rating) => {
+    if (!window.jmStarSVG) {
+      return "★".repeat(rating) + "☆".repeat(5 - rating);
+    }
+    let out = "";
+    for (let i = 1; i <= 5; i++) {
+      out += window.jmStarSVG(starStyleKey, {
+        filled: i <= rating,
+        size: "1em",
+        color: i <= rating ? starActiveColor : starEmptyColor,
+      });
+    }
+    return out;
+  };
+
   // Form texts come from the app settings (Screen title / Introduction).
   document.querySelectorAll(".jm-form-title").forEach((el) => {
     el.textContent = findText(
@@ -80,7 +100,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           <div class="jm-item-right">
             <div class="jm-topline">
               <div class="jm-stars-inline">
-                ${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}
+                ${starsInline(r.rating)}
                 <p>${r.author}</p>
               </div>
               <div class="jm-date">${r.date}</div>

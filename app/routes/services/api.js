@@ -40,6 +40,17 @@ export const createSettings = async () => {
   }
 };
 
+export const getSetupStatus = async () => {
+  try {
+    const res = await fetch("/api/routes/app/setup/status");
+    const resData = await res.json();
+    return resData.data;
+  } catch (error) {
+    console.log("setup status fetch error", error);
+    return null;
+  }
+};
+
 export const getAllReviews = async (page = 1, limit = 5, filterType) => {
   try {
     const res = await fetch(

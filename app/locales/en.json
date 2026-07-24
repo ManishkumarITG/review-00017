@@ -43,7 +43,10 @@
                 }
             }
         },
-        "DismissGuide": "Dismiss setup Guide"
+        "VerifyButton": "Verify setup",
+        "RequiredBanner": "Setup is required. Complete both steps below — we verify them automatically before unlocking your dashboard.",
+        "StepPending": "Pending",
+        "VerifyHint": "This step is verified automatically — finish it, then come back here."
     },
     "ReviewData": {
         "MediaCards": {

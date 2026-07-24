@@ -1,8 +1,34 @@
-import { useEffect } from "react";
-import { useFetcher } from "react-router";
-import { useAppBridge } from "@shopify/app-bridge-react";
+import { useEffect, useState } from "react";
+import {
+  Page,
+  InlineGrid,
+  InlineStack,
+  Box,
+  Text,
+  Divider,
+  Card,
+  Link,
+  Tabs,
+  DataTable,
+  Button,
+  Image,
+} from "@shopify/polaris";
+
+import { AppProvider } from "@shopify/polaris";
+import en from "@shopify/polaris/locales/en.json";
+import "@shopify/polaris/build/esm/styles.css";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { authenticate } from "../shopify.server";
+import DeshboardGuidense from "./components/DeshboardGuidense";
+import DeshboardimageWithText from "./components/DeshboardImageWithText";
+import DeshboardHeader from "./components/DeshboardHeader";
+import { getAllReviews } from "./services/api";
+import { getReviewsByType } from "./services/api";
+import StarRating from "./components/Ratting.jsx";
+import { useNavigate } from "react-router";
+import Loding from "./components/Loding";
+import { useColorTheme } from "./ColorContext.jsx";
+import { useTranslation } from "react-i18next";
 
 export const loader = async ({ request }) => {
   await authenticate.admin(request);
@@ -10,231 +36,274 @@ export const loader = async ({ request }) => {
   return null;
 };
 
-export const action = async ({ request }) => {
-  const { admin } = await authenticate.admin(request);
-  const color = ["Red", "Orange", "Yellow", "Green"][
-    Math.floor(Math.random() * 4)
-  ];
-  const response = await admin.graphql(
-    `#graphql
-      mutation populateProduct($product: ProductCreateInput!) {
-        productCreate(product: $product) {
-          product {
-            id
-            title
-            handle
-            status
-            variants(first: 10) {
-              edges {
-                node {
-                  id
-                  price
-                  barcode
-                  createdAt
-                }
-              }
-            }
-          }
-        }
-      }`,
-    {
-      variables: {
-        product: {
-          title: `${color} Snowboard`,
-        },
-      },
-    },
-  );
-  const responseJson = await response.json();
-  const product = responseJson.data.productCreate.product;
-  const variantId = product.variants.edges[0].node.id;
-  const variantResponse = await admin.graphql(
-    `#graphql
-    mutation shopifyReactRouterTemplateUpdateVariant($productId: ID!, $variants: [ProductVariantsBulkInput!]!) {
-      productVariantsBulkUpdate(productId: $productId, variants: $variants) {
-        productVariants {
-          id
-          price
-          barcode
-          createdAt
-        }
-      }
-    }`,
-    {
-      variables: {
-        productId: product.id,
-        variants: [{ id: variantId, price: "100.00" }],
-      },
-    },
-  );
-  const variantResponseJson = await variantResponse.json();
+export default function Deshboard() {
+  const [topProduct, setTopProduct] = useState([]);
+  const [allreviews, setReviews] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+  // Verified setup status from the guide; dashboard stays locked until both
+  // steps pass verification.
+  const [setupStatus, setSetupStatus] = useState(null);
+  const setupComplete = setupStatus?.completed === true;
 
-  return {
-    product: responseJson.data.productCreate.product,
-    variant: variantResponseJson.data.productVariantsBulkUpdate.productVariants,
+  const nevigate = useNavigate();
+
+  const { getHexCode } = useColorTheme();
+
+  const { t } = useTranslation()
+
+  const starColor = getHexCode("star");
+
+  const getAllReviewsData = async () => {
+    try {
+      setLoading(true);
+      const allReviewData = await getAllReviews();
+      setReviews(allReviewData.data.items);
+      const productReviews = await getReviewsByType("product");
+      setTopProduct(productReviews.items);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
-};
-
-export default function Index() {
-  const fetcher = useFetcher();
-  const shopify = useAppBridge();
-  const isLoading =
-    ["loading", "submitting"].includes(fetcher.state) &&
-    fetcher.formMethod === "POST";
 
   useEffect(() => {
-    if (fetcher.data?.product?.id) {
-      shopify.toast.show("Product created");
-    }
-  }, [fetcher.data?.product?.id, shopify]);
-  const generateProduct = () => fetcher.submit({}, { method: "POST" });
+    getAllReviewsData();
+  }, []);
+
+
+  const topProductRows = topProduct.map((item) => [
+    item.idType || item.idType,
+    item.review_count?.toString() || "0",
+    item.rating?.toString() || "0",
+  ]);
+
+  const deshboardImages = [
+    {
+      title: t("Dashboard.PromoCard.Title"),
+      imageurl: "https://assets.judge.me/core/cover/awesome-2025.webp",
+      buttontext: t("Dashboard.PromoCard.Button"),
+      textcontent:
+        t("Dashboard.PromoCard.Description"),
+    },
+  ];
 
   return (
-    <s-page heading="Shopify app template">
-      <s-button slot="primary-action" onClick={generateProduct}>
-        Generate a product
-      </s-button>
+    <>
+      <AppProvider i18n={en}>
+        <Page>
+          <DeshboardHeader />
+          <Box>
+            <DeshboardGuidense onStatusChange={setSetupStatus} />
+          </Box>
 
-      <s-section heading="Congrats on creating a new Shopify app 🎉">
-        <s-paragraph>
-          This embedded app template uses{" "}
-          <s-link
-            href="https://shopify.dev/docs/apps/tools/app-bridge"
-            target="_blank"
-          >
-            App Bridge
-          </s-link>{" "}
-          interface examples like an{" "}
-          <s-link href="/app/additional">additional page in the app nav</s-link>
-          , as well as an{" "}
-          <s-link
-            href="https://shopify.dev/docs/api/admin-graphql"
-            target="_blank"
-          >
-            Admin GraphQL
-          </s-link>{" "}
-          mutation demo, to provide a starting point for app development.
-        </s-paragraph>
-      </s-section>
-      <s-section heading="Get started with products">
-        <s-paragraph>
-          Generate a product with GraphQL and get the JSON output for that
-          product. Learn more about the{" "}
-          <s-link
-            href="https://shopify.dev/docs/api/admin-graphql/latest/mutations/productCreate"
-            target="_blank"
-          >
-            productCreate
-          </s-link>{" "}
-          mutation in our API references.
-        </s-paragraph>
-        <s-InlineStack   direction="inline" gap="base">
-          <s-button
-            onClick={generateProduct}
-            {...(isLoading ? { loading: true } : {})}
-          >
-            Generate a product
-          </s-button>
-          {fetcher.data?.product && (
-            <s-button
-              onClick={() => {
-                shopify.intents.invoke?.("edit:shopify/Product", {
-                  value: fetcher.data?.product?.id,
-                });
-              }}
-              target="_blank"
-              variant="tertiary"
-            >
-              Edit product
-            </s-button>
+          {setupComplete && (
+          <>
+          <Box paddingBlockStart="300">
+            <Box minHeight="400px">
+              <InlineGrid
+                columns={{ xs: "1fr", sm: "1fr", md: "1fr 1fr" }}
+                gap={{ xs: "200", md: "600" }}
+                align="start"
+              >
+                {/* --- Top Products Card --- */}
+                <Box minHeight="400px">
+                  <Box paddingBlockEnd="400">
+                    <Text variant="headingLg" as="h2" paddingBlockEnd="400">
+                      {t("Dashboard.TopProducts")}
+                    </Text>
+                  </Box>
+                  <Card padding={0}>
+
+                    {isLoading ? (
+                      <Box style={{ minHeight: "400px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <Loding />
+                      </Box>
+                    ) : (
+                      <>
+                        <Box padding="400" minHeight="400px">
+                          {topProduct.length === 0 ? (
+                            <InlineGrid
+                              columns={{ xs: "1fr", sm: "1fr", md: "1fr" }}
+                              gap="600"
+                              width="100%"
+                              borderBottom="solid"
+                            >
+
+                              <Box align="center" padding="200">
+                                <Image
+                                  src="https://pub-images.judge.me/judgeme/empty-product"
+                                  alt={t("Dashboard.NoData")}
+                                  style={{ maxWidth: "160px", width: "100%" }}
+                                />
+                              </Box>
+                              <Box align="center" padding="200">
+                                <Text>
+                                  {t("Dashboard.TopProductsEmptyMessage")}
+                                </Text>
+                              </Box>
+                              <Box align="center" padding="200">
+                                <Button
+                                  onClick={() => {
+                                    nevigate(
+                                      "/app/reveiwpage?table=All+Reviews",
+                                    );
+                                  }}
+                                >
+                                  {t("Dashboard.TopProductsButton")}
+                                </Button>
+                              </Box>
+                            </InlineGrid>
+                          ) : (
+                            <>
+                              <Box style={{ overflowX: "auto" }}>
+
+                                <DataTable
+                                  columnContentTypes={[
+                                    t("Dashboard.Table.Product"),
+                                    t("Dashboard.Table.Reviews"),
+                                    t("Dashboard.Table.Rating"),
+                                  ]}
+                                  headings={["Product", "Reviews", "Rating"]}
+                                  rows={topProductRows}
+                                />
+                              </Box>
+                            </>
+                          )}
+                        </Box>
+                      </>
+                    )}
+                  </Card>
+                </Box>
+                {/* --- Recent Activity Card --- */}
+                <Box>
+                  <Box paddingBlockEnd="400">
+                    <Text variant="headingLg" as="h2">
+                      {t("Dashboard.ReviewActivity")}
+                    </Text>
+                  </Box>
+                  <Card padding={0}>
+                    <Box minHeight="400px">
+
+
+                      {isLoading ? (
+                        <Box style={{ minHeight: "400px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <Loding />
+                        </Box>
+                      ) : (
+                        <>
+                          <Box
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              minHeight: "400px",
+                              padding: "0px 10px",
+                              gap: "16px",
+                              justifyContent: "space-between",
+                            }}
+
+                          >
+                            {allreviews.length === 0 ? (
+                              <InlineGrid
+                                columns={{ xs: "1fr" }}
+                                gap="600"
+                                width="100%"
+                                borderBottom="solid"
+                              >
+
+                                <Box align="center" padding="200">
+                                  <Image
+                                    src="https://pub-images.judge.me/judgeme/empty-review"
+                                    alt={t("Dashboard.NoData")}
+                                    width="30%"
+                                  />
+                                </Box>
+                                <Box align="center" padding="200">
+                                  <Text>
+                                    {t("Dashboard.ReviewActivityEmptyMessage")}
+                                  </Text>
+                                </Box>
+                                <Box align="center" padding="200">
+                                  <Button
+                                    onClick={() => {
+                                      nevigate(
+                                        "/app/reveiwpage?table=All+Reviews",
+                                      );
+                                    }}
+                                  >
+                                    {t("Dashboard.ReviewActivityButton")}
+                                  </Button>
+                                </Box>
+                              </InlineGrid>
+                            ) : (
+                              <>
+                                <Box>
+                                  <Tabs
+                                    tabs={[
+                                      {
+                                        id: "last_reviews",
+                                        content: t("Dashboard.LastReviews"),
+                                      },
+                                    ]}
+                                    selected={0}
+                                  />
+                                  <Divider />
+                                  {allreviews.map((review) => (
+                                    <Box key={review._id} paddingBlockEnd="300">
+                                      <InlineGrid
+                                        alignItems="start"
+                                        gap={{ xs: "200", md: "300" }}
+                                        columns={{ xs: "1fr", sm: "1fr", md: "auto 1fr" }}
+                                      >
+                                        <InlineStack align="start" gap="200">
+                                          <StarRating
+                                            rating={review.rating}
+                                            color={starColor}
+                                          />
+
+                                        </InlineStack>
+
+                                        <Box>
+                                          <Text as="p" variant="bodyMd">
+                                            {review.description}
+                                          </Text>
+                                        </Box>
+                                      </InlineGrid>
+
+                                      <Divider />
+                                    </Box>
+                                  ))}
+                                </Box>
+                                <Box>
+                                  <Divider />
+                                  <Box
+                                    paddingBlockEnd="300"
+                                    onClick={() => nevigate("/app/reveiwpage")}
+                                  >
+                                    <Link>{t("Dashboard.ViewAllReviewsDashboard")}</Link>
+                                  </Box>
+                                </Box>
+                              </>
+                            )}
+                          </Box>
+                        </>
+                      )}
+                    </Box>
+                  </Card>
+                </Box>
+              </InlineGrid>
+            </Box>
+          </Box>
+          <Box paddingBlockStart="300">
+            {deshboardImages.map((element, index) => (
+              <DeshboardimageWithText key={index} card={element} />
+            ))}
+          </Box>
+          </>
           )}
-        </s-InlineStack  >
-        {fetcher.data?.product && (
-          <s-section heading="productCreate mutation">
-            <s-InlineStack   direction="block" gap="base">
-              <s-box
-                padding="base"
-                borderWidth="base"
-                borderRadius="base"
-                background="subdued"
-              >
-                <pre style={{ margin: 0 }}>
-                  <code>{JSON.stringify(fetcher.data.product, null, 2)}</code>
-                </pre>
-              </s-box>
-
-              <s-heading>productVariantsBulkUpdate mutation</s-heading>
-              <s-box
-                padding="base"
-                borderWidth="base"
-                borderRadius="base"
-                background="subdued"
-              >
-                <pre style={{ margin: 0 }}>
-                  <code>{JSON.stringify(fetcher.data.variant, null, 2)}</code>
-                </pre>
-              </s-box>
-            </s-InlineStack  >
-          </s-section>
-        )}
-      </s-section>
-
-      <s-section slot="aside" heading="App template specs">
-        <s-paragraph>
-          <s-text>Framework: </s-text>
-          <s-link href="https://reactrouter.com/" target="_blank">
-            React Router
-          </s-link>
-        </s-paragraph>
-        <s-paragraph>
-          <s-text>Interface: </s-text>
-          <s-link
-            href="https://shopify.dev/docs/api/app-home/using-polaris-components"
-            target="_blank"
-          >
-            Polaris web components
-          </s-link>
-        </s-paragraph>
-        <s-paragraph>
-          <s-text>API: </s-text>
-          <s-link
-            href="https://shopify.dev/docs/api/admin-graphql"
-            target="_blank"
-          >
-            GraphQL
-          </s-link>
-        </s-paragraph>
-        <s-paragraph>
-          <s-text>Database: </s-text>
-          <s-link href="https://www.prisma.io/" target="_blank">
-            Prisma
-          </s-link>
-        </s-paragraph>
-      </s-section>
-
-      <s-section slot="aside" heading="Next steps">
-        <s-unordered-list>
-          <s-list-item>
-            Build an{" "}
-            <s-link
-              href="https://shopify.dev/docs/apps/getting-started/build-app-example"
-              target="_blank"
-            >
-              example app
-            </s-link>
-          </s-list-item>
-          <s-list-item>
-            Explore Shopify&apos;s API with{" "}
-            <s-link
-              href="https://shopify.dev/docs/apps/tools/graphiql-admin-api"
-              target="_blank"
-            >
-              GraphiQL
-            </s-link>
-          </s-list-item>
-        </s-unordered-list>
-      </s-section>
-    </s-page>
+        </Page>
+      </AppProvider >
+    </>
   );
 }
 

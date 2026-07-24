@@ -12,6 +12,7 @@ const routes = [
   ),
   route("/api/routes/app/setting/*", "./api/routes/app/setting.$.js"),
   route("/api/routes/app/user/*", "./api/routes/app/user.$.js"),
+  route("/api/routes/app/setup/*", "./api/routes/app/setup.$.js"),
 
   // extensions routes
   route(

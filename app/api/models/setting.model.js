@@ -56,6 +56,13 @@ const settingSchema = new Schema({
     type: sectionSettingsSchema,
     required: true,
   },
+
+  // Set the first time the merchant saves from the widget customizer;
+  // used by the dashboard setup guide to verify the "customize" step.
+  isCustomized: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Setting =

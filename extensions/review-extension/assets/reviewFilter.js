@@ -41,6 +41,7 @@ const WIDGET_DEFAULTS = {
     widgetWidth: "600",
     alignment: "center",
     starSize: "18",
+    starStyle: "rounded",
     titleSize: "22",
     textSize: "15",
     buttonRadius: "0",
@@ -168,6 +169,17 @@ function applyWidgetSettings(map) {
     );
     setHidden(".jm-sort-select", map.toggles["show sort options"]);
   });
+
+  // Re-skin the form's rating stars with the selected design; color still
+  // comes from the existing style.color logic (currentColor).
+  if (window.jmStarSVG) {
+    document.querySelectorAll(".form-star").forEach((el) => {
+      el.innerHTML = window.jmStarSVG(map.layout.starStyle, {
+        filled: true,
+        color: "currentColor",
+      });
+    });
+  }
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -264,18 +276,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   function getStarArray(rating) {
     const totalStars = 5;
     const stars = [];
+    const styleKey = settings.layout.starStyle || "rounded";
     const filled = `
     <span class="star">
-      <svg width="${starSize}" height="${starSize}" viewBox="0 0 24 24">
-        <path d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="currentColor"></path>
-      </svg>
+      ${window.jmStarSVG(styleKey, { filled: true, size: starSize, color: "currentColor" })}
     </span>
   `;
     const empty = `
     <span class="jm-star-empty">
-      <svg width="${starSize}" height="${starSize}" viewBox="0 0 24 24">
-        <path d="M12 2L15 9H22L17 14L19 22L12 18L5 22L7 14L2 9H9L12 2Z" fill="none" stroke="currentColor" stroke-width="1.5"></path>
-      </svg>
+      ${window.jmStarSVG(styleKey, { filled: false, size: starSize, color: "currentColor" })}
     </span>
   `;
     for (let i = 1; i <= totalStars; i++) {

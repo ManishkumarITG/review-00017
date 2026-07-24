@@ -6,6 +6,7 @@ import {
   getAllReviewsByShop,
   getRatingSummaryService,
   searchReviews,
+  migrateMongoReviewsToMetaobjects,
 } from "../services/review.service";
 import STATUS_CODE from "../contents/statusCode.js";
 import MESSAGE from "../contents/message.js";
@@ -73,6 +74,20 @@ export const getRatingSummary = async (shop, targetId) => {
     return responseHandler(STATUS_CODE.OK, MESSAGE.SUCCESS, data);
   } catch (error) {
     console.log("rating summary error:", error);
+    return responseHandler(
+      STATUS_CODE.INTERNAL_SERVER_ERROR,
+      error.message,
+      null,
+    );
+  }
+};
+
+export const migrateReviews = async (shop) => {
+  try {
+    const data = await migrateMongoReviewsToMetaobjects(shop);
+    return responseHandler(STATUS_CODE.OK, MESSAGE.SUCCESS, data);
+  } catch (error) {
+    console.log("migrate reviews error:", error);
     return responseHandler(
       STATUS_CODE.INTERNAL_SERVER_ERROR,
       error.message,

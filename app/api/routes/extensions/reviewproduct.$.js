@@ -88,11 +88,15 @@ export const action = async ({ request }) => {
       case "createproduct":
         return await createProductReview(shop, data);
       case "deletereview":
-        return await deletereview(data);
+        return await deletereview({ ...data, shop });
       case "updatereview":
         return await updatereview(shop, data);
       default:
-        break;
+        return responseHandler(
+          STATUS_CODE.BAD_REQUEST,
+          MESSAGE.BAD_REQUEST,
+          null,
+        );
     }
   } catch (error) {
     console.log("catch error in test loader :", error);

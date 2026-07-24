@@ -26,7 +26,8 @@ A Shopify embedded admin app ("reviewapp") for product/store reviews, built on t
 ### Two data planes
 
 1. **Sessions**: `app/shopify.server.js` uses `MongoDBSessionStorage(DB_URL)`.
-2. **App data** (reviews, settings, users): mongoose models in `app/api/models/`. `app/db.server.js` exports `mongoConnect()`, called in `entry.server.jsx` on every request.
+2. **Reviews**: stored as app-owned Shopify metaobjects (`$app:review`, defined in `shopify.app.toml`, installed on `shopify app deploy`). `review.service.js` talks Admin GraphQL via `unauthenticated.admin(shop)`; sorting/filtering/pagination/search happen in memory after fetching all entries. Product aggregates are mirrored to `$app:rating` / `$app:rating_count` product metafields. One-time Mongo→metaobject migration: POST `/api/routes/app/reviewproduct/migrateToShopify`.
+3. **Settings and users**: mongoose models in `app/api/models/`. `app/db.server.js` exports `mongoConnect()`, called in `entry.server.jsx` on every request. (`review.model.js` remains only as the migration source.)
 
 ### Backend: layered API inside React Router
 
@@ -59,6 +60,6 @@ New endpoint = add a `case` in the route file (or a new `<resource>.$.js` + entr
 ## Conventions and gotchas
 
 - Existing names contain intentional-looking misspellings that are referenced across files: routes `app.reveiwpage`, components `Ratting.jsx`, `Loding.jsx`, `DeshboardGuidense.jsx`, model field `froud`, API responses use `messeage` in places. Match existing spellings when wiring into current code; renaming requires updating every reference (liquid assets included).
-- The Review model has a unique compound index `(shop, idType, targetId, customerId)` — one review per customer per target. `idType` is `"store" | "product"`.
+- One review per customer per target is enforced by the deterministic metaobject handle `review-<idType>-<targetId>-<customerId>` (upsert semantics — a second submit overwrites). `idType` is `"store" | "product"`. Review objects returned by the API keep the Mongo-era shape; `_id` is the metaobject GID.
 - Backend responses are always `{ status, message, data }` with the HTTP status duplicated in the body.
 - Other dev apps are installed on the shared dev store (e.g. an "ae-builder" app with its own `/apps/ae-builder/*` proxy). Their 500s on the storefront are not caused by this codebase.
